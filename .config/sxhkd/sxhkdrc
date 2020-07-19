@@ -1,0 +1,44 @@
+super + Return
+	urxvt
+
+super + shift + f
+	firefox -P default-default
+
+super + shift + w
+	tor-browser
+
+super + d
+	~/bin/dmen
+
+super + shift + p
+	keepassxc
+
+super + n
+	pkill -USR1 xidle
+
+super + i
+	~/bin/maimpick
+
+shift + super + Right
+	mpc next
+
+shift + super + Left
+	mpc prev
+
+shift + super + Down
+	mpc toggle
+
+F1
+	sndioctl output.mute=! && pkill -USR1 i3status
+
+F2
+	sndioctl output.level=-0.05 && pkill -USR1 i3status
+
+F3
+	sndioctl output.level=+0.05 && pkill -USR1 i3status
+
+F5
+	xbacklight -dec 10
+
+F6
+	xbacklight -inc 10
