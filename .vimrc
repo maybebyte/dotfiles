@@ -61,7 +61,3 @@ autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
 if &diff
     syntax off
 endif
-
-"noremap <leader>n :NERDTreeToggle
-"noremap <leader>f :FZF
-"let g:airline_theme='minimalist'

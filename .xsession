@@ -1,6 +1,5 @@
-#!/usr/bin/env sh
 export LANG=en_US.UTF-8
-/usr/X11R6/bin/xrdb -merge ${HOME}/.Xresources
+/usr/X11R6/bin/xrdb -merge ~/.Xresources
 /usr/X11R6/bin/xidle -timeout 90 -program '/usr/local/bin/slock' &
 /usr/local/bin/sct 3500 &
 /usr/X11R6/bin/xset b off
