@@ -1,0 +1,7 @@
+ncmpcpp_directory = ~/.config/ncmpcpp/
+lyrics_directory = ~/.config/ncmpcpp/lyrics
+user_interface = alternative
+mouse_support = no
+
+mpd_port = 6600
+mpd_music_dir = ~/Music/
