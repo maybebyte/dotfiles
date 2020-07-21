@@ -12,6 +12,5 @@ PAGER="less"
 VISUAL="vim"
 EDITOR="vim"
 FCEDIT=${EDITOR}
-TERM=tmux-256color
-PATH=$HOME/.local/bin:$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
-export PATH TERM BROWSER PAGER VISUAL EDITOR ENV PS1 FCEDIT QT_STYLE_OVERRIDE
+PATH=~/.local/bin:~/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
+export PATH BROWSER PAGER VISUAL EDITOR ENV PS1 FCEDIT QT_STYLE_OVERRIDE
