@@ -41,21 +41,21 @@ noremap <leader>g :Goyo
 
 " for reverting edits
 set backup
-set backupdir   =~/.vim/files/backup/
+set backupdir   =$HOME/.vim/files/backup/
 set backupext   =-vimbackup
 set backupskip  =
-set directory   =~/.vim/files/swap/
+set directory   =$HOME/.vim/files/swap/
 set updatecount =100
 set undofile
-set undodir     =~/.vim/files/undo/
-set viminfo ='100,n~/.vim/files/info/viminfo
+set undodir     =$HOME/.vim/files/undo/
+set viminfo ='100,n$HOME/.vim/files/info/viminfo
 
 " automatically deletes all trailing whitespace and newlines at end of file on save.
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
 " automatically reload Xresources
-autocmd BufWritePost ~/.Xresources,~/.Xdefaults !xrdb %
+autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 
 " disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -65,12 +65,12 @@ autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
 
 " if vim-plug isn't installed, install it
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+  silent !curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source ~/.vimrc
+  autocmd VimEnter * PlugInstall --sync | source "$HOME/.vimrc"
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin("$HOME/.vim/plugged")
 Plug 'tpope/vim-surround' "
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'

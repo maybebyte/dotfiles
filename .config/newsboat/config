@@ -29,8 +29,13 @@ color info red default
 color article cyan default
 
 browser "firefox"
+player "mpv"
 macro , open-in-browser
 macro t set browser "youtube-dl"; open-in-browser ; set browser "firefox"
 macro a set browser "youtube-dl -x -f bestaudio/best"; open-in-browser ; set browser "firefox"
 macro v set browser "mpv"; open-in-browser ; set browser "firefox"
 macro c set browser "echo -n %u | xclip -selection clipboard" ; open-in-browser ; set browser "firefox"
+
+reload-threads 20
+cleanup-on-quit yes
+text-width 72

@@ -8,7 +8,7 @@ super + shift + w
 	tor-browser
 
 super + d
-	~/bin/dmen
+	${HOME}/bin/dmen
 
 super + shift + p
 	keepassxc
@@ -17,7 +17,7 @@ super + n
 	pkill -USR1 xidle
 
 super + i
-	~/bin/maimpick
+	${HOME}/bin/maimpick
 
 shift + super + Right
 	mpc next
