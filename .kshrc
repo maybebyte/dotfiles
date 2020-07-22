@@ -21,13 +21,13 @@ fi
 
 # swaps colors when uid is 0
 case "$(id -u)" in
-  0) _PS1_USER_COLOR='\033[1;33m' _PS1_PATH_COLOR='\033[1;35m' ;;
-  *) _PS1_USER_COLOR='\033[1;35m' _PS1_PATH_COLOR='\033[1;33m' ;;
+  0) _PS1_USER_COLOR='\[\033[1;33m\]' _PS1_PATH_COLOR='\[\033[1;35m\]' ;;
+  *) _PS1_USER_COLOR='\[\033[1;35m\]' _PS1_PATH_COLOR='\[\033[1;33m\]' ;;
 esac
-_PS1_BRACKET_COLOR='\033[1;36m'
-_PS1_CLEAR='\033[0m'
+_PS1_BRACKET_COLOR='\[\033[1;36m\]'
+_PS1_CLEAR='\[\033[0m\]'
 
-PS1='$(printf "${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\\\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\\\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\\\\$ ")'
+PS1='${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$'
 
 QT_STYLE_OVERRIDE=adwaita
 HISTFILE=~/.history
