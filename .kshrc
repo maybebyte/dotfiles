@@ -19,14 +19,23 @@ else
   LS='ls'
 fi
 
-PS1="$(echo -e "\033[36m[\033[0m\033[35m\u \033[0m@ \033[33m\w\033[0m\033[36m]\033[0m\\$ ")"
+# swaps colors when uid is 0
+case "$(id -u)" in
+  0) _PS1_USER_COLOR='\033[1;33m' _PS1_PATH_COLOR='\033[1;35m' ;;
+  *) _PS1_USER_COLOR='\033[1;35m' _PS1_PATH_COLOR='\033[1;33m' ;;
+esac
+_PS1_BRACKET_COLOR='\033[1;36m'
+_PS1_CLEAR='\033[0m'
+
+PS1='$(printf "${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\\\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\\\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\\\\$ ")'
+
 QT_STYLE_OVERRIDE=adwaita
 HISTFILE=~/.history
 HISTSIZE=10000
 BROWSER="firefox"
 LESS="-iMR"
 PAGER="less"
-VISUAL="vi"
+#VISUAL="$VIM"
 EDITOR="$VIM"
 FCEDIT=${EDITOR}
 CLICOLOR=1
@@ -36,6 +45,8 @@ export PATH BROWSER PAGER VISUAL EDITOR ENV PS1 FCEDIT QT_STYLE_OVERRIDE CLICOLO
 alias wgetall="wget --random-wait -m -k -p -np -c -e robots=off --no-check-certificate -R 'index.html*' -U mozilla"
 alias wgetone="wget --random-wait -k -p -np -c -e robots=off --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
 alias dots="git --git-dir=~/.dotfiles/ --work-tree=~/"
+alias dots_cmt="dots commit -a -m"
+alias dots_psh="dots push origin master"
 alias ytdl="youtube-dl"
 alias ytdlrm="ytdl --rm-cache-dir"
 alias yta="ytdl -x -f bestaudio/best --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
@@ -66,6 +77,7 @@ alias pfld="doas pfctl -f /etc/pf.conf"
 alias tmatt="tmux attach"
 alias tmksrv="tmux kill-server"
 alias tmls="tmux list-sessions"
+alias crontab="VISUAL=vi crontab" # crontab won't save otherwise
 
 ranger() {
 	if [ -z "$RANGER_LEVEL" ]; then

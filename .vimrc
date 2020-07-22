@@ -54,14 +54,13 @@ set viminfo ='100,n$HOME/.vim/files/info/viminfo
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
-" automatically reload Xresources
+" automatically reload configs
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
+autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
+autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" update binds when sxhkdrc is updated.
-autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
 
 " if vim-plug isn't installed, install it
 if empty(glob('~/.vim/autoload/plug.vim'))

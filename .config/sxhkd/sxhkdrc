@@ -10,23 +10,29 @@ super + shift + w
 super + d
 	${HOME}/bin/dmen
 
+super + u
+	${HOME}/bin/dmenuunicode
+
 super + shift + p
 	keepassxc
 
 super + n
 	pkill -USR1 xidle
 
-super + i
+Print
 	${HOME}/bin/maimpick
 
-shift + super + Right
+super + greater
 	mpc next
 
-shift + super + Left
+super + less
 	mpc prev
 
-shift + super + Down
+shift + super + t
 	mpc toggle
+
+super + plus
+	mpc seek 0
 
 F1
 	sndioctl output.mute=! && pkill -USR1 i3status
