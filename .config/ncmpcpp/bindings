@@ -78,3 +78,6 @@ def_key "x"
 
 def_key "P"
   show_playlist
+
+def_key "H"
+  show_help

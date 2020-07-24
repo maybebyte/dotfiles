@@ -34,6 +34,18 @@ shift + super + t
 super + plus
 	mpc seek 0
 
+shift + super + Left
+	mpc seek -5
+
+shift + super + Right
+	mpc seek +5
+
+shift + super + Up
+	mpc seek +1:00
+
+shift + super + Down
+	mpc seek -1:00
+
 F1
 	sndioctl output.mute=! && pkill -USR1 i3status
 
