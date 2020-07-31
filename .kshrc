@@ -77,6 +77,7 @@ alias tmatt="tmux attach"
 alias tmksrv="tmux kill-server"
 alias tmls="tmux list-sessions"
 alias crontab="VISUAL=vi crontab" # crontab won't save otherwise
+alias pdfman="MANPAGER=zathura man -T pdf"
 
 ranger() {
 	if [ -z "$RANGER_LEVEL" ]; then
