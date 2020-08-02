@@ -2,7 +2,7 @@ super + Return
 	st
 
 super + shift + f
-	firefox -P default-default
+	firefox
 
 super + shift + w
 	tor-browser

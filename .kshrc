@@ -11,6 +11,15 @@ case "$(command -v vim)" in
   *)     VIM="vi"  ;;
 esac
 
+# https://wiki.archlinux.org/index.php/Ranger#Preventing_nested_ranger_instances
+ranger() {
+	if [ -z "$RANGER_LEVEL" ]; then
+		/usr/local/bin/ranger "$@"
+	else
+		exit
+	fi
+}
+
 # use colorls if it's installed, plain old ls otherwise
 if command -v colorls > /dev/null ; then
   LS='colorls'
@@ -27,7 +36,6 @@ _PS1_BRACKET_COLOR='\[\033[1;36m\]'
 _PS1_CLEAR='\[\033[0m\]'
 
 PS1='${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ '
-
 QT_STYLE_OVERRIDE=adwaita
 HISTFILE=~/.history
 HISTSIZE=10000
@@ -69,7 +77,6 @@ alias gcmt="git commit -a -m"
 alias gpsh="git push"
 alias cmd_stats="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr"
 alias yank="xclip -selection clipboard"
-alias tar_backup="tar -cf - /mnt --exclude=/$(today).tar.bz2 | pv -s $(\du -s /mnt | awk '{print $1}') | bzip2 -c > /$(today).tar.bz2"
 alias se="doas vim"
 alias sepf="se /etc/pf.conf"
 alias pfld="doas pfctl -f /etc/pf.conf"
@@ -78,11 +85,3 @@ alias tmksrv="tmux kill-server"
 alias tmls="tmux list-sessions"
 alias crontab="VISUAL=vi crontab" # crontab won't save otherwise
 alias pdfman="MANPAGER=zathura man -T pdf"
-
-ranger() {
-	if [ -z "$RANGER_LEVEL" ]; then
-		/usr/local/bin/ranger "$@"
-	else
-		exit
-	fi
-}

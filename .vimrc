@@ -1,29 +1,26 @@
-set nocompatible " vi not vim
-set mouse= " no mouse
 set number relativenumber " can jump to specific lines
-set splitbelow splitright
-set incsearch " incremental search
-set hlsearch " highlight when searching
-set wrapscan " wrap at the end of a search
-set ttyfast " indicates a fast terminal connection
-set lazyredraw
-set autoindent
-set ignorecase
-set smartcase
-set wildmode=longest,list,full
-set tabstop=4
-set shiftwidth=4
-set expandtab
-set linebreak
-set breakindent
-set noerrorbells
-set modelines=0
-set nomodeline
-set diffopt+=iwhite
+set splitbelow splitright " more intuitive window splitting
+set nocompatible    " vim not vi
+set mouse=          " no mouse
+set incsearch       " incremental search
+set hlsearch        " highlight when searching
+set wrapscan        " wrap at the end of a search
+set ttyfast         " indicates a fast terminal connection
+set lazyredraw      " screen will not be redrawn while executing {macros,registers,other untyped commands}
+set autoindent      " detects indentation when creating newline
+set ignorecase      " ignores case when searching
+set smartcase       " with the exception of capital letters at start of search
+set tabstop=4       " tab is 4 spaces
+set shiftwidth=4    " 4 spaces for autoindent
+set expandtab       " tabs are expanded into spaces
+set noerrorbells    " prevents me from getting upset with an inanimate object
+set modelines=0     " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
+set nomodeline      " ^
+set diffopt+=iwhite " ignore white space changes
 set encoding=utf-8
+syntax on
 highlight MatchParen ctermbg=4
 filetype plugin indent on
-syntax on
 let mapleader=","
 
 " copy and paste to CLIPBOARD selection
@@ -70,7 +67,7 @@ if empty(glob('$HOME/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin("$HOME/.vim/plugged")
-Plug 'tpope/vim-surround' "
+Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
@@ -84,4 +81,5 @@ Plug 'ap/vim-css-color'
 Plug 'kovetskiy/sxhkd-vim'
 call plug#end()
 
+" https://github.com/dylanaraps/pywal
 colorscheme wal

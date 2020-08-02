@@ -1,22 +1,8 @@
-# get that status bar padding out of here
-set statusbar-h-padding 0
-set statusbar-v-padding 0
-
-# except for page padding
-set page-padding 20
-
-# sets the clipboard to the actual good one
+# CLIPBOARD instead of PRIMARY
 set selection-clipboard clipboard
-
-# save pinky finger for half-scrolls
-map u scroll half-up
-map d scroll half-down
 
 # pages on both left and right, like a book
 map D toggle_page_mode
-
-# reload, good if you're editing a pdf and need to see changes
-map r reload
 
 # rotate document 90 degrees clockwise
 map R rotate
@@ -24,5 +10,10 @@ map R rotate
 # invert colors
 map i recolor
 
-# print
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set page-padding 20
+map u scroll half-up
+map d scroll half-down
 map p print
+map r reload

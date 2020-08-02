@@ -8,9 +8,12 @@ export LANG=en_US.UTF-8
 ${HOME}/.local/bin/wal -R
 /usr/X11R6/bin/xcompmgr -I 0.0125 -O 0.0125 -D 2 -c -f -C &
 /usr/X11R6/bin/xset m 3/1 0
+
+# trackpad scrolling with middle button
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
+
 st -e ${HOME}/bin/randman &
 if [ -x /usr/local/bin/dbus-launch -a -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
         eval `dbus-launch --sh-syntax --exit-with-x11`
