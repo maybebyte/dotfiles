@@ -36,18 +36,6 @@ _PS1_BRACKET_COLOR='\[\033[1;36m\]'
 _PS1_CLEAR='\[\033[0m\]'
 
 PS1='${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ '
-QT_STYLE_OVERRIDE=adwaita
-HISTFILE=~/.history
-HISTSIZE=10000
-BROWSER="firefox"
-LESS="-iMR"
-PAGER="less"
-#VISUAL="$VIM"
-EDITOR="$VIM"
-FCEDIT=${EDITOR}
-CLICOLOR=1
-PATH=~/.local/bin:~/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
-export PATH BROWSER PAGER VISUAL EDITOR ENV PS1 FCEDIT QT_STYLE_OVERRIDE CLICOLOR LESS
 
 alias wgetall="wget --random-wait -m -k -p -np -c -e robots=off --no-check-certificate -R 'index.html*' -U mozilla"
 alias wgetone="wget --random-wait -k -p -np -c -e robots=off --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
@@ -83,5 +71,4 @@ alias pfld="doas pfctl -f /etc/pf.conf"
 alias tmatt="tmux attach"
 alias tmksrv="tmux kill-server"
 alias tmls="tmux list-sessions"
-alias crontab="VISUAL=vi crontab" # crontab won't save otherwise
 alias pdfman="MANPAGER=zathura man -T pdf"

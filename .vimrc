@@ -10,8 +10,6 @@ set lazyredraw      " screen will not be redrawn while executing {macros,registe
 set autoindent      " detects indentation when creating newline
 set ignorecase      " ignores case when searching
 set smartcase       " with the exception of capital letters at start of search
-set tabstop=4       " tab is 4 spaces
-set shiftwidth=4    " 4 spaces for autoindent
 set expandtab       " tabs are expanded into spaces
 set noerrorbells    " prevents me from getting upset with an inanimate object
 set modelines=0     " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
@@ -39,8 +37,7 @@ noremap <leader>g :Goyo
 " for reverting edits
 set backup
 set backupdir   =$HOME/.vim/files/backup/
-set backupext   =-vimbackup
-set backupskip  =
+set backupext   =.vimbak
 set directory   =$HOME/.vim/files/swap/
 set updatecount =100
 set undofile
@@ -58,6 +55,9 @@ autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" conform to https://google.github.io/styleguide/shellguide.html
+autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
 
 " if vim-plug isn't installed, install it
 if empty(glob('$HOME/.vim/autoload/plug.vim'))
