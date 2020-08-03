@@ -1,4 +1,4 @@
-. ~/.profile
+. ${HOME}/.profile
 set -o braceexpand
 set -o vi
 set -o vi-esccomplete
@@ -27,6 +27,8 @@ else
   LS='ls'
 fi
 
+umask 077
+
 # swaps colors when uid is 0
 case "$(id -u)" in
   0) _PS1_USER_COLOR='\[\033[1;33m\]' _PS1_PATH_COLOR='\[\033[1;35m\]' ;;
@@ -37,15 +39,28 @@ _PS1_CLEAR='\[\033[0m\]'
 
 PS1='${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ '
 
+QT_STYLE_OVERRIDE=adwaita
+HISTFILE=${HOME}/.history
+HISTSIZE=10000
+BROWSER="firefox"
+LESS="-iMR"
+PAGER="less"
+VISUAL="${VIM}"
+EDITOR="${VIM}"
+FCEDIT=${EDITOR}
+CLICOLOR=1
+PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
+export QT_STYLE_OVERRIDE HISTFILE HISTSIZE BROWSER LESS PAGER VISUAL EDITOR FCEDIT CLICOLOR PATH
+
 alias wgetall="wget --random-wait -m -k -p -np -c -e robots=off --no-check-certificate -R 'index.html*' -U mozilla"
 alias wgetone="wget --random-wait -k -p -np -c -e robots=off --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
-alias dots="git --git-dir=~/.dotfiles/ --work-tree=~/"
+alias dots="git --git-dir=${HOME}/.dotfiles/ --work-tree=${HOME}/"
 alias dots_cmt="dots commit -a -m"
 alias dots_psh="dots push origin master"
 alias ytdl="youtube-dl"
 alias ytdlrm="ytdl --rm-cache-dir"
-alias yta="ytdl -x -f bestaudio/best --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
-alias ytv="ytdl --embed-subs --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
+alias yta="ytdl -x -f bestaudio/best --embed-thumbnail -ic --add-metadata -o '${HOME}/Downloads/%(title)s.%(ext)s'"
+alias ytv="ytdl --embed-subs --embed-thumbnail -ic --add-metadata -o '${HOME}/Downloads/%(title)s.%(ext)s'"
 alias trem="transmission-remote"
 alias ls="${LS} -F"
 alias ll="ls -lh"

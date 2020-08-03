@@ -21,12 +21,12 @@ bind-key x delete-article
 
 unbind-key p
 
-color listnormal cyan default
-color listfocus red default
-color listnormal_unread blue default
-color listfocus_unread red default
+color listnormal red default
+color listfocus green default
+color listnormal_unread cyan default
+color listfocus_unread green default
 color info red default
-color article cyan default
+color article default default
 
 browser "firefox"
 player "mpv"

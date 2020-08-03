@@ -1,0 +1,15 @@
+# $OpenBSD: dot.mailrc,v 1.3 2014/07/10 11:18:23 jasper Exp $
+set append
+set ask
+set autoinc
+set autoprint
+set crt
+set dot
+set expandaddr
+set from="eurydice@riseup.net"
+#set hold  # holds in system mailbox
+set ignore
+set nosave
+set skipempty
+set verbose
+ignore message-id received date fcc status resent-date resent-message-id resent-from in-reply-to
