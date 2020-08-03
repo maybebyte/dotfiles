@@ -16,6 +16,9 @@ set modelines=0     " https://security.stackexchange.com/questions/36001/vim-mod
 set nomodeline      " ^
 set diffopt+=iwhite " ignore white space changes
 set encoding=utf-8
+set tabstop=2
+set shiftwidth=2
+set textwidth=72
 syntax on
 highlight MatchParen ctermbg=4
 filetype plugin indent on
