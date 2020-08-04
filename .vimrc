@@ -1,28 +1,48 @@
-set number relativenumber " can jump to specific lines
-set splitbelow splitright " more intuitive window splitting
-set nocompatible    " vim not vi
-set mouse=          " no mouse
-set incsearch       " incremental search
-set hlsearch        " highlight when searching
-set wrapscan        " wrap at the end of a search
-set ttyfast         " indicates a fast terminal connection
-set lazyredraw      " screen will not be redrawn while executing {macros,registers,other untyped commands}
-set autoindent      " detects indentation when creating newline
-set ignorecase      " ignores case when searching
-set smartcase       " with the exception of capital letters at start of search
-set expandtab       " tabs are expanded into spaces
-set noerrorbells    " prevents me from getting upset with an inanimate object
-set modelines=0     " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
-set nomodeline      " ^
-set diffopt+=iwhite " ignore white space changes
+syntax on
+highlight MatchParen ctermbg=4
+filetype plugin indent on
+
+ " can jump to specific lines
+set number relativenumber
+
+ " more intuitive window splitting
+set splitbelow splitright
+
+" vim not vi
+set nocompatible
+set mouse=
+
+" search
+set incsearch
+set hlsearch
+set wrapscan
+set ignorecase
+set smartcase
+
+" screen will not be redrawn while executing {macros,registers,other
+" untyped commands}
+set lazyredraw
+set ttyfast
+set autoindent
+
+" prevents me from getting upset with an inanimate object
+set noerrorbells
+
+" https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
+set modelines=0
+set nomodeline
+
+" ignore white space changes
+set diffopt+=iwhite
+
+" readable code
 set encoding=utf-8
 set tabstop=2
 set shiftwidth=2
 set textwidth=72
-syntax on
-highlight MatchParen ctermbg=4
-filetype plugin indent on
-let mapleader=","
+set expandtab
+
+set formatoptions=tcqro2b1jp
 
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
@@ -33,11 +53,12 @@ noremap ; :
 noremap : ;
 
 " plugin bindings
+let mapleader=","
 noremap <leader>n :NERDTreeToggle
 noremap <leader>f :FZF
 noremap <leader>g :Goyo
 
-" for reverting edits
+" for reverting edits and other conveniences
 set backup
 set backupdir   =$HOME/.vim/files/backup/
 set backupext   =.vimbak
@@ -47,7 +68,8 @@ set undofile
 set undodir     =$HOME/.vim/files/undo/
 set viminfo ='100,n$HOME/.vim/files/info/viminfo
 
-" automatically deletes all trailing whitespace and newlines at end of file on save.
+" automatically deletes all trailing whitespace and newlines at end of
+" file on save.
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
@@ -55,9 +77,6 @@ autocmd BufWritepre * %s/\n\+\%$//e
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
-
-" disables automatic commenting on newline:
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
@@ -85,4 +104,6 @@ Plug 'kovetskiy/sxhkd-vim'
 call plug#end()
 
 " https://github.com/dylanaraps/pywal
+" TL;DR it appropriately themes vim syntax highlighting based on my
+" wallpaper
 colorscheme wal
