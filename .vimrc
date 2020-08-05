@@ -42,6 +42,7 @@ set shiftwidth=2
 set textwidth=72
 set expandtab
 
+" :h fo-table explains these options.
 set formatoptions=tcqro2b1jp
 
 " copy and paste to CLIPBOARD selection
@@ -77,9 +78,11 @@ autocmd BufWritepre * %s/\n\+\%$//e
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
+autocmd BufWritePost index.md,about-me.md,software.md,selfhosting.md,projects.md,clues.md,_header.html,_footer.html ! ssg5 ~/builds/website_md ~/builds/website "A Missing Link" "https://amissing.link"
 
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
+
 
 " if vim-plug isn't installed, install it
 if empty(glob('$HOME/.vim/autoload/plug.vim'))
@@ -104,6 +107,4 @@ Plug 'kovetskiy/sxhkd-vim'
 call plug#end()
 
 " https://github.com/dylanaraps/pywal
-" TL;DR it appropriately themes vim syntax highlighting based on my
-" wallpaper
 colorscheme wal
