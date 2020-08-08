@@ -49,8 +49,9 @@ VISUAL="${VIM}"
 EDITOR="${VIM}"
 FCEDIT=${EDITOR}
 CLICOLOR=1
+GNUPGHOME="${HOME}/.config/gnupg"
 PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
-export QT_STYLE_OVERRIDE HISTFILE HISTSIZE BROWSER LESS PAGER VISUAL EDITOR FCEDIT CLICOLOR PATH
+export QT_STYLE_OVERRIDE HISTFILE HISTSIZE BROWSER LESS PAGER VISUAL EDITOR FCEDIT CLICOLOR PATH GNUPGHOME
 
 alias wgetall="wget --random-wait -m -k -p -np -c -e robots=off --no-check-certificate -R 'index.html*' -U mozilla"
 alias wgetone="wget --random-wait -k -p -np -c -e robots=off --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
@@ -87,4 +88,4 @@ alias tmatt="tmux attach"
 alias tmksrv="tmux kill-server"
 alias tmls="tmux list-sessions"
 alias pdfman="MANPAGER=zathura man -T pdf"
-alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\""
+alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\" && ${HOME}/bin/pre-commit"

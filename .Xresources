@@ -5,7 +5,7 @@ Xft.hinting   : 1
 Xft.antialias : 1
 Xft.rgba      : rgb
 
-XIdle*program:  /usr/local/bin/slock
+XIdle*program:  /usr/local/bin/slock xset dpms force off
 XIdle*timeout:  90
 
 ! Colors 0-15.

@@ -7,6 +7,7 @@
 # on OpenBSD :)
 
 source "gpg2 -dq ~/passwords/email_pass.gpg |"
+source "~/.config/mutt/gpg.rc"
 
 set editor="vim -c 'set syntax=mail ft=mail enc=utf-8'"
 set realname="Ashlen"
@@ -28,6 +29,8 @@ set record = +Sent
 set trash = +Trash
 set crypt_use_gpgme=yes
 set crypt_autosign=no
+set crypt_replyencrypt=yes
+set pgp_auto_decode=yes
 
 # do not show all headers, just a few
 ignore          *
@@ -61,7 +64,7 @@ set fcc_attach			# save attachments with the body
 set forward_format="Fwd: %s"	# format of subject when forwarding
 set forward_quote		# include message in forwards
 set reverse_name		# reply as whomever it was to
-set include			# include message in replies
+#set include			# include message in replies
 auto_view text/html		# automatically show html (mailcap uses w3m)
 auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
