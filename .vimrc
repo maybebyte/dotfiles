@@ -78,7 +78,7 @@ autocmd BufWritepre * %s/\n\+\%$//e
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
-autocmd BufWritePost index.md,about-me.md,software.md,selfhosting.md,projects.md,clues.md,_header.html,_footer.html ! ssg5 ~/builds/website_md ~/builds/website "A Missing Link" "https://amissing.link" && sh $HOME/bin/pre-commit
+autocmd BufWritePost index.md,about-me.md,software.md,selfhosting.md,projects.md,clues.md,_header.html,_footer.html ! ssg5 ~/builds/website_md ~/builds/website "A Missing Link" "https://amissing.link" && sh $HOME/bin/fmt_site
 
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
