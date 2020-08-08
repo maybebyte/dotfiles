@@ -7,7 +7,6 @@
 # on OpenBSD :)
 
 source "gpg2 -dq ~/passwords/email_pass.gpg |"
-source "~/.config/mutt/gpg.rc"
 
 subscribe announcements@openbsd.org
 
@@ -25,7 +24,6 @@ set print=no
 set reverse_alias=yes
 
 set realname="Ashlen"
-set hostname=riseup.net
 set from=eurydice@riseup.net
 set use_from=yes
 set pop_user="eurydice@riseup.net"
@@ -44,7 +42,10 @@ set trash = +Trash
 set crypt_use_gpgme=yes
 set crypt_autosign=no
 set crypt_replyencrypt=yes
+set crypt_replysign=yes
+set crypt_replysignencrypted=yes
 set pgp_auto_decode=yes
+set pgp_show_unusable=no
 
 # do not show all headers, just a few
 ignore          *
