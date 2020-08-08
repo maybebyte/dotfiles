@@ -3,13 +3,27 @@
 # it can then be referenced with $my_pass, all without leaving the
 # password in plain text on the computer.
 
-# smtp_{url,pass} aren't even needed with a working smtpd.conf(5)
+# smtp_{url,pass} aren't needed with a working smtpd.conf(5)
 # on OpenBSD :)
 
 source "gpg2 -dq ~/passwords/email_pass.gpg |"
 source "~/.config/mutt/gpg.rc"
 
-set editor="vim -c 'set syntax=mail ft=mail enc=utf-8'"
+subscribe announcements@openbsd.org
+
+set auto_subscribe=yes
+set beep=no
+set editor="vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
+set visual="vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
+set hidden_host=yes
+set ignore_linear_white_space=yes
+set ignore_list_reply_to=yes
+set mbox="~/mail"
+set mbox_type="Maildir"
+set move=yes
+set print=no
+set reverse_alias=yes
+
 set realname="Ashlen"
 set hostname=riseup.net
 set from=eurydice@riseup.net
@@ -64,7 +78,7 @@ set fcc_attach			# save attachments with the body
 set forward_format="Fwd: %s"	# format of subject when forwarding
 set forward_quote		# include message in forwards
 set reverse_name		# reply as whomever it was to
-#set include			# include message in replies
+set include			# include message in replies
 auto_view text/html		# automatically show html (mailcap uses w3m)
 auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
@@ -101,6 +115,7 @@ bind editor <Tab> complete-query
 
 # Sidebar mappings
 set sidebar_visible=yes
+set sidebar_divider_char=""
 set sidebar_width=15
 set sidebar_short_path=yes
 set sidebar_next_new_wrap=yes
@@ -127,7 +142,7 @@ mono error bold
 color normal default default
 color indicator green default
 color sidebar_highlight red default
-color sidebar_divider brightblack black
+#color sidebar_divider brightblack black
 #color sidebar_flagged red black
 #color sidebar_new green black
 color error red default
