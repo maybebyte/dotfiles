@@ -95,15 +95,15 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        bindsym $left resize shrink width 10 px or 10 ppt
-        bindsym $down resize grow height 10 px or 10 ppt
-        bindsym $up resize shrink height 10 px or 10 ppt
-        bindsym $right resize grow width 10 px or 10 ppt
+  bindsym $left resize shrink width 10 px or 10 ppt
+  bindsym $down resize grow height 10 px or 10 ppt
+  bindsym $up resize shrink height 10 px or 10 ppt
+  bindsym $right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape or $mod+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+  # back to normal: Enter or Escape or $mod+r
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+r mode "default"
 }
 
 bindsym $mod+r mode "resize"
@@ -122,18 +122,18 @@ client.placeholder      $bg     $bg     $fg  $bg       $bg
 client.background       $bg
 
 bar {
-	status_command i3status
-	position top
-	colors {
-           background #0a111a
-           statusline $fg
-           separator $bg
-           #                  border  backgr. text
-           focused_workspace  $bg	  $bg     $fg
-           active_workspace   #333333 #5f676a $fg
-           inactive_workspace #222222 #222222 $fg
-           urgent_workspace   #900000 #900000 $fg
-        }
+  status_command i3status
+  position top
+  colors {
+    background #0a111a
+    statusline $fg
+    separator $bg
+    #                  border  backgr. text
+    focused_workspace  $bg	  $bg      $fg
+    active_workspace   #333333 #5f676a $fg
+    inactive_workspace #222222 #222222 $fg
+    urgent_workspace   #900000 #900000 $fg
+  }
 }
 
 for_window [class="^.*"] border pixel 0
