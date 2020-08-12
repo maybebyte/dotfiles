@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+# Import the colors
+. "${HOME}/.cache/wal/colors.sh"
+
+#-fn ## font used
+#-nb ## normal background color
+#-nf ## normal foreground color
+#-sb ## selected background color
+#-sf ## selected foreground color
+dmenu_run -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7"

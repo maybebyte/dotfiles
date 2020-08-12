@@ -1,0 +1,86 @@
+#!/usr/bin/env sh
+
+INDEX="${HOME}/builds/website/index.html"
+ABOUT_ME="${HOME}/builds/website/pages/about-me.html"
+SOFTWARE="${HOME}/builds/website/pages/software.html"
+SELFHOSTING="${HOME}/builds/website/pages/selfhosting.html"
+PROJECTS="${HOME}/builds/website/pages/projects.html"
+CLUES="${HOME}/builds/website/pages/clues.html"
+
+
+INDEX_TITLE='<title>A Missing Link</title>'
+ABOUT_ME_TITLE='<title>About Me</title>'
+SOFTWARE_TITLE='<title>Software</title>'
+SELFHOSTING_TITLE='<title>Self-hosting</title>'
+PROJECTS_TITLE='<title>Projects</title>'
+CLUES_TITLE='<title>Clues</title>'
+
+INDEX_DESCR='<meta name="description" content="Landing page for amissing.link, my personal website dedicated to tech and other stuff.">'
+ABOUT_ME_DESCR='<meta name="description" content="Describes my personality and interests.">'
+SOFTWARE_DESCR='<meta name="description" content="Lists programs I use or otherwise enjoy, along with recommendations for libre operating systems.">'
+SELFHOSTING_DESCR='<meta name="description" content="Explains why you should self-host if you can and lists resources conducive to that.">'
+PROJECTS_DESCR='<meta name="description" content="Source code for my projects, managed with git and generated with stagit.">'
+CLUES_DESCR='<meta name="description" content="Small, precise tidbits of information not confined to any particular subject.">'
+
+
+add_titles_and_descriptions () {
+if ! grep -i "${INDEX_TITLE}" "${INDEX}"; then
+sed -i "/<!--UTF-8/a \\
+  ${INDEX_TITLE} \\
+  ${INDEX_DESCR} \\
+" "${INDEX}"
+fi
+
+if ! grep -i "${ABOUT_ME_TITLE}" "${ABOUT_ME}"; then
+sed -i "/<!--UTF-8/a \\
+  ${ABOUT_ME_TITLE} \\
+  ${ABOUT_ME_DESCR} \\
+" "${ABOUT_ME}"
+fi
+
+if ! grep -i "${SOFTWARE_TITLE}" "${SOFTWARE}"; then
+sed -i "/<!--UTF-8/a \\
+  ${SOFTWARE_TITLE} \\
+  ${SOFTWARE_DESCR} \\
+" "${SOFTWARE}"
+fi
+
+if ! grep -i "${SELFHOSTING_TITLE}" "${SELFHOSTING}"; then
+sed -i "/<!--UTF-8/a \\
+  ${SELFHOSTING_TITLE} \\
+  ${SELFHOSTING_DESCR} \\
+" "${SELFHOSTING}"
+fi
+
+if ! grep -i "${PROJECTS_TITLE}" "${PROJECTS}"; then
+sed -i "/<!--UTF-8/a \\
+  ${PROJECTS_TITLE} \\
+  ${PROJECTS_DESCR} \\
+" "${PROJECTS}"
+fi
+
+if ! grep -i "${CLUES_TITLE}" "${CLUES}"; then
+sed -i "/<!--UTF-8/a \\
+  ${CLUES_TITLE} \\
+  ${CLUES_DESCR} \\
+" "${CLUES}"
+fi
+}
+
+remove_trailing_whitespace () {
+  for i in ${INDEX} ${ABOUT_ME} ${SOFTWARE} ${SELFHOSTING} ${PROJECTS} ${CLUES}
+  do
+    sed -i 's/\s\+$//g' "${i}"
+  done
+}
+
+#set_active () {
+  #for i in ${INDEX} ${ABOUT_ME} ${SOFTWARE} ${SELFHOSTING} ${PROJECTS} ${CLUES}
+  #do
+    #ACTIVE_NAME=$(basename "${I}")
+    #sed -i "s/${ACTIVE_NAME}//g" "${i}"
+  #done
+#}
+
+add_titles_and_descriptions
+remove_trailing_whitespace
