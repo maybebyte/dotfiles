@@ -52,8 +52,8 @@ export CLICOLOR=1
 export GNUPGHOME="${HOME}/.config/gnupg"
 export PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
 
-alias wgetall="wget --random-wait -m -k -p -np -c -e robots=off --no-check-certificate -R 'index.html*' -U mozilla"
-alias wgetone="wget --random-wait -k -p -np -c -e robots=off --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
+alias wgetall="wget --random-wait -m -k -p -np -c --no-check-certificate -R 'index.html*' -U mozilla"
+alias wgetone="wget --random-wait -k -p -np -c --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
 alias dots="git --git-dir=~/.dotfiles/ --work-tree=~/"
 alias dots_cmt="dots commit -a -m"
 alias dots_psh="dots push origin master"
@@ -89,3 +89,4 @@ alias tmls="tmux list-sessions"
 alias pdfman="MANPAGER=zathura man -T pdf"
 alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\" && ~/bin/fmt_site"
 alias mutt="neomutt"
+alias axel="axel -a -v"

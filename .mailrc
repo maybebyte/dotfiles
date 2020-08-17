@@ -5,9 +5,7 @@ set autoinc
 set autoprint
 set crt
 set dot
-set expandaddr
 set from="eurydice@riseup.net"
-#set hold  # holds in system mailbox
 set ignore
 set nosave
 set skipempty
