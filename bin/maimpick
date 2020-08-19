@@ -4,9 +4,9 @@
 . "${HOME}/.cache/wal/colors.sh"
 
 case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -fn "mono-20" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7" -l 6 -p "Screenshot which area?")" in
-	"a selected area") maim -u -s ${HOME}/Downloads/selected-"$(date '+%Y%m%d-%H%M%S').png" ;;
-	"current window") maim -u -B -i "$(xdotool getactivewindow)" ${HOME}/Downloads/window-"$(date '+%Y%m%d-%H%M%S').png" ;;
-	"full screen") maim -u ${HOME}/Downloads/full-"$(date '+%Y%m%d-%H%M%S').png" ;;
+	"a selected area") maim -u -s "${HOME}/Downloads/selected-$(date '+%Y%m%d-%H%M%S').png" ;;
+	"current window") maim -u -B -i "$(xdotool getactivewindow)" "${HOME}/Downloads/window-$(date '+%Y%m%d-%H%M%S').png" ;;
+	"full screen") maim -u "${HOME}/Downloads/full-$(date '+%Y%m%d-%H%M%S').png" ;;
 	"a selected area (copy)") maim -u -s | xclip -selection clipboard -t image/png ;;
 	"current window (copy)") maim -u -B -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
 	"full screen (copy)") maim -u | xclip -selection clipboard -t image/png ;;
