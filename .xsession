@@ -1,4 +1,4 @@
-#export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 /usr/X11R6/bin/xrdb -merge ${HOME}/.Xresources
 /usr/X11R6/bin/xidle &
 /usr/local/bin/sct 3500
@@ -17,6 +17,6 @@ ${HOME}/.local/bin/wal -R
 
 st -e ${HOME}/bin/randman &
 if [ -x /usr/local/bin/dbus-launch -a -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
-        eval `dbus-launch --sh-syntax --exit-with-x11`
+  eval `dbus-launch --sh-syntax --exit-with-x11`
 fi
 exec i3
