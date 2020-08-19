@@ -6,5 +6,5 @@ chosen=$(cut -d ';' -f1 "${HOME}/.local/share/emoji" \
 
 [ -z "${chosen}" ] && exit
 
-c=$(printf "$chosen" | sed "s/ .*//")
-printf "$c" | xclip -selection clipboard
+c=$(printf "${chosen}" | sed "s/ .*//")
+printf "${c}" | xclip -selection clipboard
