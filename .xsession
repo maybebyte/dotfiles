@@ -1,4 +1,4 @@
-export LANG=en_US.UTF-8
+#export LANG=en_US.UTF-8
 /usr/X11R6/bin/xrdb -merge ${HOME}/.Xresources
 /usr/X11R6/bin/xidle &
 /usr/local/bin/sct 3500

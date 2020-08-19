@@ -1,24 +1,10 @@
 #!/usr/bin/env sh
-# Give dmenu list of all unicode characters to copy.
-# Shows the selected character in dunst if running.
-
-# Must have xclip installed to even show menu.
 . "${HOME}/.cache/wal/colors.sh"
 
-if [ -e ${HOME}/.config/fontawesome ]; then
-	chosen=$(grep -v "#" -h ${HOME}/.local/share/emoji ${HOME}/.config/fontawesome \
-    | dmenu -i -l 20 -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7")
-else
-	chosen=$(grep -v "#" ${HOME}/.local/share/emoji \
-    | dmenu -i -l 20 -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7")
-fi
+chosen=$(cut -d ';' -f1 "${HOME}/.local/share/emoji" \
+  | dmenu -i -l 20 -fn "mono-22" -nb "${color0}" -nf "${color3}" -sb "${color0}" -sf "${color7}")
 
-[ "$chosen" != "" ] || exit
+[ -z "${chosen}" ] && exit
 
-c=$(echo "$chosen" | sed "s/ .*//")
-echo "$c" | tr -d '\n' | xclip -selection clipboard
-#notify-send "'$c' copied to clipboard." &
-
-s=$(echo "$chosen" | sed "s/.*; //" | awk '{print $1}')
-echo "$s" | tr -d '\n' | xclip
-#notify-send "'$s' copied to primary." &
+c=$(printf "$chosen" | sed "s/ .*//")
+printf "$c" | xclip -selection clipboard
