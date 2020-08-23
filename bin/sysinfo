@@ -14,10 +14,10 @@ show_date () {
 show_volume () {
   # division is used to truncate the resulting floating-point number
   VOLUME=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
-  if [ "$(sndioctl -n output.mute)" != 1 ]; then
-    printf %s "vol: ${VOLUME}%"
+  if [ "$(sndioctl -n output.mute)" = 1 ]; then
+    printf %s "MUTE"
   else
-    printf "MUTE"
+    printf %s "vol: ${VOLUME}%"
   fi
 }
 
@@ -28,14 +28,18 @@ show_disk_space () {
 
 show_battery () {
   ADAPTER=$(apm -a)
-  REMAINING="~$(apm -m) min"
+  MINUTES=$(($(apm -m) % 60))
+  HOURS=$(($(apm -m) / 60))
+  REMAINING="~${HOURS}h & ${MINUTES}m"
   PERCENTAGE="$(apm -l)%"
   if [ "${ADAPTER}" = 0 ]; then
-    printf %s "bat: ${REMAINING} ${PERCENTAGE}"
+    printf %s "bat: ${REMAINING}, at ${PERCENTAGE}"
   elif [ "${ADAPTER}" = 1 ]; then
-    printf %s "chr: ${PERCENTAGE}"
-  else
-    printf %s "unknwn pwr src"
+    printf %s "chr: at ${PERCENTAGE}"
+  elif [ "${ADAPTER}" = 2 ]; then
+    printf %s "bkup: at ${PERCENTAGE}"
+  elif [ "${ADAPTER}" = 255 ]; then
+    printf %s "unknown bat"
   fi
 }
 
@@ -55,11 +59,13 @@ show_temp () {
 }
 
 show_cpu_freq () {
-  CPU_FREQ=$(sysctl -n hw.cpuspeed)
-  printf %s "cpu: ${CPU_FREQ}MHz"
+  # conversely, we want the floating-point number here
+  CPU_FREQ=$(printf "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
+  printf %s "cpu: ${CPU_FREQ} GHz"
 }
 
 while true; do
+# indenting here affects spacing in the bar
 STATS="${DEFAULT_BGFG} %{l}$(show_battery)${DELIMITER}$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)${DELIMITER}$(show_disk_space)${DELIMITER}\
 $(show_date)"
