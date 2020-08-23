@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-lemonbar-xft -f sans-16 -p
+lemonbar-xft -f sans-14 -p
