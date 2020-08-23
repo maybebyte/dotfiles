@@ -1,0 +1,63 @@
+#!/usr/bin/env sh
+# system statistics in a format suitable for lemonbar
+
+. ${HOME}/.cache/wal/colors.sh
+DELIMITER="  %{F${color3}}|%{F${foreground}}  "
+DEFAULT_BGFG="%{B${background}} %{F${foreground}"
+export DELIMITER DEFAULT_BGFG
+
+show_date () {
+  DATE=$(date "+%Y-%m-%d %H:%M")
+  printf %s "${DATE}"
+}
+
+show_volume () {
+  VOLUME=$(sndioctl output.level | cut -f 2 -d "=" | cut -f 2 -d ".")
+  printf %.7s "vol: ${VOLUME}"
+}
+
+show_disk_space () {
+  DISKSPACE=$(df -h /home | tail -1 | awk '{print $4}')
+  printf %s "/home: ${DISKSPACE}"
+}
+
+show_battery () {
+  ADAPTER=$(apm -a)
+  REMAINING="~$(apm -m) min"
+  PERCENTAGE="$(apm -l)%"
+  if [ "${ADAPTER}" = 0 ]; then
+    printf %s "bat: ${REMAINING} ${PERCENTAGE}"
+  elif [ "${ADAPTER}" = 1 ]; then
+    printf %s "chr: ${PERCENTAGE}"
+  else
+    printf %s "unknwn pwr src"
+  fi
+}
+
+show_track () {
+  SONG=$(mpc current)
+  TIME=$(mpc | sed -n 2p | awk '{print $3}')
+  if [ -z "${SONG}" ]; then
+    printf %s ""
+  else
+    printf %s "${SONG}${DELIMITER}${TIME}"
+  fi
+}
+
+show_temp () {
+  TEMPERATURE=$(sysctl -n hw.sensors.cpu0.temp0 | awk -F "." '{print $1}')
+  printf %s "temp: ${TEMPERATURE} °C"
+}
+
+show_cpu_freq () {
+  CPU_FREQ=$(sysctl -n hw.cpuspeed)
+  printf %s "cpu: ${CPU_FREQ}MHz"
+}
+
+while true; do
+STATS="${DEFAULT_BGFG} %{l}$(show_battery)${DELIMITER}$(show_temp)\
+%{c}$(show_track) %{r}$(show_volume)%${DELIMITER}$(show_disk_space)${DELIMITER}\
+$(show_date)"
+  printf %s "${STATS}"
+  sleep 1
+done
