@@ -20,11 +20,11 @@ shift + super + {plus, Left, Right, Down, Up}
 
 # mute audio
 F1
-	sndioctl output.mute=! && pkill -USR1 i3status
+	sndioctl output.mute=!
 
 # {lower,raise} volume
 {F2, F3}
-	sndioctl output.level={-0.05,+0.05} && pkill -USR1 i3status
+	sndioctl output.level={-0.05,+0.05}
 
 # {dim,brighten} display
 {F5, F6}
