@@ -12,11 +12,11 @@ show_date () {
 }
 
 show_volume () {
-  VOLUME=$(sndioctl output.level | cut -f 2 -d "=" | cut -f 2 -d ".")
+  VOLUME=$(sndioctl -n output.level | cut -f 2 -d '.')
   if [ "$(sndioctl -n output.mute)" != 1 ]; then
-    printf %.7s "vol: ${VOLUME}%"
+    printf %.7s "vol: ${VOLUME}"
   else
-    printf "vol: mute"
+    printf "MUTE"
   fi
 }
 
