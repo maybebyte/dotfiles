@@ -7,7 +7,6 @@ SELFHOSTING="${HOME}/builds/website/pages/selfhosting.html"
 PROJECTS="${HOME}/builds/website/pages/projects.html"
 CLUES="${HOME}/builds/website/pages/clues.html"
 
-
 INDEX_TITLE='<title>A Missing Link</title>'
 ABOUT_ME_TITLE='<title>About Me</title>'
 SOFTWARE_TITLE='<title>Software</title>'
@@ -73,14 +72,6 @@ remove_trailing_whitespace () {
     sed -i 's/\s\+$//g' "${i}"
   done
 }
-
-#set_active () {
-  #for i in ${INDEX} ${ABOUT_ME} ${SOFTWARE} ${SELFHOSTING} ${PROJECTS} ${CLUES}
-  #do
-    #ACTIVE_NAME=$(basename "${I}")
-    #sed -i "s/${ACTIVE_NAME}//g" "${i}"
-  #done
-#}
 
 add_titles_and_descriptions
 remove_trailing_whitespace

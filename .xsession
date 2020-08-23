@@ -8,7 +8,7 @@ export LANG=en_US.UTF-8
 ${HOME}/.local/bin/wal -R
 /usr/X11R6/bin/xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
 /usr/X11R6/bin/xset m 3/1 0
-#${HOME}/bin/lemonbar.sh | lemonbar-xft -pf "Fira Sans-18" &
+${HOME}/bin/sysinfo | ${HOME}/bin/lbar &
 
 # trackpad scrolling with middle button
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1

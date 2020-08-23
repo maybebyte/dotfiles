@@ -52,8 +52,8 @@ export CLICOLOR=1
 export GNUPGHOME="${HOME}/.config/gnupg"
 export PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
 
-alias wgetall="wget --random-wait -m -k -p -np -c --no-check-certificate -R 'index.html*' -U mozilla"
-alias wgetone="wget --random-wait -k -p -np -c --no-check-certificate -E -H -K --show-progress --no-verbose -U mozilla"
+alias wgetall="wget --random-wait -m -k -p -np -c -N --show-progress --no-verbose -R 'index.html*' -U mozilla"
+alias wgetone="wget --random-wait -k -p -np -c -E -H -K -N --show-progress --no-verbose -U mozilla"
 alias dots="git --git-dir=~/.dotfiles/ --work-tree=~/"
 alias dots_cmt="dots commit -a -m"
 alias dots_psh="dots push origin master"

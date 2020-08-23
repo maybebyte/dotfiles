@@ -121,20 +121,20 @@ client.placeholder      $bg     $bg     $fg  $bg       $bg
 
 client.background       $bg
 
-bar {
-  status_command i3status
-  position top
-  colors {
-    background #0a111a
-    statusline $fg
-    separator $bg
-    #                  border  backgr. text
-    focused_workspace  $bg	  $bg      $fg
-    active_workspace   #333333 #5f676a $fg
-    inactive_workspace #222222 #222222 $fg
-    urgent_workspace   #900000 #900000 $fg
-  }
-}
+#bar {
+  #status_command i3status
+  #position top
+  #colors {
+    #background #0a111a
+    #statusline $fg
+    #separator $bg
+    ##                  border  backgr. text
+    #focused_workspace  $bg	  $bg      $fg
+    #active_workspace   #333333 #5f676a $fg
+    #inactive_workspace #222222 #222222 $fg
+    #urgent_workspace   #900000 #900000 $fg
+  #}
+#}
 
 for_window [class="^.*"] border pixel 0
 for_window [class="Firefox"] floating enable
