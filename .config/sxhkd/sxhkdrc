@@ -1,5 +1,5 @@
 # applications
-super + {Return, d, u, F, W, P, n}
+super + {Return, d, u, F, W, P}
 	{st, ~/bin/dmen, ~/bin/dmenuunicode, firefox, tor-browser, keepassxc}
 
 # screen lock
