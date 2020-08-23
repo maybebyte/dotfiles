@@ -13,7 +13,11 @@ show_date () {
 
 show_volume () {
   VOLUME=$(sndioctl output.level | cut -f 2 -d "=" | cut -f 2 -d ".")
-  printf %.7s "vol: ${VOLUME}"
+  if [ "$(sndioctl -n output.mute)" != 1 ]; then
+    printf %.7s "vol: ${VOLUME}%"
+  else
+    printf "vol: mute"
+  fi
 }
 
 show_disk_space () {
@@ -56,7 +60,7 @@ show_cpu_freq () {
 
 while true; do
 STATS="${DEFAULT_BGFG} %{l}$(show_battery)${DELIMITER}$(show_temp)\
-%{c}$(show_track) %{r}$(show_volume)%${DELIMITER}$(show_disk_space)${DELIMITER}\
+%{c}$(show_track) %{r}$(show_volume)${DELIMITER}$(show_disk_space)${DELIMITER}\
 $(show_date)"
   printf %s "${STATS}"
   sleep 1

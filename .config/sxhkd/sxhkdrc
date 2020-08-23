@@ -1,62 +1,31 @@
-super + Return
-	st
+# applications
+super + {Return, d, u, F, W, P, n}
+	{st, ~/bin/dmen, ~/bin/dmenuunicode, firefox, tor-browser, keepassxc}
 
-super + shift + f
-	firefox
-
-super + shift + w
-	tor-browser
-
-super + d
-	${HOME}/bin/dmen
-
-super + u
-	${HOME}/bin/dmenuunicode
-
-super + shift + p
-	keepassxc
-
+# screen lock
 super + n
 	pkill -USR1 xidle
 
+# screenshots
 Print
 	${HOME}/bin/maimpick
 
-super + greater
-	mpc next
+# music skip/play/pause
+super + {greater, less, T}
+	mpc {next, prev, toggle}
 
-super + less
-	mpc prev
+# seek to beginning, 5 sec {back,forward}, 1 min {back,forward}
+shift + super + {plus, Left, Right, Down, Up}
+	 mpc seek {0, -5, +5, -1:00, +1:00}
 
-shift + super + t
-	mpc toggle
-
-super + plus
-	mpc seek 0
-
-shift + super + Left
-	mpc seek -5
-
-shift + super + Right
-	mpc seek +5
-
-shift + super + Up
-	mpc seek +1:00
-
-shift + super + Down
-	mpc seek -1:00
-
+# mute audio
 F1
 	sndioctl output.mute=! && pkill -USR1 i3status
 
-F2
-	sndioctl output.level=-0.05 && pkill -USR1 i3status
+# {lower,raise} volume
+{F2, F3}
+	sndioctl output.level={-0.05,+0.05} && pkill -USR1 i3status
 
-F3
-	sndioctl output.level=+0.05 && pkill -USR1 i3status
-
-F5
-	xbacklight -dec 10
-
-F6
-	xbacklight -inc 10
+# {dim,brighten} display
+{F5, F6}
+	xbacklight {-dec,-inc} 10
