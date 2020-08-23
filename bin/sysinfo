@@ -12,9 +12,10 @@ show_date () {
 }
 
 show_volume () {
-  VOLUME=$(sndioctl -n output.level | cut -f 2 -d '.')
+  # division is used to truncate the resulting floating-point number
+  VOLUME=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
   if [ "$(sndioctl -n output.mute)" != 1 ]; then
-    printf %.7s "vol: ${VOLUME}"
+    printf %s "vol: ${VOLUME}%"
   else
     printf "MUTE"
   fi

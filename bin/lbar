@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-lemonbar-xft -f sans-14 -p
+lemonbar-xft -f sans-14 -f "Font Awesome 5 Free-14" -p
