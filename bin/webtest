@@ -1,7 +1,16 @@
 #!/usr/bin/env sh
 
+MARKDOWNDIR=/home/ashlen/builds/website_md
 WEBDIR=/home/ashlen/builds/website
 SRVDIR=/var/www/htdocs/amissing.link
+SSG=/home/ashlen/bin/ssg5
+
+gen_site () {
+  rm -f ${WEBDIR}/.files \
+    && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
+    "https://amissing.link" \
+    || printf "couldn't generate site.\\n" >&2
+}
 
 sync_and_chmod () {
   rsync -a --partial -q ${WEBDIR}/* ${SRVDIR} \
@@ -12,4 +21,5 @@ sync_and_chmod () {
   || printf "unable to sync web server.\\n" >&2
 }
 
+gen_site
 sync_and_chmod
