@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
-INDEX="${HOME}/builds/website/index.html"
-ABOUT_ME="${HOME}/builds/website/pages/about-me.html"
-SOFTWARE="${HOME}/builds/website/pages/software.html"
-SELFHOSTING="${HOME}/builds/website/pages/selfhosting.html"
-PROJECTS="${HOME}/builds/website/pages/projects.html"
-CLUES="${HOME}/builds/website/pages/clues.html"
+INDEX="/home/ashlen/builds/website/index.html"
+ABOUT_ME="/home/ashlen/builds/website/pages/about-me.html"
+SOFTWARE="/home/ashlen/builds/website/pages/software.html"
+SELFHOSTING="/home/ashlen/builds/website/pages/selfhosting.html"
+PROJECTS="/home/ashlen/builds/website/pages/projects.html"
+CLUES="/home/ashlen/builds/website/pages/clues.html"
 
 INDEX_TITLE="<title>aml: there's no place like /home</title>"
 ABOUT_ME_TITLE='<title>aml: about me and my interests </title>'

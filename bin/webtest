@@ -4,12 +4,13 @@ MARKDOWNDIR=/home/ashlen/builds/website_md
 WEBDIR=/home/ashlen/builds/website
 SRVDIR=/var/www/htdocs/amissing.link
 SSG=/home/ashlen/bin/ssg5
+FMT=/home/ashlen/bin/fmt_site
 
 gen_site () {
   rm -f ${WEBDIR}/.files \
     && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
     "https://amissing.link" \
-    || printf "couldn't generate site.\\n" >&2
+    && ${FMT}
 }
 
 sync_and_chmod () {
@@ -17,9 +18,8 @@ sync_and_chmod () {
   && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; \
   && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; \
   && rcctl -f start httpd \
-  && printf "web server synced.\\n" \
-  || printf "unable to sync web server.\\n" >&2
+  && printf "web server synced.\\n"
 }
 
-gen_site
-sync_and_chmod
+gen_site || printf "couldn't generate site.\\n" >&2
+sync_and_chmod || printf "unable to sync web server.\\n" >&2
