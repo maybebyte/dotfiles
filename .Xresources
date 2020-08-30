@@ -5,8 +5,26 @@ Xft.hinting   : 1
 Xft.antialias : 1
 Xft.rgba      : rgb
 
-XIdle*program:  /usr/local/bin/slock xset dpms force off
-XIdle*timeout:  90
+!XIdle.program:  /usr/local/bin/slock xset dpms force off
+XIdle.timeout:  90
+
+XLock.grabmouse: True
+XLock.usefirst: True
+XLock.mono: True
+XLock.mode: blank
+XLock.erasemode: no_fade
+XLock.dpmsoff: 1
+XLock.description:
+XLock.info:
+XLock.validate:
+XLock.invalid:
+XLock.echokeys: True
+XLock.echokey: *
+XLock.sound: False
+XLock.timeelapsed: True
+XLock.username:
+XLock.password: password:
+!XLock.logoutCmd: "doas ZZZ"
 
 ! Colors 0-15.
 *.color0: #040516
