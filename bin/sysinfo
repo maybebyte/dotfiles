@@ -39,7 +39,7 @@ show_battery () {
   elif [ "${ADAPTER}" = 2 ]; then
     printf %s "bkup: ${REMAINING}, at ${PERCENTAGE}"
   elif [ "${ADAPTER}" = 255 ]; then
-    printf %s "unknown bat"
+    printf %s ""
   fi
 }
 

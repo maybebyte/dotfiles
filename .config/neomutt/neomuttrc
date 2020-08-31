@@ -9,6 +9,7 @@
 source "gpg2 -dq ~/passwords/email_pass.gpg |"
 
 subscribe announcements@openbsd.org
+subscribe bugs@openbsd.org
 
 set auto_subscribe=yes
 set beep=no
@@ -34,7 +35,7 @@ set delete=yes
 set pop_checkinterval=60
 set mail_check=60
 set folder=pops://mail.riseup.net/
-mailboxes = +INBOX
+mailboxes = +INBOX ~/mbox
 set spoolfile = +INBOX
 set postponed = +Drafts
 set record = +Sent
@@ -101,7 +102,7 @@ bind pager k previous-line
 bind pager l view-attachments
 bind index D purge-message
 #bind index U undelete-message
-bind index L limit
+bind index L list-reply
 bind index h noop
 bind index l display-message
 bind index,query <space> tag-entry
