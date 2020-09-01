@@ -9,8 +9,8 @@ import System.IO
 myModMask = mod4Mask
 myTerminal = "st"
 myBorderWidth = 2
-myNormalBorderColor = "#9974E7"
-myFocusedBorderColor = "#698CEC"
+myNormalBorderColor = "#698CEC"
+myFocusedBorderColor = "#9974E7"
 myMouseFocusRule = False
 
 myManageHook = composeAll
