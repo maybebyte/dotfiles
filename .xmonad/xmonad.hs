@@ -8,7 +8,10 @@ import System.IO
 
 myModMask = mod4Mask
 myTerminal = "st"
-myBorderWidth = 0
+myBorderWidth = 2
+myNormalBorderColor = "#9974E7"
+myFocusedBorderColor = "#698CEC"
+myMouseFocusRule = False
 
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
@@ -27,7 +30,9 @@ main = do
   xmonad $ docks def
     { layoutHook        = myLayoutHook
     , borderWidth       = myBorderWidth
+    , normalBorderColor = myNormalBorderColor
+    , focusedBorderColor= myFocusedBorderColor
     , modMask           = myModMask
     , terminal          = myTerminal
-    , focusFollowsMouse = False
+    , focusFollowsMouse = myMouseFocusRule
     , manageHook        = myManageHook <+> manageHook def }
