@@ -82,6 +82,7 @@ autocmd BufWritePost index.md,about-me.md,software.md,selfhosting.md,projects.md
 
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
+autocmd VimEnter * set laststatus=0
 
 
 " if vim-plug isn't installed, install it
