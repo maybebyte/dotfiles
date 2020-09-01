@@ -10,7 +10,8 @@ gen_site () {
   rm -f ${WEBDIR}/.files \
     && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
     "https://amissing.link" \
-    && ${FMT}
+    && ${FMT} \
+    && chown ashlen:ashlen ${WEBDIR}/.files
 }
 
 sync_and_chmod () {
