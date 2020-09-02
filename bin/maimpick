@@ -1,5 +1,8 @@
 #!/usr/bin/env ksh
 
+# rewrite of Luke Smith's maimpick
+# his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
+
 # Import the colors
 . "${HOME}/.cache/wal/colors.sh"
 

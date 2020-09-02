@@ -16,10 +16,10 @@ gen_site () {
 
 sync_and_chmod () {
   rsync -a --partial -q ${WEBDIR}/* ${SRVDIR}/ \
-  && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; \
-  && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; \
-  && rcctl -f start httpd \
-  && printf "web server synced.\\n"
+    && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; \
+    && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; \
+    && rcctl -f start httpd \
+    && printf "web server synced.\\n"
 }
 
 gen_site || printf "couldn't generate site.\\n" >&2

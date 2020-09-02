@@ -24,11 +24,9 @@ and /usr. It compresses them using ${COMPRESSOR} and places the backups inside
 EOF
 read -r CONTINUE
 
-if [ "${CONTINUE}" = "n" ];
-then
+if [ "${CONTINUE}" = "n" ]; then
   printf "Goodbye.\\n"
-elif [ "${CONTINUE}" = "y" ];
-then
+elif [ "${CONTINUE}" = "y" ]; then
   printf "Dumping filesystems...\\n"
   mkdir -p "/mnt/${DATE}"
   bkup && printf "Filesystem dump complete!\\n"
