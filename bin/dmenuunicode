@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 . "${HOME}/.cache/wal/colors.sh"
 
-chosen=$(cut -d ';' -f1 "${HOME}/.local/share/emoji" \
+CHOSEN=$(cut -d ';' -f1 "${HOME}/.local/share/emoji" \
   | dmenu -i -l 20 -fn "mono-22" -nb "${color0}" -nf "${color3}" -sb "${color0}" -sf "${color7}")
 
-[ -z "${chosen}" ] && exit
+[ -z "${CHOSEN}" ] && exit
 
-c=$(printf "${chosen}" | sed "s/ .*//")
-printf "${c}" | xclip -selection clipboard
+EMOJI=$(printf "${CHOSEN}" | sed "s/ .*//")
+printf "${EMOJI}" | xclip -selection clipboard

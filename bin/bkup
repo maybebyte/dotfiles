@@ -2,14 +2,15 @@
 DATE="$(date '+%Y-%m-%d')"
 EXTENSION=".dump.bz2"
 COMPRESSOR="bzip2"
+COMPRESSOR_ARGS="-c"
 
 bkup() {
-/sbin/dump -0 -a -u -f - / | "${COMPRESSOR}" -c > /mnt/"${DATE}"/root"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /var | "${COMPRESSOR}" -c > /mnt/"${DATE}"/var"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /home | "${COMPRESSOR}" -c > /mnt/"${DATE}"/home"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /usr/local | "${COMPRESSOR}" -c > /mnt/"${DATE}"/usr-local"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /usr/X11R6 | "${COMPRESSOR}" -c > /mnt/"${DATE}"/usr-X11R6"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /usr | "${COMPRESSOR}" -c > /mnt/"${DATE}"/usr"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - / | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/root"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /var | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/var"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /home | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/home"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr/local | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/usr-local"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr/X11R6 | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/usr-X11R6"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/usr"${EXTENSION}" &
 wait
 }
 
@@ -18,8 +19,8 @@ banner "bkup"
 cat <<EOF
 
 This script creates level 0 dumps of /root, /var, /home, /usr/local, /usr/X11R6,
-and /usr. It compresses them using ${COMPRESSOR} and places the backups inside /mnt in
-a folder named the current date. Is this acceptable?
+and /usr. It compresses them using ${COMPRESSOR} and places the backups inside
+/mnt in a folder named the current date. Is this acceptable?
 EOF
 read -r CONTINUE
 

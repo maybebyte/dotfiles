@@ -3,11 +3,72 @@
 # Import the colors
 . "${HOME}/.cache/wal/colors.sh"
 
-case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -fn "mono-20" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7" -l 6 -p "Screenshot which area?")" in
-	"a selected area") maim -u -s "${HOME}/Downloads/selected-$(date '+%Y%m%d-%H%M%S').png" ;;
-	"current window") maim -u -B -i "$(xdotool getactivewindow)" "${HOME}/Downloads/window-$(date '+%Y%m%d-%H%M%S').png" ;;
-	"full screen") maim -u "${HOME}/Downloads/full-$(date '+%Y%m%d-%H%M%S').png" ;;
-	"a selected area (copy)") maim -u -s | xclip -selection clipboard -t image/png ;;
-	"current window (copy)") maim -u -B -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
-	"full screen (copy)") maim -u | xclip -selection clipboard -t image/png ;;
+COMMON_MAIM_ARGS="-d 1 -u -q"
+DOWNLOADS="${HOME}/Downloads"
+
+menu () {
+dmenu -fn 'mono-20' \
+-nb "${color0}" \
+-nf "${color3}" \
+-sb "${color0}" \
+-sf "${color7}" \
+-l 6 \
+-p 'Screenshot which area?'
+}
+
+print_options () {
+cat <<EOF
+a selected area
+current window
+full screen
+selected area (copy)
+current window (copy)
+full screen (copy)
+EOF
+}
+
+cur_date () {
+  date '+%Y%m%d-%H%M%S'
+}
+
+yank () {
+  xclip -selection clipboard -t image/png
+}
+
+maim_sel_save () {
+  FILENAME="selected-$(cur_date).png"
+  maim ${COMMON_MAIM_ARGS} -s "${DOWNLOADS}/${FILENAME}"
+}
+
+maim_sel_copy () {
+  maim ${COMMON_MAIM_ARGS} -s | yank
+}
+
+maim_cur_save () {
+  FILENAME="window-$(cur_date).png"
+  maim ${COMMON_MAIM_ARGS} -i "$(xdotool getactivewindow)" \
+    "${DOWNLOADS}/${FILENAME}"
+}
+
+maim_cur_copy () {
+  maim ${COMMON_MAIM_ARGS} -i "$(xdotool getactivewindow)" \
+    | yank
+}
+
+maim_full_save () {
+  FILENAME="full-$(cur_date).png"
+  maim ${COMMON_MAIM_ARGS} "${DOWNLOADS}/${FILENAME}"
+}
+
+maim_full_copy () {
+  maim ${COMMON_MAIM_ARGS} | yank
+}
+
+case "$(print_options | menu)" in
+  "a selected area") maim_sel_save ;;
+  "current window") maim_cur_save ;;
+  "full screen") maim_full_save ;;
+  "a selected area (copy)") maim_sel_copy ;;
+  "current window (copy)") maim_cur_copy ;;
+  "full screen (copy)") maim_full_copy ;;
 esac
