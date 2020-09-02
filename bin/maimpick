@@ -8,12 +8,12 @@ DOWNLOADS="${HOME}/Downloads"
 
 menu () {
   dmenu -fn 'mono-20' \
-  -nb "${color0}" \
-  -nf "${color3}" \
-  -sb "${color0}" \
-  -sf "${color7}" \
-  -l 6 \
-  -p 'Screenshot which area?'
+    -nb "${color0}" \
+    -nf "${color3}" \
+    -sb "${color0}" \
+    -sf "${color7}" \
+    -l 6 \
+    -p 'Screenshot which area?'
 }
 
 print_options () {
