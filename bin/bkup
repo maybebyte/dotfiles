@@ -5,12 +5,12 @@ COMPRESSOR="bzip2"
 COMPRESSOR_ARGS="-c"
 
 bkup() {
-/sbin/dump -0 -a -u -f - / | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/root"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /var | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/var"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /home | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/home"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /usr/local | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/usr-local"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /usr/X11R6 | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/usr-X11R6"${EXTENSION}" &
-/sbin/dump -0 -a -u -f - /usr | "${COMPRESSOR}" "${COMPRESSOR_ARGS}" > /mnt/"${DATE}"/usr"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - / | "${COMPRESSOR}" ${COMPRESSOR_ARGS} > /mnt/"${DATE}"/root"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /var | "${COMPRESSOR}" ${COMPRESSOR_ARGS} > /mnt/"${DATE}"/var"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /home | "${COMPRESSOR}" ${COMPRESSOR_ARGS} > /mnt/"${DATE}"/home"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr/local | "${COMPRESSOR}" ${COMPRESSOR_ARGS} > /mnt/"${DATE}"/usr-local"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr/X11R6 | "${COMPRESSOR}" ${COMPRESSOR_ARGS} > /mnt/"${DATE}"/usr-X11R6"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr | "${COMPRESSOR}" ${COMPRESSOR_ARGS} > /mnt/"${DATE}"/usr"${EXTENSION}" &
 wait
 }
 
