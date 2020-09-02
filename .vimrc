@@ -101,7 +101,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-sensible'
 Plug 'dylanaraps/wal.vim'
 Plug 'junegunn/goyo.vim'
-Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'ap/vim-css-color'
 Plug 'kovetskiy/sxhkd-vim'
 call plug#end()
