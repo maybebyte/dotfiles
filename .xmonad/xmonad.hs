@@ -1,9 +1,6 @@
 import XMonad
 import XMonad.Layout.Spacing
-import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeys)
 import System.IO
 
 myModMask = mod4Mask
