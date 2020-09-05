@@ -6,7 +6,7 @@
 # Import the colors
 . "${HOME}/.cache/wal/colors.sh"
 
-COMMON_MAIM_ARGS="-d 1 -u -q"
+COMMON_MAIM_ARGS="-d 1 -u -q -B"
 DOWNLOADS="${HOME}/Downloads"
 
 menu () {

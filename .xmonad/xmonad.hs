@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Hooks.ManageDocks
 import System.IO
+import XMonad.Hooks.EwmhDesktops
 
 myModMask = mod4Mask
 myTerminal = "st"
@@ -24,8 +25,11 @@ myLayoutHook = avoidStruts
   $ Tall 1 (3/100) (1/2) ||| Full
 
 main = do
-  xmonad $ docks def
-    { layoutHook        = myLayoutHook
+  xmonad
+    $ ewmh
+    $ docks def
+    { handleEventHook   = fullscreenEventHook
+    , layoutHook        = myLayoutHook
     , borderWidth       = myBorderWidth
     , normalBorderColor = myNormalBorderColor
     , focusedBorderColor= myFocusedBorderColor
