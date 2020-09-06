@@ -3,6 +3,7 @@ import XMonad.Layout.Spacing
 import XMonad.Hooks.ManageDocks
 import System.IO
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Layout.NoBorders
 
 myModMask = mod4Mask
 myTerminal = "st"
@@ -18,6 +19,7 @@ myManageHook = composeAll
   , className =? "Tor Browser" --> doFloat
   , className =? "KeePassXC" --> doShift "5"
   , className =? "mpv" --> doShift "9"
+  , className =? "st-256color" --> hasBorder True
   , manageDocks ]
 
 myLayoutHook = avoidStruts
@@ -29,7 +31,7 @@ main = do
     $ ewmh
     $ docks def
     { handleEventHook   = fullscreenEventHook
-    , layoutHook        = myLayoutHook
+    , layoutHook        = smartBorders (myLayoutHook)
     , borderWidth       = myBorderWidth
     , normalBorderColor = myNormalBorderColor
     , focusedBorderColor= myFocusedBorderColor
