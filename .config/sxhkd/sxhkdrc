@@ -10,7 +10,7 @@ super + n
 Print
 	${HOME}/bin/maimpick
 
-# music skip/play/pause
+# music {skip,play,pause}
 super + {greater, less, T}
 	mpc {next, prev, toggle}
 

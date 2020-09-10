@@ -37,9 +37,6 @@ set mail_check=60
 set folder=pops://mail.riseup.net/
 mailboxes = +INBOX
 set spoolfile = +INBOX
-set postponed = +Drafts
-set record = +Sent
-set trash = +Trash
 set crypt_use_gpgme=yes
 set crypt_autosign=no
 set crypt_replyencrypt=yes
@@ -101,12 +98,12 @@ bind pager j next-line
 bind pager k previous-line
 bind pager l view-attachments
 bind index D purge-message
-#bind index U undelete-message
+bind index U undelete-message
 bind index L list-reply
 bind index h noop
 bind index l display-message
 bind index,query <space> tag-entry
-#bind browser h goto-parent
+bind browser h goto-parent
 macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
 bind browser l select-entry
 bind index,pager,browser d half-down
@@ -144,13 +141,9 @@ mono error bold
 color normal default default
 color indicator green default
 color sidebar_highlight red default
-#color sidebar_divider brightblack black
-#color sidebar_flagged red black
-#color sidebar_new green black
 color error red default
 color tilde black default
 color message cyan default
-#color markers red white
 color attachment white default
 color search brightmagenta default
 color status magenta black
