@@ -41,13 +41,15 @@ set tabstop=2
 set shiftwidth=2
 set textwidth=72
 set expandtab
+set showbreak=>\
+set nowrap
 
 " :h fo-table explains these options.
 set formatoptions=tcqro2b1jp
 
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
-map <C-p> "+P
+nnoremap <C-p> :set paste "+P :set nopaste
 
 " to protecc my left pinky finger
 noremap ; :
@@ -82,8 +84,12 @@ autocmd BufWritePost index.md,about-me.md,software.md,selfhosting.md,projects.md
 
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
+
+" no more ugly status bar, tmux covers this.
 autocmd VimEnter * set laststatus=0
 
+" Spell-check set to <leader>o, 'o' for 'orthography':
+nnoremap <leader>o :set spell! spelllang=en_us
 
 " if vim-plug isn't installed, install it
 if empty(glob('$HOME/.vim/autoload/plug.vim'))
