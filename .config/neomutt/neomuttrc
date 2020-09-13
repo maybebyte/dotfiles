@@ -54,7 +54,7 @@ hdr_order       From: To: Cc: Bcc: Date: Subject:
 
 set reflow_wrap=72
 set wrap=72
-set edit_headers=yes
+#set edit_headers=yes
 
 set header_cache="~/.cache/mutt"
 set message_cachedir="~/.cache/mutt"

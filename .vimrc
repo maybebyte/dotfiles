@@ -57,9 +57,12 @@ noremap : ;
 
 " plugin bindings
 let mapleader=","
-noremap <leader>n :NERDTreeToggle
-noremap <leader>f :FZF
-noremap <leader>g :Goyo
+nnoremap <leader>n :NERDTreeToggle
+nnoremap <leader>f :FZF
+nnoremap <leader>g :Goyo
+
+" Spell-check set to <leader>o, 'o' for 'orthography':
+nnoremap <leader>o :set spell! spelllang=en_us
 
 " for reverting edits and other conveniences
 set backup
@@ -87,9 +90,6 @@ autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
 
 " no more ugly status bar, tmux covers this.
 autocmd VimEnter * set laststatus=0
-
-" Spell-check set to <leader>o, 'o' for 'orthography':
-nnoremap <leader>o :set spell! spelllang=en_us
 
 " if vim-plug isn't installed, install it
 if empty(glob('$HOME/.vim/autoload/plug.vim'))
