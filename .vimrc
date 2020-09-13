@@ -49,7 +49,7 @@ set formatoptions=tcqro2b1jp
 
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
-nnoremap <C-p> :set paste "+P :set nopaste
+nnoremap <C-p> "+P
 
 " to protecc my left pinky finger
 noremap ; :
