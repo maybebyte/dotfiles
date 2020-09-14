@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 
 MARKDOWNDIR=/home/ashlen/builds/website_md
 WEBDIR=/home/ashlen/builds/website
@@ -9,16 +10,16 @@ FMT=/home/ashlen/bin/fmt_site
 gen_site () {
   rm -f ${WEBDIR}/.files \
     && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
-    "https://amissing.link" \
+    "https://amissing.link" > /dev/null 2>&1 \
     && ${FMT} \
     && chown ashlen:ashlen ${WEBDIR}/.files
 }
 
 sync_and_chmod () {
   rsync -a --partial -q ${WEBDIR}/* ${SRVDIR}/ \
-    && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; \
-    && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; \
-    && rcctl -f start httpd \
+    && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; > /dev/null 2>&1 \
+    && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; > /dev/null 2>&1 \
+    && rcctl -f restart httpd > /dev/null \
     && printf "web server synced.\\n"
 }
 
