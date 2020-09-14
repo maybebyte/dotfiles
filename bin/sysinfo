@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
+set -e
 # system statistics in a format suitable for lemonbar
 
 . ${HOME}/.cache/wal/colors.sh
-DELIMITER="  %{F${color3}}|%{F${foreground}}  "
-DEFAULT_BGFG="%{B${background}} %{F${foreground}"
-export DELIMITER DEFAULT_BGFG
+export DELIMITER="  %{F${color3}}|%{F${foreground}}  "
+export DEFAULT_BGFG="%{B${background}} %{F${foreground}"
 
 show_date () {
   DATE=$(date "+%Y-%m-%d %H:%M")

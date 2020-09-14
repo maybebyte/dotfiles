@@ -1,4 +1,5 @@
 #!/usr/bin/env ksh
+set -e
 
 # rewrite of Luke Smith's maimpick
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice

@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 
 INDEX="/home/ashlen/builds/website/index.html"
 ABOUT_ME="/home/ashlen/builds/website/pages/about-me.html"

@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
-# lists man pages from specified sections, shuffles them,
-# and grabs the first page (like drawing the top card from a shuffled deck).
-# Then passes that result to man for viewing.
+set -e
+
+# lists man pages from specified sections, shuffles them, and grabs the first
+# page (like drawing the top card from a shuffled deck).  Then passes that
+# result to man for viewing.
 man "$(find /usr/share/man/man{1,5,7,8} | sort -R | head -1)"

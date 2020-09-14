@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
+set -e
 # encodes all flac files in ${PWD} to opus with parallelization
 parallel opusenc --bitrate 192 "{}" "{.}.opus" ::: ./*.flac

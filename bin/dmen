@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 
 # Import the colors
 . "${HOME}/.cache/wal/colors.sh"

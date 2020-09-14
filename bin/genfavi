@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 
 # https://www.imagemagick.org/Usage/thumbnails/#favicon
 # usage: genfavi [image]

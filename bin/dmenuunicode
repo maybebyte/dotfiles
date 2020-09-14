@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 . "${HOME}/.cache/wal/colors.sh"
 
 CHOSEN=$(cut -d ';' -f1 "${HOME}/.local/share/emoji" \
