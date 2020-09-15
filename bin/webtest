@@ -16,9 +16,10 @@ gen_site () {
 }
 
 sync_and_chmod () {
-  rsync -a --partial -q ${WEBDIR}/* ${SRVDIR}/ \
+  rsync -a --partial --delete -q ${WEBDIR}/ ${SRVDIR}/ \
     && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; > /dev/null 2>&1 \
     && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; > /dev/null 2>&1 \
+    && chmod 755 ${SRVDIR} \
     && rcctl -f restart httpd > /dev/null \
     && printf "web server synced.\\n"
 }
