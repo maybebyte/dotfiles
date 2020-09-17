@@ -1,12 +1,25 @@
 #!/usr/bin/env sh
 set -e
 
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
 # https://www.imagemagick.org/Usage/thumbnails/#favicon
 # usage: genfavi [image]
 
-convert "$1" -background white \
-  \( -clone 0 -resize 16x16 -extent 16x16 \) \
-  \( -clone 0 -resize 32x32 -extent 32x32 \) \
-  \( -clone 0 -resize 48x48 -extent 48x48 \) \
-  \( -clone 0 -resize 64x64 -extent 64x64 \) \
-  -delete 0 -alpha off -colors 256 favicon.ico
+genfavi () {
+  convert "$1" -background white \
+    \( -clone 0 -resize 16x16 -extent 16x16 \) \
+    \( -clone 0 -resize 32x32 -extent 32x32 \) \
+    \( -clone 0 -resize 48x48 -extent 48x48 \) \
+    \( -clone 0 -resize 64x64 -extent 64x64 \) \
+    -delete 0 -alpha off -colors 256 favicon.ico
+}
+
+genfavi "$@" || err "Unable to generate favicon."

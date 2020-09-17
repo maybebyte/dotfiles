@@ -11,17 +11,8 @@ case "$(command -v vim)" in
   *)     VIM="vi"  ;;
 esac
 
-# https://wiki.archlinux.org/index.php/Ranger#Preventing_nested_ranger_instances
-ranger() {
-	if [ -z "$RANGER_LEVEL" ]; then
-		/usr/local/bin/ranger "$@"
-	else
-		exit
-	fi
-}
-
 # use colorls if it's installed, plain old ls otherwise
-if command -v colorls > /dev/null ; then
+if command -v colorls > /dev/null; then
   LS='colorls'
 else
   LS='ls'
@@ -29,7 +20,7 @@ fi
 
 umask 077
 
-# swaps colors when uid is 0
+# swaps colors when uid is 0, i.e. root
 case "$(id -u)" in
   0) _PS1_USER_COLOR='\[\033[1;33m\]' _PS1_PATH_COLOR='\[\033[1;35m\]' ;;
   *) _PS1_USER_COLOR='\[\033[1;35m\]' _PS1_PATH_COLOR='\[\033[1;33m\]' ;;
@@ -37,7 +28,7 @@ esac
 _PS1_BRACKET_COLOR='\[\033[1;36m\]'
 _PS1_CLEAR='\[\033[0m\]'
 
-PS1='${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ '
+PS1="${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ "
 
 export QT_STYLE_OVERRIDE=adwaita
 export HISTFILE=${HOME}/.history
@@ -52,8 +43,7 @@ export CLICOLOR=1
 export GNUPGHOME="${HOME}/.config/gnupg"
 export PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
 
-alias wgetall="wget --random-wait -m -k -p -np -c -N --show-progress --no-verbose -R 'index.html*' -U mozilla"
-alias wgetone="wget --random-wait -k -p -np -c -E -H -K -N --show-progress --no-verbose -U mozilla"
+alias mirrorsite="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'"
 alias dots="git --git-dir=~/.dotfiles/ --work-tree=~/"
 alias dotscmt="dots commit -a -m"
 alias dotspsh="dots push origin master"
@@ -102,5 +92,6 @@ alias taddself="task add project:selfcare"
 alias tshop="task list project:shopping"
 alias taddshop="task add project:shopping"
 alias tdone="task done"
+alias nscan="doas nmap -v -A"
 alias n="nnn"
 alias mpva="mpv --no-video --speed=1"

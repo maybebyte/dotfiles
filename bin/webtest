@@ -7,6 +7,15 @@ SRVDIR=/var/www/htdocs/amissing.link
 SSG=/home/ashlen/bin/ssg5
 FMT=/home/ashlen/bin/fmt_site
 
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
 gen_site () {
   rm -f ${WEBDIR}/.files \
     && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
@@ -21,8 +30,12 @@ sync_and_chmod () {
     && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; > /dev/null 2>&1 \
     && chmod 755 ${SRVDIR} \
     && rcctl -f restart httpd > /dev/null \
-    && printf "web server synced.\\n"
+    && sec_print "Web server synced."
 }
 
-gen_site || printf "couldn't generate site.\\n" >&2
-sync_and_chmod || printf "unable to sync web server.\\n" >&2
+webtest () {
+  gen_site || err "Couldn't generate site."
+  sync_and_chmod || err "Unable to sync web server."
+}
+
+webtest || err "Webtest failed."

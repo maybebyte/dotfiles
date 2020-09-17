@@ -1,12 +1,32 @@
 #!/usr/bin/env sh
 set -e
 
-# Import the colors
-. "${HOME}/.cache/wal/colors.sh"
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+import_colors () {
+  . "${HOME}/.cache/wal/colors.sh"
+}
 
 #-fn ## font used
 #-nb ## normal background color
 #-nf ## normal foreground color
 #-sb ## selected background color
 #-sf ## selected foreground color
-dmenu_run -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7"
+
+launch () {
+  dmenu_run -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7"
+}
+
+main () {
+  import_colors || err "Couldn't import colors."
+  launch || "Launch menu failed."
+}
+
+main

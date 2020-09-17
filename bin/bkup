@@ -1,9 +1,19 @@
 #!/usr/bin/env sh
 set -e
+
 DATE="$(date '+%Y-%m-%d')"
 EXTENSION=".dump.bz2"
 COMPRESSOR="bzip2"
 COMPRESSOR_ARGS="-c"
+
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
 
 bkup() {
 /sbin/dump -0 -a -u -f - / \
@@ -32,7 +42,7 @@ bkup() {
 wait
 }
 
-intro () {
+main () {
 banner "bkup"
 cat <<EOF
 
@@ -43,15 +53,14 @@ EOF
 read -r CONTINUE
 
 if [ "${CONTINUE}" = "n" ]; then
-  printf "Goodbye.\\n"
+  sec_print "Goodbye."
 elif [ "${CONTINUE}" = "y" ]; then
-  printf "Dumping filesystems...\\n"
-  mkdir -p "/mnt/${DATE}"
-  bkup && printf "Filesystem dump complete!\\n"
+  mkdir -p "/mnt/${DATE}" || err "Couldn't create backup directory."
+  sec_print "Dumping filesystems..."
+  bkup || err "Backup failed."
 else
-  printf "You must answer with 'y' or 'n'."
-  exit
+  err "You must answer with 'y' or 'n'."
 fi
 }
 
-intro
+main

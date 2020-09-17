@@ -1,11 +1,46 @@
 #!/usr/bin/env sh
 set -e
-. "${HOME}/.cache/wal/colors.sh"
 
-CHOSEN=$(cut -d ';' -f1 "${HOME}/.local/share/emoji" \
-  | dmenu -i -l 20 -fn "mono-22" -nb "${color0}" -nf "${color3}" -sb "${color0}" -sf "${color7}")
+emoji_file="${HOME}/.local/share/emoji"
 
-[ -z "${CHOSEN}" ] && exit
+sec_print () {
+  printf "%s\\n" "$1"
+}
 
-EMOJI=$(printf "${CHOSEN}" | sed "s/ .*//")
-printf "${EMOJI}" | xclip -selection clipboard
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+import_colors () {
+  . "${HOME}/.cache/wal/colors.sh"
+}
+
+menu () {
+  dmenu -i -l 20 \
+    -fn "mono-22" \
+    -nb "${color0}" \
+    -nf "${color3}" \
+    -sb "${color0}" \
+    -sf "${color7}"
+}
+
+process_emoji () {
+  chosen=$(cut -d ';' -f1 "${emoji_file}" | menu)
+
+  [ -z "${chosen}" ] && err "Nothing was selected."
+
+  emoji=$(printf "%s" "${chosen}" | sed "s/ .*//")
+}
+
+grab_emoji () {
+  printf "%s" "${emoji}" | xclip -selection clipboard
+}
+
+dmenuunicode () {
+  import_colors || err "Unable to import colors."
+  process_emoji || err "Unable to process emoji."
+  grab_emoji || err "Unable to copy emoji to clipboard."
+}
+
+dmenuunicode

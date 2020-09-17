@@ -82,7 +82,7 @@ auto_view text/html		# automatically show html (mailcap uses w3m)
 auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
 bind index,pager i noop
-bind index,pager g noop
+bind index,pager,attach g noop
 bind index \Cf noop
 
 # General rebindings
@@ -91,8 +91,8 @@ bind index k previous-entry
 bind attach <return> view-mailcap
 bind attach l view-mailcap
 bind editor <space> noop
-bind index G last-entry
-bind index gg first-entry
+bind index,attach G last-entry
+bind index,attach gg first-entry
 bind pager,attach h exit
 bind pager j next-line
 bind pager k previous-line
@@ -109,7 +109,7 @@ bind browser l select-entry
 bind index,pager,browser d half-down
 bind index,pager,browser u half-up
 bind index,pager S sync-mailbox
-bind index,pager R group-reply
+bind index,pager,attach R group-reply
 bind editor <Tab> complete-query
 
 # Sidebar mappings

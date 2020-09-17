@@ -6,6 +6,15 @@ set -e
 export DELIMITER="  %{F${color3}}|%{F${foreground}}  "
 export DEFAULT_BGFG="%{B${background}} %{F${foreground}"
 
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
 show_date () {
   DATE=$(date "+%Y-%m-%d %H:%M")
   printf %s "${DATE}"
@@ -13,7 +22,7 @@ show_date () {
 
 show_volume () {
   # division is used to truncate the resulting floating-point number
-  VOLUME=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
+  VOLUME=$(printf %s "$(sndioctl -n output.level) / 0.01\\n" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
     printf %s "MUTE"
   else
@@ -60,15 +69,19 @@ show_temp () {
 
 show_cpu_freq () {
   # conversely, we want the floating-point number here
-  CPU_FREQ=$(printf "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
+  CPU_FREQ=$(printf %s "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
   printf %s "cpu: ${CPU_FREQ} GHz"
 }
 
-while true; do
-# indenting here affects spacing in the bar
+sysinfo () {
+  while true; do
+  # indenting here affects spacing in the bar
 STATS="${DEFAULT_BGFG} %{l}$(show_battery)${DELIMITER}$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)${DELIMITER}$(show_disk_space)${DELIMITER}\
 $(show_date)"
-  printf %s "${STATS}"
-  sleep 1
-done
+    printf %s "${STATS}"
+    sleep 1
+  done
+}
+
+sysinfo || err "Something went wrong with sysinfo."

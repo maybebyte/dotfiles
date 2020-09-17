@@ -4,19 +4,29 @@ set -e
 # rewrite of Luke Smith's maimpick
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
-# Import the colors
-. "${HOME}/.cache/wal/colors.sh"
-
 COMMON_MAIM_ARGS="-d 1 -u -q -B"
 DOWNLOADS="${HOME}/Downloads"
 
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+import_colors () {
+  . "${HOME}/.cache/wal/colors.sh"
+}
+
 menu () {
-  dmenu -fn 'mono-20' \
+  dmenu -i -l 6 \
+    -fn 'mono-20' \
     -nb "${color0}" \
     -nf "${color3}" \
     -sb "${color0}" \
     -sf "${color7}" \
-    -l 6 \
     -p 'Screenshot which area?'
 }
 
@@ -36,7 +46,7 @@ cur_date () {
 }
 
 yank () {
-  xclip -selection clipboard -t image/png
+  xclip -selection clipboard -t image/png || err "Couldn't copy to clipboard."
 }
 
 maim_sel_save () {
@@ -68,11 +78,20 @@ maim_full_copy () {
   maim ${COMMON_MAIM_ARGS} | yank
 }
 
-case "$(print_options | menu)" in
-  "a selected area") maim_sel_save ;;
-  "current window") maim_cur_save ;;
-  "full screen") maim_full_save ;;
-  "a selected area (copy)") maim_sel_copy ;;
-  "current window (copy)") maim_cur_copy ;;
-  "full screen (copy)") maim_full_copy ;;
-esac
+present_options () {
+  case "$(print_options | menu)" in
+    "a selected area") maim_sel_save ;;
+    "current window") maim_cur_save ;;
+    "full screen") maim_full_save ;;
+    "a selected area (copy)") maim_sel_copy ;;
+    "current window (copy)") maim_cur_copy ;;
+    "full screen (copy)") maim_full_copy ;;
+  esac
+}
+
+main () {
+  import_colors || err "Unable to import colors."
+  present_options || err "Unable to present options."
+}
+
+main

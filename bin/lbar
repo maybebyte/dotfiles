@@ -1,3 +1,17 @@
 #!/usr/bin/env sh
 set -e
-lemonbar-xft -f sans-14 -p -d
+
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+lbar () {
+  lemonbar-xft -f sans-14 -p -d
+}
+
+lbar || err "lbar encountered a problem."
