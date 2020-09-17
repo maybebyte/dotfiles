@@ -15,7 +15,7 @@ super + {greater, less, T}
 	mpc {next, prev, toggle}
 
 # seek to beginning, 5 sec {back,forward}, 1 min {back,forward}
-shift + super + {plus, Left, Right, Down, Up}
+shift + super + {0, Left, Right, Down, Up}
 	 mpc seek {0, -5, +5, -1:00, +1:00}
 
 # mute audio

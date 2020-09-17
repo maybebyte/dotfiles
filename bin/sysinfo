@@ -22,7 +22,7 @@ show_date () {
 
 show_volume () {
   # division is used to truncate the resulting floating-point number
-  VOLUME=$(printf %s "$(sndioctl -n output.level) / 0.01\\n" | bc)
+  VOLUME=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
     printf %s "MUTE"
   else
@@ -69,7 +69,7 @@ show_temp () {
 
 show_cpu_freq () {
   # conversely, we want the floating-point number here
-  CPU_FREQ=$(printf %s "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
+  CPU_FREQ=$(printf "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
   printf %s "cpu: ${CPU_FREQ} GHz"
 }
 

@@ -43,15 +43,22 @@ export CLICOLOR=1
 export GNUPGHOME="${HOME}/.config/gnupg"
 export PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
 
-alias mirrorsite="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'"
+# git
 alias dots="git --git-dir=~/.dotfiles/ --work-tree=~/"
 alias dotscmt="dots commit -a -m"
 alias dotspsh="dots push origin master"
+alias gcl="git clone"
+alias gcmt="git commit -a -m"
+alias gpsh="git push"
+
+# youtube-dl
 alias ytdl="youtube-dl"
 alias ytdlrm="ytdl --rm-cache-dir"
 alias yta="ytdl -x -f bestaudio/best --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
 alias ytv="ytdl --embed-subs --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
 alias trem="transmission-remote"
+
+# preferred flags for core utilities
 alias ls="\${LS} -F"
 alias ll="ls -lh"
 alias llnew="ll -tr"
@@ -59,30 +66,33 @@ alias llbig="ll -Sr"
 alias df="df -h"
 alias du="du -ch"
 alias mkdir="mkdir -p"
+
+# makes life easier
 alias ..="cd .."
 alias ...="cd ../.."
-alias sortmpd="sort /var/lib/mpd/playlists/revised.m3u > /var/lib/mpd/playlists/revised1.m3u && rm /var/lib/mpd/playlists/revised.m3u && mv /var/lib/mpd/playlists/revised1.m3u /var/lib/mpd/playlists/revised.m3u && chown mpd:mpd /var/lib/mpd/playlists/revised.m3u"
-alias today="date '+%Y-%m-%d'"
+
+# keepass
 alias kpcli="keepassxc-cli"
-alias gcl="git clone"
-alias gcmt="git commit -a -m"
-alias gpsh="git push"
 alias cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr"
 alias yank="xclip -selection clipboard"
+
+# editing
 alias se="doas vim"
 alias sepf="se /etc/pf.conf"
 alias seiwm="se /etc/hostname.iwm0"
 alias seunw="se /etc/unwind.conf"
 alias sems="se /etc/X11/xorg.conf.d/90-modesetting.conf"
+
+# pf
 alias pfload="doas pfctl -f /etc/pf.conf"
 alias pftest="doas pfctl -f /etc/pf.conf -n -vvv"
+
+# tmux
 alias tmatt="tmux attach"
 alias tmksrv="tmux kill-server"
 alias tmls="tmux list-sessions"
-alias pdfman="MANPAGER=zathura man -T pdf"
-alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\" && ~/bin/fmt_site"
-alias mutt="neomutt"
-alias axel="axel -a -v"
+
+# taskwarrior
 alias tcatchup="yes | task done \$(task due.before:today ids)"
 alias ttoday="task list due:today"
 alias ttech="task list project:tech"
@@ -92,6 +102,16 @@ alias taddself="task add project:selfcare"
 alias tshop="task list project:shopping"
 alias taddshop="task add project:shopping"
 alias tdone="task done"
+
+# misc
+alias mirrorsite="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'"
 alias nscan="doas nmap -v -A"
 alias n="nnn"
 alias mpva="mpv --no-video --speed=1"
+alias upnet="doas sh /etc/netstart"
+alias sortmpd="sort /var/lib/mpd/playlists/revised.m3u > /var/lib/mpd/playlists/revised1.m3u && rm /var/lib/mpd/playlists/revised.m3u && mv /var/lib/mpd/playlists/revised1.m3u /var/lib/mpd/playlists/revised.m3u && chown mpd:mpd /var/lib/mpd/playlists/revised.m3u"
+alias today="date '+%Y-%m-%d'"
+alias pdfman="MANPAGER=zathura man -T pdf"
+alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\" && ~/bin/fmt_site"
+alias mutt="neomutt"
+alias axel="axel -a -v"
