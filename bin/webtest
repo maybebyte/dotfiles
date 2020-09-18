@@ -5,7 +5,6 @@ MARKDOWNDIR=/home/ashlen/builds/website_md
 WEBDIR=/home/ashlen/builds/website
 SRVDIR=/var/www/htdocs/amissing.link
 SSG=/home/ashlen/bin/ssg5
-FMT=/home/ashlen/bin/fmt_site
 
 sec_print () {
   printf "%s\\n" "$1"
@@ -20,7 +19,6 @@ gen_site () {
   rm -f ${WEBDIR}/.files \
     && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
     "https://amissing.link" > /dev/null 2>&1 \
-    && ${FMT} \
     && chown ashlen:ashlen ${WEBDIR}/.files
 }
 

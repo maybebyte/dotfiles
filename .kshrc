@@ -28,7 +28,7 @@ esac
 _PS1_BRACKET_COLOR='\[\033[1;36m\]'
 _PS1_CLEAR='\[\033[0m\]'
 
-PS1="${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ "
+PS1="${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ "
 
 export QT_STYLE_OVERRIDE=adwaita
 export HISTFILE=${HOME}/.history
@@ -36,8 +36,8 @@ export HISTSIZE=10000
 export BROWSER="firefox"
 export LESS="-iMR"
 export PAGER="less"
-export VISUAL="${VIM}"
 export EDITOR="${VIM}"
+export VISUAL="${VIM}"
 export FCEDIT=${EDITOR}
 export CLICOLOR=1
 export GNUPGHOME="${HOME}/.config/gnupg"
@@ -56,7 +56,6 @@ alias ytdl="youtube-dl"
 alias ytdlrm="ytdl --rm-cache-dir"
 alias yta="ytdl -x -f bestaudio/best --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
 alias ytv="ytdl --embed-subs --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
-alias trem="transmission-remote"
 
 # preferred flags for core utilities
 alias ls="\${LS} -F"
@@ -65,7 +64,7 @@ alias llnew="ll -tr"
 alias llbig="ll -Sr"
 alias df="df -h"
 alias du="du -ch"
-alias mkdir="mkdir -p"
+alias mkd="mkdir -p"
 
 # makes life easier
 alias ..="cd .."
@@ -73,8 +72,7 @@ alias ...="cd ../.."
 
 # keepass
 alias kpcli="keepassxc-cli"
-alias cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr"
-alias yank="xclip -selection clipboard"
+alias kpopen="kpcli open ~/passwords/KeePass\\ Database.kdbx"
 
 # editing
 alias se="doas vim"
@@ -94,6 +92,10 @@ alias tmls="tmux list-sessions"
 
 # taskwarrior
 alias tcatchup="yes | task done \$(task due.before:today ids)"
+alias tadd="task add"
+alias tid="task ids"
+alias tls="task list"
+alias tdone="task done"
 alias ttoday="task list due:today"
 alias ttech="task list project:tech"
 alias taddtech="task add project:tech"
@@ -101,17 +103,20 @@ alias tself="task list project:selfcare"
 alias taddself="task add project:selfcare"
 alias tshop="task list project:shopping"
 alias taddshop="task add project:shopping"
-alias tdone="task done"
+
+# most used commands
+alias cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr"
 
 # misc
 alias mirrorsite="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'"
-alias nscan="doas nmap -v -A"
+alias axel="axel -a -v"
 alias n="nnn"
+alias nscan="doas nmap -v -A"
 alias mpva="mpv --no-video --speed=1"
 alias upnet="doas sh /etc/netstart"
-alias sortmpd="sort /var/lib/mpd/playlists/revised.m3u > /var/lib/mpd/playlists/revised1.m3u && rm /var/lib/mpd/playlists/revised.m3u && mv /var/lib/mpd/playlists/revised1.m3u /var/lib/mpd/playlists/revised.m3u && chown mpd:mpd /var/lib/mpd/playlists/revised.m3u"
 alias today="date '+%Y-%m-%d'"
 alias pdfman="MANPAGER=zathura man -T pdf"
-alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\" && ~/bin/fmt_site"
+alias ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\""
 alias mutt="neomutt"
-alias axel="axel -a -v"
+alias yank="xclip -selection clipboard"
+alias trem="transmission-remote"
