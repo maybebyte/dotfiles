@@ -80,6 +80,7 @@ alias sepf="se /etc/pf.conf"
 alias seiwm="se /etc/hostname.iwm0"
 alias seunw="se /etc/unwind.conf"
 alias sems="se /etc/X11/xorg.conf.d/90-modesetting.conf"
+alias sesys="se /etc/sysctl.conf"
 
 # pf
 alias pfload="doas pfctl -f /etc/pf.conf"
@@ -109,7 +110,6 @@ alias cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr"
 
 # misc
 alias mirrorsite="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'"
-alias axel="axel -a -v"
 alias n="nnn"
 alias nscan="doas nmap -v -A"
 alias mpva="mpv --no-video --speed=1"
