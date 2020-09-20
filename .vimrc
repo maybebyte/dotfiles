@@ -85,6 +85,9 @@ autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 autocmd BufWritePost *.md ! ssg5 ~/builds/website_md ~/builds/website "A Missing Link" "https://amissing.link" && sh $HOME/bin/fmt_site
 
+" no more automatic commenting on newline
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
 

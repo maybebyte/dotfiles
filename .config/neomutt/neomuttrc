@@ -10,6 +10,7 @@ source "gpg2 -dq ~/passwords/email_pass.gpg |"
 
 subscribe announcements@openbsd.org
 subscribe bugs@openbsd.org
+subscribe misc@openbsd.org
 
 set auto_subscribe=yes
 set beep=no
@@ -88,8 +89,7 @@ bind index \Cf noop
 # General rebindings
 bind index j next-entry
 bind index k previous-entry
-bind attach <return> view-mailcap
-bind attach l view-mailcap
+bind attach l view-text
 bind editor <space> noop
 bind index,attach G last-entry
 bind index,attach gg first-entry
