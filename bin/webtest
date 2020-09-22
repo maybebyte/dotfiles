@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
-MARKDOWNDIR=/home/ashlen/builds/website_md
-WEBDIR=/home/ashlen/builds/website
-SRVDIR=/var/www/htdocs/amissing.link
-SSG=/home/ashlen/bin/ssg5
+markdowndir=/home/ashlen/builds/website_md
+webdir=/home/ashlen/builds/website
+srvdir=/var/www/htdocs/amissing.link
+ssg=/home/ashlen/bin/ssg5
 
 sec_print () {
   printf "%s\\n" "$1"
@@ -16,17 +16,17 @@ err () {
 }
 
 gen_site () {
-  rm -f ${WEBDIR}/.files \
-    && ${SSG} ${MARKDOWNDIR} ${WEBDIR} "aml: there's no place like /home" \
+  rm -f ${webdir}/.files \
+    && ${ssg} ${markdowndir} ${webdir} "aml: there's no place like /home" \
     "https://amissing.link" > /dev/null 2>&1 \
-    && chown ashlen:ashlen ${WEBDIR}/.files
+    && chown ashlen:ashlen ${webdir}/.files
 }
 
 sync_and_chmod () {
-  rsync -a --partial --delete -q ${WEBDIR}/ ${SRVDIR}/ \
-    && find ${SRVDIR} -type f -execdir chmod 644 "{}" \; > /dev/null 2>&1 \
-    && find ${SRVDIR} -type d -execdir chmod 755 "{}" \; > /dev/null 2>&1 \
-    && chmod 755 ${SRVDIR} \
+  rsync -a --partial --delete -q ${webdir}/ ${srvdir}/ \
+    && find ${srvdir} -type f -execdir chmod 644 "{}" \; > /dev/null 2>&1 \
+    && find ${srvdir} -type d -execdir chmod 755 "{}" \; > /dev/null 2>&1 \
+    && chmod 755 ${srvdir} \
     && rcctl -f restart httpd > /dev/null \
     && sec_print "Web server synced."
 }

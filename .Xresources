@@ -1,12 +1,15 @@
+! eye candy for non-{GTK,QT} applications
 Xft.autohint  : 0
-Xft.lcdfilter : lcddefault
-Xft.hintstyle : hintslight
-Xft.hinting   : 1
 Xft.antialias : 1
+Xft.hinting   : 1
+Xft.hintstyle : hintslight
+Xft.lcdfilter : lcddefault
 Xft.rgba      : rgb
 
-XIdle*program:  /usr/local/bin/slock xset dpms force off
-XIdle*timeout:  90
+! sets up xidle to execute slock instead of xlock after 90 seconds,
+! turns off screen
+XIdle.program:  /usr/local/bin/slock xset dpms force off
+XIdle.timeout:  90
 
 ! Colors 0-15.
 *.color0: #040516

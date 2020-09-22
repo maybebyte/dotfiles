@@ -1,7 +1,9 @@
 . ~/.profile
 
+# more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
 
+# ksh options
 set -o \
   braceexpand \
   vi \
@@ -11,28 +13,31 @@ set -o \
 
 # use vim if it's installed, vi otherwise
 case "$(command -v vim)" in
-  */vim) VIM="vim" ;;
-  *)     VIM="vi"  ;;
+  */vim) vim="vim" ;;
+  *)     vim="vi"  ;;
 esac
 
-# use colorls if it's installed, plain old ls otherwise
+# use colorls if it's installed, ls otherwise
 if command -v colorls > /dev/null; then
-  LS='colorls'
+  ls='colorls'
 else
-  LS='ls'
+  ls='ls'
 fi
 
 # swaps colors when uid is 0, i.e. root
 case "$(id -u)" in
-  0) _PS1_USER_COLOR='\[\033[1;33m\]' _PS1_PATH_COLOR='\[\033[1;35m\]' ;;
-  *) _PS1_USER_COLOR='\[\033[1;35m\]' _PS1_PATH_COLOR='\[\033[1;33m\]' ;;
+  0) _ps1_user='\[\033[1;33m\]' _ps1_path='\[\033[1;35m\]' ;;
+  *) _ps1_user='\[\033[1;35m\]' _ps1_path='\[\033[1;33m\]' ;;
 esac
 
-_PS1_BRACKET_COLOR='\[\033[1;36m\]'
-_PS1_CLEAR='\[\033[0m\]'
+_ps1_bracket='\[\033[1;36m\]'
+_ps1_clear='\[\033[0m\]'
 
-PS1="${_PS1_BRACKET_COLOR}[${_PS1_CLEAR}${_PS1_USER_COLOR}\\u ${_PS1_CLEAR}@ ${_PS1_PATH_COLOR}\\w${_PS1_CLEAR}${_PS1_BRACKET_COLOR}]${_PS1_CLEAR}\$ "
+PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u \
+${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
+${_ps1_clear}\$ "
 
+# PATH acts funny w/ indentation
 export \
   QT_STYLE_OVERRIDE=adwaita \
   HISTFILE=${HOME}/.history \
@@ -40,96 +45,126 @@ export \
   BROWSER="firefox" \
   LESS="-iMR" \
   PAGER="less" \
-  EDITOR="${VIM}" \
-  VISUAL="${VIM}" \
+  EDITOR="${vim}" \
+  VISUAL="${EDITOR}" \
   FCEDIT=${EDITOR} \
   CLICOLOR=1 \
   GNUPGHOME="${HOME}/.config/gnupg" \
-  PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
+  PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
+/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
 
 # git
 alias \
-  dots="git --git-dir=~/.dotfiles/ --work-tree=~/" \
-  dotscmt="dots commit -a -m" \
-  dotspsh="dots push origin master" \
-  gcl="git clone" \
-  gcmt="git commit -a -m" \
-  gpsh="git push"
+  d="git --git-dir=~/.dotfiles/ --work-tree=~/" \
+  da="d add" \
+  dcmt="d commit -a -m" \
+  ddiff="d diff" \
+  dls="d ls-files ~" \
+  dpsh="d push origin master" \
+  ds="d status" \
+  g="git" \
+  ga="g add" \
+  gcl="g clone" \
+  gcmt="g commit -a -m" \
+  gdiff="g diff" \
+  gls="git ls-files" \
+  gpsh="g push" \
+  gs="g status"
 
 # youtube-dl
 alias \
-  ytdl="youtube-dl" \
-  ytdlrm="ytdl --rm-cache-dir" \
-  yta="ytdl -x -f bestaudio/best --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'" \
-  ytv="ytdl --embed-subs --embed-thumbnail -ic --add-metadata -o '~/Downloads/%(title)s.%(ext)s'"
+  yt="youtube-dl --add-metadata -ic --embed-thumbnail -o '~/Downloads/%(title)s.%(ext)s'" \
+  ytrm="yt --rm-cache-dir" \
+  yta="yt -x -f bestaudio/best " \
+  ytv="yt --embed-subs"
 
-# preferred flags for core utilities
+# preferred flags for base utilities
 alias \
-  ls="\${LS} -F" \
+  c="clear" \
+  ls="\${ls} -F" \
   ll="ls -lh" \
-  llnew="ll -tr" \
-  llbig="ll -Sr" \
+  llb="ll -Sr" \
+  lln="ll -tr" \
   df="df -h" \
   du="du -ch" \
   mkd="mkdir -p"
 
-# makes life easier
+# gotta go fast
 alias \
   ..="cd .." \
   ...="cd ../.."
 
 # keepass
 alias \
-  kpcli="keepassxc-cli" \
-  kpopen="kpcli open ~/passwords/KeePass\\ Database.kdbx"
+  kp="keepassxc-cli" \
+  kpopen="kp open ~/passwords/KeePass\\ Database.kdbx"
 
 # editing
 alias \
-  se="doas vim" \
-  sepf="se /etc/pf.conf" \
+  e="\${EDITOR}" \
+  se="doas \${EDITOR}" \
   seiwm="se /etc/hostname.iwm0" \
-  seunw="se /etc/unwind.conf" \
   sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
+  sepf="se /etc/pf.conf" \
+  seunw="se /etc/unwind.conf" \
   sesys="se /etc/sysctl.conf"
 
 # pf
 alias \
-  pfload="doas pfctl -f /etc/pf.conf" \
-  pftest="pfload -n -vvv"
+  pfl="doas pfctl -f /etc/pf.conf" \
+  pft="pfl -n -vvv"
 
 # tmux
 alias \
-  tmatt="tmux attach" \
-  tmksrv="tmux kill-server" \
+  tma="tmux attach" \
+  tmk="tmux kill-server" \
   tmls="tmux list-sessions"
 
 # taskwarrior
 alias \
-  tcatchup="yes | task done \$(task due.before:today ids)" \
-  tadd="task add" \
-  tid="task ids" \
-  tls="task list" \
-  tdone="task done" \
-  ttoday="tls due:today" \
-  ttech="tls project:tech" \
+  t="task" \
+  ta="t add" \
+  td="t done" \
+  tid="t ids" \
+  tls="t list" \
+  tm="t modify" \
+  tt="tls due:today" \
   tself="tls project:selfcare" \
   tshop="tls project:shopping" \
-  taddtech="tadd project:tech" \
-  taddself="tadd project:selfcare" \
-  taddshop="tadd project:shopping"
+  ttech="tls project:tech" \
+  taself="ta project:selfcare" \
+  tashop="ta project:shopping" \
+  tatech="ta project:tech" \
+  tc="yes | td \$(task due.before:today ids)"
 
-# misc
+# sec
 alias \
-  mirrorsite="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
+  sspl="searchsploit" \
+  nk="nikto -output nikto-\$(today).txt -host"
+
+# web-related
+alias \
+  mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
+  gensite="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\"" \
+  m="neomutt" \
+  mpva="mpv --no-video --speed=1" \
+  stcli="speedtest-cli" \
+  trem="transmission-remote"
+
+# system
+alias \
+  off="doas shutdown -p now" \
+  offon="doas shutdown -r now" \
+  offif="doas ifconfig egress down" \
+  onif="doas ifconfig egress up" \
+  offonif="offif && onif" \
+  showif="ifconfig egress" \
+  upnet="doas sh /etc/netstart"
+
+# misc handy things
+alias \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
   n="nnn" \
-  nscan="doas nmap -v -A" \
-  mpva="mpv --no-video --speed=1" \
-  upnet="doas sh /etc/netstart" \
-  today="date '+%Y-%m-%d'" \
   pdfman="MANPAGER=zathura man -T pdf" \
-  ssgauto="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\"" \
-  mutt="neomutt" \
-  yank="xclip -selection clipboard" \
-  trem="transmission-remote" \
-  off="doas shutdown -p now"
+  today="date '+%Y-%m-%d'" \
+  yank="xclip -selection clipboard"

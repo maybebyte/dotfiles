@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+# (n)etwork (sc)anner
+# creates dir, places nmap scan results in dir
+
+# usage: nsc [target] [options]
+
+sec="${HOME}/sec"
+
+sec_print () {
+  printf "%s\\n" "$1"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+today () {
+  date '+%Y-%m-%d'
+}
+
+create_workdir () {
+  mkdir -p "${sec}/$1/nmap"
+  export workdir="${sec}/$1/nmap"
+}
+
+nsc () {
+  doas nmap -A -v -p 0-65535 --version-all --osscan-limit \
+    --privileged -oA "${workdir}/nmap-$(today)" "$1"
+}
+
+main () {
+  create_workdir "$1" || err "Couldn't create directory, do you have permission?"
+  nsc "$@" || err "Couldn't scan target."
+}
+
+main "$@" || err "nsc failed."

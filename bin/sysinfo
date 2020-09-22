@@ -3,8 +3,8 @@ set -e
 # system statistics in a format suitable for lemonbar
 
 . ${HOME}/.cache/wal/colors.sh
-export DELIMITER="  %{F${color3}}|%{F${foreground}}  "
-export DEFAULT_BGFG="%{B${background}} %{F${foreground}"
+export delimiter="  %{F${color3}}|%{F${foreground}}  "
+export bgfg="%{B${background}} %{F${foreground}"
 
 sec_print () {
   printf "%s\\n" "$1"
@@ -16,70 +16,70 @@ err () {
 }
 
 show_date () {
-  DATE=$(date "+%Y-%m-%d %H:%M")
-  printf %s "${DATE}"
+  date=$(date "+%Y-%m-%d %H:%M")
+  printf %s "${date}"
 }
 
 show_volume () {
   # division is used to truncate the resulting floating-point number
-  VOLUME=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
+  volume=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
     printf %s "MUTE"
   else
-    printf %s "vol: ${VOLUME}%"
+    printf %s "vol: ${volume}%"
   fi
 }
 
 show_disk_space () {
-  DISKSPACE=$(df -h /home | tail -1 | awk '{print $4}')
-  printf %s "/home: ${DISKSPACE}"
+  diskspace=$(df -h /home | tail -1 | awk '{print $4}')
+  printf %s "/home: ${diskspace}"
 }
 
 show_battery () {
-  ADAPTER=$(apm -a)
-  MINUTES=$(($(apm -m) % 60))
-  HOURS=$(($(apm -m) / 60))
-  REMAINING="~${HOURS}h & ${MINUTES}m"
-  PERCENTAGE="$(apm -l)%"
-  if [ "${ADAPTER}" = 0 ]; then
-    printf %s "bat: ${REMAINING}, at ${PERCENTAGE}"
-  elif [ "${ADAPTER}" = 1 ]; then
-    printf %s "chr: at ${PERCENTAGE}"
-  elif [ "${ADAPTER}" = 2 ]; then
-    printf %s "bkup: ${REMAINING}, at ${PERCENTAGE}"
-  elif [ "${ADAPTER}" = 255 ]; then
+  adapter=$(apm -a)
+  minutes=$(($(apm -m) % 60))
+  hours=$(($(apm -m) / 60))
+  remaining="~${hours}h & ${minutes}m"
+  percentage="$(apm -l)%"
+  if [ "${adapter}" = 0 ]; then
+    printf %s "bat: ${remaining}, at ${percentage}"
+  elif [ "${adapter}" = 1 ]; then
+    printf %s "chr: at ${percentage}"
+  elif [ "${adapter}" = 2 ]; then
+    printf %s "bkup: ${remaining}, at ${percentage}"
+  elif [ "${adapter}" = 255 ]; then
     printf %s ""
   fi
 }
 
 show_track () {
-  SONG=$(mpc current)
-  TIME=$(mpc | sed -n 2p | awk '{print $3}')
-  if [ -z "${SONG}" ]; then
+  song=$(mpc current)
+  time=$(mpc | sed -n 2p | awk '{print $3}')
+  if [ -z "${song}" ]; then
     printf %s ""
   else
-    printf %s "${SONG}${DELIMITER}${TIME}"
+    printf %s "${song}${delimiter}${time}"
   fi
 }
 
 show_temp () {
-  TEMPERATURE=$(sysctl -n hw.sensors.cpu0.temp0 | awk -F "." '{print $1}')
-  printf %s "temp: ${TEMPERATURE} °C"
+  temperature=$(sysctl -n hw.sensors.cpu0.temp0 | awk -F "." '{print $1}')
+  printf %s "temp: ${temperature} °C"
 }
 
 show_cpu_freq () {
   # conversely, we want the floating-point number here
-  CPU_FREQ=$(printf "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
-  printf %s "cpu: ${CPU_FREQ} GHz"
+  cpu_freq=$(printf "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
+  printf %s "cpu: ${cpu_freq} GHz"
 }
 
 sysinfo () {
   while true; do
   # indenting here affects spacing in the bar
-STATS="${DEFAULT_BGFG} %{l}$(show_battery)${DELIMITER}$(show_temp)\
-%{c}$(show_track) %{r}$(show_volume)${DELIMITER}$(show_disk_space)${DELIMITER}\
+stats="${bgfg} %{l}$(show_battery)${delimiter}$(show_temp)\
+%{c}$(show_track) %{r}$(show_volume)${delimiter}$(show_disk_space)${delimiter}\
 $(show_date)"
-    printf %s "${STATS}"
+    printf %s "${stats}"
     sleep 1
   done
 }

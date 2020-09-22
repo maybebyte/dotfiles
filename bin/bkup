@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
-DATE="$(date '+%Y-%m-%d')"
-EXTENSION=".dump.bz2"
-COMPRESSOR="bzip2"
-COMPRESSOR_ARGS="-c"
+date="$(date '+%Y-%m-%d')"
+extension=".dump.bz2"
+compressor="bzip2"
+compressor_args="-c"
 
 sec_print () {
   printf "%s\\n" "$1"
@@ -17,28 +17,28 @@ err () {
 
 bkup() {
 /sbin/dump -0 -a -u -f - / \
-  | "${COMPRESSOR}" ${COMPRESSOR_ARGS} \
-  > /mnt/"${DATE}"/root"${EXTENSION}" &
+  | "${compressor}" ${compressor_args} \
+  > /mnt/"${date}"/root"${extension}" &
 
 /sbin/dump -0 -a -u -f - /var \
-  | "${COMPRESSOR}" ${COMPRESSOR_ARGS} \
-  > /mnt/"${DATE}"/var"${EXTENSION}" &
+  | "${compressor}" ${compressor_args} \
+  > /mnt/"${date}"/var"${extension}" &
 
 /sbin/dump -0 -a -u -f - /home \
-  | "${COMPRESSOR}" ${COMPRESSOR_ARGS} \
-  > /mnt/"${DATE}"/home"${EXTENSION}" &
+  | "${compressor}" ${compressor_args} \
+  > /mnt/"${date}"/home"${extension}" &
 
 /sbin/dump -0 -a -u -f - /usr/local \
-  | "${COMPRESSOR}" ${COMPRESSOR_ARGS} \
-  > /mnt/"${DATE}"/usr-local"${EXTENSION}" &
+  | "${compressor}" ${compressor_args} \
+  > /mnt/"${date}"/usr-local"${extension}" &
 
-/sbin/dump -0 -a -u -f - /usr/X11R6 \
-  | "${COMPRESSOR}" ${COMPRESSOR_ARGS} \
-  > /mnt/"${DATE}"/usr-X11R6"${EXTENSION}" &
+/sbin/dump -0 -a -u -f - /usr/x11r6 \
+  | "${compressor}" ${compressor_args} \
+  > /mnt/"${date}"/usr-x11r6"${extension}" &
 
 /sbin/dump -0 -a -u -f - /usr \
-  | "${COMPRESSOR}" ${COMPRESSOR_ARGS} \
-  > /mnt/"${DATE}"/usr"${EXTENSION}" &
+  | "${compressor}" ${compressor_args} \
+  > /mnt/"${date}"/usr"${extension}" &
 wait
 }
 
@@ -47,15 +47,15 @@ banner "bkup"
 cat <<EOF
 
 This script creates level 0 dumps of /root, /var, /home, /usr/local, /usr/X11R6,
-and /usr. It compresses them using ${COMPRESSOR} and places the backups inside
+and /usr. It compresses them using ${compressor} and places the backups inside
 /mnt in a folder named the current date. Is this acceptable?
 EOF
 read -r CONTINUE
 
-if [ "${CONTINUE}" = "n" ]; then
+if [ "${continue}" = "n" ]; then
   sec_print "Goodbye."
-elif [ "${CONTINUE}" = "y" ]; then
-  mkdir -p "/mnt/${DATE}" || err "Couldn't create backup directory."
+elif [ "${continue}" = "y" ]; then
+  mkdir -p "/mnt/${date}" || err "Couldn't create backup directory."
   sec_print "Dumping filesystems..."
   bkup || err "Backup failed."
 else
