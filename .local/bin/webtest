@@ -17,7 +17,7 @@ set -e
 markdowndir=/home/ashlen/builds/website_md
 webdir=/home/ashlen/builds/website
 srvdir=/var/www/htdocs/amissing.link
-ssg=/home/ashlen/bin/ssg5
+ssg=/home/ashlen/.local/bin/ssg5
 
 sec_print () {
   printf "%s\\n" "$@"

@@ -57,8 +57,31 @@ export \
 nic=$(ifconfig egress | head -1 | cut -f 1 -d ':')
 export nic
 
+sec_print () {
+  printf "%s\\n" "$@"
+}
+
+err () {
+  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
 ip () {
-  showif | grep inet | awk '{print $2}'
+  ip=$(ifconfig egress | grep inet)
+  if [ -n "${ip}" ]; then
+    sec_print "${ip}" | awk '{print $2}'
+  else
+    err "No IP address assigned to ${nic}."
+  fi
+}
+
+ssid () {
+  ssid=$(ifconfig egress | grep ieee80211)
+  if [ -n "${ssid}" ]; then
+    sec_print "${ssid}" | awk '{print $3}'
+  else
+    err "No SSID available on ${nic}."
+  fi
 }
 
 # assorted
@@ -90,6 +113,7 @@ alias \
   ev="e \${HOME}/.vimrc" \
   se="doas \${EDITOR}" \
   sehn="se /etc/hostname.\${nic}" \
+  sehs="se /etc/hosts" \
   sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
   sepf="se /etc/pf.conf" \
   seres="se /etc/resolv.conf" \
@@ -102,6 +126,7 @@ alias \
   da="d add" \
   dcmt="d commit -a -m" \
   ddiff="d diff" \
+  dgr="d grep" \
   dlg="d log" \
   dls="d ls-files \${HOME}" \
   dpsh="d push origin master" \
@@ -111,6 +136,7 @@ alias \
   gcl="g clone" \
   gcmt="g commit -a -m" \
   gdiff="g diff" \
+  ggr="git grep" \
   glg="git log" \
   gls="git ls-files" \
   gpsh="g push" \
