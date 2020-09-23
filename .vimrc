@@ -42,10 +42,11 @@ set shiftwidth=2
 set textwidth=72
 set expandtab
 set showbreak=>\
-set nowrap
+set wrap
+set linebreak
 
 " :h fo-table explains these options.
-set formatoptions=tcqro2b1jp
+set formatoptions=cqnv1jp
 
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y

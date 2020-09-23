@@ -39,7 +39,6 @@ ${_ps1_clear}\$ "
 
 # PATH acts funny w/ indentation
 export \
-  BROWSER="firefox" \
   CLICOLOR=1 \
   EDITOR="${vim}" \
   FCEDIT=${EDITOR} \
@@ -51,7 +50,12 @@ export \
   PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
 /usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games \
   QT_STYLE_OVERRIDE=adwaita \
+  site="https://amissing.link" \
   VISUAL="${EDITOR}"
+
+# separate from other exports so return values aren't masked
+nic=$(ifconfig egress | head -1 | cut -f 1 -d ':')
+export nic
 
 # assorted
 alias \
@@ -78,12 +82,14 @@ alias \
 alias \
   e="\${EDITOR}" \
   ek="e \${HOME}/.kshrc" \
+  ev="e \${HOME}/.vimrc" \
   se="doas \${EDITOR}" \
-  seiwm="se /etc/hostname.iwm0" \
+  sehn="se /etc/hostname.\${nic}" \
   sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
   sepf="se /etc/pf.conf" \
-  seunw="se /etc/unwind.conf" \
-  sesys="se /etc/sysctl.conf"
+  seres="se /etc/resolv.conf" \
+  sesys="se /etc/sysctl.conf" \
+  seunw="se /etc/unwind.conf"
 
 # git
 alias \
@@ -116,6 +122,7 @@ alias \
 # pf
 alias \
   pfc="doas pfctl" \
+  pfd="doas tcpdump -n -e -ttt -r /var/log/pflog" \
   pfi="pfs info" \
   pfif="pfs Interfaces" \
   pfl="pfc -f /etc/pf.conf" \
@@ -123,7 +130,8 @@ alias \
   pfon="pfc -e" \
   pfs="pfc -s" \
   pfr="pfs rules" \
-  pft="pfl -n -vvv"
+  pft="pfl -n -vvv" \
+  pftail="doas tcpdump -n -e -ttt -i pflog0"
 
 # taskwarrior
 alias \
@@ -153,6 +161,7 @@ alias \
 # sec
 alias \
   nk="nikto -output nikto-\$(today).txt -host" \
+  sc="doas nmap -sn" \
   sspl="searchsploit"
 
 # system
@@ -162,8 +171,10 @@ alias \
   onif="doas ifconfig egress up" \
   res="doas shutdown -r now" \
   resif="offif && onif" \
+  resnet="doas sh /etc/netstart" \
   showif="ifconfig egress" \
-  upnet="doas sh /etc/netstart"
+  tlan="ping \$(cat /etc/mygate)" \
+  tnet="ping \${site##*//}"
 
 # web
 alias \
