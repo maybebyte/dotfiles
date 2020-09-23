@@ -63,7 +63,6 @@ sec_print () {
 
 err () {
   sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
-  exit 1
 }
 
 ip () {
