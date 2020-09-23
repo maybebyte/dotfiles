@@ -7,7 +7,7 @@ export delimiter="  %{F${color3}}|%{F${foreground}}  "
 export bgfg="%{B${background}} %{F${foreground}"
 
 sec_print () {
-  printf "%s\\n" "$1"
+  printf "%s\\n" "$@"
 }
 
 err () {

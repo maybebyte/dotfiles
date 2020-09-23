@@ -47,7 +47,7 @@ export \
   HISTSIZE=10000 \
   LESS="-iMR" \
   PAGER="less" \
-  PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
+  PATH=${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
 /usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games \
   QT_STYLE_OVERRIDE=adwaita \
   site="https://amissing.link" \

@@ -5,10 +5,10 @@ set -e
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
 common_maim_args="-d 1 -u -q -B"
-downloads="${HOME}/Downloads"
+savedir="${HOME}/screenshots"
 
 sec_print () {
-  printf "%s\\n" "$1"
+  printf "%s\\n" "$@"
 }
 
 err () {
@@ -51,7 +51,7 @@ yank () {
 
 maim_sel_save () {
   filename="selected-$(cur_date).png"
-  maim ${common_maim_args} -s "${downloads}/${filename}"
+  maim ${common_maim_args} -s "${savedir}/${filename}"
 }
 
 maim_sel_copy () {
@@ -61,7 +61,7 @@ maim_sel_copy () {
 maim_cur_save () {
   filename="window-$(cur_date).png"
   maim ${common_maim_args} -i "$(xdotool getactivewindow)" \
-    "${downloads}/${filename}"
+    "${savedir}/${filename}"
 }
 
 maim_cur_copy () {
@@ -71,7 +71,7 @@ maim_cur_copy () {
 
 maim_full_save () {
   filename="full-$(cur_date).png"
-  maim ${common_maim_args} "${downloads}/${filename}"
+  maim ${common_maim_args} "${savedir}/${filename}"
 }
 
 maim_full_copy () {

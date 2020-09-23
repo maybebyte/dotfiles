@@ -8,7 +8,7 @@
 sec="${HOME}/sec"
 
 sec_print () {
-  printf "%s\\n" "$1"
+  printf "%s\\n" "$@"
 }
 
 err () {

@@ -1,14 +1,18 @@
 # applications
 super + {Return, d, u, F, W, P}
-	{st, ~/bin/dmen, ~/bin/dmenuunicode, firefox, tor-browser, keepassxc}
+	{st, ~/.local/bin/dmen, ~/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
 
 # screen lock
 super + n
 	pkill -USR1 xidle
 
-# screenshots
+# full screenshot
 Print
-	${HOME}/bin/maimpick
+	maim ~/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
+
+# screenshot menu
+shift + Print
+	${HOME}/.local/bin/maimpick
 
 # music {skip,play,pause}
 super + {greater, less, T}
