@@ -39,19 +39,50 @@ ${_ps1_clear}\$ "
 
 # PATH acts funny w/ indentation
 export \
-  QT_STYLE_OVERRIDE=adwaita \
+  BROWSER="firefox" \
+  CLICOLOR=1 \
+  EDITOR="${vim}" \
+  FCEDIT=${EDITOR} \
+  GNUPGHOME="${HOME}/.config/gnupg" \
   HISTFILE=${HOME}/.history \
   HISTSIZE=10000 \
-  BROWSER="firefox" \
   LESS="-iMR" \
   PAGER="less" \
-  EDITOR="${vim}" \
-  VISUAL="${EDITOR}" \
-  FCEDIT=${EDITOR} \
-  CLICOLOR=1 \
-  GNUPGHOME="${HOME}/.config/gnupg" \
   PATH=${HOME}/.local/bin:${HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
-/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games
+/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games \
+  QT_STYLE_OVERRIDE=adwaita \
+  VISUAL="${EDITOR}"
+
+# assorted
+alias \
+  cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
+  mus="ncmpcpp" \
+  n="nnn" \
+  pdfman="MANPAGER=zathura man -T pdf" \
+  today="date '+%Y-%m-%d'" \
+  yank="xclip -selection clipboard"
+
+# base utilities
+alias \
+  c="clear" \
+  df="df -h" \
+  du="du -ch" \
+  ll="ls -lh" \
+  llb="ll -Sr" \
+  lln="ll -tr" \
+  ls="\${ls} -F" \
+  lsd="find . -iname \".[^.]*\" -maxdepth 1" \
+  mkd="mkdir -p"
+
+# editing
+alias \
+  e="\${EDITOR}" \
+  se="doas \${EDITOR}" \
+  seiwm="se /etc/hostname.iwm0" \
+  sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
+  sepf="se /etc/pf.conf" \
+  seunw="se /etc/unwind.conf" \
+  sesys="se /etc/sysctl.conf"
 
 # git
 alias \
@@ -71,100 +102,80 @@ alias \
   gpsh="g push" \
   gs="g status"
 
-# youtube-dl
+# keepass
 alias \
-  yt="youtube-dl --add-metadata -ic --embed-thumbnail -o '~/Downloads/%(title)s.%(ext)s'" \
-  ytrm="yt --rm-cache-dir" \
-  yta="yt -x -f bestaudio/best " \
-  ytv="yt --embed-subs"
+  kp="keepassxc-cli" \
+  kpo="kp open ~/passwords/KeePass\\ Database.kdbx"
 
-# preferred flags for base utilities
-alias \
-  c="clear" \
-  ls="\${ls} -F" \
-  ll="ls -lh" \
-  llb="ll -Sr" \
-  lln="ll -tr" \
-  df="df -h" \
-  du="du -ch" \
-  mkd="mkdir -p"
-
-# gotta go fast
+# navigation
 alias \
   ..="cd .." \
   ...="cd ../.."
 
-# keepass
-alias \
-  kp="keepassxc-cli" \
-  kpopen="kp open ~/passwords/KeePass\\ Database.kdbx"
-
-# editing
-alias \
-  e="\${EDITOR}" \
-  se="doas \${EDITOR}" \
-  seiwm="se /etc/hostname.iwm0" \
-  sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
-  sepf="se /etc/pf.conf" \
-  seunw="se /etc/unwind.conf" \
-  sesys="se /etc/sysctl.conf"
-
 # pf
 alias \
-  pfl="doas pfctl -f /etc/pf.conf" \
+  pfc="doas pfctl" \
+  pfi="pfs info" \
+  pfif="pfs Interfaces" \
+  pfl="pfc -f /etc/pf.conf" \
+  pfoff="pfc -d" \
+  pfon="pfc -e" \
+  pfs="pfc -s" \
+  pfr="pfs rules" \
   pft="pfl -n -vvv"
-
-# tmux
-alias \
-  tma="tmux attach" \
-  tmk="tmux kill-server" \
-  tmls="tmux list-sessions"
 
 # taskwarrior
 alias \
   t="task" \
   ta="t add" \
-  td="t done" \
-  tid="t ids" \
-  tls="t list" \
-  tm="t modify" \
-  tt="tls due:today" \
-  tself="tls project:selfcare" \
-  tshop="tls project:shopping" \
-  ttech="tls project:tech" \
   taself="ta project:selfcare" \
   tashop="ta project:shopping" \
   tatech="ta project:tech" \
-  tc="yes | td \$(task due.before:today ids)"
+  tc="t config" \
+  td="t done" \
+  tid="t ids" \
+  tls="t list" \
+  tmod="t modify" \
+  tself="tls project:selfcare" \
+  tshop="tls project:shopping" \
+  tt="tls due:today" \
+  ttech="tls project:tech" \
+  tup="yes | td \$(task due.before:today ids)"
+
+# tmux
+alias \
+  tm="tmux" \
+  tma="tm attach" \
+  tmk="tm kill-server" \
+  tml="tm list-sessions"
 
 # sec
 alias \
-  sspl="searchsploit" \
-  nk="nikto -output nikto-\$(today).txt -host"
-
-# web-related
-alias \
-  mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
-  gensite="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\"" \
-  m="neomutt" \
-  mpva="mpv --no-video --speed=1" \
-  stcli="speedtest-cli" \
-  trem="transmission-remote"
+  nk="nikto -output nikto-\$(today).txt -host" \
+  sspl="searchsploit"
 
 # system
 alias \
   off="doas shutdown -p now" \
-  offon="doas shutdown -r now" \
   offif="doas ifconfig egress down" \
   onif="doas ifconfig egress up" \
-  offonif="offif && onif" \
+  res="doas shutdown -r now" \
+  resif="offif && onif" \
   showif="ifconfig egress" \
   upnet="doas sh /etc/netstart"
 
-# misc handy things
+# web
 alias \
-  cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
-  n="nnn" \
-  pdfman="MANPAGER=zathura man -T pdf" \
-  today="date '+%Y-%m-%d'" \
-  yank="xclip -selection clipboard"
+  gensite="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\"" \
+  m="neomutt" \
+  mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
+  mpva="mpv --no-video --speed=1" \
+  stcli="speedtest-cli" \
+  trem="transmission-remote"
+
+# youtube-dl
+alias \
+  yt="youtube-dl --add-metadata -ic --embed-thumbnail -o '~/Downloads/%(title)s.%(ext)s'" \
+  yta="yt -x -f bestaudio/best " \
+  ytrm="yt --rm-cache-dir" \
+  ytv="yt --embed-subs"
