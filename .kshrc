@@ -57,6 +57,10 @@ export \
 nic=$(ifconfig egress | head -1 | cut -f 1 -d ':')
 export nic
 
+ip () {
+  showif | grep inet | awk '{print $2}'
+}
+
 # assorted
 alias \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
@@ -166,15 +170,17 @@ alias \
 
 # system
 alias \
+  eip="curl ifconfig.me && printf \"\\n\"" \
   off="doas shutdown -p now" \
-  offif="doas ifconfig egress down" \
-  onif="doas ifconfig egress up" \
+  offif="doas ifconfig \${nic} down" \
+  onif="doas ifconfig \${nic} up" \
   res="doas shutdown -r now" \
   resif="offif && onif" \
   resnet="doas sh /etc/netstart" \
-  showif="ifconfig egress" \
+  showif="ifconfig \${nic}" \
   tlan="ping \$(cat /etc/mygate)" \
-  tnet="ping \${site##*//}"
+  tnet="ping \${site##*//}" \
+  up="uptime"
 
 # web
 alias \
