@@ -80,7 +80,8 @@ alias \
   lln="ll -tr" \
   ls="\${ls} -F" \
   lsd="find . -iname \".[^.]*\" -maxdepth 1" \
-  mkd="mkdir -p"
+  mkd="mkdir -p" \
+  shre=". \${HOME}/.kshrc"
 
 # editing
 alias \
@@ -101,6 +102,7 @@ alias \
   da="d add" \
   dcmt="d commit -a -m" \
   ddiff="d diff" \
+  dlg="d log" \
   dls="d ls-files \${HOME}" \
   dpsh="d push origin master" \
   ds="d status" \
@@ -109,6 +111,7 @@ alias \
   gcl="g clone" \
   gcmt="g commit -a -m" \
   gdiff="g diff" \
+  glg="git log" \
   gls="git ls-files" \
   gpsh="g push" \
   gs="g status"
@@ -174,9 +177,9 @@ alias \
   off="doas shutdown -p now" \
   offif="doas ifconfig \${nic} down" \
   onif="doas ifconfig \${nic} up" \
-  res="doas shutdown -r now" \
-  resif="offif && onif" \
-  resnet="doas sh /etc/netstart" \
+  re="doas shutdown -r now" \
+  reif="offif && onif" \
+  renet="doas sh /etc/netstart" \
   showif="ifconfig \${nic}" \
   tlan="ping \$(cat /etc/mygate)" \
   tnet="ping \${site##*//}" \
@@ -184,6 +187,7 @@ alias \
 
 # web
 alias \
+  dl="ftp -V -C -n" \
   gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
   mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
