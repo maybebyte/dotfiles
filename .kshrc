@@ -1,4 +1,4 @@
-. ~/.profile
+. "${HOME}/.profile"
 
 # more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
@@ -77,6 +77,7 @@ alias \
 # editing
 alias \
   e="\${EDITOR}" \
+  ek="e \${HOME}/.kshrc" \
   se="doas \${EDITOR}" \
   seiwm="se /etc/hostname.iwm0" \
   sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
@@ -86,11 +87,11 @@ alias \
 
 # git
 alias \
-  d="git --git-dir=~/.dotfiles/ --work-tree=~/" \
+  d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
   da="d add" \
   dcmt="d commit -a -m" \
   ddiff="d diff" \
-  dls="d ls-files ~" \
+  dls="d ls-files \${HOME}" \
   dpsh="d push origin master" \
   ds="d status" \
   g="git" \
@@ -105,7 +106,7 @@ alias \
 # keepass
 alias \
   kp="keepassxc-cli" \
-  kpo="kp open ~/passwords/KeePass\\ Database.kdbx"
+  kpo="kp open \${HOME}/passwords/KeePass\\ Database.kdbx"
 
 # navigation
 alias \
@@ -166,7 +167,7 @@ alias \
 
 # web
 alias \
-  gensite="ssg5 ~/builds/website_md ~/builds/website \"A Missing Link\" \"https://amissing.link\"" \
+  gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
   mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
   mpva="mpv --no-video --speed=1" \
@@ -175,7 +176,7 @@ alias \
 
 # youtube-dl
 alias \
-  yt="youtube-dl --add-metadata -ic --embed-thumbnail -o '~/Downloads/%(title)s.%(ext)s'" \
+  yt="youtube-dl --add-metadata -ic --embed-thumbnail -o '\${HOME}/Downloads/%(title)s.%(ext)s'" \
   yta="yt -x -f bestaudio/best " \
   ytrm="yt --rm-cache-dir" \
   ytv="yt --embed-subs"
