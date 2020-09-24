@@ -57,32 +57,6 @@ export \
 nic=$(ifconfig egress | head -1 | cut -f 1 -d ':')
 export nic
 
-sec_print () {
-  printf "%s\\n" "$@"
-}
-
-err () {
-  sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
-}
-
-ip () {
-  ip=$(ifconfig egress | grep inet)
-  if [ -n "${ip}" ]; then
-    sec_print "${ip}" | awk '{print $2}'
-  else
-    err "No IP address assigned to ${nic}."
-  fi
-}
-
-ssid () {
-  ssid=$(ifconfig egress | grep ieee80211)
-  if [ -n "${ssid}" ]; then
-    sec_print "${ssid}" | awk '{print $3}'
-  else
-    err "No SSID available on ${nic}."
-  fi
-}
-
 # assorted
 alias \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
@@ -110,6 +84,7 @@ alias \
   e="\${EDITOR}" \
   ek="e \${HOME}/.kshrc" \
   ev="e \${HOME}/.vimrc" \
+  es="e \${HOME}/.config/sxhkd/sxhkdrc" \
   se="doas \${EDITOR}" \
   sehn="se /etc/hostname.\${nic}" \
   sehs="se /etc/hosts" \
@@ -129,6 +104,7 @@ alias \
   dlg="d log" \
   dls="d ls-files \${HOME}" \
   dpsh="d push origin master" \
+  dre="d restore" \
   ds="d status" \
   g="git" \
   ga="g add" \
@@ -139,6 +115,7 @@ alias \
   glg="git log" \
   gls="git ls-files" \
   gpsh="g push" \
+  gre="g restore" \
   gs="g status"
 
 # keepass
@@ -202,6 +179,12 @@ alias \
   off="doas shutdown -p now" \
   offif="doas ifconfig \${nic} down" \
   onif="doas ifconfig \${nic} up" \
+  rc="doas rcctl" \
+  rcd="rc disable" \
+  rce="rc enable" \
+  rcst="rc stop" \
+  rcstr="rc start" \
+  rcstrf="rc -f start" \
   re="doas shutdown -r now" \
   reif="offif && onif" \
   renet="doas sh /etc/netstart" \

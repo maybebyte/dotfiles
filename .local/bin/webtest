@@ -12,6 +12,8 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# needs root privileges
 set -e
 
 markdowndir=/home/ashlen/builds/website_md
@@ -27,6 +29,13 @@ err () {
   sec_print "[$(date +'%Y-%m-%d--%H:%M:%S')]: $*" >&2
   exit 1
 }
+
+mustberoot () {
+  if [ ! "$(id -u)" = 0 ]; then
+    err "You have to execute this script as root."
+  fi
+}
+
 
 gen_site () {
   rm -f ${webdir}/.files \
@@ -45,6 +54,7 @@ sync_and_chmod () {
 }
 
 webtest () {
+  mustberoot
   gen_site || err "Couldn't generate site."
   sync_and_chmod || err "Unable to sync web server."
 }
