@@ -2,6 +2,16 @@ syntax on
 highlight MatchParen ctermbg=4
 filetype plugin indent on
 
+" change directory to file in current window
+set autochdir
+" automatically read file when changed outside of Vim
+set autoread
+" goodbye bells
+set belloff=all
+
+" default is 50
+set history=100
+
  " can jump to specific lines
 set number relativenumber
 
@@ -10,6 +20,7 @@ set splitbelow splitright
 
 " vim not vi
 set nocompatible
+" no mouse
 set mouse=
 
 " search
@@ -24,6 +35,7 @@ set smartcase
 set lazyredraw
 set ttyfast
 set autoindent
+set smartindent
 
 " prevents me from getting upset with an inanimate object
 set noerrorbells
@@ -33,7 +45,8 @@ set modelines=0
 set nomodeline
 
 " ignore white space changes
-set diffopt+=iwhite
+set diffexpr=
+set diffopt+=iwhiteall
 
 " readable code
 set encoding=utf-8
@@ -41,7 +54,6 @@ set tabstop=2
 set shiftwidth=2
 set textwidth=72
 set expandtab
-set showbreak=>\
 set wrap
 set linebreak
 
@@ -84,7 +96,6 @@ autocmd BufWritepre * %s/\n\+\%$//e
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
-autocmd BufWritePost *.md ! ssg5 ~/builds/website_md ~/builds/website "A Missing Link" "https://amissing.link" && sh $HOME/bin/fmt_site
 
 " no more automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -92,7 +103,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " conform to https://google.github.io/styleguide/shellguide.html
 autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
 
-" no more ugly status bar, tmux covers this.
+" no more status bar
 autocmd VimEnter * set laststatus=0
 
 " if vim-plug isn't installed, install it

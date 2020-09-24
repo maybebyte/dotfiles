@@ -33,6 +33,7 @@ genfavi () {
     \( -clone 0 -resize 48x48 -extent 48x48 \) \
     \( -clone 0 -resize 64x64 -extent 64x64 \) \
     -delete 0 -alpha off -colors 256 favicon.ico
+  cp -a favicon.ico favicon.png
 }
 
 genfavi "$@" || err "Unable to generate favicon."

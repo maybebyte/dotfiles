@@ -20,6 +20,7 @@ markdowndir=/home/ashlen/builds/website_md
 webdir=/home/ashlen/builds/website
 srvdir=/var/www/htdocs/amissing.link
 ssg=/home/ashlen/.local/bin/ssg5
+rssg=/home/ashlen/.local/bin/rssg
 
 sec_print () {
   printf "%s\\n" "$@"
@@ -39,8 +40,10 @@ mustberoot () {
 
 gen_site () {
   rm -f ${webdir}/.files \
-    && ${ssg} ${markdowndir} ${webdir} "aml: there's no place like /home" \
+    && ${ssg} ${markdowndir} ${webdir} "Ashlen" \
     "https://amissing.link" > /dev/null 2>&1 \
+    && ${rssg} ${markdowndir}/articles.md > /dev/null 2>&1 \
+    "Newsletter - amissing.link" > "${webdir}/rss.xml" \
     && chown ashlen:ashlen ${webdir}/.files
 }
 
