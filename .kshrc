@@ -134,6 +134,7 @@ alias \
   pfd="doas tcpdump -n -e -ttt -r /var/log/pflog" \
   pfi="pfs info" \
   pfif="pfs Interfaces" \
+  pfiif="pfif -vv -i \${nic}" \
   pfl="pfc -f /etc/pf.conf" \
   pfoff="pfc -d" \
   pfon="pfc -e" \
@@ -175,7 +176,7 @@ alias \
 
 # system
 alias \
-  eip="curl ifconfig.me && printf \"\\n\"" \
+  eip="curl ifconfig.me && printf \"%s\\n\"" \
   off="doas shutdown -p now" \
   offif="doas ifconfig \${nic} down" \
   onif="doas ifconfig \${nic} up" \
