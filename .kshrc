@@ -85,6 +85,8 @@ alias \
   ek="e \${HOME}/.kshrc" \
   ev="e \${HOME}/.vimrc" \
   es="e \${HOME}/.config/sxhkd/sxhkdrc" \
+  exr="e \${HOME}/.Xresources" \
+  exs="e \${HOME}.xsession" \
   se="doas \${EDITOR}" \
   sehn="se /etc/hostname.\${nic}" \
   sehs="se /etc/hosts" \
@@ -176,7 +178,7 @@ alias \
 
 # system
 alias \
-  eip="curl ifconfig.me && printf \"%s\\n\"" \
+  exip="curl ifconfig.me && printf \"%s\\n\"" \
   off="doas shutdown -p now" \
   offif="doas ifconfig \${nic} down" \
   onif="doas ifconfig \${nic} up" \
