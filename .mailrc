@@ -2,7 +2,6 @@
 set append
 set ask
 set autoinc
-set autoprint
 set crt
 set dot
 set from="eurydice@riseup.net"

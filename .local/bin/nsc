@@ -39,7 +39,7 @@ create_workdir () {
 }
 
 nsc () {
-  doas nmap -A -v -p 0-65535 --version-all --osscan-limit \
+  doas nmap -A -v -p 0-65535 --osscan-limit \
     --privileged -oA "${workdir}/nmap-$(today)" "$1"
 }
 

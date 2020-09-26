@@ -86,7 +86,7 @@ alias \
   ev="e \${HOME}/.vimrc" \
   es="e \${HOME}/.config/sxhkd/sxhkdrc" \
   exr="e \${HOME}/.Xresources" \
-  exs="e \${HOME}.xsession" \
+  exs="e \${HOME}/.xsession" \
   se="doas \${EDITOR}" \
   sehn="se /etc/hostname.\${nic}" \
   sehs="se /etc/hosts" \
@@ -113,9 +113,9 @@ alias \
   gcl="g clone" \
   gcmt="g commit -a -m" \
   gdiff="g diff" \
-  ggr="git grep" \
-  glg="git log" \
-  gls="git ls-files" \
+  ggr="g grep" \
+  glg="g log" \
+  gls="g ls-files" \
   gpsh="g push" \
   gre="g restore" \
   gs="g status"
@@ -129,6 +129,21 @@ alias \
 alias \
   ..="cd .." \
   ...="cd ../.."
+
+# networking
+alias \
+  exip="curl ifconfig.me && printf \"%s\\n\"" \
+  ntst="netstat -n -f inet" \
+  ntst6="netstat -n -f inet6" \
+  ntstl="netstat -ln -f inet" \
+  ntstl6="netstat -ln -f inet6" \
+  offif="doas ifconfig \${nic} down" \
+  onif="doas ifconfig \${nic} up" \
+  reif="offif && onif" \
+  renet="doas sh /etc/netstart" \
+  showif="ifconfig \${nic}" \
+  tlan="ping \$(cat /etc/mygate)" \
+  tnet="ping \${site##*//}"
 
 # pf
 alias \
@@ -144,6 +159,41 @@ alias \
   pfr="pfs rules" \
   pft="pfl -n -vvv" \
   pftail="doas tcpdump -n -e -ttt -i pflog0"
+
+# pkg
+alias \
+  pkga="doas pkg_add" \
+  pkgd="doas pkg_delete" \
+  pkgda="pkgd -a" \
+  pkgl="pkgq -mz" \
+  pkgs="pkgq -Q" \
+  pkgss="pkgq -D snap -Q" \
+  pkgq="pkg_info" \
+  pkgu="pkgi -u"
+
+# sec
+alias \
+  nk="nikto -output nikto-\$(today).txt -host" \
+  sc="doas nmap -sn" \
+  sspl="searchsploit"
+
+# service management
+alias \
+  rc="doas rcctl" \
+  rcd="rc disable" \
+  rce="rc enable" \
+  rcg="rcctl get" \
+  rcre="rc restart" \
+  rcset="rc set" \
+  rcst="rc stop" \
+  rcstr="rc start" \
+  rcstrf="rc -f start"
+
+# system
+alias \
+  off="doas shutdown -p now" \
+  re="doas shutdown -r now" \
+  up="uptime"
 
 # taskwarrior
 alias \
@@ -169,34 +219,6 @@ alias \
   tma="tm attach" \
   tmk="tm kill-server" \
   tml="tm list-sessions"
-
-# sec
-alias \
-  nk="nikto -output nikto-\$(today).txt -host" \
-  sc="doas nmap -sn" \
-  sspl="searchsploit"
-
-# system
-alias \
-  exip="curl ifconfig.me && printf \"%s\\n\"" \
-  off="doas shutdown -p now" \
-  offif="doas ifconfig \${nic} down" \
-  onif="doas ifconfig \${nic} up" \
-  rc="doas rcctl" \
-  rcd="rc disable" \
-  rce="rc enable" \
-  rcg="rcctl get" \
-  rcset="rc set" \
-  rcst="rc stop" \
-  rcstr="rc start" \
-  rcstrf="rc -f start" \
-  re="doas shutdown -r now" \
-  reif="offif && onif" \
-  renet="doas sh /etc/netstart" \
-  showif="ifconfig \${nic}" \
-  tlan="ping \$(cat /etc/mygate)" \
-  tnet="ping \${site##*//}" \
-  up="uptime"
 
 # web
 alias \

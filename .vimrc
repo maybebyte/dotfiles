@@ -4,8 +4,10 @@ filetype plugin indent on
 
 " change directory to file in current window
 set autochdir
+
 " automatically read file when changed outside of Vim
 set autoread
+
 " goodbye bells
 set belloff=all
 
@@ -20,6 +22,7 @@ set splitbelow splitright
 
 " vim not vi
 set nocompatible
+
 " no mouse
 set mouse=
 
@@ -58,7 +61,7 @@ set wrap
 set linebreak
 
 " :h fo-table explains these options.
-set formatoptions=cqnv1jp
+set formatoptions=tqv1jp
 
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
@@ -113,6 +116,7 @@ if empty(glob('$HOME/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source "$HOME/.vimrc"
 endif
 
+" plugins
 call plug#begin("$HOME/.vim/plugged")
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
