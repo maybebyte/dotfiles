@@ -37,15 +37,15 @@ show_volume () {
   # division is used to truncate the resulting floating-point number
   volume=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
-    printf %s "MUTE"
+    printf %s "MUTE${delimiter}"
   else
-    printf %s "vol: ${volume}%"
+    printf %s "vol: ${volume}%${delimiter}"
   fi
 }
 
 show_disk_space () {
   diskspace=$(df -h /home | tail -1 | awk '{print $4}')
-  printf %s "/home: ${diskspace}"
+  printf %s "/home: ${diskspace}${delimiter}"
 }
 
 show_battery () {
@@ -55,11 +55,11 @@ show_battery () {
   remaining="~${hours}h & ${minutes}m"
   percentage="$(apm -l)%"
   if [ "${adapter}" = 0 ]; then
-    printf %s "bat: ${remaining}, at ${percentage}"
+    printf %s "bat: ${remaining}, at ${percentage}${delimiter}"
   elif [ "${adapter}" = 1 ]; then
-    printf %s "chr: at ${percentage}"
+    printf %s "chr: at ${percentage}${delimiter}"
   elif [ "${adapter}" = 2 ]; then
-    printf %s "bkup: ${remaining}, at ${percentage}"
+    printf %s "bkup: ${remaining}, at ${percentage}${delimiter}"
   elif [ "${adapter}" = 255 ]; then
     printf %s ""
   fi
@@ -76,8 +76,18 @@ show_track () {
 }
 
 show_temp () {
-  temperature=$(sysctl -n hw.sensors.cpu0.temp0 | awk -F "." '{print $1}')
-  printf %s "temp: ${temperature} °C"
+  if [ "$(hostname -s)" = "lain" ]; then
+    temperature=$(sysctl -n hw.sensors.cpu0.temp0 | awk -F "." '{print $1}')
+  elif [ "$(hostname -s)" = "aphrodite" ]; then
+    temperature=$(sysctl -n hw.sensors.ksmn0.temp0 | awk -F "." '{print $1}')
+  else
+    temperature=''
+  fi
+  if [ -z "${temperature}" ]; then
+    printf %s ""
+  else
+    printf %s "temp: ${temperature} °C"
+  fi
 }
 
 show_cpu_freq () {
@@ -89,8 +99,8 @@ show_cpu_freq () {
 sysinfo () {
   while true; do
   # indenting here affects spacing in the bar
-stats="${bgfg} %{l}$(show_battery)${delimiter}$(show_temp)\
-%{c}$(show_track) %{r}$(show_volume)${delimiter}$(show_disk_space)${delimiter}\
+stats="${bgfg} %{l}$(show_battery)$(show_temp)\
+%{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
     printf %s "${stats}"
     sleep 1
