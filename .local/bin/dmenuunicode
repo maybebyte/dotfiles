@@ -1,4 +1,10 @@
 #!/usr/bin/env sh
+# rewrite of Luke Smith's dmenuunicode:
+# https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
+
+# his dotfiles can be accessed here:
+# https://github.com/LukeSmithxyz/voidrice
+
 set -e
 
 emoji_file="${HOME}/.local/share/emoji"

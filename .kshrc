@@ -82,6 +82,7 @@ alias \
 # editing
 alias \
   e="\${EDITOR}" \
+  ef="e \${HOME}/.config/fontconfig/fonts.conf" \
   ek="e \${HOME}/.kshrc" \
   ev="e \${HOME}/.vimrc" \
   es="e \${HOME}/.config/sxhkd/sxhkdrc" \
@@ -169,7 +170,8 @@ alias \
   pkgs="pkgq -Q" \
   pkgss="pkgq -D snap -Q" \
   pkgq="pkg_info" \
-  pkgu="pkgi -u"
+  pkgqs="pkg_info -D snap" \
+  pkgup="pkga -u"
 
 # sec
 alias \
