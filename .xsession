@@ -8,7 +8,7 @@ export LANG=en_US.UTF-8
 /usr/local/bin/unclutter -idle 3 -grab &
 ${HOME}/.local/bin/wal -R
 /usr/X11R6/bin/xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
-/usr/X11R6/bin/xset m 3/1 0
+[ "$(hostname -s)" = "lain" ] && /usr/X11R6/bin/xset m 3/1 0
 ${HOME}/.local/bin/sysinfo | ${HOME}/.local/bin/lbar &
 
 # trackpad scrolling with middle button

@@ -191,6 +191,7 @@ alias \
 
 # system
 alias \
+  dtsu="doas shutdown now" \
   off="doas shutdown -p now" \
   re="doas shutdown -r now" \
   up="uptime"
