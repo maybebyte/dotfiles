@@ -34,6 +34,7 @@ macro , open-in-browser
 macro t set browser "youtube-dl"; open-in-browser ; set browser "firefox"
 macro a set browser "youtube-dl -x -f bestaudio/best"; open-in-browser ; set browser "firefox"
 macro v set browser "mpv"; open-in-browser ; set browser "firefox"
+macro l set browser "mpv --no-video --speed=1"; open-in-browser ; set browser "firefox"
 macro c set browser "printf '%u' | xclip -selection clipboard" ; open-in-browser ; set browser "firefox"
 
 reload-threads 20

@@ -77,8 +77,13 @@ nnoremap <leader>n :NERDTreeToggle
 nnoremap <leader>f :FZF
 nnoremap <leader>g :Goyo
 
-" Spell-check set to <leader>o, 'o' for 'orthography':
+" spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :set spell! spelllang=en_us
+
+" creates needed directories if they don't exist
+if isdirectory(expand("$HOME/.vim/files")) != 1
+  silent !mkdir -p $HOME/.vim/files/{backup,swap,undo,info}
+endif
 
 " for reverting edits and other conveniences
 set backup
@@ -116,6 +121,7 @@ if empty(glob('$HOME/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source "$HOME/.vimrc"
 endif
 
+
 " plugins
 call plug#begin("$HOME/.vim/plugged")
 Plug 'tpope/vim-surround'
@@ -124,11 +130,15 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-sensible'
-Plug 'dylanaraps/wal.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'ap/vim-css-color'
-Plug 'kovetskiy/sxhkd-vim'
+if $DISPLAY != ""
+  Plug 'ap/vim-css-color'
+  Plug 'kovetskiy/sxhkd-vim'
+  Plug 'dylanaraps/wal.vim'
+  Plug 'junegunn/goyo.vim'
+endif
 call plug#end()
 
 " https://github.com/dylanaraps/pywal
-colorscheme wal
+if $DISPLAY != ""
+  colorscheme wal
+endif

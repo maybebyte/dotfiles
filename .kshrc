@@ -3,13 +3,17 @@
 # more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
 
+
 # ksh options
 set -o \
   braceexpand \
   vi \
   vi-esccomplete \
-  vi-show8 \
   vi-tabcomplete
+
+if [ "$(uname -s)" = "OpenBSD" ]; then
+  set -o vi-show8
+fi
 
 # use vim if it's installed, vi otherwise
 case "$(command -v vim)" in
@@ -24,38 +28,46 @@ else
   ls='ls'
 fi
 
-# swaps colors when uid is 0, i.e. root
-case "$(id -u)" in
-  0) _ps1_user='\[\033[1;33m\]' _ps1_path='\[\033[1;35m\]' ;;
-  *) _ps1_user='\[\033[1;35m\]' _ps1_path='\[\033[1;33m\]' ;;
-esac
+if [ "$(uname -s)" = "OpenBSD" ]; then
+  # swaps colors when uid is 0, i.e. root
+  case "$(id -u)" in
+    0) _ps1_user='\[\033[1;33m\]' _ps1_path='\[\033[1;35m\]' ;;
+    *) _ps1_user='\[\033[1;35m\]' _ps1_path='\[\033[1;33m\]' ;;
+  esac
 
-_ps1_bracket='\[\033[1;36m\]'
-_ps1_clear='\[\033[0m\]'
+  _ps1_bracket='\[\033[1;36m\]'
+  _ps1_clear='\[\033[0m\]'
 
+# unintended spaces occur w/ indentation
 PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u \
 ${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
 ${_ps1_clear}\$ "
+fi
 
 # PATH acts funny w/ indentation
 export \
   CLICOLOR=1 \
   EDITOR="${vim}" \
-  FCEDIT=${EDITOR} \
+  FCEDIT="${EDITOR}" \
   GNUPGHOME="${HOME}/.config/gnupg" \
-  HISTFILE=${HOME}/.history \
+  HISTFILE="${HOME}/.history" \
   HISTSIZE=10000 \
   LESS="-iMR" \
   PAGER="less" \
-  PATH=${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
-/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games \
-  QT_STYLE_OVERRIDE=adwaita \
+  PATH="${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
+/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games" \
+  QT_STYLE_OVERRIDE="adwaita" \
   site="https://amissing.link" \
   VISUAL="${EDITOR}"
 
-# separate from other exports so return values aren't masked
-nic=$(ifconfig egress | head -1 | cut -f 1 -d ':')
-export nic
+gateway=$(netstat -rn 2> /dev/null | grep -E "^default" | awk '{print $2}' ) \
+  && export gateway
+
+nic=$(ifconfig egress 2> /dev/null | head -1 | cut -f 1 -d ':') \
+  && export nic
+
+userjs=$(find "${HOME}/.mozilla" -iname user.js 2> /dev/null) \
+  && export userjs
 
 # assorted
 alias \
@@ -82,10 +94,14 @@ alias \
 # editing
 alias \
   e="\${EDITOR}" \
+  edu="e -d \${HOME}/builds/ghacks-user.js/user.js \${userjs}" \
   ef="e \${HOME}/.config/fontconfig/fonts.conf" \
   ek="e \${HOME}/.kshrc" \
+  em="e \${HOME}/.config/neomutt/neomuttrc" \
+  eu="e \${userjs}" \
   ev="e \${HOME}/.vimrc" \
   es="e \${HOME}/.config/sxhkd/sxhkdrc" \
+  exmb="e \${HOME}/.config/xmobar/xmobarrc" \
   exr="e \${HOME}/.Xresources" \
   exs="e \${HOME}/.xsession" \
   se="doas \${EDITOR}" \
@@ -134,16 +150,18 @@ alias \
 # networking
 alias \
   exip="curl ifconfig.me && printf \"%s\\n\"" \
+  nicdel="doas ifconfig \${nic} delete" \
+  nicoff="doas ifconfig \${nic} down" \
+  nicon="doas ifconfig \${nic} up" \
+  nicre="nicoff && nicon" \
+  nicshow="ifconfig \${nic}" \
+  nictail="doas tcpdump -i \${nic} -o -p" \
   ntst="netstat -n -f inet" \
   ntst6="netstat -n -f inet6" \
   ntstl="netstat -ln -f inet" \
   ntstl6="netstat -ln -f inet6" \
-  offif="doas ifconfig \${nic} down" \
-  onif="doas ifconfig \${nic} up" \
-  reif="offif && onif" \
   renet="doas sh /etc/netstart" \
-  showif="ifconfig \${nic}" \
-  tlan="ping \$(cat /etc/mygate)" \
+  tlan="ping \${gateway}" \
   tnet="ping \${site##*//}"
 
 # pf
@@ -159,7 +177,9 @@ alias \
   pfs="pfc -s" \
   pfr="pfs rules" \
   pft="pfl -n -vvv" \
-  pftail="doas tcpdump -n -e -ttt -i pflog0"
+  pftail="doas tcpdump -n -e -ttt -i pflog0" \
+  pftailb="doas tcpdump -n -e -ttt -i pflog0 action block" \
+  pftailp="doas tcpdump -n -e -ttt -i pflog0 action pass"
 
 # pkg
 alias \
@@ -167,6 +187,7 @@ alias \
   pkgd="doas pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
+  pkgL="pkgq -L" \
   pkgs="pkgq -Q" \
   pkgss="pkgq -D snap -Q" \
   pkgq="pkg_info" \
@@ -185,6 +206,9 @@ alias \
   rcd="rc disable" \
   rce="rc enable" \
   rcg="rcctl get" \
+  rclfail="rc ls failed" \
+  rclon="rcctl ls on" \
+  rclstr="rc ls started" \
   rcre="rc restart" \
   rcset="rc set" \
   rcst="rc stop" \
@@ -193,6 +217,7 @@ alias \
 
 # system
 alias \
+  chksn="w3m \$(cat /etc/installurl)/snapshots/amd64" \
   dtsu="doas shutdown now" \
   off="doas shutdown -p now" \
   re="doas shutdown -r now" \
@@ -207,6 +232,7 @@ alias \
   tatech="ta project:tech" \
   tc="t config" \
   td="t done" \
+  tdue="task due.before:today ids" \
   tid="t ids" \
   tls="t list" \
   tmod="t modify" \
@@ -214,7 +240,7 @@ alias \
   tshop="tls project:shopping" \
   tt="tls due:today" \
   ttech="tls project:tech" \
-  tup="yes | td \$(task due.before:today ids)"
+  tup="yes | td \$(tdue ids)"
 
 # tmux
 alias \
