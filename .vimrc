@@ -11,6 +11,9 @@ set autoread
 " goodbye bells
 set belloff=all
 
+" for vim-markdown
+set conceallevel=2
+
 " default is 50
 set history=100
 
@@ -124,18 +127,20 @@ endif
 
 " plugins
 call plug#begin("$HOME/.vim/plugged")
-Plug 'tpope/vim-surround'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-sensible'
-if $DISPLAY != ""
-  Plug 'ap/vim-css-color'
-  Plug 'kovetskiy/sxhkd-vim'
-  Plug 'dylanaraps/wal.vim'
-  Plug 'junegunn/goyo.vim'
-endif
+  Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'scrooloose/nerdtree'
+  Plug 'scrooloose/syntastic'
+  Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-surround'
+  if $DISPLAY != ""
+    Plug 'ap/vim-css-color'
+    Plug 'dylanaraps/wal.vim'
+    Plug 'junegunn/goyo.vim'
+    Plug 'kovetskiy/sxhkd-vim'
+    Plug 'plasticboy/vim-markdown'
+  endif
 call plug#end()
 
 " https://github.com/dylanaraps/pywal
