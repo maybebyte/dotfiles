@@ -74,10 +74,8 @@ set wrap                      = 72
 
 mailboxes                     = +INBOX
 
-# do not show all headers, just a few
 ignore      *
 unignore    From To Cc Bcc Date Subject
-# and in this order
 unhdr_order *
 hdr_order   From: To: Cc: Bcc: Date: Subject:
 
@@ -122,6 +120,7 @@ bind  pager               l       view-attachments
 bind  pager,attach        h       exit
 macro browser             h       '<change-dir><kill-line>..<enter>' "Go to parent folder"
 
+# Colors
 color attachment        white         default
 color bold              black         default
 color error             red           default

@@ -5,12 +5,12 @@ import System.IO
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.NoBorders
 
-myModMask = mod4Mask
-myTerminal = "st"
-myBorderWidth = 2
-myNormalBorderColor = "#698CEC"
+myModMask            = mod4Mask
+myTerminal           = "st"
+myBorderWidth        = 2
+myNormalBorderColor  = "#698CEC"
 myFocusedBorderColor = "#9974E7"
-myMouseFocusRule = False
+myMouseFocusRule     = False
 
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
@@ -30,12 +30,12 @@ main = do
   xmonad
     $ ewmh
     $ docks def
-    { handleEventHook   = fullscreenEventHook
-    , layoutHook        = smartBorders (myLayoutHook)
-    , borderWidth       = myBorderWidth
-    , normalBorderColor = myNormalBorderColor
-    , focusedBorderColor= myFocusedBorderColor
-    , modMask           = myModMask
-    , terminal          = myTerminal
-    , focusFollowsMouse = myMouseFocusRule
-    , manageHook        = myManageHook <+> manageHook def }
+    { handleEventHook    = fullscreenEventHook
+    , layoutHook         = smartBorders (myLayoutHook)
+    , borderWidth        = myBorderWidth
+    , normalBorderColor  = myNormalBorderColor
+    , focusedBorderColor = myFocusedBorderColor
+    , modMask            = myModMask
+    , terminal           = myTerminal
+    , focusFollowsMouse  = myMouseFocusRule
+    , manageHook         = myManageHook <+> manageHook def }

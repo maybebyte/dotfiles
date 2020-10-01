@@ -97,9 +97,9 @@ alias \
   ef="e \${HOME}/.config/fontconfig/fonts.conf" \
   ek="e \${HOME}/.kshrc" \
   em="e \${HOME}/.config/neomutt/neomuttrc" \
+  es="e \${HOME}/.config/sxhkd/sxhkdrc" \
   eu="e \${userjs}" \
   ev="e \${HOME}/.vimrc" \
-  es="e \${HOME}/.config/sxhkd/sxhkdrc" \
   exmb="e \${HOME}/.config/xmobar/xmobarrc" \
   exr="e \${HOME}/.Xresources" \
   exs="e \${HOME}/.xsession" \
@@ -155,10 +155,10 @@ alias \
   nicre="nicoff && nicon" \
   nicshow="ifconfig \${nic}" \
   nictail="doas tcpdump -i \${nic} -o -p" \
-  ntst="netstat -n -f inet" \
   ntst6="netstat -n -f inet6" \
-  ntstl="netstat -ln -f inet" \
+  ntst="netstat -n -f inet" \
   ntstl6="netstat -ln -f inet6" \
+  ntstl="netstat -ln -f inet" \
   renet="doas sh /etc/netstart" \
   tlan="ping \${gateway}" \
   tnet="ping \${site##*//}"
@@ -173,8 +173,8 @@ alias \
   pfl="pfc -f /etc/pf.conf" \
   pfoff="pfc -d" \
   pfon="pfc -e" \
-  pfs="pfc -s" \
   pfr="pfs rules" \
+  pfs="pfc -s" \
   pft="pfl -n -vvv" \
   pftail="doas tcpdump -n -e -ttt -i pflog0" \
   pftailb="doas tcpdump -n -e -ttt -i pflog0 action block" \
@@ -182,15 +182,15 @@ alias \
 
 # pkg
 alias \
+  pkgL="pkgq -L" \
   pkga="doas pkg_add" \
   pkgd="doas pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
-  pkgL="pkgq -L" \
-  pkgs="pkgq -Q" \
-  pkgss="pkgq -D snap -Q" \
   pkgq="pkg_info" \
   pkgqs="pkg_info -D snap" \
+  pkgs="pkgq -Q" \
+  pkgss="pkgq -D snap -Q" \
   pkgup="pkga -u"
 
 # sec
