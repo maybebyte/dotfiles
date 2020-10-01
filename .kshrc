@@ -3,7 +3,6 @@
 # more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
 
-
 # ksh options
 set -o \
   braceexpand \

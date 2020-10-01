@@ -12,174 +12,163 @@ subscribe announcements@openbsd.org
 subscribe bugs@openbsd.org
 subscribe misc@openbsd.org
 
-set auto_subscribe=yes
-set beep=no
-set editor="vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
-set visual="vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
-set hidden_host=yes
-set ignore_linear_white_space=yes
-set ignore_list_reply_to=yes
-set mbox="~/mail"
-set mbox_type="Maildir"
-set move=yes
-set print=no
-set reverse_alias=yes
+set auto_subscribe            = yes
+set beep                      = no
+set crypt_autosign            = no
+set crypt_replyencrypt        = yes
+set crypt_replysign           = yes
+set crypt_replysignencrypted  = yes
+set crypt_use_gpgme           = yes
+set date_format               = "%y/%m/%d %I:%M%p"
+set delete                    = yes
+set editor                    = "vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
+set fast_reply
+set fcc_attach
+set folder                    = pops://mail.riseup.net/
+set forward_format            = "Fwd: %s"
+set forward_quote
+set from                      = eurydice@riseup.net
+set header_cache              = "~/.cache/mutt"
+set hidden_host               = yes
+set ignore_linear_white_space = yes
+set ignore_list_reply_to      = yes
+set include
+set index_format              = "%2C %Z %?X?A& ? %D %-15.15F %s (%-4.4c)"
+set mail_check                = 60
+set mail_check_stats
+set mark_old                  = no
+set markers                   = no
+set mbox                      = "~/mail"
+set mbox_type                 = "Maildir"
+set message_cachedir          = "~/.cache/mutt"
+set mime_forward              = yes
+set move                      = yes
+set pgp_auto_decode           = yes
+set pgp_show_unusable         = no
+set pop_checkinterval         = 60
+set pop_delete                = yes
+set pop_host                  = "mail.riseup.net"
+set pop_pass                  = $my_pass
+set pop_user                  = "eurydice@riseup.net"
+set print                     = no
+set realname                  = "Ashlen"
+set reflow_wrap               = 72
+set reverse_alias             = yes
+set reverse_name
+set rfc2047_parameters        = yes
+set sidebar_divider_char      = ""
+set sidebar_format            = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+set sidebar_next_new_wrap     = yes
+set sidebar_short_path        = yes
+set sidebar_visible           = yes
+set sidebar_width             = 15
+set sleep_time                = 0
+set sort                      = threads
+set spoolfile                 = +INBOX
+set ssl_force_tls             = yes
+set strict_threads            = yes
+set use_from                  = yes
+set visual                    = "vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
+set wait_key                  = no
+set wrap                      = 72
 
-set realname="Ashlen"
-set from=eurydice@riseup.net
-set use_from=yes
-set pop_user="eurydice@riseup.net"
-set pop_pass=$my_pass
-set pop_host="mail.riseup.net"
-set pop_delete=yes
-set delete=yes
-set pop_checkinterval=60
-set mail_check=60
-set folder=pops://mail.riseup.net/
-mailboxes = +INBOX
-set spoolfile = +INBOX
-set crypt_use_gpgme=yes
-set crypt_autosign=no
-set crypt_replyencrypt=yes
-set crypt_replysign=yes
-set crypt_replysignencrypted=yes
-set pgp_auto_decode=yes
-set pgp_show_unusable=no
+mailboxes                     = +INBOX
 
 # do not show all headers, just a few
-ignore          *
-unignore        From To Cc Bcc Date Subject
+ignore      *
+unignore    From To Cc Bcc Date Subject
 # and in this order
-unhdr_order     *
-hdr_order       From: To: Cc: Bcc: Date: Subject:
+unhdr_order *
+hdr_order   From: To: Cc: Bcc: Date: Subject:
 
-set reflow_wrap=72
-set wrap=72
-#set edit_headers=yes
-
-set header_cache="~/.cache/mutt"
-set message_cachedir="~/.cache/mutt"
-
-set ssl_force_tls=yes
-set sort=threads
-set strict_threads=yes
-bind index "^" fetch-mail
-
-set date_format="%y/%m/%d %I:%M%p"
-set index_format="%2C %Z %?X?A& ? %D %-15.15F %s (%-4.4c)"
-set rfc2047_parameters=yes
-set sleep_time=0		# Pause 0 seconds for informational messages
-set markers=no		# Disables the `+` displayed at line wraps
-set mark_old=no		# Unread mail stay unread until read
-set mime_forward=yes		# attachments are forwarded with mail
-set wait_key=no		# mutt won't ask "press key to continue"
-set fast_reply			# skip to compose when replying
-set fcc_attach			# save attachments with the body
-set forward_format="Fwd: %s"	# format of subject when forwarding
-set forward_quote		# include message in forwards
-set reverse_name		# reply as whomever it was to
-set include			# include message in replies
-auto_view text/html		# automatically show html (mailcap uses w3m)
-auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
-bind index,pager i noop
-bind index,pager,attach g noop
-bind index \Cf noop
+auto_view         application/pgp-encrypted
+auto_view         text/html
+
+bind index              \Cf noop
+bind index,pager        i   noop
+bind index,pager,attach g   noop
 
 # General rebindings
-bind index j next-entry
-bind index k previous-entry
-bind attach l view-text
-bind editor <space> noop
-bind index,attach G last-entry
-bind index,attach gg first-entry
-bind pager,attach h exit
-bind pager j next-line
-bind pager k previous-line
-bind pager l view-attachments
-bind index D purge-message
-bind index U undelete-message
-bind index L list-reply
-bind index h noop
-bind index l display-message
-bind index,query <space> tag-entry
-bind browser h goto-parent
-macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
-bind browser l select-entry
-bind index,pager,browser d half-down
-bind index,pager,browser u half-up
-bind index,pager S sync-mailbox
-bind index,pager,attach R group-reply
-bind editor <Tab> complete-query
+bind  attach              l       view-text
+bind  browser             h       goto-parent
+bind  browser             l       select-entry
+bind  editor              <Tab>   complete-query
+bind  editor              <space> noop
+bind  index               "^"     fetch-mail
+bind  index               D       purge-message
+bind  index               L       list-reply
+bind  index               U       undelete-message
+bind  index               h       noop
+bind  index               j       next-entry
+bind  index               k       previous-entry
+bind  index               l       display-message
+bind  index,attach        G       last-entry
+bind  index,attach        gg      first-entry
+bind  index,pager         B       sidebar-toggle-visible
+bind  index,pager         S       sync-mailbox
+bind  index,pager         \Cj     sidebar-next
+bind  index,pager         \Ck     sidebar-prev
+bind  index,pager         \Cn     sidebar-next-new
+bind  index,pager         \Co     sidebar-open
+bind  index,pager         \Cp     sidebar-prev-new
+bind  index,pager,attach  R       group-reply
+bind  index,pager,browser d       half-down
+bind  index,pager,browser u       half-up
+bind  index,query         <space> tag-entry
+bind  pager               j       next-line
+bind  pager               k       previous-line
+bind  pager               l       view-attachments
+bind  pager,attach        h       exit
+macro browser             h       '<change-dir><kill-line>..<enter>' "Go to parent folder"
 
-# Sidebar mappings
-set sidebar_visible=yes
-set sidebar_divider_char=""
-set sidebar_width=15
-set sidebar_short_path=yes
-set sidebar_next_new_wrap=yes
-set mail_check_stats
-set sidebar_format='%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
-bind index,pager \Ck sidebar-prev
-bind index,pager \Cj sidebar-next
-bind index,pager \Co sidebar-open
-bind index,pager \Cp sidebar-prev-new
-bind index,pager \Cn sidebar-next-new
-bind index,pager B sidebar-toggle-visible
-
-# Default index colors:
-color index cyan default '.*'
-
-# New mail is boldened:
-color index brightcyan default "~N"
-
-# Other colors and aesthetic settings:
-mono bold bold
-mono underline underline
-mono indicator reverse
-mono error bold
-color normal default default
-color indicator green default
-color sidebar_highlight red default
-color error red default
-color tilde black default
-color message cyan default
-color attachment white default
-color search brightmagenta default
-color status magenta black
-color hdrdefault blue default
-color quoted green default
-color quoted1 blue default
-color quoted2 cyan default
-color quoted3 yellow default
-color quoted4 red default
-color quoted5 brightred default
-color signature brightgreen default
-color bold black default
-color underline black default
-color normal default default
+color attachment        white         default
+color bold              black         default
+color error             red           default
+color hdrdefault        blue          default
+color index             brightcyan    default "~N"
+color index             cyan          default '.*'
+color indicator         green         default
+color message           cyan          default
+color normal            default       default
+color normal            default       default
+color quoted            green         default
+color quoted1           blue          default
+color quoted2           cyan          default
+color quoted3           yellow        default
+color quoted4           red           default
+color quoted5           brightred     default
+color search            brightmagenta default
+color sidebar_highlight red           default
+color signature         brightgreen   default
+color status            magenta       black
+color tilde             black         default
+color underline         black         default
+mono  bold              bold
+mono  error             bold
+mono  indicator         reverse
+mono  underline         underline
 
 # Regex highlighting:
-color header cyan default ".*"
-color header yellow default "^(From)"
-color header yellow default "^(Subject)"
-color header brightwhite default "^(CC|BCC)"
-color body blue default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # Email addresses
-color body blue default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL
-color body yellow default "\`[^\`]*\`" # Green text between ` and `
-color body brightblue default "^# \.*" # Headings as bold blue
-color body brightcyan default "^## \.*" # Subheadings as bold cyan
-color body brightgreen default "^### \.*" # Subsubheadings as bold green
-color body yellow default "^(\t| )*(-|\\*) \.*" # List items as yellow
-color body brightcyan default "[;:][-o][)/(|]" # emoticons
-color body brightcyan default "[;:][)(|]" # emoticons
-color body brightcyan default "[ ][*][^*]*[*][ ]?" # more emoticon?
-color body brightcyan default "[ ]?[*][^*]*[*][ ]" # more emoticon?
-color body red default "(BAD signature)"
-color body cyan default "(Good signature)"
-color body brightblack default "^gpg: Good signature .*"
-color body brightyellow default "^gpg: "
-color body brightyellow red "^gpg: BAD signature from.*"
-mono body bold "^gpg: Good signature"
-mono body bold "^gpg: BAD signature from.*"
-#color body blue default "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
+color body   blue         default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL
+color body   blue         default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # Email addresses
+color body   brightblack  default "^gpg: Good signature .*"
+color body   brightblue   default "^# \.*" # Headings as bold blue
+color body   brightcyan   default "[ ]?[*][^*]*[*][ ]" # more emoticon?
+color body   brightcyan   default "[ ][*][^*]*[*][ ]?" # more emoticon?
+color body   brightcyan   default "[;:][)(|]" # emoticons
+color body   brightcyan   default "[;:][-o][)/(|]" # emoticons
+color body   brightcyan   default "^## \.*" # Subheadings as bold cyan
+color body   brightgreen  default "^### \.*" # Subsubheadings as bold green
+color body   brightyellow default "^gpg: "
+color body   brightyellow red     "^gpg: BAD signature from.*"
+color body   cyan         default "(Good signature)"
+color body   red          default "(BAD signature)"
+color body   yellow       default "\`[^\`]*\`" # Green text between ` and `
+color body   yellow       default "^(\t| )*(-|\\*) \.*" # List items as yellow
+color header brightwhite  default "^(CC|BCC)"
+color header cyan         default ".*"
+color header yellow       default "^(From)"
+color header yellow       default "^(Subject)"
+mono  body   bold         "^gpg:  BAD  signature from.*"
+mono  body   bold         "^gpg:  Good signature"

@@ -47,18 +47,18 @@ set smartindent
 set noerrorbells
 
 " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
-set modelines=0
+set modelines =0
 set nomodeline
 
 " ignore white space changes
-set diffexpr=
-set diffopt+=iwhiteall
+set diffexpr  =
+set diffopt  +=iwhiteall
 
 " readable code
-set encoding=utf-8
-set tabstop=2
-set shiftwidth=2
-set textwidth=72
+set encoding   =utf-8
+set tabstop    =2
+set shiftwidth =2
+set textwidth  =72
 set expandtab
 set wrap
 set linebreak
@@ -76,6 +76,7 @@ noremap : ;
 
 " plugin bindings
 let mapleader=","
+
 nnoremap <leader>n :NERDTreeToggle
 nnoremap <leader>f :FZF
 nnoremap <leader>g :Goyo
@@ -102,7 +103,7 @@ set directory   =$HOME/.vim/files/swap/
 set updatecount =100
 set undofile
 set undodir     =$HOME/.vim/files/undo/
-set viminfo ='100,n$HOME/.vim/files/info/viminfo
+set viminfo     ='100,n$HOME/.vim/files/info/viminfo
 
 " automatically deletes all trailing whitespace and newlines at end of
 " file on save.
