@@ -58,9 +58,9 @@ export \
 /usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games" \
   QT_STYLE_OVERRIDE="adwaita" \
   READER="zathura" \
-  site="https://amissing.link" \
   TERMINAL="st" \
-  VISUAL="${EDITOR}"
+  VISUAL="${EDITOR}" \
+  site="https://amissing.link"
 
 gateway=$(netstat -rn 2> /dev/null | grep -E "^default" | awk '{print $2}' ) \
   && export gateway
@@ -160,6 +160,8 @@ alias \
   nicre="nicoff && nicon" \
   nicshow="ifconfig \${nic}" \
   nictail="doas tcpdump -i \${nic} -o -p" \
+  nsr6="netstat -rn -f inet6" \
+  nsr="netstat -rn -f inet" \
   ntst6="netstat -n -f inet6" \
   ntst="netstat -n -f inet" \
   ntstl6="netstat -ln -f inet6" \

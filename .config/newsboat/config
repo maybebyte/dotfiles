@@ -1,43 +1,48 @@
-save-path "~/books/newsboat/"
-
-bind-key j down
-bind-key k up
-bind-key j next articlelist
-bind-key k prev articlelist
-bind-key J next-feed articlelist
-bind-key K prev-feed articlelist
-bind-key G end
-bind-key g home
-bind-key d pagedown
-bind-key u pageup
-bind-key l open
-bind-key h quit
-bind-key a toggle-article-read
-bind-key n next-unread
-bind-key N prev-unread
-bind-key U show-urls
-bind-key ^B bookmark
-bind-key x delete-article
-
 unbind-key p
 
-color listnormal red default
-color listfocus green default
-color listnormal_unread cyan default
-color listfocus_unread green default
-color info red default
-color article default default
+bind-key G  end
+bind-key J  next-feed articlelist
+bind-key K  prev-feed articlelist
+bind-key N  prev-unread
+bind-key U  show-urls
+bind-key ^B bookmark
+bind-key a  toggle-article-read
+bind-key d  pagedown
+bind-key g  home
+bind-key h  quit
+bind-key j  down
+bind-key j  next articlelist
+bind-key k  prev articlelist
+bind-key k  up
+bind-key l  open
+bind-key n  next-unread
+bind-key u  pageup
+bind-key x  delete-article
 
 browser "firefox"
-player "mpv"
+
+cache-file ~/.config/newsboat/cache.db
+
+cleanup-on-quit yes
+
+color article           default default
+color info              red     default
+color listfocus         green   default
+color listfocus_unread  green   default
+color listnormal        red     default
+color listnormal_unread cyan    default
+
 macro , open-in-browser
-macro t set browser "youtube-dl"; open-in-browser ; set browser "firefox"
 macro a set browser "youtube-dl -x -f bestaudio/best"; open-in-browser ; set browser "firefox"
-macro v set browser "mpv"; open-in-browser ; set browser "firefox"
-macro l set browser "mpv --no-video --speed=1"; open-in-browser ; set browser "firefox"
 macro c set browser "printf '%u' | xclip -selection clipboard" ; open-in-browser ; set browser "firefox"
+macro l set browser "mpv --no-video --speed=1"; open-in-browser ; set browser "firefox"
+macro t set browser "youtube-dl"; open-in-browser ; set browser "firefox"
+macro v set browser "mpv"; open-in-browser ; set browser "firefox"
+
+player "mpv"
 
 reload-threads 20
-cleanup-on-quit yes
+
+save-path "~/books/newsboat/"
+
 text-width 72
-cache-file ~/.config/newsboat/cache.db

@@ -1,9 +1,9 @@
 [Default Applications]
+application/x-shellscript=vim.desktop;
+image/gif=sxiv.desktop;
+image/jpeg=sxiv.desktop;
+image/png=sxiv.desktop;
+text/markdown=vim.desktop;
 text/pdf=zathura.desktop
 text/plain=vim.desktop;
-image/png=sxiv.desktop;
-image/jpeg=sxiv.desktop;
 video/mp4=mpv.desktop;
-image/gif=sxiv.desktop;
-text/markdown=vim.desktop;
-application/x-shellscript=vim.desktop;
