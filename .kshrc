@@ -45,6 +45,7 @@ fi
 
 # PATH acts funny w/ indentation
 export \
+  BROWSER="firefox" \
   CLICOLOR=1 \
   EDITOR="${vim}" \
   FCEDIT="${EDITOR}" \
@@ -56,7 +57,9 @@ export \
   PATH="${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
 /usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games" \
   QT_STYLE_OVERRIDE="adwaita" \
+  READER="zathura" \
   site="https://amissing.link" \
+  TERMINAL="st" \
   VISUAL="${EDITOR}"
 
 gateway=$(netstat -rn 2> /dev/null | grep -E "^default" | awk '{print $2}' ) \
@@ -74,6 +77,7 @@ alias \
   mus="ncmpcpp" \
   n="nnn" \
   pdfman="MANPAGER=zathura man -T pdf" \
+  o="mimeopen" \
   today="date '+%Y-%m-%d'" \
   yank="xclip -selection clipboard"
 
@@ -82,6 +86,7 @@ alias \
   c="clear" \
   df="df -h" \
   du="du -ch" \
+  la="ll -A" \
   ll="ls -lh" \
   llb="ll -Sr" \
   lln="ll -tr" \
@@ -184,6 +189,7 @@ alias \
 alias \
   pkgL="pkgq -L" \
   pkga="doas pkg_add" \
+  pkgas="doas pkg_add -D snap" \
   pkgd="doas pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
