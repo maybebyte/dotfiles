@@ -83,6 +83,12 @@ nnoremap <leader>g :Goyo
 " spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :set spell! spelllang=en_us
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 " creates needed directories if they don't exist
 if isdirectory(expand("$HOME/.vim/files")) != 1
   silent !mkdir -p $HOME/.vim/files/{backup,swap,undo,info}
