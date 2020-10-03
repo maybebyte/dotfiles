@@ -1,6 +1,6 @@
 # applications
-super + {Return, d, u, F, W, P}
-	{st, ~/.local/bin/dmen, ~/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
+super + {Return, d, u, B, W, P}
+	{st, ~/.local/bin/dmen, ~/.local/bin/dmenuunicode, iridium, tor-browser, keepassxc}
 
 # screen lock
 super + n

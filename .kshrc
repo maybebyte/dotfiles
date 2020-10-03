@@ -5,7 +5,6 @@ umask 077
 
 # ksh options
 set -o \
-  braceexpand \
   vi \
   vi-esccomplete \
   vi-tabcomplete
@@ -45,7 +44,7 @@ fi
 
 # PATH acts funny w/ indentation
 export \
-  BROWSER="firefox" \
+  BROWSER="iridium" \
   CLICOLOR=1 \
   EDITOR="${vim}" \
   FCEDIT="${EDITOR}" \
@@ -62,7 +61,7 @@ export \
   VISUAL="${EDITOR}" \
   site="https://amissing.link"
 
-gateway=$(netstat -rn 2> /dev/null | grep -E "^default" | awk '{print $2}' ) \
+gateway=$(netstat -rn 2> /dev/null | grep -E "^default" | awk '{print $2}') \
   && export gateway
 
 nic=$(ifconfig egress 2> /dev/null | head -1 | cut -f 1 -d ':') \
@@ -74,6 +73,7 @@ userjs=$(find "${HOME}/.mozilla" -iname user.js 2> /dev/null) \
 # assorted
 alias \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
+  exifrm="exiftool -all= " \
   mus="ncmpcpp" \
   n="nnn" \
   pdfman="MANPAGER=zathura man -T pdf" \
@@ -105,6 +105,7 @@ alias \
   es="e \${HOME}/.config/sxhkd/sxhkdrc" \
   eu="e \${userjs}" \
   ev="e \${HOME}/.vimrc" \
+  exm="e \${HOME}/.xmonad/xmonad.hs" \
   exmb="e \${HOME}/.config/xmobar/xmobarrc" \
   exr="e \${HOME}/.Xresources" \
   exs="e \${HOME}/.xsession" \
@@ -167,6 +168,7 @@ alias \
   ntstl6="netstat -ln -f inet6" \
   ntstl="netstat -ln -f inet" \
   renet="doas sh /etc/netstart" \
+  renetnic="renet \${nic}" \
   tlan="ping \${gateway}" \
   tnet="ping \${site##*//}"
 
@@ -239,6 +241,7 @@ alias \
   tatech="ta project:tech" \
   tc="t config" \
   td="t done" \
+  tdel="t delete" \
   tdue="task due.before:today ids" \
   tid="t ids" \
   tls="t list" \
@@ -247,7 +250,7 @@ alias \
   tshop="tls project:shopping" \
   tt="tls due:today" \
   ttech="tls project:tech" \
-  tup="yes | td \$(tdue ids)"
+  tup="td \$(tdue)"
 
 # tmux
 alias \

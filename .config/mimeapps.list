@@ -3,6 +3,7 @@ application/x-shellscript=vim.desktop;
 image/gif=sxiv.desktop;
 image/jpeg=sxiv.desktop;
 image/png=sxiv.desktop;
+text/html=iridium-browser.desktop;
 text/markdown=vim.desktop;
 text/pdf=zathura.desktop
 text/plain=vim.desktop;
