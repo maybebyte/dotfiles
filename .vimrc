@@ -115,6 +115,12 @@ autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
+" Enable Goyo by default for mutt writing
+autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=72
+autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
+autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
+autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
+
 " no more automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
@@ -135,6 +141,7 @@ endif
 " plugins
 call plug#begin("$HOME/.vim/plugged")
   Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/goyo.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'scrooloose/nerdcommenter'
   Plug 'scrooloose/nerdtree'
@@ -144,7 +151,6 @@ call plug#begin("$HOME/.vim/plugged")
   if $DISPLAY != ""
     Plug 'ap/vim-css-color'
     Plug 'dylanaraps/wal.vim'
-    Plug 'junegunn/goyo.vim'
     Plug 'kovetskiy/sxhkd-vim'
     Plug 'plasticboy/vim-markdown'
   endif

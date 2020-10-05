@@ -63,7 +63,7 @@ This script creates level 0 dumps of /root, /var, /home, /usr/local, /usr/X11R6,
 and /usr. It compresses them using ${compressor} and places the backups inside
 /mnt in a folder named the current date. Is this acceptable?
 EOF
-read -r CONTINUE
+read -r continue
 
 if [ "${continue}" = "n" ]; then
   sec_print "Goodbye."

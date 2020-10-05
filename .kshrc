@@ -6,8 +6,7 @@ umask 077
 # ksh options
 set -o \
   vi \
-  vi-esccomplete \
-  vi-tabcomplete
+  vi-esccomplete
 
 if [ "$(uname -s)" = "OpenBSD" ]; then
   set -o vi-show8
@@ -61,7 +60,7 @@ export \
   VISUAL="${EDITOR}" \
   site="https://amissing.link"
 
-gateway=$(netstat -rn 2> /dev/null | grep -E "^default" | awk '{print $2}') \
+gateway=$(netstat -rn 2> /dev/null | awk '/default/{print $2}') \
   && export gateway
 
 nic=$(ifconfig egress 2> /dev/null | head -1 | cut -f 1 -d ':') \
@@ -79,21 +78,23 @@ alias \
   pdfman="MANPAGER=zathura man -T pdf" \
   o="mimeopen" \
   today="date '+%Y-%m-%d'" \
+  unlockhdd="doas bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"
 
 # base utilities
 alias \
   c="clear" \
   df="df -h" \
-  du="du -ch" \
+  du="du -h" \
   la="ll -A" \
   ll="ls -lh" \
   llb="ll -Sr" \
   lln="ll -tr" \
   ls="\${ls} -F" \
-  lsd="find . -iname \".[^.]*\" -maxdepth 1" \
+  lsd="find . -maxdepth 1 -iname \".[^.]*\"" \
   mkd="mkdir -p" \
-  shre=". \${HOME}/.kshrc"
+  shre=". \${HOME}/.kshrc" \
+  size="du -s"
 
 # editing
 alias \
@@ -160,7 +161,7 @@ alias \
   nicon="doas ifconfig \${nic} up" \
   nicre="nicoff && nicon" \
   nicshow="ifconfig \${nic}" \
-  nictail="doas tcpdump -i \${nic} -o -p" \
+  nictail="doas tcpdump -i \${nic} -p" \
   nsr6="netstat -rn -f inet6" \
   nsr="netstat -rn -f inet" \
   ntst6="netstat -n -f inet6" \
@@ -169,6 +170,7 @@ alias \
   ntstl="netstat -ln -f inet" \
   renet="doas sh /etc/netstart" \
   renetnic="renet \${nic}" \
+  sysnet="systat netstat" \
   tlan="ping \${gateway}" \
   tnet="ping \${site##*//}"
 
@@ -228,8 +230,10 @@ alias \
 alias \
   chksn="w3m \$(cat /etc/installurl)/snapshots/amd64" \
   dtsu="doas shutdown now" \
+  dsklab="doas disklabel -p g" \
   off="doas shutdown -p now" \
   re="doas shutdown -r now" \
+  readmsg="doas less /var/log/messages" \
   up="uptime"
 
 # taskwarrior

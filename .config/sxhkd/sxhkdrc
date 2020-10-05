@@ -1,6 +1,6 @@
 # applications
 super + {Return, d, u, B, W, P}
-	{st, ~/.local/bin/dmen, ~/.local/bin/dmenuunicode, iridium, tor-browser, keepassxc}
+	{st, ~/.local/bin/dmen, ~/.local/bin/dmenuunicode, iridium --incognito, tor-browser, keepassxc}
 
 # screen lock
 super + n
