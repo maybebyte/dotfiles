@@ -28,7 +28,7 @@ err () {
 # result to man for viewing.
 
 randman () {
-  man "$(man -w -k sec~^1\|5\|7\|8$ | sort -R | head -1)"
+  man "$(man -w -S "$(uname -m)" -k sec~^1\|5\|7\|8$ | sort -R | head -1)"
 }
 
 randman || err "Unable to pick a random man page."

@@ -90,11 +90,6 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-" creates needed directories if they don't exist
-if isdirectory(expand("$HOME/.vim/files")) != 1
-  silent !mkdir -p $HOME/.vim/files/{backup,swap,undo,info}
-endif
-
 " for reverting edits and other conveniences
 set backup
 set backupdir   =$HOME/.vim/files/backup/
@@ -108,24 +103,25 @@ set viminfo     ='100,n$HOME/.vim/files/info/viminfo
 " automatically deletes all trailing whitespace and newlines at end of
 " file on save.
 autocmd BufWritePre * %s/\s\+$//e
-autocmd BufWritepre * %s/\n\+\%$//e
+autocmd BufWritePre * %s/\n\+\%$//e
 
 " automatically reload configs
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
-autocmd BufWritePost $HOME/.kshrc !. $HOME/.kshrc
+autocmd BufWritePost $HOME/.kshrc !. %
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " Enable Goyo by default for mutt writing
 autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=72
 autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
-autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
-autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
+autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZZ :Goyo!\|x!
+autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!
+
+" Enable Goyo for help files
+autocmd BufRead /usr/local/share/vim/vim\d\d/doc/* :Goyo
+autocmd BufRead /usr/local/share/vim/vim\d\d/doc/* noremap ZQ :Goyo!\|q!
 
 " no more automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" conform to https://google.github.io/styleguide/shellguide.html
-autocmd FileType sh set tabstop=2 shiftwidth=2 textwidth=80
 
 " no more status bar
 autocmd VimEnter * set laststatus=0
@@ -137,6 +133,10 @@ if empty(glob('$HOME/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source "$HOME/.vimrc"
 endif
 
+" creates needed directories if they don't exist
+if isdirectory(expand("$HOME/.vim/files")) != 1
+  silent !mkdir -p $HOME/.vim/files/{backup,swap,undo,info}
+endif
 
 " plugins
 call plug#begin("$HOME/.vim/plugged")

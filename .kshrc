@@ -3,6 +3,12 @@
 # more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
 
+if which tmux >/dev/null 2>&1; then
+  # if not inside a tmux session, and if no session is started, start a new
+  # session
+  test -z "$TMUX" && (tmux attach || tmux new-session)
+fi
+
 # ksh options
 set -o \
   vi \
@@ -19,7 +25,7 @@ case "$(command -v vim)" in
 esac
 
 # use colorls if it's installed, ls otherwise
-if command -v colorls > /dev/null; then
+if command -v colorls >/dev/null; then
   ls='colorls'
 else
   ls='ls'
@@ -60,13 +66,13 @@ export \
   VISUAL="${EDITOR}" \
   site="https://amissing.link"
 
-gateway=$(netstat -rn 2> /dev/null | awk '/default/{print $2}') \
+gateway=$(netstat -rn 2>/dev/null | awk '/default/{print $2}') \
   && export gateway
 
-nic=$(ifconfig egress 2> /dev/null | head -1 | cut -f 1 -d ':') \
+nic=$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':') \
   && export nic
 
-userjs=$(find "${HOME}/.mozilla" -iname user.js 2> /dev/null) \
+userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
   && export userjs
 
 # assorted
@@ -75,7 +81,7 @@ alias \
   exifrm="exiftool -all= " \
   mus="ncmpcpp" \
   n="nnn" \
-  pdfman="MANPAGER=zathura man -T pdf" \
+  nb="newsboat" \
   o="mimeopen" \
   today="date '+%Y-%m-%d'" \
   unlockhdd="doas bioctl -c C -l sd2a softraid0" \
@@ -99,12 +105,16 @@ alias \
 # editing
 alias \
   e="\${EDITOR}" \
-  edu="e -d \${HOME}/builds/ghacks-user.js/user.js \${userjs}" \
-  ef="e \${HOME}/.config/fontconfig/fonts.conf" \
+  eduj="e -d \${HOME}/builds/ghacks-user.js/user.js \${userjs}" \
+  efont="e \${HOME}/.config/fontconfig/fonts.conf" \
   ek="e \${HOME}/.kshrc" \
-  em="e \${HOME}/.config/neomutt/neomuttrc" \
-  es="e \${HOME}/.config/sxhkd/sxhkdrc" \
-  eu="e \${userjs}" \
+  empv="e \${HOME}/.config/mpv/mpv.conf" \
+  enb="e \${HOME}/.config/newsboat/config" \
+  enbu="e \${HOME}/.config/newsboat/urls" \
+  enm="e \${HOME}/.config/neomutt/neomuttrc" \
+  esxh="e \${HOME}/.config/sxhkd/sxhkdrc" \
+  etm="e \${HOME}/.tmux.conf" \
+  euj="e \${userjs}" \
   ev="e \${HOME}/.vimrc" \
   exm="e \${HOME}/.xmonad/xmonad.hs" \
   exmb="e \${HOME}/.config/xmobar/xmobarrc" \
@@ -112,7 +122,7 @@ alias \
   exs="e \${HOME}/.xsession" \
   se="doas \${EDITOR}" \
   sehn="se /etc/hostname.\${nic}" \
-  sehs="se /etc/hosts" \
+  sehst="se /etc/hosts" \
   sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
   sepf="se /etc/pf.conf" \
   seres="se /etc/resolv.conf" \
@@ -147,6 +157,15 @@ alias \
 alias \
   kp="keepassxc-cli" \
   kpo="kp open \${HOME}/passwords/KeePass\\ Database.kdbx"
+
+# man
+alias \
+  apr="apropos" \
+  pdfman="MANPAGER=zathura man -T pdf"
+
+aprv () {
+  apr -S "$(uname -m)" any="$1"
+}
 
 # navigation
 alias \
@@ -200,6 +219,7 @@ alias \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
   pkgq="pkg_info" \
+  pkgqo="pkg_info -E" \
   pkgqs="pkg_info -D snap" \
   pkgs="pkgq -Q" \
   pkgss="pkgq -D snap -Q" \
@@ -229,11 +249,10 @@ alias \
 # system
 alias \
   chksn="w3m \$(cat /etc/installurl)/snapshots/amd64" \
-  dtsu="doas shutdown now" \
   dsklab="doas disklabel -p g" \
+  dtsu="doas shutdown now" \
   off="doas shutdown -p now" \
   re="doas shutdown -r now" \
-  readmsg="doas less /var/log/messages" \
   up="uptime"
 
 # taskwarrior
@@ -262,6 +281,14 @@ alias \
   tma="tm attach" \
   tmk="tm kill-server" \
   tml="tm list-sessions"
+
+# viewing log files
+alias \
+  readhttp="less /var/www/logs/access.log" \
+  readmail="doas less /var/log/maillog" \
+  readmsg="less /var/log/messages" \
+  readsec="doas less /var/log/secure" \
+  readx="less /var/log/Xorg.0.log"
 
 # web
 alias \

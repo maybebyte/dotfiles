@@ -15,8 +15,6 @@ myMouseFocusRule     = False
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
   , className =? "Firefox" --> doFloat
-  , className =? "Chromium-browser" --> doShift "3"
-  , className =? "Chromium-browser" --> doFloat
   , className =? "Tor Browser" --> doShift "4"
   , className =? "Tor Browser" --> doFloat
   , className =? "KeePassXC" --> doShift "5"
@@ -33,7 +31,7 @@ main = do
     $ ewmh
     $ docks def
     { handleEventHook    = fullscreenEventHook
-    , layoutHook         = smartBorders (myLayoutHook)
+    , layoutHook         = noBorders (myLayoutHook)
     , borderWidth        = myBorderWidth
     , normalBorderColor  = myNormalBorderColor
     , focusedBorderColor = myFocusedBorderColor

@@ -14,10 +14,11 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-date="$(date '+%Y-%m-%d')"
-extension=".dump.bz2"
 compressor="bzip2"
 compressor_args="-c"
+date=$(date '+%Y-%m-%d')
+drive=$(mount -v | awk '/mnt/{print $2}' | sed -e 's/(//' -e 's/\..*//')
+extension=".dump.bz2"
 
 sec_print () {
   printf "%s\\n" "$@"
@@ -29,27 +30,27 @@ err () {
 }
 
 bkup() {
-/sbin/dump -0 -a -u -f - / \
+/sbin/dump -0auf - / \
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/root"${extension}" &
 
-/sbin/dump -0 -a -u -f - /var \
+/sbin/dump -0auf - /var \
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/var"${extension}" &
 
-/sbin/dump -0 -a -u -f - /home \
+/sbin/dump -0auf - /home \
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/home"${extension}" &
 
-/sbin/dump -0 -a -u -f - /usr/local \
+/sbin/dump -0auf - /usr/local \
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/usr-local"${extension}" &
 
-/sbin/dump -0 -a -u -f - /usr/x11r6 \
+/sbin/dump -0auf - /usr/x11r6 \
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/usr-x11r6"${extension}" &
 
-/sbin/dump -0 -a -u -f - /usr \
+/sbin/dump -0auf - /usr \
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/usr"${extension}" &
 wait
@@ -61,7 +62,10 @@ cat <<EOF
 
 This script creates level 0 dumps of /root, /var, /home, /usr/local, /usr/X11R6,
 and /usr. It compresses them using ${compressor} and places the backups inside
-/mnt in a folder named the current date. Is this acceptable?
+/mnt in a folder named ${date}. It then automatically unmounts /mnt,
+detaches the CRYPTO volume, and powers off.
+
+Is this acceptable (y/n)?
 EOF
 read -r continue
 
@@ -71,6 +75,9 @@ elif [ "${continue}" = "y" ]; then
   mkdir -p "/mnt/${date}" || err "Couldn't create backup directory."
   sec_print "Dumping filesystems..."
   bkup || err "Backup failed."
+  umount /mnt
+  bioctl -d "${drive}" || err "Couldn't detach CRYPTO volume."
+  shutdown -p now
 else
   err "You must answer with 'y' or 'n'."
 fi

@@ -29,7 +29,7 @@ err () {
 }
 
 show_date () {
-  date=$(date "+%Y-%m-%d %H:%M")
+  date=$(date "+%a %m-%d %H:%M")
   printf %s "${date}"
 }
 

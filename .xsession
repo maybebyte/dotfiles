@@ -1,6 +1,6 @@
 . ~/.profile
 export LANG=en_US.UTF-8
-/usr/X11R6/bin/xrdb -merge ${HOME}/.Xresources
+/usr/X11R6/bin/xrdb ${HOME}/.Xresources
 /usr/X11R6/bin/xidle &
 /usr/local/bin/sct 3500
 /usr/X11R6/bin/xset b off
@@ -17,7 +17,4 @@ ${HOME}/.local/bin/sysinfo | ${HOME}/.local/bin/lbar &
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
 
 /usr/local/bin/st -e ${HOME}/.local/bin/randman &
-if [ -x /usr/local/bin/dbus-launch -a -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
-  eval $(/usr/local/bin/dbus-launch --sh-syntax --exit-with-x11)
-fi
 exec /usr/local/bin/xmonad

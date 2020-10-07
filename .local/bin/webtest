@@ -41,18 +41,18 @@ mustberoot () {
 gen_site () {
   rm -f ${webdir}/.files \
     && ${ssg} ${markdowndir} ${webdir} "Ashlen" \
-    "https://amissing.link" > /dev/null 2>&1 \
-    && ${rssg} ${markdowndir}/articles.md > /dev/null 2>&1 \
+    "https://amissing.link" >/dev/null 2>&1 \
+    && ${rssg} ${markdowndir}/articles.md >/dev/null 2>&1  \
     "Newsletter - amissing.link" > "${webdir}/rss.xml" \
     && chown ashlen:ashlen ${webdir}/.files
 }
 
 sync_and_chmod () {
   rsync -a --partial --delete -q ${webdir}/ ${srvdir}/ \
-    && find ${srvdir} -type f -execdir chmod 644 "{}" \; > /dev/null 2>&1 \
-    && find ${srvdir} -type d -execdir chmod 755 "{}" \; > /dev/null 2>&1 \
+    && find ${srvdir} -type f -execdir chmod 644 "{}" \; >/dev/null 2>&1 \
+    && find ${srvdir} -type d -execdir chmod 755 "{}" \; >/dev/null 2>&1 \
     && chmod 755 ${srvdir} \
-    && rcctl -f restart httpd > /dev/null \
+    && rcctl -f restart httpd >/dev/null \
     && sec_print "Web server synced."
 }
 
