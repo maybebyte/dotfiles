@@ -44,7 +44,7 @@ if [ "$(uname -s)" = "OpenBSD" ]; then
 # unintended spaces occur w/ indentation
 PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u \
 ${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
-${_ps1_clear}\$ "
+${_ps1_clear}\\$ "
 fi
 
 # PATH acts funny w/ indentation
@@ -170,7 +170,8 @@ aprv () {
 # navigation
 alias \
   ..="cd .." \
-  ...="cd ../.."
+  ...="cd ../.." \
+  cdweb="cd ~/builds/website_md"
 
 # networking
 alias \
@@ -259,6 +260,7 @@ alias \
 alias \
   t="task" \
   ta="t add" \
+  tagroc="ta project:groceries" \
   taself="ta project:selfcare" \
   tashop="ta project:shopping" \
   tatech="ta project:tech" \
@@ -266,6 +268,7 @@ alias \
   td="t done" \
   tdel="t delete" \
   tdue="task due.before:today ids" \
+  tgroc="tls project:groceries" \
   tid="t ids" \
   tls="t list" \
   tmod="t modify" \
@@ -288,7 +291,8 @@ alias \
   readmail="doas less /var/log/maillog" \
   readmsg="less /var/log/messages" \
   readsec="doas less /var/log/secure" \
-  readx="less /var/log/Xorg.0.log"
+  readx="less /var/log/Xorg.0.log" \
+  tmsg="doas tail -f /var/log/messages"
 
 # web
 alias \
