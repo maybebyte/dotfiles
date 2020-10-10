@@ -3,7 +3,7 @@
 # more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
 
-if which tmux >/dev/null 2>&1; then
+if command -v tmux >/dev/null 2>&1; then
   # if not inside a tmux session, and if no session is started, start a new
   # session
   test -z "$TMUX" && (tmux attach || tmux new-session)
@@ -19,13 +19,13 @@ if [ "$(uname -s)" = "OpenBSD" ]; then
 fi
 
 # use vim if it's installed, vi otherwise
-case "$(which vim)" in
+case "$(command -v vim)" in
   */vim) vim="vim" ;;
   *)     vim="vi"  ;;
 esac
 
 # use colorls if it's installed, ls otherwise
-if which colorls >/dev/null; then
+if command -v colorls >/dev/null; then
   ls='colorls'
 else
   ls='ls'
