@@ -19,13 +19,13 @@ if [ "$(uname -s)" = "OpenBSD" ]; then
 fi
 
 # use vim if it's installed, vi otherwise
-case "$(command -v vim)" in
+case "$(which vim)" in
   */vim) vim="vim" ;;
   *)     vim="vi"  ;;
 esac
 
 # use colorls if it's installed, ls otherwise
-if command -v colorls >/dev/null; then
+if which colorls >/dev/null; then
   ls='colorls'
 else
   ls='ls'
@@ -83,6 +83,7 @@ alias \
   n="nnn" \
   nb="newsboat" \
   o="mimeopen" \
+  rmus="mus --host 192.168.1.201" \
   today="date '+%Y-%m-%d'" \
   unlockhdd="doas bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"
@@ -296,7 +297,9 @@ alias \
 
 # web
 alias \
-  dl="ftp -V -C -n" \
+  anondl="torsocks ftp -V -C -n -U ''" \
+  anonsh="torsocks --shell" \
+  dl="ftp -V -C -n -U ''" \
   gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
   mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \

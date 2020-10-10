@@ -10,19 +10,19 @@ set iclower
 set leftright
 " number lines
 set number
-" print helpful messages (eg, 4 lines yanked)
+" print helpful messages (e.g., 4 lines yanked)
 set report=1
 " display row/column info
 set ruler
 " incremental search
 set searchincr
-" autoindent width = 4 spaces
-set shiftwidth=4
+" autoindent width = 2 spaces
+set shiftwidth=2
 " show matching parens, braces, etc
 set showmatch
 " display current mode (insert/normal)
 set showmode
-" tab width = 4 spaces
-set tabstop=4
+" tab width = 2 spaces
+set tabstop=2
 " display all error messages
 set verbose
