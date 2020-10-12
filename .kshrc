@@ -6,17 +6,13 @@ umask 077
 if command -v tmux >/dev/null 2>&1; then
   # if not inside a tmux session, and if no session is started, start a new
   # session
-  test -z "$TMUX" && (tmux attach || tmux new-session)
+  [ -z "${TMUX}" ] && (tmux attach || tmux)
 fi
 
 # ksh options
 set -o \
   vi \
   vi-esccomplete
-
-if [ "$(uname -s)" = "OpenBSD" ]; then
-  set -o vi-show8
-fi
 
 # use vim if it's installed, vi otherwise
 case "$(command -v vim)" in
@@ -26,12 +22,13 @@ esac
 
 # use colorls if it's installed, ls otherwise
 if command -v colorls >/dev/null; then
-  ls='colorls'
+  ls="colorls"
 else
-  ls='ls'
+  ls="ls"
 fi
 
-if [ "$(uname -s)" = "OpenBSD" ]; then
+if printf "%s" "${KSH_VERSION}" | grep -qi "pd ksh"; then
+  set -o vi-show8
   # swaps colors when uid is 0, i.e. root
   case "$(id -u)" in
     0) _ps1_user='\[\033[1;33m\]' _ps1_path='\[\033[1;35m\]' ;;
@@ -157,7 +154,7 @@ alias \
 # keepass
 alias \
   kp="keepassxc-cli" \
-  kpo="kp open \${HOME}/passwords/KeePass\\ Database.kdbx"
+  kpo="kp open \${HOME}'/passwords/KeePass Database.kdbx'"
 
 # man
 alias \
@@ -176,7 +173,7 @@ alias \
 
 # networking
 alias \
-  exip="curl ifconfig.me && printf \"%s\\n\"" \
+  exip="curl ifconfig.me && printf '%s\\n'" \
   nicdel="doas ifconfig \${nic} delete" \
   nicoff="doas ifconfig \${nic} down" \
   nicon="doas ifconfig \${nic} up" \
