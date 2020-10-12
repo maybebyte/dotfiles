@@ -55,13 +55,20 @@ export \
   HISTSIZE=10000 \
   LESS="-iMR" \
   PAGER="less" \
-  PATH="${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
-/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games" \
   QT_STYLE_OVERRIDE="adwaita" \
   READER="zathura" \
   TERMINAL="st" \
   VISUAL="${EDITOR}" \
   site="https://amissing.link"
+
+
+if [ -d "/data/data/com.termux" ]; then
+  export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
+/data/data/com.termux/files/usr/bin/applets"
+else
+  export PATH="${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
+/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games"
+fi
 
 gateway=$(netstat -rn 2>/dev/null | awk '/default/{print $2}') \
   && export gateway
