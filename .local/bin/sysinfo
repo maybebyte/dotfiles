@@ -15,7 +15,7 @@
 set -e
 # system statistics in a format suitable for lemonbar
 
-. ${HOME}/.cache/wal/colors.sh
+. "${HOME}/.cache/wal/colors.sh"
 export delimiter="  %{F${color3}}|%{F${foreground}}  "
 export bgfg="%{B${background}} %{F${foreground}"
 
@@ -30,22 +30,23 @@ err () {
 
 show_date () {
   date=$(date "+%a %m-%d %H:%M")
-  printf %s "${date}"
+  sec_print "${date}"
 }
 
 show_volume () {
   # division is used to truncate the resulting floating-point number
-  volume=$(printf "$(sndioctl -n output.level) / 0.01\\n" | bc)
+  raw_volume=$(sndioctl -n output.level)
+  formatted_volume=$(sec_print "${raw_volume} / 0.01" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
-    printf %s "MUTE${delimiter}"
+    sec_print "MUTE${delimiter}"
   else
-    printf %s "vol: ${volume}%${delimiter}"
+    sec_print "vol: ${formatted_volume}%${delimiter}"
   fi
 }
 
 show_disk_space () {
   diskspace=$(df -h /home | tail -1 | awk '{print $4}')
-  printf %s "/home: ${diskspace}${delimiter}"
+  sec_print "/home: ${diskspace}${delimiter}"
 }
 
 show_battery () {
@@ -55,13 +56,13 @@ show_battery () {
   remaining="~${hours}h & ${minutes}m"
   percentage="$(apm -l)%"
   if [ "${adapter}" = 0 ]; then
-    printf %s "bat: ${remaining}, at ${percentage}${delimiter}"
+    sec_print "bat: ${remaining}, at ${percentage}${delimiter}"
   elif [ "${adapter}" = 1 ]; then
-    printf %s "chr: at ${percentage}${delimiter}"
+    sec_print "chr: at ${percentage}${delimiter}"
   elif [ "${adapter}" = 2 ]; then
-    printf %s "bkup: ${remaining}, at ${percentage}${delimiter}"
+    sec_print "bkup: ${remaining}, at ${percentage}${delimiter}"
   elif [ "${adapter}" = 255 ]; then
-    printf %s ""
+    sec_print ""
   fi
 }
 
@@ -69,9 +70,9 @@ show_track () {
   song=$(mpc current)
   time=$(mpc | sed -n 2p | awk '{print $3}')
   if [ -z "${song}" ]; then
-    printf %s ""
+    sec_print ""
   else
-    printf %s "${song}${delimiter}${time}"
+    sec_print "${song}${delimiter}${time}"
   fi
 }
 
@@ -84,16 +85,17 @@ show_temp () {
     temperature=''
   fi
   if [ -z "${temperature}" ]; then
-    printf %s ""
+    sec_print ""
   else
-    printf %s "temp: ${temperature} °C"
+    sec_print "temp: ${temperature} °C"
   fi
 }
 
 show_cpu_freq () {
   # conversely, we want the floating-point number here
-  cpu_freq=$(printf "$(sysctl -n hw.cpuspeed) * 0.001\\n" | bc )
-  printf %s "cpu: ${cpu_freq} GHz"
+  raw_cpu_freq=$(sysctl -n hw.cpuspeed)
+  formatted_cpu_freq=$(sec_print "${raw_cpu_freq} * 0.001" | bc)
+  sec_print "cpu: ${formatted_cpu_freq} GHz"
 }
 
 sysinfo () {
@@ -102,7 +104,7 @@ sysinfo () {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    printf %s "${stats}"
+    sec_print "${stats}"
     sleep 1
   done
 }

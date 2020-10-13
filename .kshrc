@@ -95,7 +95,7 @@ alias \
   unlockhdd="doas bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"
 
-# base utilities
+# basic utilities
 alias \
   c="clear" \
   df="df -h" \
@@ -304,9 +304,9 @@ alias \
 
 # web
 alias \
-  anondl="torsocks ftp -V -C -n -U ''" \
+  anonftp="torsocks ftp -C -n -U ''" \
   anonsh="torsocks --shell" \
-  dl="ftp -V -C -n -U ''" \
+  ftp="ftp -C -n -U ''" \
   gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
   mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \

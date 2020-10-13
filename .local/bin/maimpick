@@ -53,31 +53,31 @@ yank () {
 
 maim_sel_save () {
   filename="selected-$(cur_date).png"
-  maim ${common_maim_args} -s "${savedir}/${filename}"
+  maim "${common_maim_args}" -s "${savedir}/${filename}"
 }
 
 maim_sel_copy () {
-  maim ${common_maim_args} -s | yank
+  maim "${common_maim_args}" -s | yank
 }
 
 maim_cur_save () {
   filename="window-$(cur_date).png"
-  maim ${common_maim_args} -i "$(xdotool getactivewindow)" \
+  maim "${common_maim_args}" -i "$(xdotool getactivewindow)" \
     "${savedir}/${filename}"
 }
 
 maim_cur_copy () {
-  maim ${common_maim_args} -i "$(xdotool getactivewindow)" \
+  maim "${common_maim_args}" -i "$(xdotool getactivewindow)" \
     | yank
 }
 
 maim_full_save () {
   filename="full-$(cur_date).png"
-  maim ${common_maim_args} "${savedir}/${filename}"
+  maim "${common_maim_args}" "${savedir}/${filename}"
 }
 
 maim_full_copy () {
-  maim ${common_maim_args} | yank
+  maim "${common_maim_args}" | yank
 }
 
 present_options () {
