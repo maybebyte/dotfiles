@@ -1,4 +1,4 @@
-. "${HOME}/.profile"
+# shellcheck disable=SC2034
 
 # more restricted permissions - 0700 for dirs, 0600 for files
 umask 077
@@ -44,11 +44,13 @@ ${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
 ${_ps1_clear}\\$ "
 fi
 
+# needs to be exported before VISUAL and FCEDIT
+export EDITOR="${vim}"
+
 # PATH acts funny w/ indentation
 export \
-  BROWSER="iridium" \
+  BROWSER="firefox" \
   CLICOLOR=1 \
-  EDITOR="${vim}" \
   FCEDIT="${EDITOR}" \
   GNUPGHOME="${HOME}/.config/gnupg" \
   HISTFILE="${HOME}/.history" \
@@ -61,7 +63,7 @@ export \
   VISUAL="${EDITOR}" \
   site="https://amissing.link"
 
-
+# termux compatibility
 if [ -d "/data/data/com.termux" ]; then
   export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
 /data/data/com.termux/files/usr/bin/applets"
@@ -81,6 +83,7 @@ userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
 
 # assorted
 alias \
+  b64="openssl enc -base64" \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
   exifrm="exiftool -all= " \
   mus="ncmpcpp" \
@@ -240,8 +243,8 @@ alias \
 # service management
 alias \
   rc="doas rcctl" \
-  rcd="rc disable" \
-  rce="rc enable" \
+  rcoff="rc disable" \
+  rcon="rc enable" \
   rcg="rcctl get" \
   rclfail="rc ls failed" \
   rclon="rcctl ls on" \
