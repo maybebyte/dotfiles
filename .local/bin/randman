@@ -14,11 +14,11 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
@@ -27,7 +27,7 @@ err () {
 # page (like drawing the top card from a shuffled deck).  Then passes that
 # result to man for viewing.
 
-randman () {
+randman() {
   man "$(man -w -S "$(uname -m)" -k sec~^1\|5\|7\|8$ | sort -R | head -1)"
 }
 

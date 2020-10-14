@@ -14,17 +14,17 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
 # encodes all flac files in ${PWD} to opus with parallelization
-flac2opus () {
+flac2opus() {
   parallel opusenc --bitrate 192 "{}" "{.}.opus" ::: ./*.flac
 }
 

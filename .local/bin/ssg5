@@ -153,7 +153,7 @@ list_files() {
 }
 
 
-list_dependant_files () {
+list_dependant_files() {
  	e="\\( -name '*.html' -o -name '*.md' -o -name '*.css' -o -name '*.js' \\)"
 	cd "$1" && eval "find . -type f ! -name '.' ! -path '*/_*' $IGNORE $e"
 }

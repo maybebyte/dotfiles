@@ -9,20 +9,20 @@ set -e
 
 emoji_file="${HOME}/.local/share/emoji"
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-import_colors () {
+import_colors() {
   . "${HOME}/.cache/wal/colors.sh"
 }
 
-menu () {
+menu() {
   dmenu -i -l 20 \
     -fn "mono-22" \
     -nb "${color0}" \
@@ -31,7 +31,7 @@ menu () {
     -sf "${color7}"
 }
 
-process_emoji () {
+process_emoji() {
   chosen=$(cut -d ';' -f1 "${emoji_file}" | menu)
 
   [ -z "${chosen}" ] && err "Nothing was selected."
@@ -39,11 +39,11 @@ process_emoji () {
   emoji=$(printf "%s" "${chosen}" | sed "s/ .*//")
 }
 
-grab_emoji () {
+grab_emoji() {
   printf "%s" "${emoji}" | xclip -selection clipboard
 }
 
-dmenuunicode () {
+dmenuunicode() {
   import_colors || err "Unable to import colors."
   process_emoji || err "Unable to process emoji."
   grab_emoji || err "Unable to copy emoji to clipboard."

@@ -22,23 +22,23 @@ srvdir=/var/www/htdocs/amissing.link
 ssg=/home/ashlen/.local/bin/ssg5
 rssg=/home/ashlen/.local/bin/rssg
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-must_be_root () {
+must_be_root() {
   if [ "$(id -u)" != 0 ]; then
-    err "You have to execute this script as root."
+    err "Execute $(basename "$0") with root privileges."
   fi
 }
 
 
-gen_site () {
+gen_site() {
   rm -f ${webdir}/.files \
     && ${ssg} ${markdowndir} ${webdir} "Ashlen" \
     "https://amissing.link" >/dev/null 2>&1 \
@@ -47,7 +47,7 @@ gen_site () {
     && chown ashlen:ashlen ${webdir}/.files
 }
 
-sync_and_chmod () {
+sync_and_chmod() {
   rsync -a --partial --delete -q ${webdir}/ ${srvdir}/ \
     && find ${srvdir} -type f -execdir chmod 644 "{}" \; >/dev/null 2>&1 \
     && find ${srvdir} -type d -execdir chmod 755 "{}" \; >/dev/null 2>&1 \
@@ -56,7 +56,7 @@ sync_and_chmod () {
     && sec_print "Web server synced."
 }
 
-webtest () {
+webtest() {
   must_be_root
   gen_site || err "Couldn't generate site."
   sync_and_chmod || err "Unable to sync web server."

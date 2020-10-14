@@ -1,16 +1,16 @@
 #!/usr/bin/env sh
 set -e
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-lbar () {
+lbar() {
   lemonbar-xft -f sans-14 -p -d
 }
 

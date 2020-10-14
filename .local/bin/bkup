@@ -24,18 +24,18 @@ drive=$(/sbin/mount -v \
 
 extension=".dump.bz2"
 
-sec_print () {
+sec_print() {
   /usr/bin/printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-must_be_root () {
+must_be_root() {
   if [ "$(/usr/bin/id -u)" != 0 ]; then
-    err "You have to execute this script as root."
+    err "Execute $(basename "$0") with root privileges."
   fi
 }
 
@@ -66,7 +66,7 @@ bkup() {
 wait
 }
 
-main () {
+prompt() {
 banner "bkup"
 cat <<EOF
 
@@ -78,11 +78,14 @@ automatically unmounts /mnt, detaches the CRYPTO volume, and powers off.
 Is this acceptable (y/n)?
 EOF
 read -r continue
+}
 
+main() {
+must_be_root
+prompt
 if [ "${continue}" = "n" ]; then
   sec_print "Goodbye."
 elif [ "${continue}" = "y" ]; then
-  must_be_root
   mkdir -p "/mnt/${date}" || err "Unable to create backup directory."
   sec_print "Dumping filesystems..."
   bkup || err "Backup failed."

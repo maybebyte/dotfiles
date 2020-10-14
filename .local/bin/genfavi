@@ -14,11 +14,11 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
@@ -26,7 +26,7 @@ err () {
 # https://www.imagemagick.org/Usage/thumbnails/#favicon
 # usage: genfavi [image]
 
-genfavi () {
+genfavi() {
   convert "$1" -background white \
     \( -clone 0 -resize 16x16 -extent 16x16 \) \
     \( -clone 0 -resize 32x32 -extent 32x32 \) \

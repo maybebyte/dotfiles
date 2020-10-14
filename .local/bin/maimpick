@@ -9,20 +9,20 @@ set -e
 common_maim_args="-d 1 -u -q -B"
 savedir="${HOME}/screenshots"
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-import_colors () {
+import_colors() {
   . "${HOME}/.cache/wal/colors.sh"
 }
 
-menu () {
+menu() {
   dmenu -i -l 6 \
     -fn 'mono-20' \
     -nb "${color0}" \
@@ -32,7 +32,7 @@ menu () {
     -p 'Screenshot which area?'
 }
 
-print_options () {
+print_options() {
 cat <<EOF
 a selected area
 current window
@@ -43,44 +43,44 @@ full screen (copy)
 EOF
 }
 
-cur_date () {
+cur_date() {
   date '+%Y%m%d-%H%M%S'
 }
 
-yank () {
+yank() {
   xclip -selection clipboard -t image/png || err "Couldn't copy to clipboard."
 }
 
-maim_sel_save () {
+maim_sel_save() {
   filename="selected-$(cur_date).png"
   maim "${common_maim_args}" -s "${savedir}/${filename}"
 }
 
-maim_sel_copy () {
+maim_sel_copy() {
   maim "${common_maim_args}" -s | yank
 }
 
-maim_cur_save () {
+maim_cur_save() {
   filename="window-$(cur_date).png"
   maim "${common_maim_args}" -i "$(xdotool getactivewindow)" \
     "${savedir}/${filename}"
 }
 
-maim_cur_copy () {
+maim_cur_copy() {
   maim "${common_maim_args}" -i "$(xdotool getactivewindow)" \
     | yank
 }
 
-maim_full_save () {
+maim_full_save() {
   filename="full-$(cur_date).png"
   maim "${common_maim_args}" "${savedir}/${filename}"
 }
 
-maim_full_copy () {
+maim_full_copy() {
   maim "${common_maim_args}" | yank
 }
 
-present_options () {
+present_options() {
   case "$(print_options | menu)" in
     "a selected area") maim_sel_save ;;
     "current window") maim_cur_save ;;
@@ -91,7 +91,7 @@ present_options () {
   esac
 }
 
-main () {
+main() {
   import_colors || err "Unable to import colors."
   present_options || err "Unable to present options."
 }

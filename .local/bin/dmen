@@ -14,16 +14,16 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-import_colors () {
+import_colors() {
   . "${HOME}/.cache/wal/colors.sh"
 }
 
@@ -33,11 +33,11 @@ import_colors () {
 #-sb ## selected background color
 #-sf ## selected foreground color
 
-launch () {
+launch() {
   dmenu_run -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7"
 }
 
-main () {
+main() {
   import_colors || err "Couldn't import colors."
   launch || "Launch menu failed."
 }

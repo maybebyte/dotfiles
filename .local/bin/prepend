@@ -17,16 +17,16 @@ set -e
 # https://unix.stackexchange.com/questions/417724/how-to-add-lines-text-to-the-beginning-of-a-file
 # usage: prepend [header] [target file]
 
-sec_print () {
+sec_print() {
   printf "%s\\n" "$@"
 }
 
-err () {
+err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
-prepend () {
+prepend() {
   sec_print "0r $1" "x" | ex "$2"
 }
 
