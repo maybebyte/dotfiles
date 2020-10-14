@@ -34,8 +34,8 @@ show_date () {
 }
 
 show_volume () {
-  # division is used to truncate the resulting floating-point number
   raw_volume=$(sndioctl -n output.level)
+  # division is used to truncate the resulting floating-point number
   formatted_volume=$(sec_print "${raw_volume} / 0.01" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
     sec_print "MUTE${delimiter}"
@@ -92,7 +92,6 @@ show_temp () {
 }
 
 show_cpu_freq () {
-  # conversely, we want the floating-point number here
   raw_cpu_freq=$(sysctl -n hw.cpuspeed)
   formatted_cpu_freq=$(sec_print "${raw_cpu_freq} * 0.001" | bc)
   sec_print "cpu: ${formatted_cpu_freq} GHz"

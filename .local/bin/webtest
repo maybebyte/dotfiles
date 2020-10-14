@@ -31,7 +31,7 @@ err () {
   exit 1
 }
 
-mustberoot () {
+must_be_root () {
   if [ "$(id -u)" != 0 ]; then
     err "You have to execute this script as root."
   fi
@@ -57,7 +57,7 @@ sync_and_chmod () {
 }
 
 webtest () {
-  mustberoot
+  must_be_root
   gen_site || err "Couldn't generate site."
   sync_and_chmod || err "Unable to sync web server."
 }

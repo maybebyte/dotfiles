@@ -14,19 +14,29 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-compressor="bzip2"
+compressor="/usr/local/bin/bzip2"
 compressor_args="-c"
-date=$(date '+%Y-%m-%d')
-drive=$(mount -v | awk '/mnt/{print $2}' | sed -e 's/(//' -e 's/\..*//')
+date=$(/bin/date '+%Y-%m-%d')
+
+drive=$(/sbin/mount -v \
+  | /usr/bin/awk '/mnt/{print $2}' \
+  | /usr/bin/sed -e 's/(//' -e 's/\..*//')
+
 extension=".dump.bz2"
 
 sec_print () {
-  printf "%s\\n" "$@"
+  /usr/bin/printf "%s\\n" "$@"
 }
 
 err () {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
+}
+
+must_be_root () {
+  if [ "$(/usr/bin/id -u)" != 0 ]; then
+    err "You have to execute this script as root."
+  fi
 }
 
 bkup() {
@@ -60,10 +70,10 @@ main () {
 banner "bkup"
 cat <<EOF
 
-This script creates level 0 dumps of /root, /var, /home, /usr/local, /usr/X11R6,
-and /usr. It compresses them using ${compressor} and places the backups inside
-/mnt in a folder named ${date}. It then automatically unmounts /mnt,
-detaches the CRYPTO volume, and powers off.
+This script creates level 0 dumps of /root, /var, /home, /usr/local,
+/usr/X11R6, and /usr. It compresses them using $(basename ${compressor})
+and places the backups inside /mnt in a folder named ${date}. It then
+automatically unmounts /mnt, detaches the CRYPTO volume, and powers off.
 
 Is this acceptable (y/n)?
 EOF
@@ -72,12 +82,13 @@ read -r continue
 if [ "${continue}" = "n" ]; then
   sec_print "Goodbye."
 elif [ "${continue}" = "y" ]; then
-  mkdir -p "/mnt/${date}" || err "Couldn't create backup directory."
+  must_be_root
+  mkdir -p "/mnt/${date}" || err "Unable to create backup directory."
   sec_print "Dumping filesystems..."
   bkup || err "Backup failed."
-  umount /mnt
-  bioctl -d "${drive}" || err "Couldn't detach CRYPTO volume."
-  shutdown -p now
+  /sbin/umount /mnt || err "Unable to unmount drive"
+  /sbin/bioctl -d "${drive}" || err "Unable to detach CRYPTO volume."
+  /sbin/shutdown -p now
 else
   err "You must answer with 'y' or 'n'."
 fi
