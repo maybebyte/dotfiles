@@ -39,11 +39,18 @@ create_workdir() {
 }
 
 nsc() {
-  doas nmap -A -v -p 0-65535 --osscan-limit \
+  nmap -A -v -p 0-65535 --osscan-limit \
     --privileged -oA "${workdir}/nmap-$(today)" "$1"
 }
 
+must_be_root() {
+  if [ "$(id -u)" != 0 ]; then
+    err "Execute $(basename "$0") with root privileges."
+  fi
+}
+
 main() {
+  must_be_root
   create_workdir "$1" || err "Couldn't create directory, do you have permission?"
   nsc "$@" || err "Couldn't scan target."
 }

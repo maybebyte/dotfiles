@@ -84,6 +84,7 @@ userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
 # assorted
 alias \
   b64="openssl enc -base64" \
+  chksn="w3m \$(cat /etc/installurl)/snapshots/amd64" \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
   exifrm="exiftool -all= " \
   mus="ncmpcpp" \
@@ -131,7 +132,6 @@ alias \
   se="doas \${EDITOR}" \
   sehn="se /etc/hostname.\${nic}" \
   sehst="se /etc/hosts" \
-  sems="se /etc/X11/xorg.conf.d/90-modesetting.conf" \
   sepf="se /etc/pf.conf" \
   seres="se /etc/resolv.conf" \
   sesys="se /etc/sysctl.conf" \
@@ -189,9 +189,9 @@ alias \
   nicon="doas ifconfig \${nic} up" \
   nicre="nicoff && nicon" \
   nicshow="ifconfig \${nic}" \
-  nictail="doas tcpdump -i \${nic} -p" \
-  nsr6="netstat -rn -f inet6" \
-  nsr="netstat -rn -f inet" \
+  nictail="doas tcpdump -p -i \${nic}" \
+  ntstr6="netstat -rn -f inet6" \
+  ntstr="netstat -rn -f inet" \
   ntst6="netstat -n -f inet6" \
   ntst="netstat -n -f inet" \
   ntstl6="netstat -ln -f inet6" \
@@ -205,19 +205,19 @@ alias \
 # pf
 alias \
   pfc="doas pfctl" \
-  pfd="doas tcpdump -n -e -ttt -r /var/log/pflog" \
-  pfi="pfs info" \
+  pfdump="doas tcpdump -n -e -ttt -r /var/log/pflog" \
   pfif="pfs Interfaces" \
-  pfiif="pfif -vv -i \${nic}" \
-  pfl="pfc -f /etc/pf.conf" \
+  pfinfo="pfs info" \
+  pfload="pfc -f /etc/pf.conf" \
+  pfnic="pfif -vv -i \${nic}" \
   pfoff="pfc -d" \
   pfon="pfc -e" \
-  pfr="pfs rules" \
-  pfs="pfc -s" \
-  pft="pfl -n -vvv" \
+  pfrules="pfs rules" \
+  pfshow="pfc -s" \
+  pftest="pfl -n -vvv" \
   pftail="doas tcpdump -n -e -ttt -i pflog0" \
-  pftailb="doas tcpdump -n -e -ttt -i pflog0 action block" \
-  pftailp="doas tcpdump -n -e -ttt -i pflog0 action pass"
+  pftailb="pftail action block" \
+  pftailp="pftail action pass"
 
 # pkg
 alias \
@@ -237,7 +237,7 @@ alias \
 # sec
 alias \
   nk="nikto -output nikto-\$(today).txt -host" \
-  sc="doas nmap -sn" \
+  scan="doas nmap -sn" \
   sspl="searchsploit"
 
 # service management
@@ -257,7 +257,6 @@ alias \
 
 # system
 alias \
-  chksn="w3m \$(cat /etc/installurl)/snapshots/amd64" \
   dsklab="doas disklabel -p g" \
   dtsu="doas shutdown now" \
   off="doas shutdown -p now" \
@@ -272,7 +271,7 @@ alias \
   taself="ta project:selfcare" \
   tashop="ta project:shopping" \
   tatech="ta project:tech" \
-  tc="t config" \
+  tconf="t config" \
   td="t done" \
   tdel="t delete" \
   tdue="task due.before:today ids" \
@@ -300,7 +299,9 @@ alias \
   readmsg="less /var/log/messages" \
   readsec="doas less /var/log/secure" \
   readx="less /var/log/Xorg.0.log" \
-  tmsg="doas tail -f /var/log/messages"
+  tailhttp="tail -f /var/www/logs/access.log" \
+  tailmail="doas tail -f /var/log/maillog"
+  tailmsg="doas tail -f /var/log/messages"
 
 # web
 alias \
