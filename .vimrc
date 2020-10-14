@@ -119,6 +119,10 @@ autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!
 " Enable Goyo for help files
 autocmd BufRead /usr/local/share/vim/vim\d\d/doc/* :Goyo
 autocmd BufRead /usr/local/share/vim/vim\d\d/doc/* noremap ZQ :Goyo!\|q!
+autocmd BufRead $HOME/.vim/plugged/*/doc/* :Goyo
+autocmd BufRead $HOME/.vim/plugged/*/doc/* noremap ZQ :Goyo!\|q!
+autocmd BufRead $HOME/.vim/doc/* :Goyo
+autocmd BufRead $HOME/.vim/doc/* noremap ZQ :Goyo!\|q!
 
 " no more automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o

@@ -206,15 +206,15 @@ alias \
 alias \
   pfc="doas pfctl" \
   pfdump="doas tcpdump -n -e -ttt -r /var/log/pflog" \
-  pfif="pfs Interfaces" \
-  pfinfo="pfs info" \
+  pfif="pfshow Interfaces" \
+  pfinfo="pfshow info" \
   pfload="pfc -f /etc/pf.conf" \
   pfnic="pfif -vv -i \${nic}" \
   pfoff="pfc -d" \
   pfon="pfc -e" \
-  pfrules="pfs rules" \
+  pfrules="pfshow rules" \
   pfshow="pfc -s" \
-  pftest="pfl -n -vvv" \
+  pftest="pfload -n -vvv" \
   pftail="doas tcpdump -n -e -ttt -i pflog0" \
   pftailb="pftail action block" \
   pftailp="pftail action pass"

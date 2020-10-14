@@ -16,5 +16,9 @@ export LANG=en_US.UTF-8
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
 /usr/X11R6/bin/xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
 
+if [ -x /usr/local/bin/dbus-launch -a -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
+  eval $(dbus-launch --sh-syntax --exit-with-x11)
+fi
+
 /usr/local/bin/st -e "${HOME}/.local/bin/randman" &
 exec /usr/local/bin/xmonad
