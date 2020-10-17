@@ -307,9 +307,9 @@ alias \
 
 # web
 alias \
-  anonftp="torsocks ftp -C -n -U ''" \
+  anonftp="torsocks ftp -n -U ''" \
   anonsh="torsocks --shell" \
-  ftp="ftp -C -n -U ''" \
+  ftp="ftp -n -U ''" \
   gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
   mirror="wget --random-wait -k -p -np -c -K -m -e robots=off -R 'index.html*'" \
