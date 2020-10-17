@@ -267,6 +267,7 @@ alias \
 alias \
   t="task" \
   ta="t add" \
+  tafin="ta project:finances" \
   tagroc="ta project:groceries" \
   taself="ta project:selfcare" \
   tashop="ta project:shopping" \
@@ -275,6 +276,7 @@ alias \
   td="t done" \
   tdel="t delete" \
   tdue="task due.before:today ids" \
+  tfin="tls project:finances" \
   tgroc="tls project:groceries" \
   tid="t ids" \
   tls="t list" \
@@ -300,7 +302,7 @@ alias \
   readsec="doas less /var/log/secure" \
   readx="less /var/log/Xorg.0.log" \
   tailhttp="tail -f /var/www/logs/access.log" \
-  tailmail="doas tail -f /var/log/maillog"
+  tailmail="doas tail -f /var/log/maillog" \
   tailmsg="doas tail -f /var/log/messages"
 
 # web
