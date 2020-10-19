@@ -11,7 +11,7 @@ err() {
 }
 
 lbar() {
-  lemonbar-xft -f sans-14 -p -d
+  lemonbar-xft -f sans-14 -f "Noto Sans CJK JP-14" -p -d
 }
 
 lbar || err "lbar encountered a problem."
