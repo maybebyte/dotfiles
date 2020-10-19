@@ -84,7 +84,7 @@ userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
 # assorted
 alias \
   b64="openssl enc -base64" \
-  chksn="w3m \$(cat /etc/installurl)/snapshots/amd64" \
+  chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64" \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
   exifrm="exiftool -all= " \
   mus="ncmpcpp" \
@@ -230,6 +230,7 @@ alias \
   pkgq="pkg_info" \
   pkgqo="pkg_info -E" \
   pkgqs="pkg_info -D snap" \
+  pkgqsize="pkg_info -s" \
   pkgs="pkgq -Q" \
   pkgss="pkgq -D snap -Q" \
   pkgup="pkga -u"
