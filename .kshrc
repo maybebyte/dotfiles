@@ -61,7 +61,8 @@ export \
   READER="zathura" \
   TERMINAL="st" \
   VISUAL="${EDITOR}" \
-  site="https://amissing.link"
+  site="https://amissing.link" \
+  wallpaper="${HOME}/pictures/wallpapers/wallhaven-dgow5j.jpg"
 
 # termux compatibility
 if [ -d "/data/data/com.termux" ]; then
@@ -91,7 +92,7 @@ alias \
   n="nnn" \
   nb="newsboat" \
   o="mimeopen" \
-  rmus="mus --host 192.168.1.201" \
+  rmus="mus --host 192.168.1.79" \
   today="date '+%Y-%m-%d'" \
   unlockhdd="doas bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"
