@@ -86,7 +86,7 @@ userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
 alias \
   b64="openssl enc -base64" \
   chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64" \
-  cmdstat="history -n 0 | sort | uniq -c | sort -n | tail -10 | sort -nr" \
+  cmdstat="history -n 0 | sort | uniq -c | sort -n | tail | sort -nr" \
   exifrm="exiftool -all= " \
   mus="ncmpcpp" \
   n="nnn" \
@@ -119,6 +119,8 @@ alias \
   efont="e \${HOME}/.config/fontconfig/fonts.conf" \
   ek="e \${HOME}/.kshrc" \
   empv="e \${HOME}/.config/mpv/mpv.conf" \
+  emusb="e \${HOME}/.config/ncmpcpp/bindings" \
+  emusc="e \${HOME}/.config/ncmpcpp/config" \
   enb="e \${HOME}/.config/newsboat/config" \
   enbu="e \${HOME}/.config/newsboat/urls" \
   enm="e \${HOME}/.config/neomutt/neomuttrc" \
@@ -174,6 +176,10 @@ alias \
 
 aprv () {
   apr -S "$(uname -m)" any="$1"
+}
+
+cht () {
+  curl cht.sh/"$1"
 }
 
 # navigation
