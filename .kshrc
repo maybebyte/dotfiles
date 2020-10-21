@@ -325,9 +325,15 @@ alias \
   stcli="speedtest-cli" \
   trem="transmission-remote"
 
+anonread () {
+  anonftp -o - "$1" | zathura -
+}
+
 # youtube-dl
 alias \
   yt="youtube-dl --add-metadata -ic --embed-thumbnail -o '\${HOME}/Downloads/%(title)s.%(ext)s'" \
   yta="yt -x -f bestaudio/best " \
+  ytdesc="yt --get-description" \
+  ytlen="yt --get-duration" \
   ytrm="yt --rm-cache-dir" \
   ytv="yt --embed-subs"

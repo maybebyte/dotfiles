@@ -34,7 +34,12 @@ import_colors() {
 #-sf ## selected foreground color
 
 launch() {
-  dmenu_run -fn "mono-22" -nb "$color0" -nf "$color3" -sb "$color0" -sf "$color7"
+  dmenu_run -i \
+    -fn "mono-20" \
+    -nb "$color0" \
+    -nf "$color3" \
+    -sb "$color0" \
+    -sf "$color7"
 }
 
 main() {
