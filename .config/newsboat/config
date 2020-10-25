@@ -26,10 +26,10 @@ cache-file ~/.config/newsboat/cache.db
 cleanup-on-quit yes
 
 color article           default default
-color info              red     default
-color listfocus         green   default
-color listfocus_unread  green   default
-color listnormal        red     default
+color info              magenta default
+color listfocus         yellow  default
+color listfocus_unread  yellow  default
+color listnormal        green   default
 color listnormal_unread cyan    default
 
 macro , open-in-browser

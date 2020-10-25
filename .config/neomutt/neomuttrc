@@ -127,19 +127,16 @@ color error             red           default
 color hdrdefault        blue          default
 color index             brightcyan    default "~N"
 color index             cyan          default '.*'
-color indicator         green         default
+color indicator         yellow        default
 color message           cyan          default
 color normal            default       default
-color normal            default       default
-color quoted            green         default
-color quoted1           blue          default
-color quoted2           cyan          default
-color quoted3           yellow        default
-color quoted4           red           default
-color quoted5           brightred     default
+color quoted            cyan          default
+color quoted1           magenta       default
+color quoted2           green         default
+color quoted3           red           default
 color search            brightmagenta default
 color sidebar_highlight red           default
-color signature         brightgreen   default
+color signature         cyan          default
 color status            magenta       black
 color tilde             black         default
 color underline         black         default
@@ -149,25 +146,19 @@ mono  indicator         reverse
 mono  underline         underline
 
 # Regex highlighting:
-color body   blue         default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL
-color body   blue         default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # Email addresses
-color body   brightblack  default "^gpg: Good signature .*"
-color body   brightblue   default "^# \.*" # Headings as bold blue
-color body   brightcyan   default "[ ]?[*][^*]*[*][ ]" # more emoticon?
-color body   brightcyan   default "[ ][*][^*]*[*][ ]?" # more emoticon?
-color body   brightcyan   default "[;:][)(|]" # emoticons
-color body   brightcyan   default "[;:][-o][)/(|]" # emoticons
-color body   brightcyan   default "^## \.*" # Subheadings as bold cyan
-color body   brightgreen  default "^### \.*" # Subsubheadings as bold green
-color body   brightyellow default "^gpg: "
-color body   brightyellow red     "^gpg: BAD signature from.*"
-color body   cyan         default "(Good signature)"
-color body   red          default "(BAD signature)"
-color body   yellow       default "\`[^\`]*\`" # Green text between ` and `
-color body   yellow       default "^(\t| )*(-|\\*) \.*" # List items as yellow
+color body   yellow       default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL
+color body   yellow       default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # Email addresses
+color body   blue         default "^gpg: Good signature .*"
+color body   magenta      default "[ ]?[*][^*]*[*][ ]" # more emoticon?
+color body   magenta      default "[ ][*][^*]*[*][ ]?" # more emoticon?
+color body   magenta      default "[;:][)(|]" # emoticons
+color body   magenta      default "[;:][-o][)/(|]" # emoticons
+color body   underline    bold    brightyellow default "^gpg: BAD signature from.*"
+color body   blue         default "(Good signature)"
+color body   underline    bold    brightyellow default "(BAD  signature)"
+color body   magenta      default "\`[^\`]*\`"
+#color body   magenta      default "^(\t| )*(-|\\*) \.*"
 color header brightwhite  default "^(CC|BCC)"
 color header cyan         default ".*"
-color header yellow       default "^(From)"
-color header yellow       default "^(Subject)"
-mono  body   bold         "^gpg:  BAD  signature from.*"
-mono  body   bold         "^gpg:  Good signature"
+color header brightcyan   default "^(From)"
+color header brightcyan   default "^(Subject)"
