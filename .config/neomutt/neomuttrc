@@ -12,55 +12,49 @@ subscribe announcements@openbsd.org
 subscribe bugs@openbsd.org
 subscribe misc@openbsd.org
 
-set auto_subscribe            = yes
 set beep                      = no
 set crypt_autosign            = no
 set crypt_replyencrypt        = yes
 set crypt_replysign           = no
 set crypt_replysignencrypted  = yes
 set crypt_use_gpgme           = yes
-set date_format               = "%y/%m/%d %I:%M%p"
+set date_format               = "%y/%m/%d %H:%M"
 set delete                    = yes
-set editor                    = "vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
 set fast_reply
-set fcc_attach
 set folder                    = pops://mail.riseup.net/
 set forward_format            = "Fwd: %s"
 set forward_quote
 set from                      = eurydice@riseup.net
-set header_cache              = "~/.cache/mutt"
+set header_cache              = "~/.cache/neomutt"
 set hidden_host               = yes
-set ignore_linear_white_space = yes
 set ignore_list_reply_to      = yes
 set include
-set index_format              = "%2C %Z %?X?A& ? %D %-15.15F %s (%-4.4c)"
-set mail_check                = 60
+set mail_check                = 600
 set mail_check_stats
+set mail_check_stats_interval = 600
 set mark_old                  = no
 set markers                   = no
 set mbox                      = "~/mail"
 set mbox_type                 = "Maildir"
-set message_cachedir          = "~/.cache/mutt"
+set message_cachedir          = "~/.cache/neomutt"
 set mime_forward              = yes
 set move                      = yes
 set pgp_auto_decode           = yes
 set pgp_show_unusable         = no
-set pop_checkinterval         = 60
+set pop_checkinterval         = 600
 set pop_delete                = yes
 set pop_host                  = "mail.riseup.net"
 set pop_pass                  = $my_pass
 set pop_user                  = "eurydice@riseup.net"
 set print                     = no
 set realname                  = "Ashlen"
+set record                    = "~/mail"
 set reflow_wrap               = 72
 set reverse_alias             = yes
 set reverse_name
 set rfc2047_parameters        = yes
-set sidebar_divider_char      = ""
-set sidebar_format            = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
 set sidebar_next_new_wrap     = yes
-set sidebar_short_path        = yes
-set sidebar_visible           = yes
+set sidebar_visible           = no
 set sidebar_width             = 15
 set sleep_time                = 0
 set sort                      = threads
@@ -68,7 +62,7 @@ set spoolfile                 = +INBOX
 set ssl_force_tls             = yes
 set strict_threads            = yes
 set use_from                  = yes
-set visual                    = "vim -c 'set syntax=mail ft=mail enc=utf-8' %s"
+set use_domain                = yes
 set wait_key                  = no
 set wrap                      = 72
 
@@ -126,7 +120,7 @@ color bold              black         default
 color error             red           default
 color hdrdefault        blue          default
 color index             brightcyan    default "~N"
-color index             cyan          default '.*'
+color index             cyan          default ".*"
 color indicator         yellow        default
 color message           cyan          default
 color normal            default       default
@@ -140,10 +134,6 @@ color signature         cyan          default
 color status            magenta       black
 color tilde             black         default
 color underline         black         default
-mono  bold              bold
-mono  error             bold
-mono  indicator         reverse
-mono  underline         underline
 
 # Regex highlighting:
 color body   yellow       default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL

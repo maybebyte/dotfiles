@@ -92,6 +92,7 @@ alias \
   o="mimeopen" \
   rmus="mus --host 192.168.1.79" \
   today="date '+%Y-%m-%d'" \
+  tuir="torsocks tuir" \
   unlockhdd="doas bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"
 

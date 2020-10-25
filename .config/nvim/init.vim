@@ -1,24 +1,24 @@
 set autochdir
 set backup
-set conceallevel  =2
-set diffexpr      =
+set conceallevel =2
+set diffexpr     =
 set diffopt      +=iwhiteall
 set expandtab
 set ignorecase
 set lazyredraw
 set linebreak
 " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
-set modelines     =0
+set modelines    =0
 set nomodeline
 set number
 set relativenumber
-set shiftwidth    =2
+set shiftwidth   =2
 set smartcase
 set smartindent
 set splitbelow
 set splitright
-set tabstop       =2
-set textwidth     =72
+set tabstop      =2
+set textwidth    =72
 set undofile
 set wrap
 set wrapscan
@@ -58,10 +58,11 @@ autocmd BufWritePost $HOME/.kshrc !. %
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " Enable Goyo by default for mutt writing
-autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=72
-autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
-autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZZ :Goyo!\|x!
-autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!
+" Is buggy in Neomutt, nomodifiable bug
+"autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
+"autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=72
+"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZZ :Goyo!\|x!
+"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!
 
 " Enable Goyo for help files
 autocmd BufRead /usr/local/share/nvim/runtime/doc/* :Goyo
@@ -82,9 +83,9 @@ if empty(glob('$HOME/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source "$HOME/.config/nvim/init.vim"
 endif
 
-"" creates needed directories if they don't exist
-if isdirectory(expand("$HOME/.config/nvim/files")) != 1
-  silent !mkdir -p $HOME/.config/nvim/files/{backup,swap,undo,info}
+" creates backup directory
+if isdirectory(expand("$HOME/.local/share/nvim/backup")) != 1
+  silent !mkdir -p $HOME/.local/share/nvim/backup
 endif
 
 " plugins
@@ -95,7 +96,6 @@ call plug#begin("$HOME/.local/share/nvim/site/autoload/plugged")
   Plug 'scrooloose/nerdcommenter'
   Plug 'scrooloose/nerdtree'
   Plug 'scrooloose/syntastic'
-  Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
   if $DISPLAY != ""
     Plug 'ap/vim-css-color'
