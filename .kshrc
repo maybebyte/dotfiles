@@ -6,7 +6,7 @@ umask 077
 if command -v tmux >/dev/null 2>&1; then
   # if not inside a tmux session, and if no session is started, start a new
   # session
-  [ -z "${TMUX}" ] && (tmux attach || tmux)
+  [ -z "${TMUX}" ] && (tmux attach >/dev/null 2>&1 || tmux)
 fi
 
 # ksh options
@@ -15,10 +15,11 @@ set -o \
   vi-esccomplete
 
 # use vim if it's installed, vi otherwise
-case "$(command -v vim)" in
-  */vim) vim="vim" ;;
-  *)     vim="vi"  ;;
-esac
+if command -v nvim >/dev/null; then
+  EDITOR="nvim"
+else
+  EDITOR="vi"
+fi
 
 # use colorls if it's installed, ls otherwise
 if command -v colorls >/dev/null; then
@@ -43,9 +44,6 @@ PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u \
 ${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
 ${_ps1_clear}\\$ "
 fi
-
-# needs to be exported before VISUAL and FCEDIT
-export EDITOR="${vim}"
 
 # PATH acts funny w/ indentation
 export \
@@ -127,7 +125,7 @@ alias \
   esxh="e \${HOME}/.config/sxhkd/sxhkdrc" \
   etm="e \${HOME}/.tmux.conf" \
   euj="e \${userjs}" \
-  ev="e \${HOME}/.vimrc" \
+  ev="e \${HOME}/.config/nvim/init.vim" \
   exm="e \${HOME}/.xmonad/xmonad.hs" \
   exmb="e \${HOME}/.config/xmobar/xmobarrc" \
   exr="e \${HOME}/.Xresources" \
@@ -213,6 +211,8 @@ alias \
 alias \
   pfc="doas pfctl" \
   pfdump="doas tcpdump -n -e -ttt -r /var/log/pflog" \
+  pfdumpb="doas tcpdump -n -e -ttt -r /var/log/pflog action block" \
+  pfdumpp="doas tcpdump -n -e -ttt -r /var/log/pflog action pass" \
   pfif="pfshow Interfaces" \
   pfinfo="pfshow info" \
   pfload="pfc -f /etc/pf.conf" \

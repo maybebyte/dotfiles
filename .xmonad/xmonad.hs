@@ -15,6 +15,7 @@ myManageHook = composeAll
   , className =? "Tor Browser" --> doShift "4"
   , className =? "Tor Browser" --> doFloat
   , className =? "KeePassXC" --> doShift "5"
+  , className =? "Zathura" --> doShift "8"
   , className =? "mpv" --> doShift "9"
   , manageDocks ]
 
