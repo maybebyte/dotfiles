@@ -56,9 +56,9 @@ bkup() {
   | "${compressor}" ${compressor_args} \
   > /mnt/"${date}"/usr-local"${extension}" &
 
-/sbin/dump -0auf - /usr/x11r6 \
+/sbin/dump -0auf - /usr/x11R6 \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/usr-x11r6"${extension}" &
+  > /mnt/"${date}"/usr-x11R6"${extension}" &
 
 /sbin/dump -0auf - /usr \
   | "${compressor}" ${compressor_args} \
