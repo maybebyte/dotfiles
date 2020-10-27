@@ -38,20 +38,20 @@ must_be_root() {
 }
 
 gen_site() {
-  rm -f ${webdir}/.files \
-    && ${ssg} ${markdowndir} ${webdir} "Ashlen" \
-    "https://amissing.link" >/dev/null 2>&1 \
-    && ${rssg} ${markdowndir}/articles.md >/dev/null 2>&1  \
-    "Newsletter - amissing.link" > "${webdir}/rss.xml" \
-    && chown ashlen:ashlen ${webdir}/.files
+  rm -f ${webdir}/.files
+  ${ssg} ${markdowndir} ${webdir} "Ashlen" \
+    "https://amissing.link" >/dev/null 2>&1
+  ${rssg} ${markdowndir}/articles.md >/dev/null 2>&1 \
+    "Newsletter - amissing.link" > "${webdir}/rss.xml"
+  chown ashlen:ashlen ${webdir}/.files
 }
 
 sync_and_chmod() {
-  rsync -a --partial --delete -q ${webdir}/ ${srvdir}/ \
-    && find ${srvdir} -type f -exec chmod 644 "{}" \; >/dev/null 2>&1 \
-    && find ${srvdir} -type d -exec chmod 755 "{}" \; >/dev/null 2>&1 \
-    && rcctl -f restart httpd >/dev/null \
-    && sec_print "Web server synced."
+  openrsync -r --delete ${webdir}/ ${srvdir}/
+  find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \; >/dev/null 2>&1
+  find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \; >/dev/null 2>&1
+  rcctl reload httpd >/dev/null
+  sec_print "Web server synced."
 }
 
 webtest() {
