@@ -159,7 +159,7 @@ alias \
   ggr="g grep" \
   glg="g log" \
   gls="g ls-files" \
-  gpsh="g push" \
+  gpsh="g push origin master" \
   gre="g restore" \
   gs="g status"
 
@@ -231,16 +231,13 @@ alias \
 alias \
   pkgL="pkgq -L" \
   pkga="doas pkg_add" \
-  pkgas="doas pkg_add -D snap" \
   pkgd="doas pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
   pkgq="pkg_info" \
   pkgqo="pkg_info -E" \
-  pkgqs="pkg_info -D snap" \
-  pkgqsize="pkg_info -s" \
   pkgs="pkgq -Q" \
-  pkgss="pkgq -D snap -Q" \
+  pkgsize="pkg_info -s" \
   pkgup="pkga -u"
 
 # sec
@@ -278,6 +275,7 @@ alias \
   ta="t add" \
   tafin="ta project:finances" \
   tagroc="ta project:groceries" \
+  taedu="ta project:education" \
   taself="ta project:selfcare" \
   tashop="ta project:shopping" \
   tatech="ta project:tech" \
@@ -285,6 +283,7 @@ alias \
   td="t done" \
   tdel="t delete" \
   tdue="task due.before:today ids" \
+  tedu="tls project:education" \
   tfin="tls project:finances" \
   tgroc="tls project:groceries" \
   tid="t ids" \
