@@ -108,8 +108,7 @@ alias \
   ls="\${ls} -F" \
   lsd="find . -maxdepth 1 -iname \".[^.]*\"" \
   mkd="mkdir -p" \
-  shre=". \${HOME}/.kshrc" \
-  size="du -s"
+  shre=". \${HOME}/.kshrc"
 
 # editing
 alias \
@@ -173,12 +172,12 @@ alias \
   apr="apropos" \
   pdfman="MANPAGER=zathura man -T pdf"
 
-aprv () {
-  apr -S "$(uname -m)" any="$1"
+aprv() {
+  apr -S "$(uname -m)" any="${1}"
 }
 
-cht () {
-  curl cht.sh/"$1"
+cht() {
+  curl cht.sh/"${1}"
 }
 
 # navigation
@@ -325,8 +324,8 @@ alias \
   stcli="speedtest-cli" \
   trem="transmission-remote"
 
-anonread () {
-  anonftp -o - "$1" | zathura -
+anonread() {
+  anonftp -o - "${1}" | zathura -
 }
 
 # youtube-dl
