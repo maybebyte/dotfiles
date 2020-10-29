@@ -38,18 +38,20 @@ must_be_root() {
 }
 
 gen_site() {
+  rm -rf ${webdir:?}/*
   rm -f ${webdir}/.files
   ${ssg} ${markdowndir} ${webdir} "Ashlen" \
     "https://amissing.link" >/dev/null 2>&1
   ${rssg} ${markdowndir}/articles.md >/dev/null 2>&1 \
     "Newsletter - amissing.link" > "${webdir}/rss.xml"
-  chown ashlen:ashlen ${webdir}/.files
 }
 
-sync_and_chmod() {
-  openrsync -r --delete ${webdir}/ ${srvdir}/
+sync_site() {
+  rm -rf ${srvdir:?}/*
+  mv ${webdir}/* ${srvdir}/
   find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \; >/dev/null 2>&1
   find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \; >/dev/null 2>&1
+  chown -R ashlen:ashlen ${srvdir}
   rcctl reload httpd >/dev/null
   sec_print "Web server synced."
 }
@@ -57,7 +59,7 @@ sync_and_chmod() {
 webtest() {
   must_be_root
   gen_site || err "Couldn't generate site."
-  sync_and_chmod || err "Unable to sync web server."
+  sync_site || err "Unable to sync web server."
 }
 
 webtest || err "Webtest failed."
