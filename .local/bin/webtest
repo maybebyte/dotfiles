@@ -38,8 +38,8 @@ must_be_root() {
 }
 
 gen_site() {
-  rm -rf ${webdir:?}/*
-  rm -f ${webdir}/.files
+  rm -rf ${webdir:?}
+  mkdir -p ${webdir}
   ${ssg} ${markdowndir} ${webdir} "Ashlen" \
     "https://amissing.link" >/dev/null 2>&1
   ${rssg} ${markdowndir}/articles.md >/dev/null 2>&1 \
@@ -47,7 +47,8 @@ gen_site() {
 }
 
 sync_site() {
-  rm -rf ${srvdir:?}/*
+  rm -rf ${srvdir:?}
+  mkdir -p ${srvdir}
   mv ${webdir}/* ${srvdir}/
   find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \; >/dev/null 2>&1
   find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \; >/dev/null 2>&1
