@@ -2,6 +2,7 @@
 export LANG=en_US.UTF-8
 /usr/X11R6/bin/xrdb "${HOME}/.Xresources"
 /usr/X11R6/bin/xidle &
+/usr/local/bin/sct 3500
 /usr/X11R6/bin/xset b off
 /usr/local/bin/sxhkd &
 /usr/local/bin/unclutter -idle 3 -grab &

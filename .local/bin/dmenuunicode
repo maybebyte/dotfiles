@@ -9,6 +9,10 @@ set -e
 
 emoji_file="${HOME}/.local/share/emoji"
 
+sec_print() {
+  printf "%s\\n" "$@"
+}
+
 err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1

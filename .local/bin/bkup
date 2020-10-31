@@ -24,6 +24,10 @@ drive=$(/sbin/mount -v \
 
 extension=".dump.bz2"
 
+sec_print() {
+  /usr/bin/printf "%s\\n" "$@"
+}
+
 err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
