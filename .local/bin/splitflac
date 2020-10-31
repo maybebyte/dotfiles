@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 
 # dependencies:
 #   - cuetools
@@ -9,11 +10,14 @@ err() {
   exit 1
 }
 
+# usage
 # splitflac [cue file] [FLAC file]
 splitflac() {
-  shnsplit -f "${1}" -o flac -t "%n %t" "${2}"
+  shnsplit -f "${1}" -o flac -t "%n %t" "${2}" \
+    || err "Unable to split the FLAC file."
   mv "${2}" "${2}.bak"
-  cuetag "${1}" ./*.flac
+  cuetag "${1}" ./*.flac || err "Unable to tag FLAC files."
+  rm "${2}.bak"
 }
 
-splitflac "$@" || err "Unable to split FLAC files."
+splitflac "$@"
