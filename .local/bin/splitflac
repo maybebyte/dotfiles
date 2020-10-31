@@ -13,7 +13,7 @@ err() {
 splitflac() {
   shnsplit -f "${1}" -o flac -t "%n %t" "${2}"
   mv "${2}" "${2}.bak"
-  cuetag "${1}" "*.flac"
+  cuetag "${1}" ./*.flac
 }
 
 splitflac "$@" || err "Unable to split FLAC files."
