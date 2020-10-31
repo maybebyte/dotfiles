@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+sec_print() {
+  printf "%s\\n" "$@"
+}
+
+sec_print "$@"
