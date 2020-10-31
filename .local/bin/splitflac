@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+# dependencies:
+#   - cuetools
+#   - shntool
+
+err() {
+  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+# splitflac [cue file] [FLAC file]
+splitflac() {
+  shnsplit -f "${1}" -o flac -t "%n %t" "${2}"
+  mv "${2}" "${2}.bak"
+  cuetag "${1}" "*.flac"
+}
+
+splitflac "$@" || err "Unable to split FLAC files."
