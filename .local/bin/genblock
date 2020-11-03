@@ -42,23 +42,22 @@ dl_blocklist () {
 }
 
 format_blocklist() {
+  {
   grep -E '^0.0.0.0' "${raw_blockfile}" \
-    | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}' \
-    >> "${tmp_blockfile}"
+    | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}'
 
   grep -E '^127.0.0.1' "${raw_blockfile}" \
     | grep -v "localhost" \
-    | awk '$1 == "127.0.0.1" {print "local-zone: \""$2"\" always_refuse"}' \
-    >> "${tmp_blockfile}"
+    | awk '$1 == "127.0.0.1" {print "local-zone: \""$2"\" always_refuse"}'
 
-  sec_print 'local-zone: "use-application-dns.net" always_refuse' \
+  sec_print 'local-zone: "use-application-dns.net" always_refuse';
+  } | sed 's///g' \
     >> "${tmp_blockfile}"
-
-  # gets rid of the '^M' control character in blocklists
+  # the sed expression gets rid of the '^M' control character in
+  # blocklists
 
   # given that '^M' represents a carriage return, it may not display
   # properly in various places
-  sed -i 's///g' "${tmp_blockfile}"
 }
 
 install_blocklist() {
@@ -81,7 +80,7 @@ restart_dns() {
 }
 
 rm_tmpdir() {
-  rm -rf "${tmpdir}"
+  rm -rf "${tmpdir:?}"
 }
 
 main() {
