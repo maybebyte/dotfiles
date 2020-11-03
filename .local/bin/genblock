@@ -1,0 +1,75 @@
+#!/usr/bin/env sh
+
+firebog=$(/usr/bin/ftp -o - https://v.firebog.net/hosts/lists.php?type=tick)
+tmpdir=$(mktemp -d)
+raw_blockfile="${tmpdir}/raw_blocklist.txt"
+tmp_blockfile="${tmpdir}/unbound_blocklist.txt"
+blockfile="/var/unbound/etc/blocklist.txt"
+
+err() {
+  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+backup() {
+  if [ -f "${blockfile}" ]; then
+    mv "${blockfile}" "${blockfile}.bak"
+  fi
+}
+
+dl_blocklist () {
+  for list in ${firebog}; do
+    /usr/bin/ftp -o - "${list}" >> "${raw_blockfile}"
+  done
+}
+
+format_blocklist() {
+  grep -E '^0.0.0.0' "${raw_blockfile}" \
+    | grep -v "localhost" \
+    | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}' \
+    >> "${tmp_blockfile}"
+
+  grep -E '^127.0.0.1' "${raw_blockfile}" \
+    | grep -v "localhost" \
+    | awk '$1 == "127.0.0.1" {print "local-zone: \""$2"\" always_refuse"}' \
+    >> "${tmp_blockfile}"
+
+  printf "%s\\n" 'local-zone: "use-application-dns.net" always_refuse' \
+    >> "${tmp_blockfile}"
+
+  sed -i 's///g' "${tmp_blockfile}"
+}
+
+install_blocklist() {
+  cp "${tmp_blockfile}" "${blockfile}"
+  chmod 0444 "${blockfile}"
+}
+
+restart_dns() {
+  if /usr/sbin/unbound-checkconf >/dev/null 2>&1 \
+    && rcctl ls on 2>/dev/null \
+    | grep -qE "^unbound$"; then
+      rcctl restart unbound >/dev/null 2>&1
+  elif [ -f "${blockfile}.bak" ]; then
+    mv "${blockfile}.bak" "${blockfile}"
+  else
+    rm "${blockfile}"
+    touch "${blockfile}"
+    chmod 0444 "${blockfile}"
+  fi
+}
+
+rm_tmpdir() {
+  rm -rf "${tmpdir}"
+}
+
+main() {
+  backup || err "Unable to backup blocklist file."
+  dl_blocklist || err "firebog.net couldn't be reached."
+  format_blocklist || err "Unable to format blocklist."
+  install_blocklist || err "Unable to install blocklist."
+  restart_dns || err "Unable to restart unbound(8)."
+  rm_tmpdir || err "Unable to remove ${tmpdir}."
+}
+
+main
