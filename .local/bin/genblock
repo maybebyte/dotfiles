@@ -52,6 +52,8 @@ format_blocklist() {
 
   sec_print 'local-zone: "use-application-dns.net" always_refuse';
   } | sed 's///g' \
+    | sort \
+    | uniq \
     >> "${tmp_blockfile}"
   # the sed expression gets rid of the '^M' control character in
   # blocklists
@@ -61,7 +63,7 @@ format_blocklist() {
 }
 
 install_blocklist() {
-  sort "${tmp_blockfile}" | uniq > "${blockfile}"
+  cp "${tmp_blockfile}" "${blockfile}"
   chmod 0444 "${blockfile}"
 }
 
