@@ -43,7 +43,6 @@ dl_blocklist () {
 
 format_blocklist() {
   grep -E '^0.0.0.0' "${raw_blockfile}" \
-    | grep -v "localhost" \
     | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}' \
     >> "${tmp_blockfile}"
 
