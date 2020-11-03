@@ -4,7 +4,6 @@
 
 # his dotfiles can be accessed here:
 # https://github.com/LukeSmithxyz/voidrice
-
 set -e
 
 emoji_file="${HOME}/.local/share/emoji"
