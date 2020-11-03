@@ -85,8 +85,8 @@ rm_tmpdir() {
 }
 
 main() {
-  backup || err "Unable to backup blocklist file."
   dl_blocklist || err "firebog.net couldn't be reached."
+  backup || err "Unable to backup blocklist file."
   format_blocklist || err "Unable to format blocklist."
   install_blocklist || err "Unable to install blocklist."
   restart_dns || err "Unable to restart unbound(8)."
