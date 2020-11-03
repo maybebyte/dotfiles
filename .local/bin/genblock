@@ -45,7 +45,7 @@ format_blocklist() {
 }
 
 install_blocklist() {
-  cp "${tmp_blockfile}" "${blockfile}"
+  sort "${tmp_blockfile}" | uniq > "${blockfile}"
   chmod 0444 "${blockfile}"
 }
 
