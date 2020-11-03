@@ -54,8 +54,10 @@ format_blocklist() {
   sec_print 'local-zone: "use-application-dns.net" always_refuse' \
     >> "${tmp_blockfile}"
 
-  # gets rid of the '^M' control character, since that causes issues
-  # it may not display properly
+  # gets rid of the '^M' control character in blocklists
+
+  # given that '^M' represents a carriage return, it may not display
+  # properly in various places
   sed -i 's///g' "${tmp_blockfile}"
 }
 
