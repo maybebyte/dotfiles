@@ -330,8 +330,8 @@ anonread() {
 
 # youtube-dl
 alias \
-  yt="youtube-dl"
-  yta="yt -x -f bestaudio/best " \
+  yt="youtube-dl" \
+  yta="yt -x -f bestaudio/best" \
   ytdesc="yt --get-description" \
   ytlen="yt --get-duration" \
   ytrm="yt --rm-cache-dir" \
