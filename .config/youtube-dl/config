@@ -1,0 +1,5 @@
+-ic
+--add-metadata
+--embed-thumbnail
+--prefer-free-formats
+-o "${HOME}/Downloads/%(title)s.%(ext)s"
