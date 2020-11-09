@@ -142,7 +142,7 @@ alias \
 alias \
   d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
   da="d add" \
-  dcmt="d commit -a -m" \
+  dcmt="d commit -a" \
   ddiff="d diff" \
   dgr="d grep" \
   dlg="d log" \
@@ -153,7 +153,7 @@ alias \
   g="git" \
   ga="g add" \
   gcl="g clone" \
-  gcmt="g commit -a -m" \
+  gcmt="g commit -a" \
   gdiff="g diff" \
   ggr="g grep" \
   glg="g log" \
