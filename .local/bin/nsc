@@ -45,6 +45,10 @@ nsc() {
     --privileged -oA "${workdir}/nmap-$(today)" "$1"
 }
 
+fix_perms() {
+  chown -R ashlen:ashlen "${sec}"
+}
+
 must_be_root() {
   if [ "$(id -u)" != 0 ]; then
     err "Execute $(basename "$0") with root privileges."
@@ -55,6 +59,7 @@ main() {
   must_be_root
   create_workdir "$1" || err "Couldn't create directory, do you have permission?"
   nsc "$@" || err "Couldn't scan target."
+  fix_perms || err "Unable to fix permissions."
 }
 
 main "$@" || err "nsc failed."
