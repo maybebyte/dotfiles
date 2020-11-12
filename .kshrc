@@ -194,13 +194,13 @@ alias \
   nicon="doas ifconfig \${nic} up" \
   nicre="nicoff && nicon" \
   nicshow="ifconfig \${nic}" \
-  nictail="doas tcpdump -p -i \${nic}" \
-  ntstr6="netstat -rn -f inet6" \
-  ntstr="netstat -rn -f inet" \
-  ntst6="netstat -n -f inet6" \
-  ntst="netstat -n -f inet" \
-  ntstl6="netstat -ln -f inet6" \
-  ntstl="netstat -ln -f inet" \
+  nictail="doas tcpdump -pi \${nic}" \
+  ntstr6="netstat -rnf inet6" \
+  ntstr="netstat -rnf inet" \
+  ntst6="netstat -nf inet6" \
+  ntst="netstat -nf inet" \
+  ntstl6="netstat -lnf inet6" \
+  ntstl="netstat -lnf inet" \
   renet="doas sh /etc/netstart" \
   renetnic="renet \${nic}" \
   sysnet="systat netstat" \
@@ -210,19 +210,19 @@ alias \
 # pf
 alias \
   pfc="doas pfctl" \
-  pfdump="doas tcpdump -n -e -ttt -r /var/log/pflog" \
-  pfdumpb="doas tcpdump -n -e -ttt -r /var/log/pflog action block" \
-  pfdumpp="doas tcpdump -n -e -ttt -r /var/log/pflog action pass" \
+  pfdump="doas tcpdump -r /var/log/pflog" \
+  pfdumpb="doas tcpdump -r /var/log/pflog action block" \
+  pfdumpp="doas tcpdump -r /var/log/pflog action pass" \
   pfif="pfshow Interfaces" \
   pfinfo="pfshow info" \
   pfload="pfc -f /etc/pf.conf" \
-  pfnic="pfif -vv -i \${nic}" \
+  pfnic="pfif -vvi \${nic}" \
   pfoff="pfc -d" \
   pfon="pfc -e" \
   pfrules="pfshow rules" \
   pfshow="pfc -s" \
-  pftest="pfload -n -vvv" \
-  pftail="doas tcpdump -n -e -ttt -i pflog0" \
+  pftest="pfload -nvvv" \
+  pftail="doas tcpdump -i pflog0" \
   pftailb="pftail action block" \
   pftailp="pftail action pass"
 
@@ -230,18 +230,19 @@ alias \
 alias \
   pkgL="pkgq -L" \
   pkga="doas pkg_add" \
-  pkgas="doas pkg_add -D snap" \
+  pkgas="pkga -D snap" \
   pkgd="doas pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
   pkgq="pkg_info" \
-  pkgqo="pkg_info -E" \
+  pkgqo="pkgq -E" \
   pkgs="pkgq -Q" \
-  pkgss="pkgq -Q -D snap" \
-  pkgsize="pkg_info -s" \
-  pkgsizes="pkg_info -s -D snap" \
+  # needs -Q to be at the end for query to work
+  pkgss="pkg_info -D snap -Q" \
+  pkgsize="pkgq -s" \
+  pkgsizes="pkgsize -D snap" \
   pkgup="pkga -u" \
-  pkgups="pkga -u -D snap"
+  pkgups="pkgup -D snap"
 
 # sec
 alias \
@@ -318,12 +319,12 @@ alias \
 
 # web
 alias \
-  anonftp="torsocks ftp -n -U ''" \
+  anonftp="torsocks ftp -nU ''" \
   anonsh="torsocks --shell" \
-  ftp="ftp -n -U ''" \
+  ftp="ftp -nU ''" \
   gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
-  mirror="wget --random-wait -kpcKEm -np -e robots=off -R 'index.html*'" \
+  mirror="wget --random-wait -kpnpcKEme robots=off -R 'index.html*'" \
   mpva="mpv --no-video --speed=1" \
   stcli="speedtest-cli" \
   trem="transmission-remote"
@@ -335,7 +336,7 @@ anonread() {
 # youtube-dl
 alias \
   yt="youtube-dl" \
-  yta="yt -x -f bestaudio/best" \
+  yta="yt -xf bestaudio/best" \
   ytdesc="yt --get-description" \
   ytlen="yt --get-duration" \
   ytrm="yt --rm-cache-dir" \
