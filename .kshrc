@@ -230,14 +230,18 @@ alias \
 alias \
   pkgL="pkgq -L" \
   pkga="doas pkg_add" \
+  pkgas="doas pkg_add -D snap" \
   pkgd="doas pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
   pkgq="pkg_info" \
   pkgqo="pkg_info -E" \
   pkgs="pkgq -Q" \
+  pkgss="pkgq -Q -D snap" \
   pkgsize="pkg_info -s" \
-  pkgup="pkga -u"
+  pkgsizes="pkg_info -s -D snap" \
+  pkgup="pkga -u" \
+  pkgups="pkga -u -D snap"
 
 # sec
 alias \
