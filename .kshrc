@@ -237,7 +237,6 @@ alias \
   pkgq="pkg_info" \
   pkgqo="pkgq -E" \
   pkgs="pkgq -Q" \
-  # needs -Q to be at the end for query to work
   pkgss="pkg_info -D snap -Q" \
   pkgsize="pkgq -s" \
   pkgsizes="pkgsize -D snap" \
