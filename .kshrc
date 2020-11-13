@@ -323,7 +323,7 @@ alias \
   ftp="ftp -nU ''" \
   gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
-  mirror="wget --random-wait -kpnpcKEme robots=off -R 'index.html*'" \
+  mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
   mpva="mpv --no-video --speed=1" \
   stcli="speedtest-cli" \
   trem="transmission-remote"
