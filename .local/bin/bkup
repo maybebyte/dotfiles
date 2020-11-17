@@ -18,10 +18,6 @@ compressor="/usr/local/bin/bzip2"
 compressor_args="-c"
 date=$(/bin/date '+%Y-%m-%d')
 
-drive=$(/sbin/mount -v \
-  | /usr/bin/awk '/mnt/{print $2}' \
-  | /usr/bin/sed -e 's/(//' -e 's/\..*//')
-
 extension=".dump.bz2"
 
 sec_print() {
@@ -73,7 +69,7 @@ cat <<EOF
 This script creates level 0 dumps of /root, /var, /home, /usr/local,
 /usr/X11R6, and /usr. It compresses them using $(basename ${compressor})
 and places the backups inside /mnt in a folder named ${date}. It then
-automatically unmounts /mnt, detaches the CRYPTO volume, and powers off.
+automatically unmounts /mnt and powers off.
 
 Is this acceptable (y/n)?
 EOF
@@ -90,7 +86,6 @@ elif [ "${continue}" = "y" ]; then
   sec_print "Dumping filesystems..."
   bkup || err "Backup failed."
   /sbin/umount /mnt || err "Unable to unmount drive"
-  /sbin/bioctl -d "${drive}" || err "Unable to detach CRYPTO volume."
   /sbin/shutdown -p now
 else
   err "You must answer with 'y' or 'n'."

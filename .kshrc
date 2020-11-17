@@ -259,6 +259,7 @@ alias \
   rclon="rcctl ls on" \
   rclstr="rc ls started" \
   rcre="rc restart" \
+  rcrel="rc reload" \
   rcset="rc set" \
   rcst="rc stop" \
   rcstr="rc start" \
