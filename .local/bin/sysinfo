@@ -69,10 +69,10 @@ show_battery() {
 show_track() {
   song=$(mpc current)
   time=$(mpc | sed -n 2p | awk '{print $3}')
-  if [ -n "${song}" ]; then
-    sec_print "${song}${delimiter}${time}"
-  else
+  if [ -z "${song}" ]; then
     sec_print ""
+  else
+    sec_print "${song}${delimiter}${time}"
   fi
 }
 
