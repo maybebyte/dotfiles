@@ -1,8 +1,5 @@
 # shellcheck disable=SC2034
 
-# more restricted permissions - 0700 for dirs, 0600 for files
-umask 077
-
 if command -v tmux >/dev/null 2>&1; then
   # if not inside a tmux session, and if no session is started, start a new
   # session

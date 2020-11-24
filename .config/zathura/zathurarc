@@ -16,7 +16,7 @@ map [fullscreen] p     print
 map [fullscreen] r     reload
 map [fullscreen] u     scroll half-up
 
-set page-padding        0
+set page-padding        1
 set sandbox             strict
 set selection-clipboard clipboard
 set statusbar-h-padding 0
