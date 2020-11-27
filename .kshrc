@@ -42,7 +42,6 @@ ${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
 ${_ps1_clear}\\$ "
 fi
 
-# PATH acts funny w/ indentation
 export \
   BROWSER="firefox" \
   CLICOLOR=1 \
@@ -59,7 +58,7 @@ export \
   site="https://amissing.link" \
   wallpaper="${HOME}/pictures/wallpapers/wallhaven-dgow5j.jpg"
 
-# termux compatibility
+# PATH acts funny w/ indentation
 if [ -d "/data/data/com.termux" ]; then
   export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
 /data/data/com.termux/files/usr/bin/applets"

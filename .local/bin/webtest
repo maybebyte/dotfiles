@@ -52,7 +52,7 @@ sync_site() {
   mv ${webdir}/* ${srvdir}/
   find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \; >/dev/null 2>&1
   find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \; >/dev/null 2>&1
-  chown -R ashlen:ashlen ${srvdir}
+  chown -R ashlen:ashlen ${srvdir} ${webdir}
   rcctl reload httpd >/dev/null
   sec_print "Web server synced."
 }
