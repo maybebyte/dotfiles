@@ -34,11 +34,13 @@ if printf "%s" "${KSH_VERSION}" | grep -qi "pd ksh"; then
   esac
 
   _ps1_bracket='\[\033[1;36m\]'
+  _ps1_hostname='\[\033[1;32m\]'
   _ps1_clear='\[\033[0m\]'
 
 # unintended spaces occur w/ indentation
-PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u \
-${_ps1_clear}@ ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
+PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
+${_ps1_clear}@${_ps1_hostname}\\h${_ps1_clear} \
+${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]\
 ${_ps1_clear}\\$ "
 fi
 
