@@ -18,7 +18,7 @@
 set -e
 
 
-main() {
+main () {
 	test -n "$1" || usage
 	test -n "$2" || usage
 	test -f "$1" || no_file "$1"
