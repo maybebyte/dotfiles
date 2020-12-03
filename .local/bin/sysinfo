@@ -13,6 +13,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
+
 # system statistics in a format suitable for lemonbar
 
 . "${HOME}/.cache/wal/colors.sh"
@@ -34,7 +35,7 @@ show_date() {
 }
 
 show_volume() {
-  raw_volume=$(sndioctl -n output.level)
+  raw_volume=$(sndioctl -n output.level 2>/dev/null)
   # division is used to truncate the resulting floating-point number
   formatted_volume=$(sec_print "${raw_volume} / 0.01" | bc)
   if [ "$(sndioctl -n output.mute)" = 1 ]; then
@@ -68,11 +69,10 @@ show_battery() {
 
 show_track() {
   song=$(mpc current)
-  time=$(mpc | sed -n 2p | awk '{print $3}')
   if [ -z "${song}" ]; then
     sec_print ""
   else
-    sec_print "${song}${delimiter}${time}"
+    sec_print "${song}"
   fi
 }
 
