@@ -84,6 +84,7 @@ alias \
   chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64" \
   cmdstat="history -n 0 | sort | uniq -c | sort -n | tail | sort -nr" \
   exifrm="exiftool -all= " \
+  irssi="proxychains4 irssi" \
   mus="ncmpcpp" \
   n="nnn" \
   nb="newsboat" \

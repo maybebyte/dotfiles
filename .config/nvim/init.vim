@@ -42,6 +42,9 @@ nnoremap <leader>g :Goyo
 " spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :set spell! spelllang=en_us
 
+" Replace all is aliased to S.
+nnoremap S :%s//g<Left><Left>
+
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
