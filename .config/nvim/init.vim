@@ -48,9 +48,6 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-" Replace all is aliased to S.
-	nnoremap S :%s//g<Left><Left>
-
 " automatically deletes all trailing whitespace and newlines at end of
 " file on save.
 autocmd BufWritePre * %s/\s\+$//e
