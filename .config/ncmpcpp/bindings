@@ -1,41 +1,53 @@
 def_key "j"
-    scroll_down
+  scroll_down
 
 def_key "k"
-    scroll_up
+  scroll_up
 
 def_key "ctrl-u"
-    page_up
+  page_up
 
 def_key "ctrl-d"
-    page_down
+  page_down
 
 def_key "u"
-    page_up
+  page_up
 
 def_key "d"
-    page_down
+  page_down
 
 def_key "h"
-    previous_column
+  previous_column
 
 def_key "l"
-    next_column
+  next_column
 
 def_key "."
-    show_lyrics
+  show_lyrics
 
 def_key "n"
-    next_found_item
+  next_found_item
 
 def_key "N"
-    previous_found_item
+  previous_found_item
 
 def_key "J"
-    move_sort_order_down
+  move_sort_order_down
+
+def_key "J"
+  move_sort_order_down
+
+def_key "J"
+  move_selected_items_down
 
 def_key "K"
-    move_sort_order_up
+  move_sort_order_up
+
+def_key "K"
+  move_sort_order_up
+
+def_key "K"
+  move_selected_items_up
 
 def_key "h"
   jump_to_parent_directory
@@ -79,5 +91,9 @@ def_key "x"
 def_key "P"
   show_playlist
 
-def_key "H"
+def_key "?"
   show_help
+
+def_key "space"
+  select_item
+  scroll_down
