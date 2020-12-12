@@ -82,7 +82,7 @@ prompt
 if [ "${continue}" = "n" ]; then
   sec_print "Goodbye."
 elif [ "${continue}" = "y" ]; then
-  mkdir -p "/mnt/${date}" || err "Unable to create backup directory."
+  /bin/mkdir -p "/mnt/${date}" || err "Unable to create backup directory."
   sec_print "Dumping filesystems..."
   bkup || err "Backup failed."
   /sbin/umount /mnt || err "Unable to unmount drive"
