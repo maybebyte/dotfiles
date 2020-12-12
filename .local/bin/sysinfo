@@ -97,20 +97,34 @@ show_cpu_freq() {
   sec_print "cpu: ${formatted_cpu_freq} GHz"
 }
 
-main() {
-  if rcctl ls on | grep -E "^mpd$"; then
+sysinfo_mpd() {
+  while true; do
+# spaces bork ${stats}
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-  else
-stats="${bgfg} %{l}$(show_battery)$(show_temp)\
-%{r}$(show_volume)$(show_disk_space)\
-$(show_date)"
-  fi
-  while true; do
     sec_print "${stats}" || err "Unable to print statistics."
     sleep 5
   done
+}
+
+sysinfo_no_mpd() {
+  while true; do
+# spaces bork ${stats}
+stats="${bgfg} %{l}$(show_battery)$(show_temp)\
+%{r}$(show_volume)$(show_disk_space)\
+$(show_date)"
+    sec_print "${stats}" || err "Unable to print statistics."
+    sleep 5
+  done
+}
+
+main() {
+  if rcctl ls on | grep -E "^mpd$"; then
+    sysinfo_mpd
+  else
+    sysinfo_no_mpd
+  fi
 }
 
 main
