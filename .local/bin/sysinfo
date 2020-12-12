@@ -62,7 +62,7 @@ show_battery() {
     sec_print "chr: at ${percentage}${delimiter}"
   elif [ "${adapter}" = 2 ]; then
     sec_print "bkup: ${remaining}, at ${percentage}${delimiter}"
-  elif [ "${adapter}" = 255 ]; then
+  else
     sec_print ""
   fi
 }
