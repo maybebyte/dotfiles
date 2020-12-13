@@ -38,7 +38,7 @@ show_volume() {
   raw_volume=$(sndioctl -n output.level 2>/dev/null)
   # division is used to truncate the resulting floating-point number
   formatted_volume=$(sec_print "${raw_volume} / 0.01" | bc)
-  if [ "$(sndioctl -n output.mute)" = 1 ]; then
+  if [ "$(sndioctl -n output.mute 2>/dev/null)" = 1 ]; then
     sec_print "MUTE${delimiter}"
   else
     sec_print "vol: ${formatted_volume}%${delimiter}"
@@ -130,7 +130,7 @@ main() {
   import_colors || err "Unable to import colors."
   delimiter="  %{F${color3}}|%{F${foreground}}  "
   bgfg="%{B${background}} %{F${foreground}"
-  if rcctl ls on | grep -E "^mpd$"; then
+  if rcctl ls on | grep -E "^mpd$" >/dev/null; then
     sysinfo_mpd
   else
     sysinfo_no_mpd
