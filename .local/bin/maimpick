@@ -9,6 +9,12 @@ set -e
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
 common_maim_args="-d 1 -u -q -B"
+options="a selected area
+current window
+full screen
+selected area (copy)
+current window (copy)
+full screen (copy)"
 savedir="${HOME}/screenshots"
 
 sec_print() {
@@ -35,14 +41,7 @@ menu() {
 }
 
 print_options() {
-cat <<EOF
-a selected area
-current window
-full screen
-selected area (copy)
-current window (copy)
-full screen (copy)
-EOF
+  sec_print "${options}"
 }
 
 cur_date() {

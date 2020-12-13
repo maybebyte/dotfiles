@@ -18,14 +18,14 @@ compressor="/usr/local/bin/bzip2"
 compressor_args="-c"
 compressor_basename=$(/usr/bin/basename ${compressor})
 extension=".dump.bz2"
-lecture="
-This script creates level 0 dumps of /root, /var, /home, /usr/local,
-/usr/X11R6, and /usr. It compresses them using ${compressor_basename}
-and places the backups inside /mnt in a folder named ${today}. It then
-automatically unmounts /mnt and powers off.
+today=$(/bin/date '+%Y-%m-%d')
+
+lecture="This script creates level 0 dumps of /root, /var, /home,
+/usr/local, /usr/X11R6, and /usr. It compresses them using
+${compressor_basename} and places the backups inside /mnt in a folder
+named ${today}. It then automatically unmounts /mnt and powers off.
 
 Is this acceptable (y/n)?"
-today=$(/bin/date '+%Y-%m-%d')
 
 sec_print() {
   /usr/bin/printf "%s\\n" "$@"
