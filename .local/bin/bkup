@@ -74,6 +74,10 @@ automatically unmounts /mnt and powers off.
 Is this acceptable (y/n)?
 EOF
 read -r continue
+while [ "${continue}" != "y" ] && [ "${continue}" != "n" ]; do
+  sec_print "Only 'y' and 'n' are recognized inputs."
+  read -r continue
+done
 }
 
 main() {
@@ -82,6 +86,7 @@ prompt
 case "${continue}" in
   n)
     sec_print "Goodbye."
+    exit 0
     ;;
   y)
     /bin/mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
@@ -89,9 +94,6 @@ case "${continue}" in
     bkup || err "Backup failed."
     /sbin/umount /mnt || err "Unable to unmount drive"
     /sbin/shutdown -p now
-    ;;
-  *)
-    err "You must answer with 'y' or 'n'."
     ;;
 esac
 }
