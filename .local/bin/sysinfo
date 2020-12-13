@@ -56,15 +56,20 @@ show_battery() {
   hours=$(($(apm -m) / 60))
   remaining="~${hours}h & ${minutes}m"
   percentage="$(apm -l)%"
-  if [ "${adapter}" = 0 ]; then
-    sec_print "bat: ${remaining}, at ${percentage}${delimiter}"
-  elif [ "${adapter}" = 1 ]; then
-    sec_print "chr: at ${percentage}${delimiter}"
-  elif [ "${adapter}" = 2 ]; then
-    sec_print "bkup: ${remaining}, at ${percentage}${delimiter}"
-  else
-    sec_print ""
-  fi
+  case "${adapter}" in
+    0)
+      sec_print "bat: ${remaining}, at ${percentage}${delimiter}"
+      ;;
+    1)
+      sec_print "chr: at ${percentage}${delimiter}"
+      ;;
+    2)
+      sec_print "bkup: ${remaining}, at ${percentage}${delimiter}"
+      ;;
+    *)
+      sec_print ""
+      ;;
+  esac
 }
 
 show_track() {
@@ -77,13 +82,19 @@ show_track() {
 }
 
 show_temp() {
-  if [ "$(hostname -s)" = "lain" ]; then
-    temperature=$(sysctl -n hw.sensors.cpu0.temp0 | awk -F "." '{print $1}')
-  elif [ "$(hostname -s)" = "aphrodite" ]; then
-    temperature=$(sysctl -n hw.sensors.ksmn0.temp0 | awk -F "." '{print $1}')
-  else
-    temperature=''
-  fi
+  case "$(hostname -s)" in
+    lain)
+      temperature=$(sysctl -n hw.sensors.cpu0.temp0 \
+        | awk -F "." '{print $1}')
+      ;;
+    aphrodite)
+      temperature=$(sysctl -n hw.sensors.ksmn0.temp0 \
+        | awk -F "." '{print $1}')
+      ;;
+    *)
+      temperature=''
+      ;;
+  esac
   if [ -z "${temperature}" ]; then
     sec_print ""
   else
