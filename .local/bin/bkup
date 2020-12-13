@@ -18,6 +18,13 @@ compressor="/usr/local/bin/bzip2"
 compressor_args="-c"
 compressor_basename=$(/usr/bin/basename ${compressor})
 extension=".dump.bz2"
+lecture="
+This script creates level 0 dumps of /root, /var, /home, /usr/local,
+/usr/X11R6, and /usr. It compresses them using ${compressor_basename}
+and places the backups inside /mnt in a folder named ${today}. It then
+automatically unmounts /mnt and powers off.
+
+Is this acceptable (y/n)?"
 today=$(/bin/date '+%Y-%m-%d')
 
 sec_print() {
@@ -36,66 +43,58 @@ must_be_root() {
 }
 
 bkup() {
-/sbin/dump -0auf - / \
-  | "${compressor}" ${compressor_args} \
-  > /mnt/"${today}"/root"${extension}" &
+  /sbin/dump -0auf - / \
+    | "${compressor}" ${compressor_args} \
+    > /mnt/"${today}"/root"${extension}" &
 
-/sbin/dump -0auf - /var \
-  | "${compressor}" ${compressor_args} \
-  > /mnt/"${today}"/var"${extension}" &
+  /sbin/dump -0auf - /var \
+    | "${compressor}" ${compressor_args} \
+    > /mnt/"${today}"/var"${extension}" &
 
-/sbin/dump -0auf - /home \
-  | "${compressor}" ${compressor_args} \
-  > /mnt/"${today}"/home"${extension}" &
+  /sbin/dump -0auf - /home \
+    | "${compressor}" ${compressor_args} \
+    > /mnt/"${today}"/home"${extension}" &
 
-/sbin/dump -0auf - /usr/local \
-  | "${compressor}" ${compressor_args} \
-  > /mnt/"${today}"/usr-local"${extension}" &
+  /sbin/dump -0auf - /usr/local \
+    | "${compressor}" ${compressor_args} \
+    > /mnt/"${today}"/usr-local"${extension}" &
 
-/sbin/dump -0auf - /usr/x11R6 \
-  | "${compressor}" ${compressor_args} \
-  > /mnt/"${today}"/usr-x11R6"${extension}" &
+  /sbin/dump -0auf - /usr/x11R6 \
+    | "${compressor}" ${compressor_args} \
+    > /mnt/"${today}"/usr-x11R6"${extension}" &
 
-/sbin/dump -0auf - /usr \
-  | "${compressor}" ${compressor_args} \
-  > /mnt/"${today}"/usr"${extension}" &
-wait
+  /sbin/dump -0auf - /usr \
+    | "${compressor}" ${compressor_args} \
+    > /mnt/"${today}"/usr"${extension}" &
+  wait
 }
 
 prompt() {
-banner "bkup"
-cat <<EOF
-
-This script creates level 0 dumps of /root, /var, /home, /usr/local,
-/usr/X11R6, and /usr. It compresses them using ${compressor_basename}
-and places the backups inside /mnt in a folder named ${today}. It then
-automatically unmounts /mnt and powers off.
-
-Is this acceptable (y/n)?
-EOF
-read -r continue
-while [ "${continue}" != "y" ] && [ "${continue}" != "n" ]; do
-  sec_print "Only 'y' and 'n' are recognized inputs."
+  banner "bkup"
+  sec_print "${lecture}"
   read -r continue
-done
+  while [ "${continue}" != "y" ] && [ "${continue}" != "n" ]; do
+    sec_print "Only 'y' and 'n' are recognized inputs."
+    read -r continue
+  done
 }
 
 main() {
-must_be_root
-prompt
-case "${continue}" in
-  n)
-    sec_print "Goodbye."
-    exit 0
-    ;;
-  y)
-    /bin/mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
-    sec_print "Dumping filesystems..."
-    bkup || err "Backup failed."
-    /sbin/umount /mnt || err "Unable to unmount drive"
-    /sbin/shutdown -p now
-    ;;
-esac
+  must_be_root
+  prompt
+  case "${continue}" in
+    n)
+      sec_print "Goodbye."
+      exit 0
+      ;;
+    y)
+      /bin/mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
+      sec_print "Dumping filesystems..."
+      bkup || err "Backup failed."
+      /sbin/umount /mnt || err "Unable to unmount drive"
+      /sbin/shutdown -p now
+      ;;
+  esac
 }
 
 main
