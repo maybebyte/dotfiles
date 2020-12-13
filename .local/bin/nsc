@@ -19,7 +19,7 @@ set -e
 
 # usage: nsc [target] [options]
 
-# needs to be an absolute path, otherwise will save in /root/
+# ${sec} needs to be an absolute path, otherwise will save in /root/
 sec="/home/ashlen/sec"
 
 sec_print() {

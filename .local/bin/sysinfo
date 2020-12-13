@@ -16,9 +16,8 @@ set -e
 
 # system statistics in a format suitable for lemonbar
 
-. "${HOME}/.cache/wal/colors.sh"
-export delimiter="  %{F${color3}}|%{F${foreground}}  "
-export bgfg="%{B${background}} %{F${foreground}"
+delimiter="  %{F${color3}}|%{F${foreground}}  "
+bgfg="%{B${background}} %{F${foreground}"
 
 sec_print() {
   printf "%s\\n" "$@"
@@ -27,6 +26,10 @@ sec_print() {
 err() {
   sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
+}
+
+import_colors() {
+  . "${HOME}/.cache/wal/colors.sh"
 }
 
 show_date() {
@@ -131,6 +134,7 @@ $(show_date)"
 }
 
 main() {
+  import_colors || err "Unable to import colors."
   if rcctl ls on | grep -E "^mpd$"; then
     sysinfo_mpd
   else
