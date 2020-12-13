@@ -36,7 +36,7 @@ backup() {
 }
 
 dl_blocklist () {
-  for list in ${firebog}; do
+  for list in ${firebog:?}; do
     /usr/bin/ftp -o - "${list}" >> "${raw_blocklist}"
   done
 }

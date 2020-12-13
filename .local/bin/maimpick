@@ -33,10 +33,10 @@ import_colors() {
 menu() {
   dmenu -i -l 6 \
     -fn 'mono-20' \
-    -nb "${color0}" \
-    -nf "${color3}" \
-    -sb "${color0}" \
-    -sf "${color7}" \
+    -nb "${color0:?}" \
+    -nf "${color3:?}" \
+    -sb "${color0:?}" \
+    -sf "${color7:?}" \
     -p 'Screenshot which area?'
 }
 
@@ -93,7 +93,7 @@ present_options() {
 }
 
 main() {
-  import_colors || err "Unable to import colors."
+  import_colors
   present_options || err "Unable to present options."
 }
 
