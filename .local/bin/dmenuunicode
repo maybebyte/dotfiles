@@ -24,28 +24,21 @@ import_colors() {
 menu() {
   dmenu -i -l 20 \
     -fn "mono-22" \
-    -nb "${color0}" \
-    -nf "${color3}" \
-    -sb "${color0}" \
-    -sf "${color7}"
-}
-
-process_emoji() {
-  chosen=$(cut -d ';' -f1 "${emoji_file}" | menu)
-
-  [ -z "${chosen}" ] && err "Nothing was selected."
-
-  emoji=$(printf "%s" "${chosen}" | sed "s/ .*//")
+    -nb "${color0:?}" \
+    -nf "${color3:?}" \
+    -sb "${color0:?}" \
+    -sf "${color7:?}"
 }
 
 grab_emoji() {
-  printf "%s" "${emoji}" | xclip -selection clipboard
+  chosen=$(cut -d ';' -f1 "${emoji_file:?}" | menu)
+  emoji=$(printf "%s" "${chosen:?}" | sed "s/ .*//")
+  printf "%s" "${emoji:?}" | xclip -selection clipboard
 }
 
 dmenuunicode() {
-  import_colors || err "Unable to import colors."
-  process_emoji || err "Unable to process emoji."
-  grab_emoji || err "Unable to copy emoji to clipboard."
+  import_colors
+  grab_emoji
 }
 
 dmenuunicode
