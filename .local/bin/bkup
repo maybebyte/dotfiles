@@ -16,49 +16,49 @@ set -e
 
 compressor="/usr/local/bin/bzip2"
 compressor_args="-c"
-date=$(/bin/date '+%Y-%m-%d')
-
+compressor_basename=$(/usr/bin/basename ${compressor})
 extension=".dump.bz2"
+today=$(/bin/date '+%Y-%m-%d')
 
 sec_print() {
   /usr/bin/printf "%s\\n" "$@"
 }
 
 err() {
-  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  sec_print "[$(/bin/date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
 must_be_root() {
   if [ "$(/usr/bin/id -u)" != 0 ]; then
-    err "Execute $(basename "$0") with root privileges."
+    err "Execute $(/usr/bin/basename "$0") with root privileges."
   fi
 }
 
 bkup() {
 /sbin/dump -0auf - / \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/root"${extension}" &
+  > /mnt/"${today}"/root"${extension}" &
 
 /sbin/dump -0auf - /var \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/var"${extension}" &
+  > /mnt/"${today}"/var"${extension}" &
 
 /sbin/dump -0auf - /home \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/home"${extension}" &
+  > /mnt/"${today}"/home"${extension}" &
 
 /sbin/dump -0auf - /usr/local \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/usr-local"${extension}" &
+  > /mnt/"${today}"/usr-local"${extension}" &
 
 /sbin/dump -0auf - /usr/x11R6 \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/usr-x11R6"${extension}" &
+  > /mnt/"${today}"/usr-x11R6"${extension}" &
 
 /sbin/dump -0auf - /usr \
   | "${compressor}" ${compressor_args} \
-  > /mnt/"${date}"/usr"${extension}" &
+  > /mnt/"${today}"/usr"${extension}" &
 wait
 }
 
@@ -67,8 +67,8 @@ banner "bkup"
 cat <<EOF
 
 This script creates level 0 dumps of /root, /var, /home, /usr/local,
-/usr/X11R6, and /usr. It compresses them using $(basename ${compressor})
-and places the backups inside /mnt in a folder named ${date}. It then
+/usr/X11R6, and /usr. It compresses them using ${compressor_basename}
+and places the backups inside /mnt in a folder named ${today}. It then
 automatically unmounts /mnt and powers off.
 
 Is this acceptable (y/n)?
@@ -84,7 +84,7 @@ case "${continue}" in
     sec_print "Goodbye."
     ;;
   y)
-    /bin/mkdir -p "/mnt/${date}" || err "Unable to create backup directory."
+    /bin/mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
     sec_print "Dumping filesystems..."
     bkup || err "Backup failed."
     /sbin/umount /mnt || err "Unable to unmount drive"
