@@ -25,8 +25,8 @@ err() {
 
 viewimg() {
   filename="/tmp/sxiv-$(date '+%Y%m%d-%H%M%S')"
-  wget -O "${filename}" "${1}"
-  sxiv "${filename}"
+  ftp -Vo "${filename}" "${1}" >/dev/null 2>&1
+  sxiv "${filename}" >/dev/null 2>&1
 }
 
 main() {
