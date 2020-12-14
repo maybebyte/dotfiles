@@ -14,7 +14,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-firebog=$(/usr/bin/ftp -o - https://v.firebog.net/hosts/lists.php?type=tick)
+firebog=$(ftp -o - https://v.firebog.net/hosts/lists.php?type=tick)
 tmpdir=$(mktemp -d)
 raw_blocklist="${tmpdir}/raw_blocklist.txt"
 tmp_blocklist="${tmpdir}/unbound_blocklist.txt"
@@ -37,7 +37,7 @@ backup() {
 
 dl_blocklist () {
   for list in ${firebog:?}; do
-    /usr/bin/ftp -o - "${list}" >> "${raw_blocklist}"
+    ftp -o - "${list}" >> "${raw_blocklist}"
   done
 }
 
@@ -69,7 +69,7 @@ install_blocklist() {
 }
 
 restart_dns() {
-  if /usr/sbin/unbound-checkconf >/dev/null 2>&1 \
+  if unbound-checkconf >/dev/null 2>&1 \
     && rcctl ls on 2>/dev/null \
     | grep -qE "^unbound$"; then
       rcctl restart unbound >/dev/null 2>&1
