@@ -14,11 +14,11 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-compressor="/usr/local/bin/bzip2"
+compressor="bzip2"
 compressor_args="-c"
-compressor_basename=$(/usr/bin/basename ${compressor})
+compressor_basename=$(basename ${compressor})
 extension=".dump.bz2"
-today=$(/bin/date '+%Y-%m-%d')
+today=$(date '+%Y-%m-%d')
 
 lecture="This script creates level 0 dumps of /root, /var, /home,
 /usr/local, /usr/X11R6, and /usr. It compresses them using
@@ -28,42 +28,42 @@ named ${today}. It then automatically unmounts /mnt and powers off.
 Is this acceptable (y/n)?"
 
 sec_print() {
-  /usr/bin/printf "%s\\n" "$@"
+  printf "%s\\n" "$@"
 }
 
 err() {
-  sec_print "[$(/bin/date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
 must_be_root() {
-  if [ "$(/usr/bin/id -u)" != 0 ]; then
-    err "Execute $(/usr/bin/basename "$0") with root privileges."
+  if [ "$(id -u)" != 0 ]; then
+    err "Execute $(basename "$0") with root privileges."
   fi
 }
 
 bkup() {
-  /sbin/dump -0auf - / \
+  dump -0auf - / \
     | "${compressor}" ${compressor_args} \
     > /mnt/"${today}"/root"${extension}" &
 
-  /sbin/dump -0auf - /var \
+  dump -0auf - /var \
     | "${compressor}" ${compressor_args} \
     > /mnt/"${today}"/var"${extension}" &
 
-  /sbin/dump -0auf - /home \
+  dump -0auf - /home \
     | "${compressor}" ${compressor_args} \
     > /mnt/"${today}"/home"${extension}" &
 
-  /sbin/dump -0auf - /usr/local \
+  dump -0auf - /usr/local \
     | "${compressor}" ${compressor_args} \
     > /mnt/"${today}"/usr-local"${extension}" &
 
-  /sbin/dump -0auf - /usr/x11R6 \
+  dump -0auf - /usr/x11R6 \
     | "${compressor}" ${compressor_args} \
     > /mnt/"${today}"/usr-x11R6"${extension}" &
 
-  /sbin/dump -0auf - /usr \
+  dump -0auf - /usr \
     | "${compressor}" ${compressor_args} \
     > /mnt/"${today}"/usr"${extension}" &
   wait
@@ -89,11 +89,11 @@ main() {
       exit 0
       ;;
     y)
-      /bin/mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
+      mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
       sec_print "Dumping filesystems..."
       bkup || err "Backup failed."
-      /sbin/umount /mnt || err "Unable to unmount drive"
-      /sbin/shutdown -p now
+      umount /mnt || err "Unable to unmount drive"
+      shutdown -p now
       ;;
   esac
 }
