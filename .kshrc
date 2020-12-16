@@ -1,4 +1,8 @@
 # shellcheck disable=SC2034
+# pywal
+if [ "$(id -u)" != 0 ]; then
+  . "${HOME}/.cache/wal/colors.sh"
+fi
 
 if command -v tmux >/dev/null 2>&1; then
   # if not inside a tmux session, and if no session is started, start a new
@@ -55,10 +59,9 @@ export \
   PAGER="less" \
   QT_STYLE_OVERRIDE="adwaita" \
   READER="zathura" \
-  TERMINAL="st" \
+  TERMINAL="xst" \
   VISUAL="${EDITOR}" \
-  site="https://amissing.link" \
-  wallpaper="${HOME}/pictures/wallpapers/wallhaven-dgow5j.jpg"
+  site="https://amissing.link"
 
 # PATH acts funny w/ indentation
 if [ -d "/data/data/com.termux" ]; then
@@ -112,7 +115,7 @@ alias \
 # editing
 alias \
   e="\${EDITOR}" \
-  eduj="e -d \${HOME}/builds/ghacks-user.js/user.js \${userjs}" \
+  eduj="e -d \${HOME}/builds/user.js/user.js \${userjs}" \
   efont="e \${HOME}/.config/fontconfig/fonts.conf" \
   ek="e \${HOME}/.kshrc" \
   empv="e \${HOME}/.config/mpv/mpv.conf" \
@@ -183,7 +186,7 @@ cht() {
 alias \
   ..="cd .." \
   ...="cd ../.." \
-  cdweb="cd ~/builds/website_md"
+  cdweb="cd \${HOME}/builds/website_md"
 
 # networking
 alias \

@@ -1,3 +1,6 @@
+! pywal
+#include ".cache/wal/colors.Xresources"
+
 ! eye candy for non-{GTK,QT} applications
 Xft.antialias: 1
 Xft.autohint:  0
@@ -10,37 +13,3 @@ Xft.rgba:      rgb
 ! turns off screen
 XIdle.program: /usr/local/bin/slock xset dpms force off
 XIdle.timeout: 90
-
-! Colors 0-15.
-*.color0:  #040516
-*color0:   #040516
-*.color1:  #345CBF
-*color1:   #345CBF
-*.color2:  #5B6BDB
-*color2:   #5B6BDB
-*.color3:  #9974E7
-*color3:   #9974E7
-*.color4:  #249AE5
-*color4:   #249AE5
-*.color5:  #698CEC
-*color5:   #698CEC
-*.color6:  #9D99F2
-*color6:   #9D99F2
-*.color7:  #e0cef3
-*color7:   #e0cef3
-*.color8:  #9c90aa
-*color8:   #9c90aa
-*.color9:  #345CBF
-*color9:   #345CBF
-*.color10: #5B6BDB
-*color10:  #5B6BDB
-*.color11: #9974E7
-*color11:  #9974E7
-*.color12: #249AE5
-*color12:  #249AE5
-*.color13: #698CEC
-*color13:  #698CEC
-*.color14: #9D99F2
-*color14:  #9D99F2
-*.color15: #e0cef3
-*color15:  #e0cef3
