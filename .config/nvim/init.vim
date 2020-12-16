@@ -94,6 +94,7 @@ endif
 
 " plugins
 call plug#begin("$HOME/.local/share/nvim/site/autoload/plugged")
+  Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/goyo.vim'
   Plug 'junegunn/vim-easy-align'
