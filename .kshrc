@@ -149,7 +149,7 @@ alias \
   dgr="d grep" \
   dlg="d log" \
   dls="d ls-files \${HOME}" \
-  dpsh="d push origin master" \
+  dpsh="d push" \
   dre="d restore" \
   ds="d status" \
   g="git" \
@@ -160,7 +160,7 @@ alias \
   ggr="g grep" \
   glg="g log" \
   gls="g ls-files" \
-  gpsh="g push origin master" \
+  gpsh="g push" \
   gre="g restore" \
   gs="g status"
 
