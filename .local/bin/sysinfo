@@ -46,7 +46,7 @@ show_volume() {
 }
 
 show_disk_space() {
-  diskspace=$(df -h /home | tail -1 | awk '{print $4}')
+  diskspace=$(df -h /home | awk '/dev/{print $4}')
   sec_print "/home: ${diskspace}${delimiter}"
 }
 
