@@ -20,5 +20,5 @@ if [ -x /usr/local/bin/dbus-launch -a -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
   eval $(dbus-launch --sh-syntax --exit-with-x11)
 fi
 
-/usr/local/bin/st -e "${HOME}/.local/bin/randman" &
+/usr/local/bin/xst -e "${HOME}/.local/bin/randman" &
 exec /usr/local/bin/xmonad
