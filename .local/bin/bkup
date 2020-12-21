@@ -16,13 +16,12 @@ set -e
 
 compressor="bzip2"
 compressor_args="-c"
-compressor_basename=$(basename ${compressor})
 extension=".dump.bz2"
 today=$(date '+%Y-%m-%d')
 
 lecture="This script creates level 0 dumps of /root, /var, /home,
 /usr/local, /usr/X11R6, and /usr. It compresses them using
-${compressor_basename} and places the backups inside /mnt in a folder
+${compressor} and places the backups inside /mnt in a folder
 named ${today}. It then automatically unmounts /mnt and powers off.
 
 Is this acceptable (y/n)?"
