@@ -23,7 +23,7 @@ import_colors() {
 
 menu() {
   dmenu -i -l 20 \
-    -fn "mono-22" \
+    -fn "mono-20" \
     -nb "${color0:?}" \
     -nf "${color3:?}" \
     -sb "${color0:?}" \
