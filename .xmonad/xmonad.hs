@@ -1,19 +1,20 @@
-import XMonad
-import XMonad.Layout.Spacing
-import XMonad.Hooks.ManageDocks
 import System.IO
+import XMonad
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Layout.Spacing
 
-myModMask            = mod4Mask
-myTerminal           = "st"
 myBorderWidth        = 0
+myModMask            = mod4Mask
 myMouseFocusRule     = False
+myTerminal           = "xst"
 
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
-  , className =? "Firefox" --> doFloat
+  , className =? "Firefox" --> doCenterFloat
   , className =? "Tor Browser" --> doShift "4"
-  , className =? "Tor Browser" --> doFloat
+  , className =? "Tor Browser" --> doCenterFloat
   , className =? "KeePassXC" --> doShift "5"
   , className =? "Zathura" --> doShift "8"
   , className =? "mpv" --> doShift "9"
