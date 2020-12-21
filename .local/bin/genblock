@@ -36,7 +36,7 @@ backup() {
 }
 
 dl_blocklist () {
-  for list in ${firebog:?}; do
+  for list in ${firebog}; do
     ftp -o - "${list}" >> "${raw_blocklist}"
   done
 }
@@ -87,7 +87,7 @@ rm_tmpdir() {
 }
 
 main() {
-  dl_blocklist || err "firebog.net couldn't be reached."
+  dl_blocklist || err "Unable to download lists from firebog.net."
   backup || err "Unable to backup blocklist file."
   format_blocklist || err "Unable to format blocklist."
   install_blocklist || err "Unable to install blocklist."
