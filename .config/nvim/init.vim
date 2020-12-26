@@ -74,6 +74,9 @@ autocmd BufRead /usr/local/share/nvim/runtime/doc/* noremap ZQ :Goyo!\|q!
 autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
 autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* noremap ZQ :Goyo!\|q!
 
+" shell script syntax for xsession
+autocmd BufRead $HOME/.xsession set filetype=sh
+
 " no more automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
