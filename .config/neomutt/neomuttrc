@@ -6,7 +6,7 @@
 # smtp_{url,pass} aren't needed with a working smtpd.conf(5)
 # on OpenBSD :)
 
-source "gpg2 -dq ~/passwords/email_pass.gpg |"
+source "gpg2 -dq ${HOME}/passwords/email_pass.gpg |"
 
 subscribe announcements@openbsd.org
 subscribe bugs@openbsd.org
@@ -25,7 +25,7 @@ set folder                    = pops://mail.riseup.net/
 set forward_format            = "Fwd: %s"
 set forward_quote
 set from                      = eurydice@riseup.net
-set header_cache              = "~/.cache/neomutt"
+set header_cache              = "${HOME}/.cache/neomutt"
 set hidden_host               = yes
 set ignore_list_reply_to      = yes
 set include
@@ -34,9 +34,9 @@ set mail_check_stats
 set mail_check_stats_interval = 600
 set mark_old                  = no
 set markers                   = no
-set mbox                      = "~/mail"
+set mbox                      = "${HOME}/mail"
 set mbox_type                 = "Maildir"
-set message_cachedir          = "~/.cache/neomutt"
+set message_cachedir          = "${HOME}/.cache/neomutt"
 set mime_forward              = yes
 set move                      = yes
 set pgp_auto_decode           = yes
@@ -48,7 +48,7 @@ set pop_pass                  = $my_pass
 set pop_user                  = "eurydice@riseup.net"
 set print                     = no
 set realname                  = "Ashlen"
-set record                    = "~/mail"
+set record                    = "${HOME}/mail"
 set reflow_wrap               = 72
 set reverse_alias             = yes
 set reverse_name
