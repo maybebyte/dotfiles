@@ -36,13 +36,13 @@ today() {
 }
 
 create_workdir() {
-  mkdir -p "${sec}/$1/nmap"
-  export workdir="${sec}/$1/nmap"
+  mkdir -p "${sec}/${1}/nmap"
+  export workdir="${sec}/${1}/nmap"
 }
 
 nsc() {
   nmap -A -v -p 0-65535 --osscan-limit \
-    --privileged -oA "${workdir}/nmap-$(today)" "$1"
+    --privileged -oA "${workdir}/nmap-$(today)" "${1}"
 }
 
 fix_perms() {
@@ -51,13 +51,13 @@ fix_perms() {
 
 must_be_root() {
   if [ "$(id -u)" != 0 ]; then
-    err "Execute $(basename "$0") with root privileges."
+    err "Execute $(basename "${0}") with root privileges."
   fi
 }
 
 main() {
   must_be_root
-  create_workdir "$1" || err "Couldn't create directory, do you have permission?"
+  create_workdir "${1}" || err "Couldn't create directory, do you have permission?"
   nsc "$@" || err "Couldn't scan target."
   fix_perms || err "Unable to fix permissions."
 }
