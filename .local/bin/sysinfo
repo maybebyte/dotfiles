@@ -109,7 +109,7 @@ sysinfo_mpd() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    sec_print "${stats:?}"
+    sec_print "${stats}"
     sleep 5
   done
 }
@@ -120,7 +120,7 @@ sysinfo_no_mpd() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    sec_print "${stats:?}"
+    sec_print "${stats}"
     sleep 5
   done
 }

@@ -24,16 +24,16 @@ import_colors() {
 menu() {
   dmenu -i -l 20 \
     -fn "mono-20" \
-    -nb "${color0:?}" \
-    -nf "${color3:?}" \
-    -sb "${color0:?}" \
-    -sf "${color7:?}"
+    -nb "${color0}" \
+    -nf "${color3}" \
+    -sb "${color0}" \
+    -sf "${color7}"
 }
 
 grab_emoji() {
-  chosen=$(cut -d ';' -f1 "${emoji_file:?}" | menu)
-  emoji=$(printf "%s" "${chosen:?}" | sed "s/ .*//")
-  printf "%s" "${emoji:?}" | xclip -selection clipboard
+  chosen=$(cut -d ';' -f1 "${emoji_file}" | menu)
+  emoji=$(printf "%s" "${chosen}" | sed "s/ .*//")
+  printf "%s" "${emoji}" | xclip -selection clipboard
 }
 
 dmenuunicode() {
