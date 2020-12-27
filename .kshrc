@@ -175,11 +175,11 @@ alias \
   pdfman="MANPAGER=zathura man -T pdf"
 
 aprv() {
-  apr -S "$(uname -m)" any="${1}"
+  apr -S "$(uname -m)" any="$1"
 }
 
 cht() {
-  curl cht.sh/"${1}"
+  curl cht.sh/"$1"
 }
 
 # navigation
@@ -332,7 +332,7 @@ alias \
   trem="transmission-remote"
 
 anonread() {
-  anonftp -o - "${1}" | zathura -
+  anonftp -o - "$1" | zathura -
 }
 
 # youtube-dl

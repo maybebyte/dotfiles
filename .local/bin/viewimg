@@ -25,12 +25,12 @@ err() {
 
 viewimg() {
   filename="/tmp/sxiv-$(date '+%Y%m%d-%H%M%S')"
-  ftp -Vo "${filename}" "${1}" >/dev/null 2>&1
+  ftp -Vo "${filename}" "$1" >/dev/null 2>&1
   sxiv "${filename}" >/dev/null 2>&1
 }
 
 main() {
-  viewimg "${1}"
+  viewimg "$1"
   wait
   rm "${filename}"
 }
