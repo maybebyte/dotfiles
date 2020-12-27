@@ -17,7 +17,7 @@ if [ -x dbus-launch ] && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
   eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 fi
 
-# desktop adjustments
+# look and feel
 "${HOME}/.local/bin/wal" -R
 sct 3500
 xset b off
