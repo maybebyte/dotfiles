@@ -1,6 +1,6 @@
 set autochdir
 set backup
-set backupdir    =~/.local/share/nvim/backup
+set backupdir    =$HOME/.local/share/nvim/backup
 set conceallevel =2
 set diffexpr     =
 set diffopt      +=iwhiteall
