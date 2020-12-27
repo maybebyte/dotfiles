@@ -1,6 +1,6 @@
 # applications
 super + {Return, d, u, B, W, P}
-	{xst, ~/.local/bin/dmen, ~/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
+	{xst, $\{HOME\}/.local/bin/dmen, $\{HOME\}/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
 
 # screen lock
 super + n
@@ -8,7 +8,7 @@ super + n
 
 # full screenshot
 Print
-	maim -uq ~/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
+	maim -uq ${HOME}/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
 
 # screenshot menu
 shift + Print
