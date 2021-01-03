@@ -1,4 +1,4 @@
-# shellcheck disable=SC2034
+# shellcheck disable=SC2034,SC1090
 # pywal
 if [ "$(id -u)" != 0 ] \
   && [ -n "${DISPLAY}" ] \
@@ -83,6 +83,14 @@ nic=$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':') \
 userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
   && export userjs
 
+# needed for aliases to expand when {doas,sudo} is the first part of a
+# command
+if command -v doas >/dev/null 2>&1; then
+  alias doas="doas "
+elif command -v sudo >/dev/null 2>&1; then
+  alias sudo="sudo "
+fi
+
 # assorted
 alias \
   b64="openssl enc -base64" \
@@ -97,7 +105,7 @@ alias \
   rmus="mus --host 192.168.1.79" \
   today="date '+%Y-%m-%d'" \
   tuir="torsocks tuir" \
-  unlockhdd="doas bioctl -c C -l sd2a softraid0" \
+  unlockhdd="bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"
 
 # basic utilities
@@ -119,6 +127,8 @@ alias \
   e="\${EDITOR}" \
   eduj="e -d \${HOME}/builds/user.js/user.js \${userjs}" \
   efont="e \${HOME}/.config/fontconfig/fonts.conf" \
+  ehn="e /etc/hostname.\${nic}" \
+  ehst="e /etc/hosts" \
   ek="e \${HOME}/.kshrc" \
   empv="e \${HOME}/.config/mpv/mpv.conf" \
   emusb="e \${HOME}/.config/ncmpcpp/bindings" \
@@ -126,21 +136,18 @@ alias \
   enb="e \${HOME}/.config/newsboat/config" \
   enbu="e \${HOME}/.config/newsboat/urls" \
   enm="e \${HOME}/.config/neomutt/neomuttrc" \
+  epf="e /etc/pf.conf" \
+  eres="e /etc/resolv.conf" \
   esxh="e \${HOME}/.config/sxhkd/sxhkdrc" \
+  esys="e /etc/sysctl.conf" \
   etm="e \${HOME}/.tmux.conf" \
   euj="e \${userjs}" \
+  eunw="e /etc/unwind.conf" \
   ev="e \${HOME}/.config/nvim/init.vim" \
   exm="e \${HOME}/.xmonad/xmonad.hs" \
   exmb="e \${HOME}/.config/xmobar/xmobarrc" \
   exr="e \${HOME}/.Xresources" \
-  exs="e \${HOME}/.xsession" \
-  se="doas \${EDITOR}" \
-  sehn="se /etc/hostname.\${nic}" \
-  sehst="se /etc/hosts" \
-  sepf="se /etc/pf.conf" \
-  seres="se /etc/resolv.conf" \
-  sesys="se /etc/sysctl.conf" \
-  seunw="se /etc/unwind.conf"
+  exs="e \${HOME}/.xsession"
 
 # git
 alias \
@@ -193,19 +200,19 @@ alias \
 # networking
 alias \
   exip="curl ifconfig.me && printf '%s\\n'" \
-  nicdel="doas ifconfig \${nic} delete" \
-  nicoff="doas ifconfig \${nic} down" \
-  nicon="doas ifconfig \${nic} up" \
+  nicdel="ifconfig \${nic} delete" \
+  nicoff="ifconfig \${nic} down" \
+  nicon="ifconfig \${nic} up" \
   nicre="nicoff && nicon" \
   nicshow="ifconfig \${nic}" \
-  nictail="doas tcpdump -pi \${nic}" \
+  nictail="tcpdump -pi \${nic}" \
   ntstr6="netstat -rnf inet6" \
   ntstr="netstat -rnf inet" \
   ntst6="netstat -nf inet6" \
   ntst="netstat -nf inet" \
   ntstl6="netstat -lnf inet6" \
   ntstl="netstat -lnf inet" \
-  renet="doas sh /etc/netstart" \
+  renet="sh /etc/netstart" \
   renetnic="renet \${nic}" \
   sysnet="systat netstat" \
   tlan="ping \${gateway}" \
@@ -213,10 +220,10 @@ alias \
 
 # pf
 alias \
-  pfc="doas pfctl" \
-  pfdump="doas tcpdump -r /var/log/pflog" \
-  pfdumpb="doas tcpdump -r /var/log/pflog action block" \
-  pfdumpp="doas tcpdump -r /var/log/pflog action pass" \
+  pfc="pfctl" \
+  pfdump="tcpdump -r /var/log/pflog" \
+  pfdumpb="tcpdump -r /var/log/pflog action block" \
+  pfdumpp="tcpdump -r /var/log/pflog action pass" \
   pfif="pfshow Interfaces" \
   pfinfo="pfshow info" \
   pfload="pfc -f /etc/pf.conf" \
@@ -226,22 +233,22 @@ alias \
   pfrules="pfshow rules" \
   pfshow="pfc -s" \
   pftest="pfload -nvvv" \
-  pftail="doas tcpdump -i pflog0" \
+  pftail="tcpdump -i pflog0" \
   pftailb="pftail action block" \
   pftailp="pftail action pass"
 
 # pkg
 alias \
   pkgL="pkgq -L" \
-  pkga="doas pkg_add" \
+  pkga="pkg_add" \
   pkgas="pkga -D snap" \
-  pkgd="doas pkg_delete" \
+  pkgd="pkg_delete" \
   pkgda="pkgd -a" \
   pkgl="pkgq -mz" \
   pkgq="pkg_info" \
   pkgqo="pkgq -E" \
   pkgs="pkgq -Q" \
-  pkgss="pkg_info -D snap -Q" \
+  pkgss="pkgq -D snap -Q" \
   pkgsize="pkgq -s" \
   pkgsizes="pkgsize -D snap" \
   pkgup="pkga -u" \
@@ -250,17 +257,17 @@ alias \
 # sec
 alias \
   nk="nikto -output nikto-\$(today).txt -host" \
-  scan="doas nmap -sn" \
+  scan="nmap -sn" \
   sspl="searchsploit"
 
 # service management
 alias \
-  rc="doas rcctl" \
+  rc="rcctl" \
   rcoff="rc disable" \
   rcon="rc enable" \
-  rcg="rcctl get" \
+  rcg="rc get" \
   rclfail="rc ls failed" \
-  rclon="rcctl ls on" \
+  rclon="rc ls on" \
   rclstr="rc ls started" \
   rcre="rc restart" \
   rcrel="rc reload" \
@@ -271,10 +278,10 @@ alias \
 
 # system
 alias \
-  dsklab="doas disklabel -p g" \
-  dtsu="doas shutdown now" \
-  off="doas shutdown -p now" \
-  re="doas shutdown -r now" \
+  dsklab="disklabel -p g" \
+  dtsu="shutdown now" \
+  off="shutdown -p now" \
+  re="shutdown -r now" \
   up="uptime"
 
 # taskwarrior
@@ -313,13 +320,13 @@ alias \
 # viewing log files
 alias \
   readhttp="less /var/www/logs/access.log" \
-  readmail="doas less /var/log/maillog" \
+  readmail="less /var/log/maillog" \
   readmsg="less /var/log/messages" \
-  readsec="doas less /var/log/secure" \
+  readsec="less /var/log/secure" \
   readx="less /var/log/Xorg.0.log" \
   tailhttp="tail -f /var/www/logs/access.log" \
-  tailmail="doas tail -f /var/log/maillog" \
-  tailmsg="doas tail -f /var/log/messages"
+  tailmail="tail -f /var/log/maillog" \
+  tailmsg="tail -f /var/log/messages"
 
 # web
 alias \
