@@ -44,27 +44,27 @@ must_be_root() {
 bkup() {
   dump -0auf - / \
     | "${compressor}" ${compressor_args} \
-    > /mnt/"${today}"/root"${extension}" &
+    > "/mnt/${today}/root${extension}" &
 
   dump -0auf - /var \
     | "${compressor}" ${compressor_args} \
-    > /mnt/"${today}"/var"${extension}" &
+    > "/mnt/${today}/var${extension}" &
 
   dump -0auf - /home \
     | "${compressor}" ${compressor_args} \
-    > /mnt/"${today}"/home"${extension}" &
+    > "/mnt/${today}/home${extension}" &
 
   dump -0auf - /usr/local \
     | "${compressor}" ${compressor_args} \
-    > /mnt/"${today}"/usr-local"${extension}" &
+    > "/mnt/${today}/usr-local${extension}" &
 
   dump -0auf - /usr/x11R6 \
     | "${compressor}" ${compressor_args} \
-    > /mnt/"${today}"/usr-x11R6"${extension}" &
+    > "/mnt/${today}/usr-x11R6${extension}" &
 
   dump -0auf - /usr \
     | "${compressor}" ${compressor_args} \
-    > /mnt/"${today}"/usr"${extension}" &
+    > "/mnt/${today}/usr${extension}" &
   wait
 }
 
