@@ -1,6 +1,8 @@
 # shellcheck disable=SC2034
 # pywal
-if [ "$(id -u)" != 0 ] && [ -n "${DISPLAY}" ]; then
+if [ "$(id -u)" != 0 ] \
+  && [ -n "${DISPLAY}" ] \
+  && [ -f "${HOME}/.cache/wal/colors.sh" ]; then
   . "${HOME}/.cache/wal/colors.sh"
 fi
 
