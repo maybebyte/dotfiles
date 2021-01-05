@@ -14,12 +14,8 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
 
-sec_print() {
-  printf "%s\\n" "$@"
-}
-
 err() {
-  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 

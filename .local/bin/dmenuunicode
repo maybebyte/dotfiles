@@ -12,12 +12,8 @@ emoji_file="${HOME}/.local/share/emoji"
 # figure out a way to get a consistent display with fontconfig
 emoji_font="Symbola-16"
 
-sec_print() {
-  printf "%s\\n" "$@"
-}
-
 err() {
-  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 

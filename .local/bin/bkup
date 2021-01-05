@@ -26,12 +26,8 @@ named ${today}. It then automatically unmounts /mnt and powers off.
 
 Is this acceptable (y/n)?"
 
-sec_print() {
-  printf "%s\\n" "$@"
-}
-
 err() {
-  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
@@ -73,7 +69,7 @@ prompt() {
   printf %s "${lecture} "
   read -r continue
   while [ "${continue}" != "y" ] && [ "${continue}" != "n" ]; do
-    sec_print "Only 'y' and 'n' are recognized inputs."
+    printf "%s\\n" "Only 'y' and 'n' are recognized inputs."
     printf %s "Is this acceptable? (y/n) "
     read -r continue
   done
@@ -84,12 +80,12 @@ main() {
   prompt
   case "${continue}" in
     n)
-      sec_print "Goodbye."
+      printf "%s\\n" "Goodbye."
       exit 0
       ;;
     y)
       mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
-      sec_print "Dumping filesystems..."
+      printf "%s\\n" "Dumping filesystems..."
       bkup || err "Backup failed."
       umount /mnt || err "Unable to unmount drive"
       shutdown -p now

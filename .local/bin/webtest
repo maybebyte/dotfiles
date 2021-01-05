@@ -22,12 +22,8 @@ srvdir=/var/www/htdocs/aml
 ssg=/home/ashlen/.local/bin/ssg5
 rssg=/home/ashlen/.local/bin/rssg
 
-sec_print() {
-  printf "%s\\n" "$@"
-}
-
 err() {
-  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
@@ -54,7 +50,7 @@ sync_site() {
   find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \; >/dev/null 2>&1
   chown -R ashlen:ashlen ${srvdir} ${webdir}
   rcctl reload httpd >/dev/null
-  sec_print "Web server synced."
+  printf "%s\\n" "Web server synced."
 }
 
 webtest() {

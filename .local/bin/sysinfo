@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# shellcheck disable=SC2154,SC1090
 # Copyright (c) 2020 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
@@ -16,12 +17,12 @@ set -e
 
 # system statistics in a format suitable for lemonbar
 
-sec_print() {
-  printf "%s\\n" "$@"
-}
+# TODO
+# figure out how to set a refresh timer appropriate for each function,
+# rather than a global refresh timer
 
 err() {
-  sec_print "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
@@ -36,17 +37,18 @@ show_date() {
 show_volume() {
   raw_volume=$(sndioctl -n output.level 2>/dev/null)
   # division is used to truncate the resulting floating-point number
-  formatted_volume=$(sec_print "${raw_volume} / 0.01" | bc)
+  # side note: bc(1) needs a newline to work
+  formatted_volume=$(printf "%s\\n" "${raw_volume} / 0.01" | bc)
   if [ "$(sndioctl -n output.mute 2>/dev/null)" = 1 ]; then
-    sec_print "MUTE${delimiter}"
+    printf %s "MUTE${delimiter}"
   else
-    sec_print "vol: ${formatted_volume}%${delimiter}"
+    printf %s "vol: ${formatted_volume}%${delimiter}"
   fi
 }
 
 show_disk_space() {
   diskspace=$(df -h /home | awk '/dev/{print $4}')
-  sec_print "/home: ${diskspace}${delimiter}"
+  printf %s "/home: ${diskspace}${delimiter}"
 }
 
 show_battery() {
@@ -57,23 +59,23 @@ show_battery() {
   percentage="$(apm -l)%"
   case "${adapter}" in
     0)
-      sec_print "bat: ${remaining}, at ${percentage}${delimiter}"
+      printf %s "bat: ${remaining}, at ${percentage}${delimiter}"
       ;;
     1)
-      sec_print "chr: at ${percentage}${delimiter}"
+      printf %s "chr: at ${percentage}${delimiter}"
       ;;
     2)
-      sec_print "bkup: ${remaining}, at ${percentage}${delimiter}"
+      printf %s "bkup: ${remaining}, at ${percentage}${delimiter}"
       ;;
     *)
-      sec_print ""
+      printf %s ""
       ;;
   esac
 }
 
 show_track() {
   song=$(mpc current)
-  sec_print "${song:-}"
+  printf %s "${song:-}"
 }
 
 show_temp() {
@@ -91,16 +93,16 @@ show_temp() {
       ;;
   esac
   if [ -z "${temperature}" ]; then
-    sec_print ""
+    printf %s ""
   else
-    sec_print "temp: ${temperature} °C"
+    printf %s "temp: ${temperature} °C"
   fi
 }
 
 show_cpu_freq() {
   raw_cpu_freq=$(sysctl -n hw.cpuspeed)
-  formatted_cpu_freq=$(sec_print "${raw_cpu_freq} * 0.001" | bc)
-  sec_print "cpu: ${formatted_cpu_freq} GHz"
+  formatted_cpu_freq=$(printf "%s\\n" "${raw_cpu_freq} * 0.001" | bc)
+  printf %s "cpu: ${formatted_cpu_freq} GHz"
 }
 
 sysinfo_mpd() {
@@ -109,7 +111,7 @@ sysinfo_mpd() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    sec_print "${stats}"
+    printf %s "${stats}"
     sleep 5
   done
 }
@@ -120,7 +122,7 @@ sysinfo_no_mpd() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    sec_print "${stats}"
+    printf %s "${stats}"
     sleep 5
   done
 }
