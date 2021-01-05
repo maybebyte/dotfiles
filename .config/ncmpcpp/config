@@ -2,6 +2,6 @@ lyrics_directory = ~/.config/ncmpcpp/lyrics
 mouse_support = no
 mpd_connection_timeout = 5
 mpd_host = /var/run/mpd/socket
-mpd_music_dir = ~/Music/
+mpd_music_dir = /mnt/music
 ncmpcpp_directory = ~/.config/ncmpcpp
 user_interface = alternative
