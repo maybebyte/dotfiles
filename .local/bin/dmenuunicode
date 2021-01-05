@@ -8,6 +8,10 @@ set -e
 
 emoji_file="${HOME}/.local/share/emoji"
 
+# TODO
+# figure out a way to get a consistent display with fontconfig
+emoji_font="Symbola-16"
+
 sec_print() {
   printf "%s\\n" "$@"
 }
@@ -23,7 +27,7 @@ import_colors() {
 
 menu() {
   dmenu -i -l 20 \
-    -fn "mono-20" \
+    -fn "${emoji_font}" \
     -nb "${color0}" \
     -nf "${color3}" \
     -sb "${color0}" \
