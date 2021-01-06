@@ -40,15 +40,15 @@ show_volume() {
   # side note: bc(1) needs a newline to work
   formatted_volume=$(printf "%s\\n" "${raw_volume} / 0.01" | bc)
   if [ "$(sndioctl -n output.mute 2>/dev/null)" = 1 ]; then
-    printf %s "MUTE${delimiter}"
+    printf "%s" "MUTE${delimiter}"
   else
-    printf %s "vol: ${formatted_volume}%${delimiter}"
+    printf "%s" "vol: ${formatted_volume}%${delimiter}"
   fi
 }
 
 show_disk_space() {
   diskspace=$(df -h /home | awk '/dev/{print $4}')
-  printf %s "/home: ${diskspace}${delimiter}"
+  printf "%s" "/home: ${diskspace}${delimiter}"
 }
 
 show_battery() {
@@ -59,23 +59,23 @@ show_battery() {
   percentage="$(apm -l)%"
   case "${adapter}" in
     0)
-      printf %s "bat: ${remaining}, at ${percentage}${delimiter}"
+      printf "%s" "bat: ${remaining}, at ${percentage}${delimiter}"
       ;;
     1)
-      printf %s "chr: at ${percentage}${delimiter}"
+      printf "%s" "chr: at ${percentage}${delimiter}"
       ;;
     2)
-      printf %s "bkup: ${remaining}, at ${percentage}${delimiter}"
+      printf "%s" "bkup: ${remaining}, at ${percentage}${delimiter}"
       ;;
     *)
-      printf %s ""
+      printf "%s" ""
       ;;
   esac
 }
 
 show_track() {
   song=$(mpc current)
-  printf %s "${song:-}"
+  printf "%s" "${song:-}"
 }
 
 show_temp() {
@@ -93,16 +93,16 @@ show_temp() {
       ;;
   esac
   if [ -z "${temperature}" ]; then
-    printf %s ""
+    printf "%s" ""
   else
-    printf %s "temp: ${temperature} °C"
+    printf "%s" "temp: ${temperature} °C"
   fi
 }
 
 show_cpu_freq() {
   raw_cpu_freq=$(sysctl -n hw.cpuspeed)
   formatted_cpu_freq=$(printf "%s\\n" "${raw_cpu_freq} * 0.001" | bc)
-  printf %s "cpu: ${formatted_cpu_freq} GHz"
+  printf "%s" "cpu: ${formatted_cpu_freq} GHz"
 }
 
 sysinfo_mpd() {
@@ -111,7 +111,7 @@ sysinfo_mpd() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    printf %s "${stats}"
+    printf "%s" "${stats}"
     sleep 5
   done
 }
@@ -122,7 +122,7 @@ sysinfo_no_mpd() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    printf %s "${stats}"
+    printf "%s" "${stats}"
     sleep 5
   done
 }

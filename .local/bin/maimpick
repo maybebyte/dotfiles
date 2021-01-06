@@ -37,7 +37,7 @@ menu() {
 }
 
 print_options() {
-  printf %s "${options}"
+  printf "%s" "${options}"
 }
 
 cur_date() {

@@ -66,11 +66,11 @@ bkup() {
 
 prompt() {
   banner "bkup"
-  printf %s "${lecture} "
+  printf "%s" "${lecture} "
   read -r continue
   while [ "${continue}" != "y" ] && [ "${continue}" != "n" ]; do
     printf "%s\\n" "Only 'y' and 'n' are recognized inputs."
-    printf %s "Is this acceptable? (y/n) "
+    printf "%s" "Is this acceptable? (y/n) "
     read -r continue
   done
 }
