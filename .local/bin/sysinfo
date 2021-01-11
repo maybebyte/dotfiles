@@ -59,13 +59,13 @@ show_battery() {
   percentage="$(apm -l)%"
   case "${adapter}" in
     0)
-      printf "%s" "bat: ${remaining}, at ${percentage}${delimiter}"
+      printf "%s" "bat: ${remaining}, at ${percentage}"
       ;;
     1)
-      printf "%s" "chr: at ${percentage}${delimiter}"
+      printf "%s" "chr: at ${percentage}"
       ;;
     2)
-      printf "%s" "bkup: ${remaining}, at ${percentage}${delimiter}"
+      printf "%s" "bkup: ${remaining}, at ${percentage}"
       ;;
     *)
       printf "%s" ""
@@ -95,7 +95,7 @@ show_temp() {
   if [ -z "${temperature}" ]; then
     printf "%s" ""
   else
-    printf "%s" "temp: ${temperature} °C"
+    printf "%s" "${delimiter}temp: ${temperature} °C"
   fi
 }
 
