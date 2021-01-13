@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# shellcheck disable=SC2086
+# shellcheck disable=SC2086,SC1090,SC2154
 # command_maim_args doesn't work when quoted, so SC2086 is disabled
 set -e
 
