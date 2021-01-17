@@ -9,7 +9,7 @@ fi
 if command -v tmux >/dev/null 2>&1; then
   # if not inside a tmux session, and if no session is started, start a new
   # session
-  [ -z "${TMUX}" ] && (tmux attach >/dev/null 2>&1 || tmux)
+  [ -z "${TMUX}" ] && (tmux attach || tmux) >/dev/null 2>&1
 fi
 
 # ksh options
