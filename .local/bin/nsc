@@ -28,12 +28,12 @@ create_workdir() {
 }
 
 nsc() {
-  priv_elev nmap -A -v -p 0-65535 --osscan-limit \
+  priv nmap -A -v -p 0-65535 --osscan-limit \
     --privileged -oA "${workdir}/nmap-$(today)" "$1"
 }
 
 fix_perms() {
-  priv_elev chown -R ashlen:ashlen "${sec}"
+  priv chown -R ashlen:ashlen "${sec}"
 }
 
 main() {

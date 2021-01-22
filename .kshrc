@@ -1,9 +1,10 @@
 # shellcheck disable=SC2034,SC1090
+. "${HOME}/.local/bin/libr"
+
 # pywal
 if [ "$(id -u)" != 0 ] \
-  && [ -n "${DISPLAY}" ] \
   && [ -f "${HOME}/.cache/wal/colors.sh" ]; then
-  . "${HOME}/.cache/wal/colors.sh"
+  import_colors
 fi
 
 if command -v tmux >/dev/null 2>&1; then
@@ -83,14 +84,6 @@ nic=$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':') \
 userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
   && export userjs
 
-# needed for aliases to expand when {doas,sudo} is the first part of a
-# command
-if command -v doas >/dev/null 2>&1; then
-  alias doas="doas "
-elif command -v sudo >/dev/null 2>&1; then
-  alias sudo="sudo "
-fi
-
 # assorted
 alias \
   b64="openssl enc -base64" \
@@ -103,7 +96,6 @@ alias \
   nb="newsboat" \
   o="mimeopen" \
   rmus="mus --host 192.168.1.79" \
-  today="date '+%Y-%m-%d'" \
   tuir="torsocks tuir" \
   unlockhdd="bioctl -c C -l sd2a softraid0" \
   yank="xclip -selection clipboard"

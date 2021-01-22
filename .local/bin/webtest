@@ -29,15 +29,15 @@ gen_site() {
 }
 
 sync_site() {
-  # oddly, can't call this in the form 'priv_elev sync_site' in
+  # oddly, can't call this in the form 'priv sync_site' in
   # webtest(). thus, a heredoc is needed.
-  priv_elev /usr/bin/env sh <<EOF
+  priv /usr/bin/env sh <<EOF
   rm -rf ${srvdir:?}
   mkdir -p ${srvdir}
   mv ${webdir}/* ${srvdir}/
   find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \\; >/dev/null 2>&1
   find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \\; >/dev/null 2>&1
-  chown -R ashlen:ashlen ${srvdir} ${webdir}
+  chown -R ashlen:ashlen ${srvdir}
   rcctl reload httpd >/dev/null
 EOF
 }
