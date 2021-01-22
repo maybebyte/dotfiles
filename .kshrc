@@ -19,5 +19,5 @@ set -o \
   vi-esccomplete
 
 for srcfile in aliases functions prompt vars; do
-  . "${HOME}/.config/shell/${srcfile}"
+  . "${HOME}/.config/ksh/${srcfile}"
 done
