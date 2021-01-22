@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# essentially, anything too simple to warrant its own shell script
+
+anonread() {
+  anonftp -o - "$1" | zathura -
+}
+
+aprv() {
+  apr -S "$(uname -m)" any="$1"
+}
+
+cht() {
+  curl cht.sh/"$1"
+}
+
+grabipv4() {
+  host -t A "$1" | awk '{print $4}'
+}
+
+grabipv6() {
+  host -t AAAA "$1" | awk '{print $5}'
+}

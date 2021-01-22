@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+# use vim if it's installed, vi otherwise
+if command -v nvim >/dev/null; then
+  EDITOR="nvim"
+else
+  EDITOR="vi"
+fi
+
+# use colorls if it's installed, ls otherwise
+if command -v colorls >/dev/null; then
+  ls="colorls"
+else
+  ls="ls"
+fi
+
+export \
+  BROWSER="firefox" \
+  CLICOLOR=1 \
+  FCEDIT="${EDITOR}" \
+  GNUPGHOME="${HOME}/.config/gnupg" \
+  HISTFILE="${HOME}/.history" \
+  HISTSIZE=10000 \
+  LESS="-iMR" \
+  PAGER="less" \
+  QT_STYLE_OVERRIDE="adwaita" \
+  READER="zathura" \
+  TERMINAL="xst" \
+  VISUAL="${EDITOR}" \
+  site="https://amissing.link"
+
+# PATH acts funny w/ indentation
+if [ -d "/data/data/com.termux" ]; then
+  export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
+/data/data/com.termux/files/usr/bin/applets"
+else
+  export PATH="${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
+/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games"
+fi
+
+gateway=$(netstat -rn 2>/dev/null | awk '/default/{print $2}') \
+  && export gateway
+
+nic=$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':') \
+  && export nic
+
+userjs=$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null) \
+  && export userjs
