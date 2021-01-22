@@ -218,6 +218,14 @@ alias \
   tlan="ping \${gateway}" \
   tnet="ping \${site##*//}"
 
+grabipv4() {
+  host -t A "$1" | awk '{print $4}'
+}
+
+grabipv6() {
+  host -t AAAA "$1" | awk '{print $5}'
+}
+
 # pf
 alias \
   pfc="pfctl" \
