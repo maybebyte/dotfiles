@@ -13,6 +13,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
+. "${HOME}/.local/bin/libr"
 
 compressor="bzip2"
 compressor_args="-c"
@@ -25,17 +26,6 @@ ${compressor} and places the backups inside /mnt in a folder
 named ${today}. It then automatically unmounts /mnt and powers off.
 
 Is this acceptable (y/n)?"
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
-
-must_be_root() {
-  if [ "$(id -u)" != 0 ]; then
-    err "Execute $(basename "$0") with root privileges."
-  fi
-}
 
 bkup() {
   dump -0auf - / \

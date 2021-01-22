@@ -13,50 +13,39 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
+. "${HOME}/.local/bin/libr"
 
-# needs root privileges
-
-markdowndir=/home/ashlen/builds/website_md
-webdir=/home/ashlen/builds/website
-srvdir=/var/www/htdocs/aml
-ssg=/home/ashlen/.local/bin/ssg5
-rssg=/home/ashlen/.local/bin/rssg
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
-
-must_be_root() {
-  if [ "$(id -u)" != 0 ]; then
-    err "Execute $(basename "$0") with root privileges."
-  fi
-}
+markdowndir="${HOME}/builds/website_md"
+webdir="${HOME}/builds/website"
+srvdir="/var/www/htdocs/aml"
 
 gen_site() {
-  rm -rf ${webdir:?}
-  mkdir -p ${webdir}
-  ${ssg} ${markdowndir} ${webdir} "Ashlen" \
+  rm -rf "${webdir:?}"
+  mkdir -p "${webdir}"
+  ssg5 "${markdowndir}" "${webdir}" "Ashlen" \
     "https://amissing.link" >/dev/null 2>&1
-  ${rssg} ${markdowndir}/articles.md 2>/dev/null \
+  rssg "${markdowndir}/articles.md" 2>/dev/null \
     "Newsletter - amissing.link" > "${webdir}/rss.xml"
 }
 
 sync_site() {
+  # oddly, can't call this in the form 'priv_elev sync_site' in
+  # webtest(). thus, a heredoc is needed.
+  priv_elev /usr/bin/env sh <<EOF
   rm -rf ${srvdir:?}
   mkdir -p ${srvdir}
   mv ${webdir}/* ${srvdir}/
-  find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \; >/dev/null 2>&1
-  find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \; >/dev/null 2>&1
+  find ${srvdir} -type f ! -perm 644 -exec chmod 644 "{}" \\; >/dev/null 2>&1
+  find ${srvdir} -type d ! -perm 755 -exec chmod 755 "{}" \\; >/dev/null 2>&1
   chown -R ashlen:ashlen ${srvdir} ${webdir}
   rcctl reload httpd >/dev/null
-  printf "%s\\n" "Web server synced."
+EOF
 }
 
 webtest() {
-  must_be_root
   gen_site || err "Couldn't generate site."
   sync_site || err "Unable to sync web server."
+  printf "%s\\n" "Web server synced."
 }
 
 webtest || err "Webtest failed."

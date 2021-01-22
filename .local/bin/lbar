@@ -13,11 +13,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
+. "${HOME}/.local/bin/libr"
 
 lbar() {
   lemonbar-xft -f sans-14 -f "Noto Sans CJK JP-14" -p -d

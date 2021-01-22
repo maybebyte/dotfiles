@@ -2,6 +2,7 @@
 # shellcheck disable=SC2086,SC1090,SC2154
 # command_maim_args doesn't work when quoted, so SC2086 is disabled
 set -e
+. "${HOME}/.local/bin/libr"
 
 # rewrite of Luke Smith's maimpick
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick
@@ -16,15 +17,6 @@ selected area (copy)
 current window (copy)
 full screen (copy)"
 savedir="${HOME}/screenshots"
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
-
-import_colors() {
-  . "${HOME}/.cache/wal/colors.sh"
-}
 
 menu() {
   dmenu -i -l 6 \

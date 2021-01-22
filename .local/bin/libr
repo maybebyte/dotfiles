@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+# 'libr' is a file with frequently used functions that may be sourced
+# for readability purposes
+
+if command -v doas >/dev/null 2>&1; then
+  alias priv_elev="doas"
+elif command -v sudo >/dev/null 2>&1; then
+  alias priv_elev="sudo"
+fi
+
+err() {
+  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  exit 1
+}
+
+import_colors() {
+  . "${HOME}/.cache/wal/colors.sh"
+}
+
+must_be_root() {
+  if [ "$(id -u)" != 0 ]; then
+    err "Execute $(basename "$0") with root privileges."
+  fi
+}
+
+today() {
+  date '+%Y-%m-%d'
+}

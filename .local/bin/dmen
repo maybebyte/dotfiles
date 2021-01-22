@@ -14,15 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
-
-import_colors() {
-  . "${HOME}/.cache/wal/colors.sh"
-}
+. "${HOME}/.local/bin/libr"
 
 #-fn ## font used
 #-nb ## normal background color

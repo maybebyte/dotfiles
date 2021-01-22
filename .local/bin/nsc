@@ -13,23 +13,14 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
+. "${HOME}/.local/bin/libr"
 
 # (n)etwork (sc)anner
 # creates dir, places nmap scan results in dir
 
 # usage: nsc [target] [options]
 
-# ${sec} needs to be an absolute path, otherwise will save in /root/
-sec="/home/ashlen/sec"
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
-
-today() {
-  date '+%Y-%m-%d'
-}
+sec="${HOME}/sec"
 
 create_workdir() {
   mkdir -p "${sec}/$1/nmap"
@@ -37,22 +28,15 @@ create_workdir() {
 }
 
 nsc() {
-  nmap -A -v -p 0-65535 --osscan-limit \
+  priv_elev nmap -A -v -p 0-65535 --osscan-limit \
     --privileged -oA "${workdir}/nmap-$(today)" "$1"
 }
 
 fix_perms() {
-  chown -R ashlen:ashlen "${sec}"
-}
-
-must_be_root() {
-  if [ "$(id -u)" != 0 ]; then
-    err "Execute $(basename "$0") with root privileges."
-  fi
+  priv_elev chown -R ashlen:ashlen "${sec}"
 }
 
 main() {
-  must_be_root
   create_workdir "$1" || err "Couldn't create directory, do you have permission?"
   nsc "$@" || err "Couldn't scan target."
   fix_perms || err "Unable to fix permissions."

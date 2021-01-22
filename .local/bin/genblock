@@ -13,17 +13,13 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
+. "${HOME}/.local/bin/libr"
 
 firebog=$(ftp -Vo - https://v.firebog.net/hosts/lists.php?type=tick)
 tmpdir=$(mktemp -d)
 raw_blocklist="${tmpdir}/raw_blocklist.txt"
 tmp_blocklist="${tmpdir}/unbound_blocklist.txt"
 blocklist="/var/unbound/etc/blocklist.txt"
-
-err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
-  exit 1
-}
 
 backup() {
   if [ -f "${blocklist}" ]; then
