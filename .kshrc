@@ -2,8 +2,7 @@
 . "${HOME}/.local/bin/libr"
 
 # pywal
-if [ "$(id -u)" != 0 ] \
-  && [ -f "${HOME}/.cache/wal/colors.sh" ]; then
+if [ -f "${HOME}/.cache/wal/colors.sh" ]; then
   import_colors
 fi
 
@@ -17,6 +16,10 @@ fi
 set -o \
   vi \
   vi-esccomplete
+
+if printf "%s" "${KSH_VERSION}" | grep -qi "pd ksh"; then
+  set -o vi-show8
+fi
 
 for srcfile in aliases functions prompt vars; do
   . "${HOME}/.config/ksh/${srcfile}"
