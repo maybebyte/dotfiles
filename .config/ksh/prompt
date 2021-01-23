@@ -1,31 +1,35 @@
 #!/usr/bin/env sh
 esc=$(print \\001)
-case "$(printf "%s\\n" "$0")" in
-  *ksh)
-    # swaps colors when uid is 0, i.e. root
-    case "$(id -u)" in
-      0)
-        _ps1_user="${esc}\\033[1;33m${esc}"
-        _ps1_path="${esc}\\033[1;35m${esc}"
-        ;;
-      *)
-        _ps1_user="${esc}\\033[1;35m${esc}"
-        _ps1_path="${esc}\\033[1;33m${esc}"
-         ;;
-    esac
+
+case "$(id -u)" in
+  0)
+    _ps1_user="${esc}\\033[1;33m${esc}"
+    _ps1_path="${esc}\\033[1;35m${esc}"
+    ;;
+  *)
+    _ps1_user="${esc}\\033[1;35m${esc}"
+    _ps1_path="${esc}\\033[1;33m${esc}"
+     ;;
+esac
 
 _ps1_bracket="${esc}\\033[1;36m${esc}"
 _ps1_hostname="${esc}\\033[1;32m${esc}"
 _ps1_clear="${esc}\\033[0m${esc}"
 
-  # unintended spaces occur w/ indentation
-  # TODO: if ${PWD} = ${HOME}, make it a tilde
+case $(printf "%s\\n" "${KSH_VERSION}" | awk '{print $1, $2}') in
+  "@(#)PD KSH")
+# unintended spaces occur w/ indentation
 PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
 ${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
-${_ps1_path}\${PWD}${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
-    ;;
+${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
+  ;;
+  "@(#)MIRBSD KSH")
+PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
+${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
+${_ps1_path}$(printf "%s\\n" "\${PWD/#${HOME}/\\~}")\
+${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
+  ;;
   *)
-    printf "%s\\n" "Prompt is only compatible with ksh." >&2
+    printf "%s\\n" "Custom PS1 not available for this variant of $0." >&2
     return 1
-    ;;
 esac
