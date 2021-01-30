@@ -56,21 +56,25 @@ format_blocklist() {
 }
 
 install_blocklist() {
-  cp "${tmp_blocklist}" "${blocklist}"
-  chmod 0444 "${blocklist}"
+  priv /usr/bin/env sh <<EOF
+cp "${tmp_blocklist}" "${blocklist}"
+chmod 0444 "${blocklist}"
+EOF
 }
 
 restart_dns() {
   if unbound-checkconf >/dev/null 2>&1 \
     && rcctl ls on 2>/dev/null \
     | grep -qE "^unbound$"; then
-      rcctl restart unbound >/dev/null 2>&1
+      priv rcctl restart unbound >/dev/null 2>&1
   elif [ -f "${blocklist}.bak" ]; then
-    mv "${blocklist}.bak" "${blocklist}"
+    priv mv "${blocklist}.bak" "${blocklist}"
   else
-    rm "${blocklist}"
-    touch "${blocklist}"
-    chmod 0444 "${blocklist}"
+    priv /usr/bin/env sh <<EOF
+rm "${blocklist}"
+touch "${blocklist}"
+chmod 0444 "${blocklist}"
+EOF
   fi
 }
 
