@@ -23,7 +23,7 @@ blocklist="/var/unbound/etc/blocklist.txt"
 
 backup() {
   if [ -f "${blocklist}" ]; then
-    mv "${blocklist}" "${blocklist}.bak"
+    priv mv "${blocklist}" "${blocklist}.bak"
   fi
 }
 
