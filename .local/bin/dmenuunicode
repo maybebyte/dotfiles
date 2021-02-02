@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC1090,SC2154
-. "${HOME}/.local/bin/libr"
 set -e
+. "${HOME}/.local/bin/libr"
 # rewrite of Luke Smith's dmenuunicode:
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
 
