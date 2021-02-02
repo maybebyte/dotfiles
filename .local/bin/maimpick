@@ -18,16 +18,6 @@ current window (copy)
 full screen (copy)"
 savedir="${HOME}/screenshots"
 
-menu() {
-  dmenu -i -l 6 \
-    -fn 'mono-20' \
-    -nb "${color0}" \
-    -nf "${color3}" \
-    -sb "${color0}" \
-    -sf "${color7}" \
-    -p 'Screenshot which area?'
-}
-
 print_options() {
   printf "%s" "${options}"
 }
@@ -70,7 +60,7 @@ maim_full_copy() {
 }
 
 present_options() {
-  case "$(print_options | menu)" in
+  case "$(print_options | dmen -l 6 -p "Screenshot which area?")" in
     "a selected area") maim_sel_save ;;
     "current window") maim_cur_save ;;
     "full screen") maim_full_save ;;

@@ -1,0 +1,35 @@
+#!/bin/sh
+while read -r file; do
+  case "$1" in
+  # delete file
+  "d")
+    if [ "$(printf "No\\nYes" \
+      | dmen -p "Really delete ${file}?")" = "Yes" ]; then
+        rm "${file}"
+        notify-send "${file} deleted."
+    fi
+    ;;
+  # rotate clockwise
+  "r")
+    convert -rotate 90 "${file}" "${file}"
+    ;;
+  # rotate counter-clockwise
+  "R")
+    convert -rotate -90 "${file}" "${file}"
+    ;;
+  # horizontally invert file, aka 'flop' it
+  "f")
+    convert -flop "${file}" "${file}"
+    ;;
+  # yank the relative file path
+  "y")
+    printf %s "${file}" | xclip -selection clipboard
+    notify-send "${file} copied to clipboard."
+    ;;
+  # yank the absolute file path
+  "Y")
+    printf %s "$(readlink -f "${file}")" | xclip -selection clipboard
+    notify-send "$(readlink -f "${file}") copied to clipboard."
+    ;;
+  esac
+done

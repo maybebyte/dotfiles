@@ -27,3 +27,12 @@ must_be_root() {
 today() {
   date '+%Y-%m-%d'
 }
+
+dmen() {
+  dmenu "$@" -i \
+    -fn "mono-20" \
+    -nb "${color0}" \
+    -nf "${color3}" \
+    -sb "${color0}" \
+    -sf "${color7}"
+}
