@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 . "${HOME}/.local/bin/libr"
 import_colors
 
@@ -11,8 +11,8 @@ Yes
 No
 EOF
     )" = "Yes" ]; then
-        rm "${file}"
-        notify-send "${file} deleted."
+      rm "${file}"
+      notify-send "${file} deleted."
     fi
     ;;
   # rotate clockwise
