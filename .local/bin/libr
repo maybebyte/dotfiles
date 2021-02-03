@@ -18,6 +18,15 @@ import_colors() {
   . "${HOME}/.cache/wal/colors.sh"
 }
 
+menu() {
+  dmenu "$@" -i \
+    -fn "mono-20" \
+    -nb "${color0}" \
+    -nf "${color3}" \
+    -sb "${color0}" \
+    -sf "${color7}"
+}
+
 must_be_root() {
   if [ "$(id -u)" != 0 ]; then
     err "Execute $(basename "$0") with root privileges."
@@ -28,11 +37,6 @@ today() {
   date '+%Y-%m-%d'
 }
 
-dmen() {
-  dmenu "$@" -i \
-    -fn "mono-20" \
-    -nb "${color0}" \
-    -nf "${color3}" \
-    -sb "${color0}" \
-    -sf "${color7}"
+yank() {
+  xclip -selection clipboard
 }

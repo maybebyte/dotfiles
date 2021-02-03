@@ -26,8 +26,8 @@ cur_date() {
   date '+%Y%m%d-%H%M%S'
 }
 
-yank() {
-  xclip -selection clipboard -t image/png || err "Couldn't copy to clipboard."
+yankpic() {
+  yank -t image/png || err "Couldn't copy to clipboard."
 }
 
 maim_sel_save() {
@@ -36,7 +36,7 @@ maim_sel_save() {
 }
 
 maim_sel_copy() {
-  maim ${common_maim_args} -s | yank
+  maim ${common_maim_args} -s | yankpic
 }
 
 maim_cur_save() {
@@ -47,7 +47,7 @@ maim_cur_save() {
 
 maim_cur_copy() {
   maim ${common_maim_args} -i "$(xdotool getactivewindow)" \
-    | yank
+    | yankpic
 }
 
 maim_full_save() {
@@ -56,11 +56,11 @@ maim_full_save() {
 }
 
 maim_full_copy() {
-  maim ${common_maim_args} | yank
+  maim ${common_maim_args} | yankpic
 }
 
 present_options() {
-  case "$(print_options | dmen -l 6 -p "Screenshot which area?")" in
+  case "$(print_options | menu -l 6 -p "Screenshot which area?")" in
     "a selected area") maim_sel_save ;;
     "current window") maim_cur_save ;;
     "full screen") maim_full_save ;;

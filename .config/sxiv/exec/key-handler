@@ -1,10 +1,16 @@
 #!/bin/sh
+. "${HOME}/.local/bin/libr"
+import_colors
+
 while read -r file; do
   case "$1" in
   # delete file
   "d")
-    if [ "$(printf "No\\nYes" \
-      | dmen -p "Really delete ${file}?")" = "Yes" ]; then
+    if [ "$(menu -p "Really delete ${file}?" <<EOF
+Yes
+No
+EOF
+    )" = "Yes" ]; then
         rm "${file}"
         notify-send "${file} deleted."
     fi
@@ -23,12 +29,12 @@ while read -r file; do
     ;;
   # yank the relative file path
   "y")
-    printf %s "${file}" | xclip -selection clipboard
+    printf %s "${file}" | yank
     notify-send "${file} copied to clipboard."
     ;;
   # yank the absolute file path
   "Y")
-    printf %s "$(readlink -f "${file}")" | xclip -selection clipboard
+    printf %s "$(readlink -f "${file}")" | yank
     notify-send "$(readlink -f "${file}") copied to clipboard."
     ;;
   esac
