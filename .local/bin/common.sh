@@ -1,6 +1,4 @@
-#!/usr/bin/env sh
-
-# 'libr' is a file with frequently used functions that may be sourced
+# 'common.sh' is a file with frequently used functions that may be sourced
 # for readability purposes
 
 if command -v doas >/dev/null 2>&1; then

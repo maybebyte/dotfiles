@@ -1,5 +1,3 @@
-#!/usr/bin/env sh
-
 # essentially, anything too simple to warrant its own shell script
 
 anonread() {

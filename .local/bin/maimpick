@@ -2,7 +2,7 @@
 # shellcheck disable=SC2086,SC1090,SC2154
 # command_maim_args doesn't work when quoted, so SC2086 is disabled
 set -e
-. "${HOME}/.local/bin/libr"
+. "${HOME}/.local/bin/common.sh"
 
 # rewrite of Luke Smith's maimpick
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick

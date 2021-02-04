@@ -1,4 +1,3 @@
-#!/usr/bin/env sh
 esc=$(print \\001)
 
 case "$(id -u)" in

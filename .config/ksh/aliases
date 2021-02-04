@@ -1,5 +1,3 @@
-#!/usr/bin/env sh
-
 # assorted
 alias \
   b64="openssl enc -base64" \
