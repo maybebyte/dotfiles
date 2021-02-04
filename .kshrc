@@ -1,5 +1,5 @@
 # shellcheck disable=SC2034,SC1090
-. "${HOME}/.local/bin/libr"
+. "${HOME}/.local/bin/common.sh"
 
 # pywal
 if [ -f "${HOME}/.cache/wal/colors.sh" ]; then

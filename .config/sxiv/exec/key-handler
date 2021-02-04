@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-. "${HOME}/.local/bin/libr"
+. "${HOME}/.local/bin/common.sh"
 import_colors
 
 while read -r file; do
