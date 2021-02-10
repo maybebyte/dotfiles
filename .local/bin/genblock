@@ -33,48 +33,47 @@ dl_blocklist() {
   done
 }
 
-format_blocklist_unbound() {
-  {
-  grep -E '^0.0.0.0' "${raw_blocklist}" \
-    | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}'
+format_blocklist() {
+  case "${dns}" in
+    "unwind")
+      (
+      grep -E '^0.0.0.0' "${raw_blocklist}" \
+        | awk '$1 == "0.0.0.0" {print $2}'
 
-  grep -E '^127.0.0.1' "${raw_blocklist}" \
-    | grep -v "localhost" \
-    | awk '$1 == "127.0.0.1" {print "local-zone: \""$2"\" always_refuse"}'
+      grep -E '^127.0.0.1' "${raw_blocklist}" \
+        | grep -v "localhost" \
+        | awk '$1 == "127.0.0.1" {print $2}'
 
-  # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
-  printf "%s\\n" 'local-zone: "use-application-dns.net" always_refuse';
-  } | sed 's///g' \
-    | sort \
-    | uniq \
-    >> "${tmp_blocklist}"
-  # the sed expression gets rid of the '^M' control character in
-  # blocklists
+      # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
+      printf "%s\\n" 'use-application-dns.net'
+      )
+      ;;
+    "unbound")
+      (
+      grep -E '^0.0.0.0' "${raw_blocklist}" \
+        | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}'
 
-  # given that '^M' represents a carriage return, it may not display
-  # properly in various places
-}
+      grep -E '^127.0.0.1' "${raw_blocklist}" \
+        | grep -v "localhost" \
+        | awk '$1 == "127.0.0.1" {print "local-zone: \""$2"\" always_refuse"}'
 
-format_blocklist_unwind() {
-  {
-  grep -E '^0.0.0.0' "${raw_blocklist}" \
-    | awk '$1 == "0.0.0.0" {print $2}'
+      # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
+      printf "%s\\n" 'local-zone: "use-application-dns.net" always_refuse'
+      )
+      ;;
+    *)
+      err "Only unwind(8) and unbound(8) are supported."
+      ;;
+  esac \
+      | sed 's///g' \
+      | sort \
+      | uniq \
+      >> "${tmp_blocklist}"
+    # the sed expression gets rid of the '^M' control character in
+    # blocklists
 
-  grep -E '^127.0.0.1' "${raw_blocklist}" \
-    | grep -v "localhost" \
-    | awk '$1 == "127.0.0.1" {print $2}'
-
-  # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
-  printf "%s\\n" 'use-application-dns.net';
-  } | sed 's///g' \
-    | sort \
-    | uniq \
-    >> "${tmp_blocklist}"
-  # the sed expression gets rid of the '^M' control character in
-  # blocklists
-
-  # given that '^M' represents a carriage return, it may not display
-  # properly in various places
+    # given that '^M' represents a carriage return, it may not display
+    # properly in various places
 }
 
 install_blocklist() {
@@ -84,38 +83,38 @@ chmod 0444 "${blocklist}"
 EOF
 }
 
-restart_unwind() {
-  # since the script checks to see which of these two is enabled in
-  # main(), there's no need for a check here. instead, this function checks
-  # that the configuration is sane.
-  if unwind -n >/dev/null 2>&1; then
-    priv rcctl restart unwind >/dev/null 2>&1
-  elif [ -f "${blocklist}.bak" ]; then
-    priv mv "${blocklist}.bak" "${blocklist}"
-  else
-    priv /usr/bin/env sh <<EOF
+restart_dns() {
+  case "${dns}" in
+    "unwind")
+      if unwind -n >/dev/null 2>&1; then
+        priv rcctl restart unwind >/dev/null 2>&1
+      elif [ -f "${blocklist}.bak" ]; then
+        priv mv "${blocklist}.bak" "${blocklist}"
+      else
+        priv /usr/bin/env sh <<EOF
 rm "${blocklist}"
 touch "${blocklist}"
 chmod 0444 "${blocklist}"
 EOF
-  fi
-}
-
-restart_unbound() {
-  # since the script checks to see which of these two is enabled in
-  # main(), there's no need for a check here. instead, this function checks
-  # that the configuration is sane.
-  if unbound-checkconf >/dev/null 2>&1; then
-    priv rcctl restart unbound >/dev/null 2>&1
-  elif [ -f "${blocklist}.bak" ]; then
-    priv mv "${blocklist}.bak" "${blocklist}"
-  else
-    priv /usr/bin/env sh <<EOF
+      fi
+      ;;
+    "unbound")
+      if unbound-checkconf >/dev/null 2>&1; then
+        priv rcctl restart unbound >/dev/null 2>&1
+      elif [ -f "${blocklist}.bak" ]; then
+        priv mv "${blocklist}.bak" "${blocklist}"
+      else
+        priv /usr/bin/env sh <<EOF
 rm "${blocklist}"
 touch "${blocklist}"
 chmod 0444 "${blocklist}"
 EOF
-  fi
+      fi
+      ;;
+    *)
+      err "Only unwind(8) and unbound(8) are supported."
+      ;;
+  esac
 }
 
 rm_tmpdir() {
@@ -123,19 +122,18 @@ rm_tmpdir() {
 }
 
 main() {
+  if rcctl ls on 2>/dev/null | grep -qE "^unwind$"; then
+    dns="unwind"
+  elif rcctl ls on 2>/dev/null | grep -qE "^unbound$"; then
+    dns="unbound"
+  else
+    err "Only unwind(8) and unbound(8) are supported. Enable one of them and try again."
+  fi
   dl_blocklist || err "Unable to download lists from firebog.net."
   backup || err "Unable to backup blocklist file."
-  if rcctl ls on 2>/dev/null | grep -qE "^unwind$"; then
-    format_blocklist_unwind || err "Unable to format blocklist."
-    install_blocklist || err "Unable to install blocklist."
-    restart_unwind || err "Unable to restart unwind(8)."
-  elif rcctl ls on 2>/dev/null | grep -qE "^unbound$"; then
-    format_blocklist_unbound || err "Unable to format blocklist."
-    install_blocklist || err "Unable to install blocklist."
-    restart_unbound || err "Unable to restart unbound(8)."
-  else
-    err "Only unwind(8) and unbound(8) are supported. Enable one of these."
-  fi
+  format_blocklist || err "Unable to format blocklist."
+  install_blocklist || err "Unable to install blocklist."
+  restart_dns || err "Unable to restart DNS."
   rm_tmpdir || err "Unable to remove ${tmpdir}."
 }
 
