@@ -27,7 +27,7 @@ backup() {
   fi
 }
 
-dl_blocklist () {
+dl_blocklist() {
   for list in ${firebog}; do
     ftp -o - "${list}" >> "${raw_blocklist}"
   done
