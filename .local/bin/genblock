@@ -18,8 +18,8 @@ set -e
 firebog=$(ftp -Vo - https://v.firebog.net/hosts/lists.php?type=tick)
 tmpdir=$(mktemp -d)
 raw_blocklist="${tmpdir}/raw_blocklist.txt"
-tmp_blocklist="${tmpdir}/unbound_blocklist.txt"
-blocklist="/var/unbound/etc/blocklist.txt"
+tmp_blocklist="${tmpdir}/blocklist.txt"
+blocklist="/etc/blocklist.txt"
 
 backup() {
   if [ -f "${blocklist}" ]; then
@@ -33,7 +33,7 @@ dl_blocklist () {
   done
 }
 
-format_blocklist() {
+format_blocklist_unbound() {
   {
   grep -E '^0.0.0.0' "${raw_blocklist}" \
     | awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}'
@@ -55,6 +55,28 @@ format_blocklist() {
   # properly in various places
 }
 
+format_blocklist_unwind() {
+  {
+  grep -E '^0.0.0.0' "${raw_blocklist}" \
+    | awk '$1 == "0.0.0.0" {print $2}'
+
+  grep -E '^127.0.0.1' "${raw_blocklist}" \
+    | grep -v "localhost" \
+    | awk '$1 == "127.0.0.1" {print $2}'
+
+  # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
+  printf "%s\\n" 'use-application-dns.net';
+  } | sed 's///g' \
+    | sort \
+    | uniq \
+    >> "${tmp_blocklist}"
+  # the sed expression gets rid of the '^M' control character in
+  # blocklists
+
+  # given that '^M' represents a carriage return, it may not display
+  # properly in various places
+}
+
 install_blocklist() {
   priv /usr/bin/env sh <<EOF
 cp "${tmp_blocklist}" "${blocklist}"
@@ -63,10 +85,13 @@ EOF
 }
 
 restart_dns() {
-  if unbound-checkconf >/dev/null 2>&1 \
-    && rcctl ls on 2>/dev/null \
-    | grep -qE "^unbound$"; then
-      priv rcctl restart unbound >/dev/null 2>&1
+  # since the script checks to see which of these two is enabled in
+  # main(), there's no need for a check here. instead, the script checks
+  # that the configuration is sane.
+  if unwind -n >/dev/null 2>&1; then
+    priv rcctl restart unwind >/dev/null 2>&1
+  elif unbound-checkconf >/dev/null 2>&1; then
+    priv rcctl restart unbound >/dev/null 2>&1
   elif [ -f "${blocklist}.bak" ]; then
     priv mv "${blocklist}.bak" "${blocklist}"
   else
@@ -85,9 +110,15 @@ rm_tmpdir() {
 main() {
   dl_blocklist || err "Unable to download lists from firebog.net."
   backup || err "Unable to backup blocklist file."
-  format_blocklist || err "Unable to format blocklist."
+  if rcctl ls on 2>/dev/null | grep -qE "^unwind$"; then
+    format_blocklist_unwind || err "Unable to format blocklist."
+  elif rcctl ls on 2>/dev/null | grep -qE "^unbound$"; then
+    format_blocklist_unbound || err "Unable to format blocklist."
+  else
+    err "Only unwind(8) and unbound(8) are supported. Enable one of these."
+  fi
   install_blocklist || err "Unable to install blocklist."
-  restart_dns || err "Unable to restart unbound(8)."
+  restart_dns || err "Unable to restart DNS."
   rm_tmpdir || err "Unable to remove ${tmpdir}."
 }
 
