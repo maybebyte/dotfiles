@@ -175,7 +175,7 @@ alias \
 
 # system
 alias \
-  dsklab="disklabel -p g" \
+  dsklab="disklabel -h" \
   dtsu="shutdown now" \
   off="shutdown -p now" \
   re="shutdown -r now" \
