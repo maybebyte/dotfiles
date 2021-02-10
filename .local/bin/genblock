@@ -61,9 +61,6 @@ format_blocklist() {
       printf "%s\\n" 'local-zone: "use-application-dns.net" always_refuse'
       )
       ;;
-    *)
-      err "Only unwind(8) and unbound(8) are supported."
-      ;;
   esac \
       | sed 's///g' \
       | sort \
@@ -110,9 +107,6 @@ touch "${blocklist}"
 chmod 0444 "${blocklist}"
 EOF
       fi
-      ;;
-    *)
-      err "Only unwind(8) and unbound(8) are supported."
       ;;
   esac
 }
