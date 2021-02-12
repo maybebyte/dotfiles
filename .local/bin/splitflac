@@ -13,16 +13,27 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-set -e
-. "${HOME}/.local/bin/common.sh"
 
 # dependencies:
 #   - cuetools
 #   - shntool
 
-# usage
-# splitflac [cue file] [FLAC file]
-splitflac() {
+set -e
+. "${HOME}/.local/bin/common.sh"
+
+usage_details="$(basename "$0") requires two arguments.
+
+usage:
+$(basename "$0") [cue file] [FLAC file]"
+
+usage() {
+  for arg in "$1" "$2"; do
+    [ -n "${arg}" ] || err "${usage_details}"
+  done
+}
+
+main() {
+  usage "$@"
   shnsplit -f "$1" -o flac -t "%n %t" "$2" \
     || err "Unable to split the FLAC file."
   mv "$2" "$2.bak"
@@ -30,4 +41,4 @@ splitflac() {
   rm "$2.bak"
 }
 
-splitflac "$@"
+main "$@"
