@@ -35,6 +35,10 @@ today() {
   date '+%Y-%m-%d'
 }
 
+usage() {
+  [ "$#" -eq "${arguments_needed}" ] || err "${usage_details}"
+}
+
 yank() {
   xclip -selection clipboard
 }

@@ -21,14 +21,11 @@
 set -e
 . "${HOME}/.local/bin/common.sh"
 
-usage_details="$(basename "$0") requires two arguments.
+arguments_needed=2
+usage_details="$(basename "$0") requires ${arguments_needed} arguments.
 
 usage:
 $(basename "$0") [cue file] [FLAC file]"
-
-usage() {
-  [ "$#" -eq "2" ] || err "${usage_details}"
-}
 
 main() {
   usage "$@"
