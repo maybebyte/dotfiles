@@ -16,6 +16,12 @@
 set -e
 . "${HOME}/.local/bin/common.sh"
 
+arguments_needed=1
+usage_details="$(basename "$0") requires ${arguments_needed} argument(s).
+
+usage:
+$(basename "$0") [URL]"
+
 viewimg() {
   filename="/tmp/sxiv-$(date '+%Y%m%d-%H%M%S')"
   ftp -Vo "${filename}" "$1" >/dev/null 2>&1
@@ -23,6 +29,7 @@ viewimg() {
 }
 
 main() {
+  usage "$@"
   viewimg "$1"
   wait
   rm "${filename}"

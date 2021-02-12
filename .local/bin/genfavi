@@ -16,8 +16,11 @@
 set -e
 . "${HOME}/.local/bin/common.sh"
 
-# https://www.imagemagick.org/Usage/thumbnails/#favicon
-# usage: genfavi [image]
+arguments_needed=1
+usage_details="$(basename "$0") requires ${arguments_needed} argument(s).
+
+usage:
+$(basename "$0") [image]"
 
 genfavi() {
   convert "$1" -background white \
@@ -29,4 +32,9 @@ genfavi() {
   cp -a favicon.ico favicon.png
 }
 
-genfavi "$@" || err "Unable to generate favicon."
+main() {
+  usage_min "$@"
+  genfavi "$1" || err "Unable to generate favicon."
+}
+
+main "$@"

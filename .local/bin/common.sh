@@ -39,6 +39,10 @@ usage() {
   [ "$#" -eq "${arguments_needed}" ] || err "${usage_details}"
 }
 
+usage_min() {
+  [ "$#" -ge "${arguments_needed}" ] || err "${usage_details}"
+}
+
 yank() {
   xclip -selection clipboard
 }

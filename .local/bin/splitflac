@@ -22,18 +22,22 @@ set -e
 . "${HOME}/.local/bin/common.sh"
 
 arguments_needed=2
-usage_details="$(basename "$0") requires ${arguments_needed} arguments.
+usage_details="$(basename "$0") requires ${arguments_needed} argument(s).
 
 usage:
 $(basename "$0") [cue file] [FLAC file]"
 
-main() {
-  usage "$@"
+splitflac() {
   shnsplit -f "$1" -o flac -t "%n %t" "$2" \
     || err "Unable to split the FLAC file."
   mv "$2" "$2.bak"
   cuetag "$1" ./*.flac || err "Unable to tag FLAC files."
   rm "$2.bak"
+}
+
+main() {
+  usage "$@"
+  splitflac "$@"
 }
 
 main "$@"
