@@ -27,9 +27,7 @@ usage:
 $(basename "$0") [cue file] [FLAC file]"
 
 usage() {
-  for arg in "$1" "$2"; do
-    [ -n "${arg}" ] || err "${usage_details}"
-  done
+  [ "$#" -eq "2" ] || err "${usage_details}"
 }
 
 main() {
