@@ -33,7 +33,7 @@ genfavi() {
 }
 
 main() {
-  usage_min "$@"
+  usage "$@"
   genfavi "$1" || err "Unable to generate favicon."
 }
 
