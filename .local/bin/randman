@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# shellcheck disable=SC1090
 # Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
