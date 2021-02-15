@@ -125,8 +125,8 @@ main() {
     err "Only unwind(8) and unbound(8) are supported. Enable one of them and try again."
   fi
   dl_blocklist || err "Unable to download lists from firebog.net."
-  backup || err "Unable to backup blocklist file."
   format_blocklist || err "Unable to format blocklist."
+  backup || err "Unable to backup blocklist file."
   install_blocklist || err "Unable to install blocklist."
   restart_dns || err "Unable to restart DNS."
   rm_tmpdir || err "Unable to remove ${tmpdir}."
