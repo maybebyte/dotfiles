@@ -60,7 +60,7 @@ show_battery() {
       printf "%s" "bkup: ${remaining}, at ${percentage}"
       ;;
     *)
-      printf "%s" ""
+      return 1
       ;;
   esac
 }
@@ -81,14 +81,10 @@ show_temp() {
         | awk -F "." '{print $1}')
       ;;
     *)
-      temperature=''
+      return 1
       ;;
   esac
-  if [ -z "${temperature}" ]; then
-    printf "%s" ""
-  else
-    printf "%s" "${delimiter}temp: ${temperature} °C"
-  fi
+  printf "%s" "${delimiter}temp: ${temperature} °C"
 }
 
 show_cpu_freq() {
@@ -123,7 +119,7 @@ main() {
   delimiter="  %{F${color3}}|%{F${foreground}}  "
   bgfg="%{B${background}} %{F${foreground}"
   while true; do
-    sysinfo || err "sysinfo() failed"
+    sysinfo || err "sysinfo() failed."
     sleep 5
   done
 }
