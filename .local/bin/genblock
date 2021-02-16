@@ -37,7 +37,7 @@ dl_blocklist() {
 }
 
 gen_domains() {
-  grep -v " localhost" "$1" | \
+  grep -Ev " localhost$" "$1" | \
   (
   grep -E '^0.0.0.0'
   grep -E '^127.0.0.1'
