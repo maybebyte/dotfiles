@@ -8,7 +8,7 @@ case "$(id -u)" in
   *)
     _ps1_user="${esc}\\033[1;35m${esc}"
     _ps1_path="${esc}\\033[1;33m${esc}"
-     ;;
+    ;;
 esac
 
 _ps1_bracket="${esc}\\033[1;36m${esc}"

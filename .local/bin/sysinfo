@@ -97,24 +97,26 @@ show_cpu_freq() {
   printf "%s" "cpu: ${formatted_cpu_freq} GHz"
 }
 
-sysinfo_mpd() {
+# TODO: change so that sysinfo() will only print track if MPD is currently
+# playing music
+sysinfo() {
   while true; do
+    pgrep -q mpd
+    case "$?" in
+      0)
 # spaces bork ${stats}
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    printf "%s" "${stats}"
-    sleep 5
-  done
-}
-
-sysinfo_no_mpd() {
-  while true; do
-# spaces bork ${stats}
+        printf "%s" "${stats}"
+        ;;
+      1)
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-    printf "%s" "${stats}"
+        printf "%s" "${stats}"
+        ;;
+    esac
     sleep 5
   done
 }
@@ -123,11 +125,7 @@ main() {
   import_colors || err "Unable to import colors."
   delimiter="  %{F${color3}}|%{F${foreground}}  "
   bgfg="%{B${background}} %{F${foreground}"
-  if pgrep -q mpd; then
-    sysinfo_mpd
-  else
-    sysinfo_no_mpd
-  fi
+  sysinfo || err "sysinfo() failed."
 }
 
 main

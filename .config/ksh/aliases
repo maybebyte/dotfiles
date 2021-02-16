@@ -177,6 +177,7 @@ alias \
 alias \
   dsklab="disklabel -p g" \
   dtsu="shutdown now" \
+  mntsafe="mount -o noexec,nosuid,nodev" \
   off="shutdown -p now" \
   re="shutdown -r now" \
   up="uptime"
