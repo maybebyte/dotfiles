@@ -30,13 +30,13 @@ backup() {
   fi
 }
 
-dl_blocklist() {
+dl_blocklists() {
   for list in ${firebog}; do
     ftp -o - "${list}"
   done
 }
 
-gen_domains() {
+grab_domains() {
   grep -Ev "localhost$" "$1" \
     | grep -E -e '^0.0.0.0' -e '^127.0.0.1'
 }
@@ -122,8 +122,8 @@ main() {
   else
     err "Only unwind(8) and unbound(8) are supported. Enable one of them and try again."
   fi
-  dl_blocklist \
-    | gen_domains - \
+  dl_blocklists \
+    | grab_domains - \
     | format_domains - \
     > "${tmp_blocklist}" \
     || err "Unable to create blocklist."
