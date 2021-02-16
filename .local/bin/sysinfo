@@ -67,7 +67,7 @@ show_battery() {
 
 show_track() {
   song=$(mpc current)
-  printf "%s" "${song:-}"
+  printf "%s" "${song:+}"
 }
 
 show_temp() {
@@ -119,6 +119,8 @@ main() {
   delimiter="  %{F${color3}}|%{F${foreground}}  "
   bgfg="%{B${background}} %{F${foreground}"
   while true; do
+    # without this catchall err, sysinfo outputs nothing if an MPD
+    # process isn't available
     sysinfo || err "sysinfo() failed."
     sleep 5
   done
