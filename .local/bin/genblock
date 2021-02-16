@@ -16,19 +16,13 @@
 set -e
 . "${HOME}/.local/bin/common.sh"
 
-tmpdir=$(mktemp -d /tmp/genblock.XXXXXX)
 blocklist="/etc/blocklist.txt"
 firebog=$(ftp -Vo - https://v.firebog.net/hosts/lists.php?type=tick)
-raw_blocklist="${tmpdir}/raw_blocklist.txt"
-tmp_blocklist="${tmpdir}/blocklist.txt"
+tmp_blocklist=$(mktemp /tmp/genblock.XXXXXX)
 
 # TODO:
-# use less temporary files
-
 # if a blocklist has been retrieved recently, use it instead of
 # downloading a new one
-
-# have each function return values, and redirect output in main()
 
 backup() {
   if [ -f "${blocklist}" ]; then
@@ -38,12 +32,12 @@ backup() {
 
 dl_blocklist() {
   for list in ${firebog}; do
-    ftp -o - "${list}" >> "${raw_blocklist}"
+    ftp -o - "${list}"
   done
 }
 
 gen_domains() {
-  grep -v " localhost" "${raw_blocklist}" | \
+  grep -v " localhost" "$1" | \
   (
   grep -E '^0.0.0.0'
   grep -E '^127.0.0.1'
@@ -54,8 +48,8 @@ format_domains() {
   case "${dns}" in
     "unwind")
       (
-      awk '$1 == "0.0.0.0" {print $2}' -
-      awk '$1 == "127.0.0.1" {print $2}' -
+      awk '$1 == "0.0.0.0" {print $2}' "$1"
+      awk '$1 == "127.0.0.1" {print $2}' "$1"
       # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
       printf "%s\\n" 'use-application-dns.net'
       )
@@ -63,9 +57,9 @@ format_domains() {
     "unbound")
       (
       awk '$1 == "0.0.0.0" {print "local-zone: \""$2"\" always_refuse"}' \
-        -
+        "$1"
       awk '$1 == "127.0.0.1" {print "local-zone: \""$2"\" always_refuse"}' \
-        -
+        "$1"
       # https://support.mozilla.org/en-US/kb/canary-domain-use-application-dnsnet
       printf "%s\\n" 'local-zone: "use-application-dns.net" always_refuse'
       )
@@ -73,8 +67,7 @@ format_domains() {
   esac \
       | sed 's///g' \
       | sort \
-      | uniq \
-      > "${tmp_blocklist}"
+      | uniq
     # the sed expression gets rid of the '^M' control character in
     # blocklists
 
@@ -120,8 +113,8 @@ EOF
   esac
 }
 
-rm_tmpdir() {
-  rm -rf "${tmpdir:?}"
+rm_tmpfile() {
+  rm "${tmp_blocklist:?}"
 }
 
 main() {
@@ -132,12 +125,15 @@ main() {
   else
     err "Only unwind(8) and unbound(8) are supported. Enable one of them and try again."
   fi
-  dl_blocklist || err "Unable to download lists from firebog.net."
-  gen_domains | format_domains || err "Unable to format blocklist."
+  dl_blocklist \
+    | gen_domains - \
+    | format_domains - \
+    > "${tmp_blocklist}" \
+    || err "Unable to create blocklist."
   backup || err "Unable to backup blocklist file."
   install_blocklist || err "Unable to install blocklist."
   restart_dns || err "Unable to restart DNS."
-  rm_tmpdir || err "Unable to remove ${tmpdir}."
+  rm_tmpfile || err "Unable to remove ${tmp_blocklist}."
 }
 
 main
