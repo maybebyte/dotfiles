@@ -18,9 +18,9 @@ grab_emoji() {
   printf "%s" "${chosen}" | cut -d " " -f1 | yank
 }
 
-dmenuunicode() {
+main() {
   import_colors
   grab_emoji
 }
 
-dmenuunicode
+main

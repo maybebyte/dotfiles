@@ -20,10 +20,10 @@ set -e
 # page (like drawing the top card from a shuffled deck).  Then passes that
 # result to man for viewing.
 
-randman() {
+main() {
   man "$(man -w -S "$(uname -m)" -k sec~^1\|5\|7\|8$ \
     | sort -R \
     | head -1)"
 }
 
-randman || err "Unable to pick a random man page."
+main || err "Unable to pick a random man page."
