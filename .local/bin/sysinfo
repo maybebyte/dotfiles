@@ -67,7 +67,7 @@ show_battery() {
 
 show_track() {
   song=$(mpc current)
-  printf "%s" "${song:+}"
+  printf "%s" "${song:-}"
 }
 
 show_temp() {

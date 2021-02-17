@@ -112,6 +112,7 @@ bind  pager               j       next-line
 bind  pager               k       previous-line
 bind  pager               l       view-attachments
 bind  pager,attach        h       exit
+bind  index,pager         p       recall-message
 macro browser             h       '<change-dir><kill-line>..<enter>' "Go to parent folder"
 
 # Colors
