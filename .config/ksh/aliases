@@ -10,8 +10,7 @@ alias \
   nb="newsboat" \
   o="mimeopen" \
   rmus="mus --host 192.168.1.79" \
-  tuir="torsocks tuir" \
-  unlockhdd="bioctl -c C -l sd2a softraid0"
+  tuir="torsocks tuir"
 
 # basic utilities
 alias \

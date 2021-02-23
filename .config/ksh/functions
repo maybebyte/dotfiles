@@ -19,3 +19,7 @@ grabipv4() {
 grabipv6() {
   host -t AAAA "$1" | awk '{print $5}'
 }
+
+unlockhdd() {
+  priv bioctl -c C -l "$1" softraid0
+}
