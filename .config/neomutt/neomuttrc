@@ -97,6 +97,8 @@ bind  index               k       previous-entry
 bind  index               l       display-message
 bind  index,attach        G       last-entry
 bind  index,attach        gg      first-entry
+bind  index,pager         \Cb     previous-page
+bind  index,pager         \Cf     next-page
 bind  index,pager         B       sidebar-toggle-visible
 bind  index,pager         S       sync-mailbox
 bind  index,pager         \Cj     sidebar-next
@@ -104,6 +106,7 @@ bind  index,pager         \Ck     sidebar-prev
 bind  index,pager         \Cn     sidebar-next-new
 bind  index,pager         \Co     sidebar-open
 bind  index,pager         \Cp     sidebar-prev-new
+bind  index,pager         p       recall-message
 bind  index,pager,attach  R       group-reply
 bind  index,pager,browser d       half-down
 bind  index,pager,browser u       half-up
@@ -112,7 +115,6 @@ bind  pager               j       next-line
 bind  pager               k       previous-line
 bind  pager               l       view-attachments
 bind  pager,attach        h       exit
-bind  index,pager         p       recall-message
 macro browser             h       '<change-dir><kill-line>..<enter>' "Go to parent folder"
 
 # Colors
