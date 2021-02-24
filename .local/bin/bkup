@@ -19,7 +19,7 @@ set -e
 compressor="bzip2"
 compressor_args="-c"
 extension=".dump.bz2"
-today=$(today)
+today="$(today)"
 
 lecture="This script creates level 0 dumps of /root, /var, /home,
 /usr/local, /usr/X11R6, and /usr. It compresses them using

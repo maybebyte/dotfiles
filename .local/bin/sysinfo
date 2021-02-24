@@ -27,9 +27,9 @@ show_date() {
 }
 
 show_volume() {
-  raw_volume=$(sndioctl -n output.level 2>/dev/null)
-  formatted_volume=$(printf "%.2s" "${raw_volume##*.}")
-  muted=$(sndioctl -n output.mute 2>/dev/null)
+  raw_volume="$(sndioctl -n output.level 2>/dev/null)"
+  formatted_volume="$(printf "%.2s" "${raw_volume##*.}")"
+  muted="$(sndioctl -n output.mute 2>/dev/null)"
   if [ "${muted}" = 1 ]; then
     printf "%s" "MUTE${delimiter}"
   else
@@ -38,17 +38,17 @@ show_volume() {
 }
 
 show_disk_space() {
-  diskspace=$(df -h /home | awk '/dev/{print $4}')
+  diskspace="$(df -h /home | awk '/dev/{print $4}')"
   printf "%s" "/home: ${diskspace}${delimiter}"
 }
 
 show_battery() {
-  adapter_status=$(apm -a)
-  estimated_battery_life=$(apm -m)
+  adapter_status="$(apm -a)"
+  estimated_battery_life="$(apm -m)"
   ebl_minutes=$((estimated_battery_life % 60))
   ebl_hours=$((estimated_battery_life / 60))
   remaining="~${ebl_hours}h & ${ebl_minutes}m"
-  percentage=$(apm -l)
+  percentage="$(apm -l)"
   case "${adapter_status}" in
     0)
       printf "%s" "bat: ${remaining}, at ${percentage}%"
@@ -66,17 +66,17 @@ show_battery() {
 }
 
 show_track() {
-  song=$(mpc current)
+  song="$(mpc current)"
   printf "%s" "${song:-}"
 }
 
 show_temp() {
   case "$(hostname -s)" in
     lain)
-      temperature=$(sysctl -n hw.sensors.cpu0.temp0)
+      temperature="$(sysctl -n hw.sensors.cpu0.temp0)"
       ;;
     aphrodite)
-      temperature=$(sysctl -n hw.sensors.ksmn0.temp0)
+      temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"
       ;;
     *)
       return 1

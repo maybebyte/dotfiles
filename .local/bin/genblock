@@ -17,8 +17,8 @@ set -e
 . "${HOME}/.local/bin/common.sh"
 
 blocklist="/etc/blocklist.txt"
-firebog=$(ftp -Vo - https://v.firebog.net/hosts/lists.php?type=tick)
-tmp_blocklist=$(mktemp /tmp/genblock.XXXXXX)
+firebog="$(ftp -Vo - https://v.firebog.net/hosts/lists.php?type=tick)"
+tmp_blocklist="$(mktemp /tmp/genblock.XXXXXX)"
 
 # TODO:
 # if a blocklist has been retrieved recently, use it instead of

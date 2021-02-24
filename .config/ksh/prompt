@@ -1,4 +1,4 @@
-esc=$(print \\001)
+esc="$(printf \\001)"
 
 case "$(id -u)" in
   0)
@@ -21,14 +21,14 @@ _ps1_clear="${esc}\\033[0m${esc}"
 case "${KSH_VERSION%%KSH*}" in
   "@(#)PD ")
 # unintended spaces occur w/ indentation
-PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
+PS1="$(printf "%s" "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
 ${_ps1_clear}@${_ps1_hostname}\\h${_ps1_clear} \
 ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
     ;;
   "@(#)MIRBSD ")
-PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
+PS1="$(printf "%s" "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
 ${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
-${_ps1_path}$(printf "%s\\n" "\${PWD/#\${HOME}/\\~}")\
+${_ps1_path}$(printf "%s" "\${PWD/#\${HOME}/\\~}")\
 ${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
     ;;
   *)
