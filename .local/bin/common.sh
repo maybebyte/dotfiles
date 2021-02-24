@@ -27,7 +27,7 @@ menu() {
 
 must_be_root() {
   if [ "$(id -u)" != 0 ]; then
-    err "Execute $(basename "$0") with root privileges."
+    err "Execute ${0##*/} with root privileges."
   fi
 }
 

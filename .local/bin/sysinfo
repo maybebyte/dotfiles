@@ -28,10 +28,9 @@ show_date() {
 
 show_volume() {
   raw_volume=$(sndioctl -n output.level 2>/dev/null)
-  # division is used to truncate the resulting floating-point number
-  # side note: bc(1) needs a newline to work
-  formatted_volume=$(printf "%s\\n" "${raw_volume} / 0.01" | bc)
-  if [ "$(sndioctl -n output.mute 2>/dev/null)" = 1 ]; then
+  formatted_volume=$(printf "%.2s" "${raw_volume##*.}")
+  muted=$(sndioctl -n output.mute 2>/dev/null)
+  if [ "${muted}" = 1 ]; then
     printf "%s" "MUTE${delimiter}"
   else
     printf "%s" "vol: ${formatted_volume}%${delimiter}"
@@ -44,20 +43,21 @@ show_disk_space() {
 }
 
 show_battery() {
-  adapter=$(apm -a)
-  minutes=$(($(apm -m) % 60))
-  hours=$(($(apm -m) / 60))
-  remaining="~${hours}h & ${minutes}m"
-  percentage="$(apm -l)%"
-  case "${adapter}" in
+  adapter_status=$(apm -a)
+  estimated_battery_life=$(apm -m)
+  ebl_minutes=$((estimated_battery_life % 60))
+  ebl_hours=$((estimated_battery_life / 60))
+  remaining="~${ebl_hours}h & ${ebl_minutes}m"
+  percentage=$(apm -l)
+  case "${adapter_status}" in
     0)
-      printf "%s" "bat: ${remaining}, at ${percentage}"
+      printf "%s" "bat: ${remaining}, at ${percentage}%"
       ;;
     1)
-      printf "%s" "chr: at ${percentage}"
+      printf "%s" "chr: at ${percentage}%"
       ;;
     2)
-      printf "%s" "bkup: ${remaining}, at ${percentage}"
+      printf "%s" "bkup: ${remaining}, at ${percentage}%"
       ;;
     *)
       return 1
@@ -73,24 +73,16 @@ show_track() {
 show_temp() {
   case "$(hostname -s)" in
     lain)
-      temperature=$(sysctl -n hw.sensors.cpu0.temp0 \
-        | awk -F "." '{print $1}')
+      temperature=$(sysctl -n hw.sensors.cpu0.temp0)
       ;;
     aphrodite)
-      temperature=$(sysctl -n hw.sensors.ksmn0.temp0 \
-        | awk -F "." '{print $1}')
+      temperature=$(sysctl -n hw.sensors.ksmn0.temp0)
       ;;
     *)
       return 1
       ;;
   esac
-  printf "%s" "${delimiter}temp: ${temperature} °C"
-}
-
-show_cpu_freq() {
-  raw_cpu_freq=$(sysctl -n hw.cpuspeed)
-  formatted_cpu_freq=$(printf "%s\\n" "${raw_cpu_freq} * 0.001" | bc)
-  printf "%s" "cpu: ${formatted_cpu_freq} GHz"
+  printf "%s" "${delimiter}temp: ${temperature%%.*} °C"
 }
 
 # TODO: change so that sysinfo() will only print track if MPD is currently

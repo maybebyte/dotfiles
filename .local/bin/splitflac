@@ -22,10 +22,10 @@ set -e
 . "${HOME}/.local/bin/common.sh"
 
 arguments_needed=2
-usage_details="$(basename "$0") requires ${arguments_needed} argument(s).
+usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
-$(basename "$0") [cue file] [FLAC file]"
+${0##*/} [cue file] [FLAC file]"
 
 splitflac() {
   shnsplit -f "$1" -o flac -t "%n %t" "$2" \

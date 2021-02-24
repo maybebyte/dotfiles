@@ -22,10 +22,10 @@ set -e
 # usage: nsc [target] [options]
 
 arguments_needed=1
-usage_details="$(basename "$0") requires at least ${arguments_needed} argument(s).
+usage_details="${0##*/} requires at least ${arguments_needed} argument(s).
 
 usage:
-$(basename "$0") [target] [options]"
+${0##*/} [target] [options]"
 sec="${HOME}/sec"
 
 create_workdir() {

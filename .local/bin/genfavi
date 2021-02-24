@@ -17,10 +17,10 @@ set -e
 . "${HOME}/.local/bin/common.sh"
 
 arguments_needed=1
-usage_details="$(basename "$0") requires ${arguments_needed} argument(s).
+usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
-$(basename "$0") [image]"
+${0##*/} [image]"
 
 genfavi() {
   convert "$1" -background white \
