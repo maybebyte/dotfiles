@@ -26,9 +26,7 @@ menu() {
 }
 
 must_be_root() {
-  if [ "$(id -u)" != 0 ]; then
-    err "Execute ${0##*/} with root privileges."
-  fi
+  [ "$(id -u)" = 0 ] || err "Execute ${0##*/} with root privileges."
 }
 
 today() {

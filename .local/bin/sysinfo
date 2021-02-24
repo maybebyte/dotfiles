@@ -30,11 +30,9 @@ show_volume() {
   raw_volume="$(sndioctl -n output.level 2>/dev/null)"
   formatted_volume="$(printf "%.2s" "${raw_volume##*.}")"
   muted="$(sndioctl -n output.mute 2>/dev/null)"
-  if [ "${muted}" = 1 ]; then
-    printf "%s" "MUTE${delimiter}"
-  else
-    printf "%s" "vol: ${formatted_volume}%${delimiter}"
-  fi
+  [ "${muted}" = 0 ] \
+    && printf "%s" "vol: ${formatted_volume}%${delimiter}" \
+    || printf "%s" "MUTE${delimiter}"
 }
 
 show_disk_space() {

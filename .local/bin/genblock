@@ -25,9 +25,8 @@ tmp_blocklist="$(mktemp /tmp/genblock.XXXXXX)"
 # downloading a new one
 
 backup() {
-  if [ -f "${blocklist}" ]; then
-    priv mv "${blocklist}" "${blocklist}.bak"
-  fi
+  [ -f "${blocklist}" ] \
+    && priv mv "${blocklist}" "${blocklist}.bak"
 }
 
 dl_blocklists() {
@@ -82,32 +81,26 @@ EOF
 restart_dns() {
   case "${dns}" in
     "unwind")
-      if unwind -n >/dev/null 2>&1; then
-        priv rcctl restart unwind >/dev/null 2>&1
-      elif [ -f "${blocklist}.bak" ]; then
-        priv mv "${blocklist}.bak" "${blocklist}"
-      else
-        priv /usr/bin/env sh <<EOF
-rm "${blocklist}"
-touch "${blocklist}"
-chmod 0444 "${blocklist}"
-EOF
-      fi
+      unwind -n >/dev/null 2>&1 \
+        && priv rcctl restart unwind >/dev/null 2>&1
       ;;
     "unbound")
-      if unbound-checkconf >/dev/null 2>&1; then
-        priv rcctl restart unbound >/dev/null 2>&1
-      elif [ -f "${blocklist}.bak" ]; then
-        priv mv "${blocklist}.bak" "${blocklist}"
-      else
-        priv /usr/bin/env sh <<EOF
+      unbound-checkconf >/dev/null 2>&1 \
+        && priv rcctl restart unbound >/dev/null 2>&1
+      ;;
+  esac
+}
+
+revert() {
+  if [ -f "${blocklist}.bak" ]; then
+    mv "${blocklist}.bak" "${blocklist}"
+  else
+    priv /usr/bin/env sh <<EOF
 rm "${blocklist}"
 touch "${blocklist}"
 chmod 0444 "${blocklist}"
 EOF
-      fi
-      ;;
-  esac
+  fi
 }
 
 rm_tmpfile() {
@@ -129,7 +122,7 @@ main() {
     || err "Unable to create blocklist."
   backup || err "Unable to backup blocklist file."
   install_blocklist || err "Unable to install blocklist."
-  restart_dns || err "Unable to restart DNS."
+  restart_dns || revert
   rm_tmpfile || err "Unable to remove ${tmp_blocklist}."
 }
 

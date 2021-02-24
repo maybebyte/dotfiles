@@ -13,9 +13,9 @@ unclutter -idle 3 -grab &
 xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
 xidle &
 
-if [ -x dbus-launch ] && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
-  eval "$(dbus-launch --sh-syntax --exit-with-x11)"
-fi
+[ -x dbus-launch ] \
+  && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
+  && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
 # look and feel
 "${HOME}/.local/bin/wal" -R
