@@ -13,11 +13,13 @@ cht() {
 }
 
 grabipv4() {
-  host -t A "$1" | awk '{print $4}'
+  ipv4=$(host -t A "$1")
+  printf "%s\\n" "${ipv4##*address }"
 }
 
 grabipv6() {
-  host -t AAAA "$1" | awk '{print $5}'
+  ipv6=$(host -t AAAA "$1")
+  printf "%s\\n" "${ipv6##*address }"
 }
 
 unlockhdd() {

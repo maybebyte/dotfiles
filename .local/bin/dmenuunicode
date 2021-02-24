@@ -15,7 +15,7 @@ emoji_file="${HOME}/.local/share/emoji"
 
 grab_emoji() {
   chosen=$(cut -d ';' -f1 "${emoji_file}" | menu -l 20 -fn "${emoji_font}")
-  printf "%s" "${chosen}" | cut -d " " -f1 | yank
+  printf "%s" "${chosen%% *}" | yank
 }
 
 main() {

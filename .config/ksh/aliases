@@ -230,7 +230,6 @@ alias \
   anonftp="torsocks ftp -nU ''" \
   anonsh="torsocks --shell" \
   ftp="ftp -nU ''" \
-  gensite="ssg5 \${HOME}/builds/website_md \${HOME}/builds/website \"A Missing Link\" \"https://amissing.link\"" \
   m="neomutt" \
   mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
   mpva="mpv --no-video --speed=1" \
