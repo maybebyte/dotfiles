@@ -18,14 +18,14 @@ _ps1_clear="${esc}\\033[0m${esc}"
 # TODO: if a more portable solution for displaying PWD with tilde
 # expansion is found (so far sed isn't working), get rid of this case
 # statement and implement it in a single PS1 assignment
-case $(printf "%s\\n" "${KSH_VERSION}" | awk '{print $1, $2}') in
-  "@(#)PD KSH")
+case "${KSH_VERSION%%KSH*}" in
+  "@(#)PD ")
 # unintended spaces occur w/ indentation
 PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
 ${_ps1_clear}@${_ps1_hostname}\\h${_ps1_clear} \
 ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
     ;;
-  "@(#)MIRBSD KSH")
+  "@(#)MIRBSD ")
 PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
 ${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
 ${_ps1_path}$(printf "%s\\n" "\${PWD/#\${HOME}/\\~}")\
