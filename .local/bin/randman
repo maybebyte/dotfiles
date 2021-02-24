@@ -14,7 +14,8 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 set -e
-. "${HOME}/.local/bin/common.sh"
+[ -f "${HOME}/.local/bin/common.sh" ] \
+  && . "${HOME}/.local/bin/common.sh"
 
 # lists man page paths from listed sections, shuffles them, and grabs the first
 # page (like drawing the top card from a shuffled deck).  Then passes that
