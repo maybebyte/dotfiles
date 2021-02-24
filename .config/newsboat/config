@@ -19,9 +19,9 @@ bind-key n  next-unread
 bind-key u  pageup
 bind-key x  delete-article
 
-browser "firefox"
+browser "${BROWSER}"
 
-cache-file ~/.config/newsboat/cache.db
+cache-file "~/.config/newsboat/cache.db"
 
 cleanup-on-quit yes
 
@@ -33,11 +33,16 @@ color listnormal        green   default
 color listnormal_unread cyan    default
 
 macro , open-in-browser
-macro a set browser "youtube-dl -x -f bestaudio/best"; open-in-browser ; set browser "firefox"
-macro c set browser "printf '%u' | xclip -selection clipboard" ; open-in-browser ; set browser "firefox"
-macro l set browser "mpv --no-video --speed=1"; open-in-browser ; set browser "firefox"
-macro t set browser "youtube-dl"; open-in-browser ; set browser "firefox"
-macro v set browser "mpv"; open-in-browser ; set browser "firefox"
+# download (a)udio
+macro a set browser "youtube-dl -x -f bestaudio/best"; open-in-browser; set browser "${BROWSER}"
+# (c)opy
+macro c set browser "printf '%u' | xclip -selection clipboard"; open-in-browser ; set browser "${BROWSER}"
+# (l)isten
+macro l set browser "mpv --no-video --speed=1"; open-in-browser; set browser "${BROWSER}"
+# download (v)ideo
+macro v set browser "youtube-dl"; open-in-browser; set browser "${BROWSER}"
+# (w)atch
+macro w set browser "mpv"; open-in-browser; set browser "${BROWSER}"
 
 player "mpv"
 

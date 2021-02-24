@@ -32,6 +32,7 @@ if [ "$(hostname -s)" = "lain" ]; then
 fi
 
 # random manual page for didactic purposes
+# oddly, $TERMINAL in place of xst causes this not to run
 xst -e "${HOME}/.local/bin/randman" &
 
 exec xmonad

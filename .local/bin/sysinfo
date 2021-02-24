@@ -37,6 +37,7 @@ show_date() {
 
 show_volume() {
   raw_volume="$(sndioctl -n output.level 2>/dev/null)"
+  # 1.000 and 0.000 will display as "00%" with ${formatted_volume}
   formatted_volume="$(printf "%.2s" "${raw_volume##*.}")"
   muted="$(sndioctl -n output.mute 2>/dev/null)"
   [ "${muted}" = 0 ] \
@@ -57,18 +58,10 @@ show_battery() {
   remaining="~${ebl_hours}h & ${ebl_minutes}m"
   percentage="$(apm -l)"
   case "${adapter_status}" in
-    0)
-      printf "%s" "bat: ${remaining}, at ${percentage}%"
-      ;;
-    1)
-      printf "%s" "chr: at ${percentage}%"
-      ;;
-    2)
-      printf "%s" "bkup: ${remaining}, at ${percentage}%"
-      ;;
-    *)
-      return 1
-      ;;
+    0) printf "%s" "bat: ${remaining}, at ${percentage}%" ;;
+    1) printf "%s" "chr: at ${percentage}%" ;;
+    2) printf "%s" "bkup: ${remaining}, at ${percentage}%" ;;
+    *) return 1 ;;
   esac
 }
 

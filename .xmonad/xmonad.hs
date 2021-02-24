@@ -8,7 +8,7 @@ import XMonad.Layout.Spacing
 myBorderWidth        = 0
 myModMask            = mod4Mask
 myMouseFocusRule     = False
-myTerminal           = "xst"
+myTerminal           = "${TERMINAL}"
 
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
