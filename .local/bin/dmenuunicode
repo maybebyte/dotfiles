@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC1090,SC2154
-set -e
 library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"

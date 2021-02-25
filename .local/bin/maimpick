@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC2086,SC1090,SC2154
 # command_maim_args doesn't work when quoted, so SC2086 is disabled
-set -e
 library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
@@ -26,10 +25,6 @@ selected area (copy)
 current window (copy)
 full screen (copy)"
 savedir="${HOME}/screenshots"
-
-print_options() {
-  printf "%s" "${options}"
-}
 
 cur_date() {
   date '+%Y%m%d-%H%M%S'
@@ -69,7 +64,7 @@ maim_full_copy() {
 }
 
 present_options() {
-  case "$(print_options | menu -l 6 -p "Screenshot which area?")" in
+  case "$(printf "%s" "${options}" | menu -l 6 -p "Screenshot which area?")" in
     "a selected area") maim_sel_save ;;
     "current window") maim_cur_save ;;
     "full screen") maim_full_save ;;

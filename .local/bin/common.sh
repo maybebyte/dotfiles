@@ -12,12 +12,13 @@ err() {
   exit 1
 }
 
-# the subshell ensures interactive ksh(1) sessions won't terminate and
-# that dmenu scripts still work without colors
+# err isn't used here so that:
+# 1) interactive ksh(1) sessions won't terminate
+# 2) dmenu scripts still work without colors
 import_colors() {
   colors_sh="${HOME}/.cache/wal/colors.sh"
   [ -r "${colors_sh}" ] \
-    || (err "${colors_sh} not readable/found.") \
+    || printf "%s\\n" "${colors_sh} not readable/found." >&2 \
     && . "${colors_sh}"
 }
 
