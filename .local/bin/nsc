@@ -36,10 +36,10 @@ usage_details="${0##*/} requires at least ${arguments_needed} argument(s).
 usage:
 ${0##*/} [target] [options]"
 sec="${HOME}/sec"
+workdir="${sec}/$1/nmap"
 
 create_workdir() {
-  mkdir -p "${sec}/$1/nmap"
-  export workdir="${sec}/$1/nmap"
+  mkdir -p "${workdir}"
 }
 
 nsc() {
