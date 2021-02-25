@@ -3,7 +3,7 @@
 xrdb "${HOME}/.Xresources"
 
 # vars
-export LANG=en_US.UTF-8
+export LANG="en_US.UTF-8"
 
 # daemons
 "${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
@@ -13,7 +13,7 @@ unclutter -idle 3 -grab &
 xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
 xidle &
 
-[ -x dbus-launch ] \
+command -v dbus-launch >/dev/null 2>&1 \
   && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
   && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 

@@ -3,7 +3,7 @@
   && . "${HOME}/.local/bin/common.sh"
 
 # pywal
-[ -f "${HOME}/.cache/wal/colors.sh" ] && import_colors
+import_colors
 
 # if tmux is installed and not inside a tmux session, then try to attach.
 # if attachment fails, start a new session

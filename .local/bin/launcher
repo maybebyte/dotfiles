@@ -34,10 +34,11 @@ fi
 launch() {
   dmenu_run -i \
     -fn "mono-20" \
-    -nb "${color0}" \
-    -nf "${color3}" \
-    -sb "${color0}" \
-    -sf "${color7}"
+    -nb "${color0:=#040516}" \
+    -nf "${color3:=#9974e7}" \
+    -sb "${color0:=#040516}" \
+    -sf "${color7:=#e0cef3}"
+
 }
 
 main() {

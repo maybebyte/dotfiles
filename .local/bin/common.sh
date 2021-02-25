@@ -12,17 +12,22 @@ err() {
   exit 1
 }
 
+# the subshell ensures interactive ksh(1) sessions won't terminate and
+# that dmenu scripts still work without colors
 import_colors() {
-  . "${HOME}/.cache/wal/colors.sh"
+  colors_sh="${HOME}/.cache/wal/colors.sh"
+  [ -r "${colors_sh}" ] \
+    || (err "${colors_sh} not readable/found.") \
+    && . "${colors_sh}"
 }
 
 menu() {
   dmenu "$@" -i \
     -fn "mono-20" \
-    -nb "${color0}" \
-    -nf "${color3}" \
-    -sb "${color0}" \
-    -sf "${color7}"
+    -nb "${color0:=#040516}" \
+    -nf "${color3:=#9974e7}" \
+    -sb "${color0:=#040516}" \
+    -sf "${color7:=#e0cef3}"
 }
 
 must_be_root() {
