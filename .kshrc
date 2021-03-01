@@ -1,5 +1,5 @@
 # shellcheck disable=SC2034,SC1090
-[ -f  "${HOME}/.local/bin/common.sh" ] \
+[ -r  "${HOME}/.local/bin/common.sh" ] \
   && . "${HOME}/.local/bin/common.sh"
 
 # pywal
@@ -21,6 +21,6 @@ printf "%s" "${KSH_VERSION}" \
   && set -o vi-show8
 
 for srcfile in aliases functions prompt vars; do
-  [ -f "${HOME}/.config/ksh/${srcfile}" ] \
+  [ -r "${HOME}/.config/ksh/${srcfile}" ] \
     && . "${HOME}/.config/ksh/${srcfile}"
 done

@@ -102,7 +102,7 @@ restart_dns() {
 
 revert() {
   if [ -f "${blocklist}.bak" ]; then
-    mv "${blocklist}.bak" "${blocklist}"
+    priv mv "${blocklist}.bak" "${blocklist}"
   else
     priv /usr/bin/env sh <<EOF
 rm "${blocklist}"

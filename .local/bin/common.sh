@@ -18,8 +18,8 @@ err() {
 import_colors() {
   colors_sh="${HOME}/.cache/wal/colors.sh"
   [ -r "${colors_sh}" ] \
-    || printf "%s\\n" "${colors_sh} not readable/found." >&2 \
-    && . "${colors_sh}"
+    && . "${colors_sh}" \
+    || printf "%s\\n" "${colors_sh} not readable/found." >&2
 }
 
 menu() {
