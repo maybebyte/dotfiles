@@ -25,72 +25,35 @@ EOF
   exit 1
 fi
 
+arguments_needed=2
 compressor="bzip2"
 compressor_args="-c"
-extension=".dump.bz2"
-today="$(today)"
+uid="$(id -u)"
+usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
-lecture="This script creates level 0 dumps of /root, /var, /home,
-/usr/local, /usr/X11R6, and /usr. It compresses them using
-${compressor} and places the backups inside /mnt in a folder
-named ${today}. It then automatically unmounts /mnt and powers off.
+usage:
+${0##*/} [backup target] [destination]"
 
-Is this acceptable (y/n)?"
-
+# bkup [backup target] [destination]
 bkup() {
-  dump -0auf - / \
-    | "${compressor}" ${compressor_args} \
-    > "/mnt/${today}/root${extension}" &
-
-  dump -0auf - /var \
-    | "${compressor}" ${compressor_args} \
-    > "/mnt/${today}/var${extension}" &
-
-  dump -0auf - /home \
-    | "${compressor}" ${compressor_args} \
-    > "/mnt/${today}/home${extension}" &
-
-  dump -0auf - /usr/local \
-    | "${compressor}" ${compressor_args} \
-    > "/mnt/${today}/usr-local${extension}" &
-
-  dump -0auf - /usr/x11R6 \
-    | "${compressor}" ${compressor_args} \
-    > "/mnt/${today}/usr-x11R6${extension}" &
-
-  dump -0auf - /usr \
-    | "${compressor}" ${compressor_args} \
-    > "/mnt/${today}/usr${extension}" &
-  wait
+  if [ "${uid}" = 0 ]; then
+    dump -0auf - "$1" \
+      | "${compressor}" ${compressor_args} \
+      > "$2"
+  elif alias | grep -qi priv; then
+    priv dump -0auf - "$1" \
+      | "${compressor}" ${compressor_args} \
+      > "$2"
+  else
+    err "Not running as root and unable to elevate privileges, exiting."
+  fi
 }
 
-prompt() {
-  banner "bkup"
-  printf "%s" "${lecture} "
-  read -r continue
-  while [ "${continue}" != "y" ] && [ "${continue}" != "n" ]; do
-    printf "%s\\n" "Only 'y' and 'n' are recognized inputs."
-    printf "%s" "Is this acceptable? (y/n) "
-    read -r continue
-  done
-}
-
+# TODO: add a function to test validity of $1 and $2
 main() {
-  must_be_root
-  prompt
-  case "${continue}" in
-    n)
-      printf "%s\\n" "Goodbye."
-      exit 0
-      ;;
-    y)
-      mkdir -p "/mnt/${today}" || err "Unable to create backup directory."
-      printf "%s\\n" "Dumping filesystems..."
-      bkup || err "Backup failed."
-      umount /mnt || err "Unable to unmount drive"
-      shutdown -p now
-      ;;
-  esac
+  usage "$@"
+  printf "%s\\n" "Dumping..."
+  bkup "$1" "$2"
 }
 
-main
+main "$@"
