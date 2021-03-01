@@ -29,12 +29,12 @@ EOF
       ;;
     # yank the relative file path
     "y")
-      printf %s "${file}" | yank
+      printf "%s" "${file}" | yank
       notify-send "${file} copied to clipboard."
       ;;
     # yank the absolute file path
     "Y")
-      printf %s "$(readlink -f "${file}")" | yank
+      printf "%s" "$(readlink -f "${file}")" | yank
       notify-send "$(readlink -f "${file}") copied to clipboard."
       ;;
   esac
