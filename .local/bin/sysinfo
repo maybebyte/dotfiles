@@ -97,8 +97,6 @@ show_temp() {
   fi
 }
 
-# TODO: change so that sysinfo() will only print track if MPD is currently
-# playing music
 sysinfo() {
 # spaces bork ${stats}
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
