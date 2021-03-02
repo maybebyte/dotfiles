@@ -82,7 +82,9 @@ show_temp() {
       return 1
       ;;
   esac
-  printf "%s" "${delimiter}temp: ${temperature%%.*} °C"
+  show_battery >/dev/null 2>&1 \
+    && printf "%s" "${delimiter}temp: ${temperature%%.*} °C" \
+    || printf "%s" "temp: ${temperature%%.*} °C"
 }
 
 # TODO: change so that sysinfo() will only print track if MPD is currently
