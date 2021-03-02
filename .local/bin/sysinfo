@@ -13,6 +13,10 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# TODO
+# figure out how to set a refresh timer appropriate for each function,
+# rather than a global refresh timer
 set -e
 library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
@@ -25,12 +29,7 @@ EOF
   exit 1
 fi
 
-# system statistics in a format suitable for lemonbar
 batt_status="$(apm -b)"
-
-# TODO
-# figure out how to set a refresh timer appropriate for each function,
-# rather than a global refresh timer
 
 show_date() {
   date "+%a %m-%d %H:%M"
