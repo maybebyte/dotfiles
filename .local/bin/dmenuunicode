@@ -17,13 +17,10 @@ fi
 # his dotfiles can be accessed here:
 # https://github.com/LukeSmithxyz/voidrice
 
-# TODO
-# figure out a way to get a consistent display with fontconfig
-emoji_font="Symbola-16"
 emoji_file="${HOME}/.local/share/emoji"
 
 grab_emoji() {
-  chosen="$(cut -d ';' -f1 "${emoji_file}" | menu -l 20 -fn "${emoji_font}")"
+  chosen="$(cut -d ';' -f1 "${emoji_file}" | menu -l 20)"
   printf "%s" "${chosen%% *}" | yank
 }
 
