@@ -8,7 +8,7 @@ elif command -v sudo >/dev/null 2>&1; then
 fi
 
 err() {
-  printf "%s\\n" "[$(date +'%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf "%s\\n" "[$(date '+%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
