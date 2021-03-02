@@ -17,7 +17,7 @@
 # TODO
 # figure out how to set a refresh timer appropriate for each function,
 # rather than a global refresh timer
-set -e
+set -eh
 library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
