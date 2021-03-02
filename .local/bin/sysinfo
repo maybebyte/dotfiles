@@ -69,8 +69,13 @@ show_battery() {
 }
 
 show_track() {
-  song="$(mpc current)"
-  printf "%s" "${song:-}"
+  if ! pgrep -q mpd; then
+    return 1
+  elif mpc | grep -qi paused; then
+    return 1
+  else
+    mpc current
+  fi
 }
 
 show_temp() {
@@ -95,22 +100,11 @@ show_temp() {
 # TODO: change so that sysinfo() will only print track if MPD is currently
 # playing music
 sysinfo() {
-  pgrep -q mpd
-  case "$?" in
-    0)
 # spaces bork ${stats}
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-      printf "%s" "${stats}"
-      ;;
-    1)
-stats="${bgfg} %{l}$(show_battery)$(show_temp)\
-%{r}$(show_volume)$(show_disk_space)\
-$(show_date)"
-      printf "%s" "${stats}"
-      ;;
-  esac
+  printf "%s" "${stats}"
 }
 
 main() {
