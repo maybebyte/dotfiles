@@ -111,10 +111,8 @@ main() {
   import_colors
   delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
   bgfg="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
-  while true; do
-    # without this catchall err, sysinfo outputs nothing if an MPD
-    # process isn't available
-    sysinfo || err "sysinfo() failed."
+  while :; do
+    sysinfo
     sleep 5
   done
 }
