@@ -37,8 +37,11 @@ show_date() {
 
 show_volume() {
   raw_volume="$(sndioctl -n output.level 2>/dev/null)"
-  # 1.000 and 0.000 will display as "00%" with ${formatted_volume}
-  formatted_volume="$(printf "%.2s" "${raw_volume##*.}")"
+  case "${raw_volume}" in
+    1.000) formatted_volume="100" ;;
+    0.000) formatted_volume="0" ;;
+    *) formatted_volume="$(printf "%.2s" "${raw_volume##*.}")" ;;
+  esac
   muted="$(sndioctl -n output.mute 2>/dev/null)"
   [ "${muted}" = 0 ] \
     && printf "%s" "vol: ${formatted_volume}%${delimiter}" \
