@@ -26,6 +26,7 @@ EOF
 fi
 
 # system statistics in a format suitable for lemonbar
+batt_status="$(apm -b)"
 
 # TODO
 # figure out how to set a refresh timer appropriate for each function,
@@ -51,6 +52,9 @@ show_disk_space() {
 }
 
 show_battery() {
+  if [ "${batt_status}" = "4" ] || [ "${batt_status}" = "255" ]; then
+    return 1
+  fi
   adapter_status="$(apm -a)"
   estimated_battery_life="$(apm -m)"
   ebl_minutes=$((estimated_battery_life % 60))
@@ -82,9 +86,11 @@ show_temp() {
       return 1
       ;;
   esac
-  show_battery >/dev/null 2>&1 \
-    && printf "%s" "${delimiter}temp: ${temperature%%.*} °C" \
-    || printf "%s" "temp: ${temperature%%.*} °C"
+  if [ "${batt_status}" = "4" ] || [ "${batt_status}" = "255" ]; then
+    printf "%s" "temp: ${temperature%%.*} °C"
+  else
+    printf "%s" "${delimiter}temp: ${temperature%%.*} °C"
+  fi
 }
 
 # TODO: change so that sysinfo() will only print track if MPD is currently
