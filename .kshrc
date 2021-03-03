@@ -12,11 +12,10 @@ command -v tmux >/dev/null 2>&1 \
   && (tmux attach || tmux) >/dev/null 2>&1
 
 # ksh options
-set -o \
-  vi \
-  vi-esccomplete
+set -o vi vi-esccomplete
 
-printf '%s' "${KSH_VERSION}" \
+# ${KSH_VERSION} is read-only, so echo is safe
+echo "${KSH_VERSION}" \
   | grep -qi 'pd' \
   && set -o vi-show8
 

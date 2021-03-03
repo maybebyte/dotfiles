@@ -55,7 +55,7 @@ EOF
 main() {
   gen_site || err 'Unable to generate site.'
   sync_site || err 'Unable to sync web server.'
-  printf '%s\n' 'Web server synced.'
+  echo 'Web server synced.'
 }
 
 main

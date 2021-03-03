@@ -34,7 +34,7 @@ EOF
       ;;
     # yank the absolute file path
     "Y")
-      printf '%s' "$(readlink -f "${file}")" | yank
+      readlink -f "${file}" | yank
       notify-send "$(readlink -f "${file}") copied to clipboard."
       ;;
   esac

@@ -96,7 +96,7 @@ alias \
 
 # networking
 alias \
-  exip="curl ifconfig.me && printf '%s\n'" \
+  exip="curl ifconfig.me -w '\n'" \
   nicdel="ifconfig \${nic} delete" \
   nicoff="ifconfig \${nic} down" \
   nicon="ifconfig \${nic} up" \

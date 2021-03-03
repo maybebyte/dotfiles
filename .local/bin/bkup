@@ -52,7 +52,7 @@ bkup() {
 # TODO: add a function to test validity of $1 and $2
 main() {
   usage "$@"
-  printf '%s\n' 'Dumping...'
+  echo 'Dumping...'
   bkup "$1" "$2"
 }
 

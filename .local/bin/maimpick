@@ -21,7 +21,7 @@ common_maim_args='-d 1 -u -q -B'
 options='a selected area
 current window
 full screen
-selected area (copy)
+a selected area (copy)
 current window (copy)
 full screen (copy)'
 savedir="${HOME}/screenshots"
@@ -64,13 +64,14 @@ maim_full_copy() {
 }
 
 present_options() {
-  case "$(printf '%s' "${options}" | menu -l 6 -p "Screenshot which area?")" in
+  case "$(echo "${options}" | menu -l 6 -p "Screenshot which area?")" in
     'a selected area') maim_sel_save ;;
     'current window') maim_cur_save ;;
     'full screen') maim_full_save ;;
     'a selected area (copy)') maim_sel_copy ;;
     'current window (copy)') maim_cur_copy ;;
     'full screen (copy)') maim_full_copy ;;
+    *) err "Not a valid area." ;;
   esac
 }
 

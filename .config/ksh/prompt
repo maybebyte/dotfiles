@@ -1,4 +1,4 @@
-esc="$(print \\001)"
+esc="$(echo \\001)"
 
 case "$(id -u)" in
   0)
@@ -21,18 +21,18 @@ _ps1_clear="${esc}\\033[0m${esc}"
 case "${KSH_VERSION%%KSH*}" in
   '@(#)PD ')
 # unintended spaces occur w/ indentation
-PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
+PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
 ${_ps1_clear}@${_ps1_hostname}\\h${_ps1_clear} \
 ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
     ;;
   '@(#)MIRBSD ')
-PS1="$(print "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
+PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
 ${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
-${_ps1_path}$(print "\${PWD/#\${HOME}/\\~}")\
+${_ps1_path}$(echo "\${PWD/#\${HOME}/\\~}")\
 ${_ps1_clear}${_ps1_bracket}]${_ps1_clear}")\\$ "
     ;;
   *)
-    print "Custom PS1 not available for this variant of $0." >&2
+    echo "Custom PS1 not available for this variant of $0." >&2
     return 1
     ;;
 esac
