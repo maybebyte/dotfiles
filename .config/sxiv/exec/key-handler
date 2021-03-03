@@ -6,7 +6,7 @@ while read -r file; do
   case "$1" in
     # delete file
     "d")
-      if [ "$(menu -p "Really delete ${file}?" <<EOF
+      if [ "$(menu -p "Really delete ${file}?" <<'EOF'
 Yes
 No
 EOF
