@@ -17,13 +17,13 @@ fi
 
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
-common_maim_args="-d 1 -u -q -B"
-options="a selected area
+common_maim_args='-d 1 -u -q -B'
+options='a selected area
 current window
 full screen
 selected area (copy)
 current window (copy)
-full screen (copy)"
+full screen (copy)'
 savedir="${HOME}/screenshots"
 
 cur_date() {
@@ -31,7 +31,7 @@ cur_date() {
 }
 
 yankpic() {
-  yank -t image/png || err "Couldn't copy to clipboard."
+  yank -t image/png || err 'Unable to copy selection to clipboard.'
 }
 
 maim_sel_save() {
@@ -64,19 +64,19 @@ maim_full_copy() {
 }
 
 present_options() {
-  case "$(printf "%s" "${options}" | menu -l 6 -p "Screenshot which area?")" in
-    "a selected area") maim_sel_save ;;
-    "current window") maim_cur_save ;;
-    "full screen") maim_full_save ;;
-    "a selected area (copy)") maim_sel_copy ;;
-    "current window (copy)") maim_cur_copy ;;
-    "full screen (copy)") maim_full_copy ;;
+  case "$(printf '%s' "${options}" | menu -l 6 -p "Screenshot which area?")" in
+    'a selected area') maim_sel_save ;;
+    'current window') maim_cur_save ;;
+    'full screen') maim_full_save ;;
+    'a selected area (copy)') maim_sel_copy ;;
+    'current window (copy)') maim_cur_copy ;;
+    'full screen (copy)') maim_full_copy ;;
   esac
 }
 
 main() {
   import_colors
-  present_options || err "Unable to present options."
+  present_options || err 'Unable to present options.'
 }
 
 main

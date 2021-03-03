@@ -27,7 +27,7 @@ fi
 
 # encodes all flac files in ${PWD} to opus with parallelization
 main() {
-  parallel opusenc --bitrate 192 "{}" "{.}.opus" ::: ./*.flac
+  parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac
 }
 
-main || err "Unable to convert files properly."
+main || err 'Unable to convert files properly.'

@@ -16,8 +16,8 @@ set -o \
   vi \
   vi-esccomplete
 
-printf "%s" "${KSH_VERSION}" \
-  | grep -qi "pd" \
+printf '%s' "${KSH_VERSION}" \
+  | grep -qi 'pd' \
   && set -o vi-show8
 
 for srcfile in aliases functions prompt vars; do

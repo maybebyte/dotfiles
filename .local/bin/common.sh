@@ -2,13 +2,13 @@
 # for readability purposes
 
 if command -v doas >/dev/null 2>&1; then
-  alias priv="doas "
+  alias priv='doas '
 elif command -v sudo >/dev/null 2>&1; then
-  alias priv="sudo "
+  alias priv='sudo '
 fi
 
 err() {
-  printf "%s\\n" "[$(date '+%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf '%s\n' "[$(date '+%Y-%m-%d|%H:%M:%S')]: $*" >&2
   exit 1
 }
 
@@ -19,12 +19,12 @@ import_colors() {
   colors_sh="${HOME}/.cache/wal/colors.sh"
   [ -r "${colors_sh}" ] \
     && . "${colors_sh}" \
-    || printf "%s\\n" "${colors_sh} not readable/found." >&2
+    || printf '%s\n' "${colors_sh} not readable/found." >&2
 }
 
 menu() {
   dmenu "$@" -i \
-    -fn "mono-20" \
+    -fn 'mono-20' \
     -nb "${color0:=#040516}" \
     -nf "${color3:=#9974e7}" \
     -sb "${color0:=#040516}" \

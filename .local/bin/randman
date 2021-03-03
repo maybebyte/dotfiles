@@ -35,4 +35,4 @@ main() {
     | head -1)"
 }
 
-main || err "Unable to pick a random man page."
+main || err 'Unable to pick a random man page.'

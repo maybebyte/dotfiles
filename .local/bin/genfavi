@@ -43,7 +43,7 @@ genfavi() {
 
 main() {
   usage "$@"
-  genfavi "$1" || err "Unable to generate favicon."
+  genfavi "$1" || err 'Unable to generate favicon.'
 }
 
 main "$@"

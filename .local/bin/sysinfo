@@ -32,29 +32,29 @@ fi
 batt_status="$(apm -b)"
 
 show_date() {
-  date "+%a %m-%d %H:%M"
+  date '+%a %m-%d %H:%M'
 }
 
 show_volume() {
   raw_volume="$(sndioctl -n output.level 2>/dev/null)"
   case "${raw_volume}" in
-    1.000) formatted_volume="100" ;;
-    0.000) formatted_volume="0" ;;
-    *) formatted_volume="$(printf "%.2s" "${raw_volume##*.}")" ;;
+    1.000) formatted_volume=100 ;;
+    0.000) formatted_volume=0 ;;
+    *) formatted_volume="$(printf '%.2s' "${raw_volume##*.}")" ;;
   esac
   muted="$(sndioctl -n output.mute 2>/dev/null)"
   [ "${muted}" = 0 ] \
-    && printf "%s" "vol: ${formatted_volume}%${delimiter}" \
-    || printf "%s" "MUTE${delimiter}"
+    && printf '%s' "vol: ${formatted_volume}%${delimiter}" \
+    || printf '%s' "MUTE${delimiter}"
 }
 
 show_disk_space() {
   diskspace="$(df -h /home | awk '/dev/{print $4}')"
-  printf "%s" "/home: ${diskspace}${delimiter}"
+  printf '%s' "/home: ${diskspace}${delimiter}"
 }
 
 show_battery() {
-  if [ "${batt_status}" = "4" ] || [ "${batt_status}" = "255" ]; then
+  if [ "${batt_status}" = '4' ] || [ "${batt_status}" = '255' ]; then
     return 1
   fi
   adapter_status="$(apm -a)"
@@ -64,9 +64,9 @@ show_battery() {
   remaining="~${ebl_hours}h & ${ebl_minutes}m"
   percentage="$(apm -l)"
   case "${adapter_status}" in
-    0) printf "%s" "bat: ${remaining}, at ${percentage}%" ;;
-    1) printf "%s" "chr: at ${percentage}%" ;;
-    2) printf "%s" "bkup: ${remaining}, at ${percentage}%" ;;
+    0) printf '%s' "bat: ${remaining}, at ${percentage}%" ;;
+    1) printf '%s' "chr: at ${percentage}%" ;;
+    2) printf '%s' "bkup: ${remaining}, at ${percentage}%" ;;
     *) return 1 ;;
   esac
 }
@@ -83,20 +83,20 @@ show_track() {
 
 show_temp() {
   case "$(hostname -s)" in
-    lain)
+    'lain')
       temperature="$(sysctl -n hw.sensors.cpu0.temp0)"
       ;;
-    aphrodite)
+    'aphrodite')
       temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"
       ;;
     *)
       return 1
       ;;
   esac
-  if [ "${batt_status}" = "4" ] || [ "${batt_status}" = "255" ]; then
-    printf "%s" "temp: ${temperature%%.*} °C"
+  if [ "${batt_status}" = '4' ] || [ "${batt_status}" = '255' ]; then
+    printf '%s' "temp: ${temperature%%.*} °C"
   else
-    printf "%s" "${delimiter}temp: ${temperature%%.*} °C"
+    printf '%s' "${delimiter}temp: ${temperature%%.*} °C"
   fi
 }
 
@@ -105,7 +105,7 @@ sysinfo() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-  printf "%s" "${stats}"
+  printf '%s' "${stats}"
 }
 
 main() {

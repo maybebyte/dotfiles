@@ -3,7 +3,7 @@
 xrdb "${HOME}/.Xresources"
 
 # vars
-export LANG="en_US.UTF-8"
+export LANG='en_US.UTF-8'
 
 # daemons
 "${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
@@ -23,12 +23,12 @@ sct 3500
 xset b off
 
 # laptop adjustments
-if [ "$(hostname -s)" = "lain" ]; then
+if [ "$(hostname -s)" = 'lain' ]; then
   xset m 3/1 0
   # trackpad scrolling with middle button
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
-  xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
+  xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
+  xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Button' 2
+  xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Axes' 6 7 4 5
 fi
 
 # random manual page for didactic purposes

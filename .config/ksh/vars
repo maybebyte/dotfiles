@@ -1,34 +1,34 @@
 # use vim if it's installed, vi otherwise
 if command -v nvim >/dev/null; then
-  EDITOR="nvim"
+  EDITOR='nvim'
 else
-  EDITOR="vi"
+  EDITOR='vi'
 fi
 
 # use colorls if it's installed, ls otherwise
 if command -v colorls >/dev/null; then
-  ls="colorls"
+  ls='colorls'
 else
-  ls="ls"
+  ls='ls'
 fi
 
 export \
-  BROWSER="firefox" \
+  BROWSER='firefox' \
   CLICOLOR=1 \
   FCEDIT="${EDITOR}" \
   GNUPGHOME="${HOME}/.config/gnupg" \
   HISTFILE="${HOME}/.history" \
   HISTSIZE=10000 \
-  LESS="-iMR" \
-  PAGER="less" \
-  QT_STYLE_OVERRIDE="adwaita" \
-  READER="zathura" \
-  TERMINAL="xst" \
+  LESS='-iMR' \
+  PAGER='less' \
+  QT_STYLE_OVERRIDE='adwaita' \
+  READER='zathura' \
+  TERMINAL='xst' \
   VISUAL="${EDITOR}" \
-  site="https://amissing.link"
+  site='https://amissing.link'
 
 # PATH acts funny w/ indentation
-if [ -d "/data/data/com.termux" ]; then
+if [ -d '/data/data/com.termux' ]; then
   export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
 /data/data/com.termux/files/usr/bin/applets"
 else

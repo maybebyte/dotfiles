@@ -26,7 +26,7 @@ EOF
 fi
 
 main() {
-  lemonbar-xft -f sans-14 -f "Noto Sans CJK JP-14" -p -d
+  lemonbar-xft -f sans-14 -f 'Noto Sans CJK JP-14' -p -d
 }
 
-main || err "lbar encountered a problem."
+main || err 'lbar encountered a problem.'

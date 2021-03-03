@@ -32,7 +32,7 @@ fi
 
 launch() {
   dmenu_run -i \
-    -fn "mono-20" \
+    -fn 'mono-20' \
     -nb "${color0:=#040516}" \
     -nf "${color3:=#9974e7}" \
     -sb "${color0:=#040516}" \
@@ -42,7 +42,7 @@ launch() {
 
 main() {
   import_colors
-  launch || err "launch() failed."
+  launch || err 'launch() failed.'
 }
 
 main

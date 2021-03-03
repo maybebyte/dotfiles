@@ -37,10 +37,10 @@ usage:
 ${0##*/} [cue file] [FLAC file]"
 
 splitflac() {
-  shnsplit -f "$1" -o flac -t "%n %t" "$2" \
-    || err "Unable to split the FLAC file."
+  shnsplit -f "$1" -o flac -t '%n %t' "$2" \
+    || err 'Unable to split the FLAC file.'
   mv "$2" "$2.bak"
-  cuetag "$1" ./*.flac || err "Unable to tag FLAC files."
+  cuetag "$1" ./*.flac || err 'Unable to tag FLAC files.'
   rm "$2.bak"
 }
 
