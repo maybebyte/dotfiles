@@ -14,10 +14,9 @@ command -v tmux >/dev/null 2>&1 \
 # ksh options
 set -o vi vi-esccomplete
 
-# ${KSH_VERSION} is read-only, so echo is safe
-echo "${KSH_VERSION}" \
-  | grep -qi 'pd' \
-  && set -o vi-show8
+grep -qi 'pd' <<EOF && set -o vi-show8
+${KSH_VERSION}
+EOF
 
 for srcfile in aliases functions prompt vars; do
   [ -r "${HOME}/.config/ksh/${srcfile}" ] \
