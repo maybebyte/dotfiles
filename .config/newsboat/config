@@ -36,7 +36,7 @@ macro , open-in-browser
 # download (a)udio
 macro a set browser "youtube-dl -x -f bestaudio/best"; open-in-browser; set browser "${BROWSER}"
 # (c)opy URL
-macro c set browser "printf '%u' | xclip -selection clipboard"; open-in-browser ; set browser "${BROWSER}"
+macro c set browser "printf '%s' '%u' | xclip -selection clipboard"; open-in-browser ; set browser "${BROWSER}"
 # (l)isten
 macro l set browser "mpv --no-video --speed=1"; open-in-browser; set browser "${BROWSER}"
 # download (v)ideo

@@ -44,13 +44,13 @@ show_volume() {
   esac
   muted="$(sndioctl -n output.mute 2>/dev/null)"
   [ "${muted}" = 0 ] \
-    && printf '%s' "vol: ${formatted_volume}%${delimiter}" \
-    || printf '%s' "MUTE${delimiter}"
+    && echo "vol: ${formatted_volume}%${delimiter}" \
+    || echo "MUTE${delimiter}"
 }
 
 show_disk_space() {
   diskspace="$(df -h /home | awk '/dev/{print $4}')"
-  printf '%s' "/home: ${diskspace}${delimiter}"
+  echo "/home: ${diskspace}${delimiter}"
 }
 
 show_battery() {
@@ -64,9 +64,9 @@ show_battery() {
   remaining="~${ebl_hours}h & ${ebl_minutes}m"
   percentage="$(apm -l)"
   case "${adapter_status}" in
-    0) printf '%s' "bat: ${remaining}, at ${percentage}%" ;;
-    1) printf '%s' "chr: at ${percentage}%" ;;
-    2) printf '%s' "bkup: ${remaining}, at ${percentage}%" ;;
+    0) echo "bat: ${remaining}, at ${percentage}%" ;;
+    1) echo "chr: at ${percentage}%" ;;
+    2) echo "bkup: ${remaining}, at ${percentage}%" ;;
     *) return 1 ;;
   esac
 }
@@ -94,9 +94,9 @@ show_temp() {
       ;;
   esac
   if [ "${batt_status}" = '4' ] || [ "${batt_status}" = '255' ]; then
-    printf '%s' "temp: ${temperature%%.*} °C"
+    echo "temp: ${temperature%%.*} °C"
   else
-    printf '%s' "${delimiter}temp: ${temperature%%.*} °C"
+    echo "${delimiter}temp: ${temperature%%.*} °C"
   fi
 }
 
@@ -105,7 +105,7 @@ sysinfo() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_volume)$(show_disk_space)\
 $(show_date)"
-  printf '%s' "${stats}"
+  echo "${stats}"
 }
 
 main() {

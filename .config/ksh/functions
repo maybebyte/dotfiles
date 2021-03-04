@@ -14,12 +14,12 @@ cht() {
 
 grabipv4() {
   ipv4=$(host -t A "$1")
-  printf '%s\n' "${ipv4##*address }"
+  echo "${ipv4##*address }"
 }
 
 grabipv6() {
   ipv6=$(host -t AAAA "$1")
-  printf '%s\n' "${ipv6##*address }"
+  echo "${ipv6##*address }"
 }
 
 unlockhdd() {
