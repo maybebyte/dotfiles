@@ -42,7 +42,7 @@ genfavi() {
 }
 
 main() {
-  usage "$@"
+  arg_eq "$@"
   genfavi "$1" || err 'Unable to generate favicon.'
 }
 

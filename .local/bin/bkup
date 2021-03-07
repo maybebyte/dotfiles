@@ -51,7 +51,7 @@ bkup() {
 
 # TODO: add a function to test validity of $1 and $2
 main() {
-  usage "$@"
+  arg_eq "$@"
   echo 'Dumping...'
   bkup "$1" "$2"
 }

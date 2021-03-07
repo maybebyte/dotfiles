@@ -52,7 +52,7 @@ fix_perms() {
 }
 
 main() {
-  usage_min "$@"
+  arg_ge "$@"
   create_workdir "$1" || err 'Unable to create directory, do you have permission?'
   nsc "$@" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'

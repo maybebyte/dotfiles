@@ -39,11 +39,11 @@ today() {
   date '+%Y-%m-%d'
 }
 
-usage() {
+arg_eq() {
   [ "$#" -eq "${arguments_needed}" ] || err "${usage_details}"
 }
 
-usage_min() {
+arg_ge() {
   [ "$#" -ge "${arguments_needed}" ] || err "${usage_details}"
 }
 

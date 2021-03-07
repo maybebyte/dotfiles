@@ -38,7 +38,7 @@ viewimg() {
 }
 
 main() {
-  usage "$@"
+  arg_eq "$@"
   viewimg "$1"
   wait
   rm "${filename}"
