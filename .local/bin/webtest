@@ -32,7 +32,7 @@ srvdir='/var/www/htdocs/aml'
 gen_site() {
   rm -rf "${webdir:?}"
   mkdir -p "${webdir}"
-  ssg5 "${markdowndir}" "${webdir}" 'Ashlen' \
+  ssg6 "${markdowndir}" "${webdir}" 'Ashlen' \
     'https://amissing.link' >/dev/null 2>&1
   rssg "${markdowndir}/articles.md" 2>/dev/null \
     'Newsletter - amissing.link' > "${webdir}/rss.xml"
