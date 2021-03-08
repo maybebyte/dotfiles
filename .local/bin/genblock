@@ -26,6 +26,7 @@ EOF
 fi
 
 blocklist='/etc/blocklist.txt'
+enabled_daemons="$(rcctl ls on 2>/dev/null)"
 firebog="$(ftp -Vo - https://v.firebog.net/hosts/lists.php?type=tick)"
 tmp_blocklist="$(mktemp /tmp/genblock.XXXXXX)"
 
@@ -117,9 +118,9 @@ rm_tmpfile() {
 }
 
 main() {
-  if rcctl ls on 2>/dev/null | grep -qE '^unwind$'; then
+  if echo "${enabled_daemons}" | grep -q '^unwind$'; then
     dns='unwind'
-  elif rcctl ls on 2>/dev/null | grep -qE '^unbound$'; then
+  elif echo "${enabled_daemons}" | grep -q '^unbound$'; then
     dns='unbound'
   else
     err 'Only unwind(8) and unbound(8) are supported. Enable one of them and try again.'
