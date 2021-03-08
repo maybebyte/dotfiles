@@ -40,7 +40,7 @@ bkup() {
     dump -0auf - "$1" \
       | "${compressor}" ${compressor_args} \
       > "$2"
-  elif alias | grep -qi priv; then
+  elif alias | grep -qi '^priv'; then
     priv dump -0auf - "$1" \
       | "${compressor}" ${compressor_args} \
       > "$2"
