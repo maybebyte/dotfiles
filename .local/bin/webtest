@@ -29,11 +29,8 @@ EOF
   exit 1
 fi
 
-markdowndir="${HOME}/builds/website_md"
-webdir="${HOME}/builds/website"
-srvdir='/var/www/htdocs/aml'
-
 gen_site() {
+  markdowndir="${HOME}/builds/website_md"
   rm -rf "${webdir:?}"
   mkdir -p "${webdir}"
   ssg6 "${markdowndir}" "${webdir}" 'Ashlen' \
@@ -43,6 +40,7 @@ gen_site() {
 }
 
 sync_site() {
+  srvdir='/var/www/htdocs/aml'
   # oddly, can't call this in the form 'priv sync_site' in
   # main(). thus, a heredoc is needed.
   priv /usr/bin/env sh <<EOF
@@ -57,6 +55,7 @@ EOF
 }
 
 main() {
+  webdir="${HOME}/builds/website"
   gen_site || err 'Unable to generate site.'
   sync_site || err 'Unable to sync web server.'
   echo 'Web server synced.'

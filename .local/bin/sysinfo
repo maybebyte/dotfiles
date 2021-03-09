@@ -33,8 +33,6 @@ EOF
   exit 1
 fi
 
-batt_status="$(apm -b)"
-
 show_date() {
   date '+%a %m-%d %H:%M'
 }
@@ -114,6 +112,7 @@ $(show_date)"
 
 main() {
   import_colors
+  batt_status="$(apm -b)"
   delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
   bgfg="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
   while :; do

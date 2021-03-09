@@ -29,15 +29,6 @@ EOF
   exit 1
 fi
 
-arguments_needed=2
-compressor='bzip2'
-compressor_args='-c'
-uid="$(id -u)"
-usage_details="${0##*/} requires ${arguments_needed} argument(s).
-
-usage:
-${0##*/} [backup target] [destination]"
-
 # bkup [backup target] [destination]
 bkup() {
   if [ "${uid}" = 0 ]; then
@@ -55,6 +46,14 @@ bkup() {
 
 # TODO: add a function to test validity of $1 and $2
 main() {
+  arguments_needed=2
+  compressor='bzip2'
+  compressor_args='-c'
+  uid="$(id -u)"
+  usage_details="${0##*/} requires ${arguments_needed} argument(s).
+
+usage:
+${0##*/} [backup target] [destination]"
   arg_eq "$@"
   echo 'Dumping...'
   bkup "$1" "$2"

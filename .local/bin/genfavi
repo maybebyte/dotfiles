@@ -29,12 +29,6 @@ EOF
   exit 1
 fi
 
-arguments_needed=1
-usage_details="${0##*/} requires ${arguments_needed} argument(s).
-
-usage:
-${0##*/} [image]"
-
 genfavi() {
   convert "$1" -background white \
     \( -clone 0 -resize 16x16 -extent 16x16 \) \
@@ -46,6 +40,11 @@ genfavi() {
 }
 
 main() {
+  arguments_needed=1
+  usage_details="${0##*/} requires ${arguments_needed} argument(s).
+
+usage:
+${0##*/} [image]"
   arg_eq "$@"
   genfavi "$1" || err 'Unable to generate favicon.'
 }

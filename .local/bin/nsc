@@ -34,14 +34,6 @@ fi
 
 # usage: nsc [target] [options]
 
-arguments_needed=1
-usage_details="${0##*/} requires at least ${arguments_needed} argument(s).
-
-usage:
-${0##*/} [target] [options]"
-sec="${HOME}/sec"
-workdir="${sec}/$1/nmap"
-
 create_workdir() {
   mkdir -p "${workdir}"
 }
@@ -56,6 +48,13 @@ fix_perms() {
 }
 
 main() {
+  arguments_needed=1
+  usage_details="${0##*/} requires at least ${arguments_needed} argument(s).
+
+usage:
+${0##*/} [target] [options]"
+  sec="${HOME}/sec"
+  workdir="${sec}/$1/nmap"
   arg_ge "$@"
   create_workdir "$1" || err 'Unable to create directory, do you have permission?'
   nsc "$@" || err 'Unable to scan target.'
