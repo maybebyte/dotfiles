@@ -9,7 +9,7 @@ aprv() {
 }
 
 cht() {
-  curl "cht.sh/$1"
+  ftp -U 'curl' -VMo - "https://cht.sh/$1"
 }
 
 grabipv4() {
@@ -20,6 +20,10 @@ grabipv4() {
 grabipv6() {
   ipv6="$(host -t AAAA "$1")"
   echo "${ipv6##*address }"
+}
+
+ipinf() {
+  ftp -VMo - "https://ipinfo.io/$1"
 }
 
 unlockhdd() {
