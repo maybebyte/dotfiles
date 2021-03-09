@@ -59,13 +59,13 @@ maim_full_copy() {
 
 present_options() {
   case "$(menu -l 6 -p "Screenshot which area?")" in
-    'a selected area') maim_sel_save ;;
-    'current window') maim_cur_save ;;
-    'full screen') maim_full_save ;;
-    'a selected area (copy)') maim_sel_copy ;;
-    'current window (copy)') maim_cur_copy ;;
-    'full screen (copy)') maim_full_copy ;;
-    *) err "Not a valid area." ;;
+    'a selected area')        maim_sel_save           ;;
+    'current window')         maim_cur_save           ;;
+    'full screen')            maim_full_save          ;;
+    'a selected area (copy)') maim_sel_copy           ;;
+    'current window (copy)')  maim_cur_copy           ;;
+    'full screen (copy)')     maim_full_copy          ;;
+    *)                        err "Not a valid area." ;;
   esac
 }
 
