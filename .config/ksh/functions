@@ -9,7 +9,7 @@ aprv() {
 }
 
 cht() {
-  curl cht.sh/"$1"
+  curl "cht.sh/$1"
 }
 
 grabipv4() {

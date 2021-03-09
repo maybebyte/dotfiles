@@ -40,9 +40,9 @@ show_date() {
 show_volume() {
   raw_volume="$(sndioctl -n output.level 2>/dev/null)"
   case "${raw_volume}" in
-    1.000) formatted_volume=100 ;;
-    0.000) formatted_volume=0 ;;
-    *) formatted_volume="$(printf '%.2s' "${raw_volume##*.}")" ;;
+    1.000) formatted_volume=100                                    ;;
+    0.000) formatted_volume=0                                      ;;
+    *)     formatted_volume="$(printf '%.2s' "${raw_volume##*.}")" ;;
   esac
   muted="$(sndioctl -n output.mute 2>/dev/null)"
   [ "${muted}" = 0 ] \
@@ -66,10 +66,10 @@ show_battery() {
   remaining="~${ebl_hours}h & ${ebl_minutes}m"
   percentage="$(apm -l)"
   case "${adapter_status}" in
-    0) echo "bat: ${remaining}, at ${percentage}%" ;;
-    1) echo "chr: at ${percentage}%" ;;
+    0) echo "bat: ${remaining}, at ${percentage}%"  ;;
+    1) echo "chr: at ${percentage}%"                ;;
     2) echo "bkup: ${remaining}, at ${percentage}%" ;;
-    *) return 1 ;;
+    *) return 1                                     ;;
   esac
 }
 
@@ -85,15 +85,9 @@ show_track() {
 
 show_temp() {
   case "$(hostname -s)" in
-    'lain')
-      temperature="$(sysctl -n hw.sensors.cpu0.temp0)"
-      ;;
-    'aphrodite')
-      temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"
-      ;;
-    *)
-      return 1
-      ;;
+    'lain')      temperature="$(sysctl -n hw.sensors.cpu0.temp0)"  ;;
+    'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)" ;;
+    *)           return 1                                          ;;
   esac
   if [ "${batt_status}" = '4' ] || [ "${batt_status}" = '255' ]; then
     echo "temp: ${temperature%%.*} °C"
