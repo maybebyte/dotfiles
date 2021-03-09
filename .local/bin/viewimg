@@ -30,7 +30,7 @@ EOF
 fi
 
 viewimg() {
-  filename="$(mktemp 'sxiv.XXXXXXXXXX')"
+  filename="$(mktemp)"
   ftp -Vo "${filename}" "$1" >/dev/null 2>&1
   sxiv "${filename}" >/dev/null 2>&1
 }
