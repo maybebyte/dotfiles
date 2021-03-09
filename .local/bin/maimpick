@@ -65,7 +65,7 @@ present_options() {
     'a selected area (copy)') maim_sel_copy           ;;
     'current window (copy)')  maim_cur_copy           ;;
     'full screen (copy)')     maim_full_copy          ;;
-    *)                        err "Not a valid area." ;;
+    *)                        err 'Not a valid area.' ;;
   esac
 }
 
