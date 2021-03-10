@@ -1,13 +1,32 @@
 # essentially, anything too simple to warrant its own shell script
+#
+# note that some of these functions use aliases. if certain behavior for
+# a program is documented in a comment and the flag to enable that
+# behavior isn't present, it may be in "${HOME}/.config/ksh/aliases".
 
+# using torsocks(1) and ftp(1) with no auto-login or user agent, send a
+# GET request to $1 and send the results to STDOUT. zathura(1) reads
+# from STDIN and displays the document.
+#
+# $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
+# zathura(1) can open.
 anonread() {
   anonftp -o - "$1" | zathura -
 }
 
+# invoke apropos(1) to match $1 against any available macro key of
+# manpages that match the current machine architecture.
+#
+# $1 is a word/phrase to search for (phrases must be quoted).
 aprv() {
   apr -S "$(uname -m)" any="$1"
 }
 
+# with a user agent of 'curl', no progress meter, no auto-login, and no
+# verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
+# the path and send the results to STDOUT.
+#
+# $1 is a program one wants to learn more about.
 cht() {
   ftp -U 'curl' -VMo - "https://cht.sh/$1"
 }
@@ -17,6 +36,8 @@ cht() {
 #
 # otherwise, copy $1 to an identically named file except the new file
 # ends in '.bak'.
+#
+# $1 is a file.
 cpbak() {
   if [ -z "${1##*.bak}" ]; then
     cp "$1" "${1%.bak}"
@@ -25,22 +46,35 @@ cpbak() {
   fi
 }
 
+# perform an A record lookup on $1 and return the IP address.
+#
+# $1 is a domain.
 grabipv4() {
   ipv4="$(host -t A "$1")"
   echo "${ipv4##*address }"
 }
 
+# perform an AAAA record lookup on $1 and return the IPv6 address.
+#
+# $1 is a domain.
 grabipv6() {
   ipv6="$(host -t AAAA "$1")"
   echo "${ipv6##*address }"
 }
 
+# with no auto-login, no progress meter and no verbose mode, use ftp(1)
+# to send a GET request to ipinfo.io with $1 as the path and send the
+# results to STDOUT.
+#
+# $1 is an IP address.
 ipinf() {
   ftp -VMo - "https://ipinfo.io/$1"
 }
 
 # if $1 ends in '.bak', remove '.bak' from the filename.
 # otherwise, append '.bak' to the filename.
+#
+# $1 is a file.
 mvbak() {
   if [ -z "${1##*.bak}" ]; then
     mv "$1" "${1%.bak}"
@@ -49,6 +83,10 @@ mvbak() {
   fi
 }
 
+# use bioctl(8) to unlock an encrypted partition and attach it to
+# softraid0.
+#
+# $1 is a chunk device.
 unlockhdd() {
   priv bioctl -c C -l "$1" softraid0
 }
