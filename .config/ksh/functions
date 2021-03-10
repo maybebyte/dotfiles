@@ -12,6 +12,19 @@ cht() {
   ftp -U 'curl' -VMo - "https://cht.sh/$1"
 }
 
+# if $1 ends in '.bak', copy $1 to an identically named file except the
+# new file omits '.bak'.
+#
+# otherwise, copy $1 to an identically named file except the new file
+# ends in '.bak'.
+cpbak() {
+  if [ -z "${1##*.bak}" ]; then
+    cp "$1" "${1%.bak}"
+  else
+    cp "$1" "$1.bak"
+  fi
+}
+
 grabipv4() {
   ipv4="$(host -t A "$1")"
   echo "${ipv4##*address }"
@@ -24,6 +37,16 @@ grabipv6() {
 
 ipinf() {
   ftp -VMo - "https://ipinfo.io/$1"
+}
+
+# if $1 ends in '.bak', remove '.bak' from the filename.
+# otherwise, append '.bak' to the filename.
+mvbak() {
+  if [ -z "${1##*.bak}" ]; then
+    mv "$1" "${1%.bak}"
+  else
+    mv "$1" "$1.bak"
+  fi
 }
 
 unlockhdd() {
