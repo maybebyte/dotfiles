@@ -146,8 +146,6 @@ alias \
   pkgqo='pkgq -E' \
   pkgs='pkgq -Q' \
   pkgss='pkgq -D snap -Q' \
-  pkgsize='pkgq -s' \
-  pkgsizes='pkgsize -D snap' \
   pkgup='pkga -u' \
   pkgups='pkgup -D snap'
 

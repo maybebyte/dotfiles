@@ -11,6 +11,18 @@ elif command -v sudo >/dev/null 2>&1; then
   alias priv='sudo '
 fi
 
+# if the number of arguments isn't equal to the number needed, print the
+# usage details to STDERR and exit.
+arg_eq() {
+  [ "$#" -eq "${arguments_needed}" ] || err "${usage_details}"
+}
+
+# if the number of arguments isn't greater than or equal to the number
+# needed, print the usage details to STDERR and exit.
+arg_ge() {
+  [ "$#" -ge "${arguments_needed}" ] || err "${usage_details}"
+}
+
 # err() is the generic way to print an error message and exit a script.
 # all of its output goes to STDERR.
 #
@@ -57,16 +69,28 @@ today() {
   date '+%Y-%m-%d'
 }
 
-# if the number of arguments isn't equal to the number needed, print the
-# usage details to STDERR and exit.
-arg_eq() {
-  [ "$#" -eq "${arguments_needed}" ] || err "${usage_details}"
-}
-
-# if the number of arguments isn't greater than or equal to the number
-# needed, print the usage details to STDERR and exit.
-arg_ge() {
-  [ "$#" -ge "${arguments_needed}" ] || err "${usage_details}"
+# recursive function. if $1 is less than 1024, print it and exit successfully.
+# otherwise, convert a given number to its human readable counterpart.
+#
+# $1 is a positive integer (supporting rational numbers would require
+# some additional code to handle exceptions).
+readable() {
+  recurse=0
+  size="$1"
+  [ "${size}" -lt 1024 ] \
+    && echo "${size}" \
+    && return 0
+  until [ "${#size}" -le 3 ]; do
+    recurse=$((recurse + 1))
+    size="$(echo "${size} / 1024" | bc)"
+  done
+  case ${recurse} in
+    1) echo "${size}KB"                                   ;;
+    2) echo "${size}MB"                                   ;;
+    3) echo "${size}GB"                                   ;;
+    4) echo "${size}TB"                                   ;;
+    *) err 'readable() can only convert up to terabytes.' ;;
+  esac
 }
 
 # copy STDIN to the clipboard so it can be pasted elsewhere.
