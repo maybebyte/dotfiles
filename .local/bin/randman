@@ -32,7 +32,7 @@ fi
 # lists man page paths from listed sections, shuffles them, and returns
 # the first page (like drawing the top card from a shuffled deck).
 randman() {
-  man -w -S "$(uname -m)" -k sec~^1\|5\|\|6\|7\|8$ \
+  man -w -S "$(uname -m)" -k sec~^1\|5\|6\|7\|8$ \
     | sort -R \
     | head -1
 }
