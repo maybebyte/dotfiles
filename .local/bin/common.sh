@@ -70,7 +70,7 @@ today() {
 }
 
 # if $1 is less than 1024, print it and exit successfully.  otherwise,
-# convert a given number to its human readable counterpart.
+# convert a given integer to its human readable counterpart.
 #
 # $1 is a positive integer (supporting rational numbers would require
 # some additional code to handle exceptions).

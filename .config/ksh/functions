@@ -83,6 +83,10 @@ mvbak() {
   fi
 }
 
+# obtains the estimated size of a package and returns it in a human
+# readable format (hreadable() can be found in 'common.sh').
+#
+# $1 is the name of a valid package.
 pkgsize() {
   size="$(pkgq -s "$1" | awk '/Size/{print $2}')"
   hreadable "${size}"
