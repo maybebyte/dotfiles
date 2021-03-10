@@ -69,27 +69,27 @@ today() {
   date '+%Y-%m-%d'
 }
 
-# recursive function. if $1 is less than 1024, print it and exit successfully.
-# otherwise, convert a given number to its human readable counterpart.
+# if $1 is less than 1024, print it and exit successfully.  otherwise,
+# convert a given number to its human readable counterpart.
 #
 # $1 is a positive integer (supporting rational numbers would require
 # some additional code to handle exceptions).
-readable() {
-  recurse=0
+hreadable() {
+  no_of_loops=0
   size="$1"
   [ "${size}" -lt 1024 ] \
     && echo "${size}" \
     && return 0
   until [ "${#size}" -le 3 ]; do
-    recurse=$((recurse + 1))
+    no_of_loops=$((no_of_loops + 1))
     size="$(echo "${size} / 1024" | bc)"
   done
-  case ${recurse} in
-    1) echo "${size}KB"                                   ;;
-    2) echo "${size}MB"                                   ;;
-    3) echo "${size}GB"                                   ;;
-    4) echo "${size}TB"                                   ;;
-    *) err 'readable() can only convert up to terabytes.' ;;
+  case ${no_of_loops} in
+    1) echo "${size}KB"                                    ;;
+    2) echo "${size}MB"                                    ;;
+    3) echo "${size}GB"                                    ;;
+    4) echo "${size}TB"                                    ;;
+    *) err 'hreadable() can only convert up to terabytes.' ;;
   esac
 }
 

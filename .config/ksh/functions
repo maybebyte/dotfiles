@@ -85,7 +85,7 @@ mvbak() {
 
 pkgsize() {
   size="$(pkgq -s "$1" | awk '/Size/{print $2}')"
-  readable "${size}"
+  hreadable "${size}"
 }
 
 # use bioctl(8) to unlock an encrypted partition and attach it to
