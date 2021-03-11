@@ -69,14 +69,20 @@ today() {
   date '+%Y-%m-%d'
 }
 
-# if $1 is less than 1024, print it and exit successfully.  otherwise,
-# convert a given integer to its human readable counterpart.
+# if $1 is less than 1024, print it and exit successfully.
+# if $1 is not an integer, exit with an error.
+# otherwise, convert $1 to its human readable counterpart.
 #
 # $1 is a positive integer (supporting rational numbers would require
 # some additional code to handle exceptions).
+#
+# bug: 1024000 returns 0MB.
 hreadable() {
   no_of_loops=0
   size="$1"
+  echo "${size}" \
+    | grep -q '[^[:digit:]]' \
+    && err 'Only integers are accepted.'
   [ "${size}" -lt 1024 ] \
     && echo "${size}" \
     && return 0
