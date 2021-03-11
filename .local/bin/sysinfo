@@ -56,7 +56,7 @@ show_disk_space() {
 }
 
 show_battery() {
-  if [ "${batt_status}" = '4' ] || [ "${batt_status}" = '255' ]; then
+  if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
     return 1
   fi
   adapter_status="$(apm -a)"
@@ -89,7 +89,7 @@ show_temp() {
     'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)" ;;
     *)           return 1                                          ;;
   esac
-  if [ "${batt_status}" = '4' ] || [ "${batt_status}" = '255' ]; then
+  if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
     echo "temp: ${temperature%%.*} °C"
   else
     echo "${delimiter}temp: ${temperature%%.*} °C"
