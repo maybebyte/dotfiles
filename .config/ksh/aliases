@@ -98,7 +98,7 @@ general_aliases() {
   # sec
   alias \
     nk="nikto -output nikto-\$(today).txt -host" \
-    scan='must_be_root && nmap -sn' \
+    scan='nmap -sn' \
     sspl='searchsploit'
 
   # system
