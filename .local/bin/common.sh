@@ -86,11 +86,11 @@ hreadable() {
   [ "${size}" -lt 1024 ] \
     && echo "${size}" \
     && return 0
+  # shell arithmetic must be assigned to a variable to avoid executing output
+  # https://github.com/koalaman/shellcheck/wiki/SC2084
   until [ "${#size}" -le 3 ]; do
-    no_of_loops=$((no_of_loops + 1))
-    # must be assigned to a variable to avoid executing output
-    # https://github.com/koalaman/shellcheck/wiki/SC2084
-    _=$((size /= 1024))
+    dummy1=$((no_of_loops += 1))
+    dummy2=$((size /= 1024))
   done
   case ${no_of_loops} in
     1) echo "${size}KB"                                    ;;
