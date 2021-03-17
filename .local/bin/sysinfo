@@ -38,15 +38,21 @@ show_battery() {
     return 1
   fi
   adapter_status="$(apm -a)"
-  estimated_battery_life="$(apm -m)"
-  ebl_minutes=$((estimated_battery_life % 60))
-  ebl_hours=$((estimated_battery_life / 60))
-  remaining="~${ebl_hours}h & ${ebl_minutes}m"
   percentage="$(apm -l)"
   case "${adapter_status}" in
-    0) echo "bat: ${remaining}, at ${percentage}%" ;;
-    1) echo "chr: at ${percentage}%"               ;;
-    *) return 1                                    ;;
+    0) # disconnected (on battery)
+      estimated_battery_life="$(apm -m)"
+      ebl_minutes=$((estimated_battery_life % 60))
+      ebl_hours=$((estimated_battery_life / 60))
+      remaining="~${ebl_hours}h & ${ebl_minutes}m"
+      echo "bat: ${remaining}, at ${percentage}%"
+      ;;
+    1) # charging
+      echo "chr: at ${percentage}%"
+      ;;
+    *) # there's no battery information to display
+      return 1
+      ;;
   esac
 }
 
