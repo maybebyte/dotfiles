@@ -44,9 +44,9 @@ show_battery() {
   remaining="~${ebl_hours}h & ${ebl_minutes}m"
   percentage="$(apm -l)"
   case "${adapter_status}" in
-    0) echo "bat: ${remaining}, at ${percentage}%"  ;;
-    1) echo "chr: at ${percentage}%"                ;;
-    *) return 1                                     ;;
+    0) echo "bat: ${remaining}, at ${percentage}%" ;;
+    1) echo "chr: at ${percentage}%"               ;;
+    *) return 1                                    ;;
   esac
 }
 
