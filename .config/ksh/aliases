@@ -277,6 +277,9 @@ void_aliases() {
     xi='xbps-install' \
     xq='xbps-query' \
     xr='xbps-remove'
+
+  # alternatives
+  alias file='openbsd-file'
 }
 
 main() {
