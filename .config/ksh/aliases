@@ -2,7 +2,6 @@ general_aliases() {
   # assorted
   alias \
     b64='openssl enc -base64' \
-    chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64" \
     cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr' \
     exifrm='exiftool -all= ' \
     irssi='proxychains4 irssi' \
@@ -79,7 +78,7 @@ general_aliases() {
   # keepass
   alias \
     kp='keepassxc-cli' \
-    kpo="kp open \${HOME}'/passwords/KeePass Database.kdbx'"
+    kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
 
   # man
   alias \
@@ -183,6 +182,9 @@ linux_aliases() {
 }
 
 openbsd_aliases() {
+  # check the date of the latest snapshot
+  alias chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64" \
+
   # editing
   alias \
     ehn="e /etc/hostname.\${nic}" \

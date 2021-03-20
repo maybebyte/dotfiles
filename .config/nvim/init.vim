@@ -77,6 +77,9 @@ autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* noremap ZQ
 " shell script syntax for xsession
 autocmd BufRead $HOME/.xsession set filetype=sh
 
+" ksh is a shell :)
+autocmd BufRead $HOME/.config/ksh/* set filetype=sh
+
 " no more automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
