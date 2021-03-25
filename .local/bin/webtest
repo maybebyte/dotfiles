@@ -47,8 +47,8 @@ sync_site() {
 rm -rf ${srvdir:?}
 mkdir -p ${srvdir}
 mv ${webdir}/* ${srvdir}/
-find ${srvdir} -type f ! -perm 644 -exec chmod 644 '{}' \\; >/dev/null 2>&1
-find ${srvdir} -type d ! -perm 755 -exec chmod 755 '{}' \\; >/dev/null 2>&1
+find ${srvdir} \( -type f ! -perm 644 -exec chmod 644 '{}' \; \) \
+  -o \( -type d ! -perm 755 -exec chmod 755 '{}' \; \)
 chown -R ashlen:ashlen ${srvdir}
 rcctl reload httpd >/dev/null
 EOF
