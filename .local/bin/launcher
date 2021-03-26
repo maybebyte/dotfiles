@@ -41,7 +41,6 @@ launch() {
     -nf "${color3:=#9974e7}" \
     -sb "${color0:=#040516}" \
     -sf "${color7:=#e0cef3}"
-
 }
 
 main() {
