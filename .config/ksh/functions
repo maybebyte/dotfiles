@@ -63,7 +63,7 @@ grabipv6() {
 }
 
 # with no auto-login, no progress meter and no verbose mode, use ftp(1)
-# to send a GET request to ipinfo.io with $1 as the path and send the
+# to send a GET request to ipinfo.io with $1 as the path. Then, send the
 # results to STDOUT.
 #
 # $1 is an IP address.
@@ -98,4 +98,13 @@ pkgsize() {
 # $1 is a chunk device.
 unlockhdd() {
   priv bioctl -c C -l "$1" softraid0
+}
+
+# with a user agent of 'curl', no progress meter, no auto-login, and no
+# verbose mode, use ftp(1) to send a GET request to wttr.in with $1 as
+# the path. Then, send the results to STDOUT.
+#
+# $1 is a geographical location for weather forecasting purposes.
+wttr() {
+  ftp -U 'curl' -VMo - "https://wttr.in/$1"
 }
