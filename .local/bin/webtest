@@ -41,6 +41,7 @@ gen_site() {
 
 sync_site() {
   srvdir='/var/www/htdocs/aml'
+  unpriv_user="$(id -un)"
   # oddly, can't call this in the form 'priv sync_site' in
   # main(). thus, a heredoc is needed.
   priv /usr/bin/env sh <<EOF
@@ -49,7 +50,7 @@ mkdir -p ${srvdir}
 mv ${webdir}/* ${srvdir}/
 find ${srvdir} \( -type f ! -perm 644 -exec chmod 644 '{}' \; \) \
   -o \( -type d ! -perm 755 -exec chmod 755 '{}' \; \)
-chown -R ashlen:ashlen ${srvdir}
+chown -R ${unpriv_user}:${unpriv_user} ${srvdir}
 rcctl reload httpd >/dev/null
 EOF
 }
