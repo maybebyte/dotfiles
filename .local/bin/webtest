@@ -55,6 +55,10 @@ rcctl reload httpd >/dev/null
 EOF
 }
 
+# TODO: make this script more flexible.
+#
+# right now this script uses hard-coded variables.
+# perhaps make use of positional parameters or a conf file instead?
 main() {
   webdir="${HOME}/builds/website"
   gen_site || err 'Unable to generate site.'
