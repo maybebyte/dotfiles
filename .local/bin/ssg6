@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/usr/bin/env sh
 #
 # https://rgz.ee/bin/ssg6
 # Copyright 2018-2019 Roman Zolotarev <hi@romanzolotarev.com>
@@ -14,7 +14,7 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-#
+set -e
 
 main() {
   for pos_par in "$1" "$2" "$3" "$4"; do
@@ -63,11 +63,11 @@ main() {
     echo "$fs" | tee "$dst/.files"
 
     if echo "$fs" | grep -q '\.md$'; then
-      if [ -x "$(which lowdown 2> /dev/null)" ]; then
+      if [ -x "$(command -v lowdown)" ]; then
         echo "$fs" | grep '\.md$' |
         render_md_files_lowdown "$src" "$dst" "$title"
       else
-        if [ -x "$(which Markdown.pl 2> /dev/null)" ]; then
+        if [ -x "$(command -v Markdown.pl)" ]; then
           echo "$fs" | grep '\.md$' |
           render_md_files_Markdown_pl "$src" "$dst" "$title"
         else
