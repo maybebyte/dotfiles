@@ -48,8 +48,7 @@ main() {
   [ -f "$f_file" ] && FOOTER=$(cat "$f_file") && export FOOTER
   [ -f "$h_file" ] && HEADER=$(cat "$h_file") && export HEADER
 
-  list_dirs "$src" |
-  (cd "$src" && cpio -pdu "$dst")
+  list_dirs "$src" | (cd "$src" && cpio -pdu "$dst")
 
   fs=$(
   if [ -f "$dst/.files" ]; then
@@ -64,12 +63,14 @@ main() {
 
     if echo "$fs" | grep -q '\.md$'; then
       if [ -x "$(command -v lowdown)" ]; then
-        echo "$fs" | grep '\.md$' |
-        render_md_files_lowdown "$src" "$dst" "$title"
+        echo "$fs" \
+          | grep '\.md$' \
+          | render_md_files_lowdown "$src" "$dst" "$title"
       else
         if [ -x "$(command -v Markdown.pl)" ]; then
-          echo "$fs" | grep '\.md$' |
-          render_md_files_Markdown_pl "$src" "$dst" "$title"
+          echo "$fs" \
+            | grep '\.md$' \
+            | render_md_files_Markdown_pl "$src" "$dst" "$title"
         else
           echo "couldn't find lowdown nor Markdown.pl"
           exit 3
@@ -77,11 +78,13 @@ main() {
       fi
     fi
 
-    echo "$fs" | grep '\.html$' |
-    render_html_files "$src" "$dst" "$title"
+    echo "$fs" \
+      | grep '\.html$' \
+      | render_html_files "$src" "$dst" "$title"
 
-    echo "$fs" | grep -Ev '\.md$|\.html$' |
-    (cd "$src" && cpio -pu "$dst")
+    echo "$fs" \
+      | grep -Ev '\.md$|\.html$' \
+      | (cd "$src" && cpio -pu "$dst")
   fi
 
   printf '[ssg] ' >&2
@@ -94,8 +97,8 @@ main() {
   date=$(date +%Y-%m-%d)
   urls=$(list_pages "$src")
 
-  [ -n "$urls" ] &&
-  render_sitemap "$urls" "$base_url" "$date" > "$dst/sitemap.xml"
+  [ -n "$urls" ] \
+    && render_sitemap "$urls" "$base_url" "$date" > "$dst/sitemap.xml"
 
   print_status 'url' 'urls' "$urls" >&2
   echo >&2
@@ -235,8 +238,9 @@ render_html_file() {
 
 list_pages() {
   e="\\( -name '*.html' -o -name '*.md' \\)"
-  cd "$1" && eval "find . -type f ! -path '*/.*' ! -path '*/_*' $IGNORE $e" |
-  sed 's#^./##;s#.md$#.html#;s#/index.html$#/#'
+  cd "$1" \
+    && eval "find . -type f ! -path '*/.*' ! -path '*/_*' $IGNORE $e" \
+    | sed 's#^./##;s#.md$#.html#;s#/index.html$#/#'
 }
 
 
