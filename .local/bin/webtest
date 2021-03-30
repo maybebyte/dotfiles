@@ -30,24 +30,21 @@ EOF
 fi
 
 gen_site() {
-  markdowndir="${HOME}/builds/website_md"
-  rm -rf "${webdir:?}"
-  mkdir -p "${webdir}"
-  ssg6 "${markdowndir}" "${webdir}" 'Ashlen' \
-    'https://amissing.link' >/dev/null 2>&1
+  rm -rf "${htmldir:?}"
+  mkdir -p "${htmldir}"
+  ssg6 "${markdowndir}" "${htmldir}" "${unpriv_user}" \
+    "${site##*//}" >/dev/null 2>&1
   rssg "${markdowndir}/articles.md" 2>/dev/null \
-    'Newsletter - amissing.link' > "${webdir}/rss.xml"
+    "Newsletter - ${site##*//}" > "${htmldir}/rss.xml"
 }
 
 sync_site() {
-  srvdir='/var/www/htdocs/aml'
-  unpriv_user="$(id -un)"
   # oddly, can't call this in the form 'priv sync_site' in
   # main(). thus, a heredoc is needed.
   priv /usr/bin/env sh <<EOF
 rm -rf ${srvdir:?}
 mkdir -p ${srvdir}
-mv ${webdir}/* ${srvdir}/
+mv ${htmldir}/* ${srvdir}/
 find ${srvdir} \( -type f ! -perm 644 -exec chmod 644 '{}' \; \) \
   -o \( -type d ! -perm 755 -exec chmod 755 '{}' \; \)
 chown -R ${unpriv_user}:${unpriv_user} ${srvdir}
@@ -55,15 +52,18 @@ rcctl reload httpd >/dev/null
 EOF
 }
 
-# TODO: make this script more flexible.
-#
-# right now this script uses hard-coded variables.
-# perhaps make use of positional parameters or a conf file instead?
 main() {
-  webdir="${HOME}/builds/website"
+  arguments_needed=4
+  usage_details="usage: ${0##*/} [domain] [md dir] [html (output) dir] [srv dir]"
+  arg_eq "$@"
+  unpriv_user="$(id -un)"
+  site="$1"
+  markdowndir="$2"
+  htmldir="$3"
+  srvdir="$4"
   gen_site || err 'Unable to generate site.'
   sync_site || err 'Unable to sync web server.'
   echo 'Web server synced.'
 }
 
-main
+main "$@"
