@@ -29,6 +29,7 @@ EOF
   exit 1
 fi
 
+# TODO: articles.md should be a variable instead of hard-coded
 gen_site() {
   ssg6 "${markdowndir}" "${htmldir}" "${unpriv_user}" \
     "${site##*//}" >/dev/null 2>&1
@@ -54,6 +55,8 @@ cleanup() {
   rm -rf "${htmldir:?}"
 }
 
+# TODO: a conf file is likely a better implementation than positional
+# parameters in the long run.
 main() {
   arguments_needed=3
   usage_details="usage: ${0##*/} [domain] [md dir] [srv dir]"
