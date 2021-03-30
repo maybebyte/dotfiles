@@ -1,12 +1,12 @@
 # use vim if it's installed, vi otherwise
-if command -v nvim >/dev/null; then
+if [ -x "$(command -v nvim)" ]; then
   EDITOR='nvim'
 else
   EDITOR='vi'
 fi
 
 # use colorls if it's installed, ls otherwise
-if command -v colorls >/dev/null; then
+if [ -x "$(command -v colorls)" ]; then
   ls='colorls'
 else
   ls='ls'

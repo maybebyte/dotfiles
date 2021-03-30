@@ -7,7 +7,7 @@ import_colors
 
 # if tmux is installed and not inside a tmux session, then try to attach.
 # if attachment fails, start a new session
-command -v tmux >/dev/null 2>&1 \
+[ -x "$(command -v tmux)" ] \
   && [ -z "${TMUX}" ] \
   && (tmux attach || tmux) >/dev/null 2>&1
 
