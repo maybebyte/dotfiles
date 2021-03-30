@@ -25,10 +25,10 @@ main() {
     [ -d "${pos_par}" ] || no_dir "${pos_par}"
   done
 
-  src=$(readlink_f "$1")
-  dst=$(readlink_f "$2")
+  src="$(readlink_f "$1")"
+  dst="$(readlink_f "$2")"
 
-  IGNORE=$(
+  IGNORE="$(
     if [ ! -f "$src/.ssgignore" ]; then
       printf ' ! -path "*/.*"'
       return
@@ -37,7 +37,7 @@ main() {
       [ -n "$x" ] || continue
       printf ' ! -path "*/%s*"' "$x"
     done < "$src/.ssgignore"
-  )
+  )"
 
   # files
 
@@ -45,18 +45,18 @@ main() {
 
   h_file="$src/_header.html"
   f_file="$src/_footer.html"
-  [ -f "$f_file" ] && FOOTER=$(cat "$f_file") && export FOOTER
-  [ -f "$h_file" ] && HEADER=$(cat "$h_file") && export HEADER
+  [ -f "$f_file" ] && FOOTER="$(cat "$f_file")" && export FOOTER
+  [ -f "$h_file" ] && HEADER="$(cat "$h_file")" && export HEADER
 
   list_dirs "$src" | (cd "$src" && cpio -pdu "$dst")
 
-  fs=$(
+  fs="$(
   if [ -f "$dst/.files" ]; then
     list_affected_files "$src" "$dst/.files"
   else
     list_files "$1"
   fi
-  )
+  )"
 
   if [ -n "$fs" ]; then
     echo "$fs" | tee "$dst/.files"
@@ -94,8 +94,8 @@ main() {
   # sitemap
 
   base_url="$4"
-  date=$(date +%Y-%m-%d)
-  urls=$(list_pages "$src")
+  date="$(date +%Y-%m-%d)"
+  urls="$(list_pages "$src")"
 
   [ -n "$urls" ] \
     && render_sitemap "$urls" "$base_url" "$date" > "$dst/sitemap.xml"
@@ -108,13 +108,13 @@ main() {
 readlink_f() {
   file="$1"
   cd "$(dirname "$file")"
-  file=$(basename "$file")
+  file="$(basename "$file")"
   while [ -L "$file" ]; do
-    file=$(readlink "$file")
+    file="$(readlink "$file")"
     cd "$(dirname "$file")"
-    file=$(basename "$file")
+    file="$(basename "$file")"
   done
-  dir=$(pwd -P)
+  dir="$(pwd -P)"
   echo "$dir/$file"
 }
 
@@ -167,10 +167,10 @@ has_partials() {
 
 
 list_affected_files() {
-  fs=$(list_newer_files "$1" "$2")
+  fs="$(list_newer_files "$1" "$2")"
 
   if echo "$fs" | has_partials; then
-    list_dependant_files "$1"
+    list_dependent_files "$1"
   else
     echo "$fs"
   fi
