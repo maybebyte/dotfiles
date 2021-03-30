@@ -29,7 +29,6 @@ export \
 
 if [ "$(uname)" = 'OpenBSD' ]; then
   export \
-    htmldir="${HOME}/builds/website" \
     markdowndir="${HOME}/builds/website_md" \
     srvdir='/var/www/htdocs/aml'
 fi

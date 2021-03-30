@@ -30,8 +30,6 @@ EOF
 fi
 
 gen_site() {
-  rm -rf "${htmldir:?}"
-  mkdir -p "${htmldir}"
   ssg6 "${markdowndir}" "${htmldir}" "${unpriv_user}" \
     "${site##*//}" >/dev/null 2>&1
   rssg "${markdowndir}/articles.md" 2>/dev/null \
@@ -52,17 +50,22 @@ rcctl reload httpd >/dev/null
 EOF
 }
 
+cleanup() {
+  rm -rf "${htmldir:?}"
+}
+
 main() {
-  arguments_needed=4
-  usage_details="usage: ${0##*/} [domain] [md dir] [html (output) dir] [srv dir]"
+  arguments_needed=3
+  usage_details="usage: ${0##*/} [domain] [md dir] [srv dir]"
   arg_eq "$@"
-  unpriv_user="$(id -un)"
   site="$1"
   markdowndir="$2"
-  htmldir="$3"
-  srvdir="$4"
-  gen_site || err 'Unable to generate site.'
-  sync_site || err 'Unable to sync web server.'
+  srvdir="$3"
+  htmldir="$(mktemp -d)"
+  unpriv_user="$(id -un)"
+  gen_site || cleanup; err 'Unable to generate site.'
+  sync_site || cleanup; err 'Unable to sync web server.'
+  cleanup
   echo 'Web server synced.'
 }
 

@@ -89,7 +89,8 @@ general_aliases() {
   alias \
     ..='cd ..' \
     ...='cd ../..' \
-    cdweb="cd \${HOME}/builds/website_md"
+    cdmd="cd \${markdowndir}" \
+    cdsrv="cd \${srvdir}"
 
   # networking
   alias tnet="ping \${site##*//}"
@@ -273,8 +274,7 @@ openbsd_aliases() {
     tailmail='tail -f /var/log/maillog'
 
   # website test
-  alias webtest="webtest \${site} \${markdowndir} \\
-    \${htmldir} \${srvdir}"
+  alias webtest="webtest \${site} \${markdowndir} \${srvdir}"
 }
 
 void_aliases() {
