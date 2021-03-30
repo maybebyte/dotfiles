@@ -18,7 +18,7 @@ grep -qi 'pd' <<EOF && set -o vi-show8
 ${KSH_VERSION}
 EOF
 
-for srcfile in aliases functions prompt vars; do
+for srcfile in 'aliases' 'functions' 'prompt' 'vars'; do
   [ -r "${HOME}/.config/ksh/${srcfile}" ] \
     && . "${HOME}/.config/ksh/${srcfile}"
 done
