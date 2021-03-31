@@ -10,26 +10,20 @@
 #
 # $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
 # zathura(1) can open.
-anonread() {
-  anonftp -o - "$1" | zathura -
-}
+anonread() { anonftp -o - "$1" | zathura - ;}
 
 # invoke apropos(1) to match $1 against any available macro key of
 # manpages that match the current machine architecture.
 #
 # $1 is a word/phrase to search for (phrases must be quoted).
-aprv() {
-  apr -S "$(uname -m)" any="$1"
-}
+aprv() { apr -S "$(uname -m)" any="$1" ;}
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
 # the path and send the results to STDOUT.
 #
 # $1 is a program one wants to learn more about.
-cht() {
-  ftp -U 'curl' -VMo - "https://cht.sh/$1"
-}
+cht() { ftp -U 'curl' -VMo - "https://cht.sh/$1" ;}
 
 # if $1 ends in '.bak', copy $1 to an identically named file except the
 # new file omits '.bak'.
@@ -67,9 +61,7 @@ grabipv6() {
 # results to STDOUT.
 #
 # $1 is an IP address.
-ipinf() {
-  ftp -VMo - "https://ipinfo.io/$1"
-}
+ipinf() { ftp -VMo - "https://ipinfo.io/$1" ;}
 
 # if $1 ends in '.bak', remove '.bak' from the filename.
 # otherwise, append '.bak' to the filename.
@@ -96,15 +88,11 @@ pkgsize() {
 # softraid0.
 #
 # $1 is a chunk device.
-unlockhdd() {
-  priv bioctl -c C -l "$1" softraid0
-}
+unlockhdd() { priv bioctl -c C -l "$1" softraid0 ;}
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to wttr.in with $1 as
 # the path. Then, send the results to STDOUT.
 #
 # $1 is a geographical location for weather forecasting purposes.
-wttr() {
-  ftp -U 'curl' -VMo - "https://wttr.in/$1"
-}
+wttr() { ftp -U 'curl' -VMo - "https://wttr.in/$1" ;}

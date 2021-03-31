@@ -65,9 +65,7 @@ must_be_root() {
 }
 
 # print date in yyyy-mm-dd format.
-today() {
-  date '+%Y-%m-%d'
-}
+today() { date '+%Y-%m-%d' ;}
 
 # if $1 is less than 1024, print it and exit successfully.
 # if $1 is not an integer, exit with an error.
@@ -102,6 +100,4 @@ hreadable() {
 }
 
 # copy STDIN to the clipboard so it can be pasted elsewhere.
-yank() {
-  xclip -selection clipboard
-}
+yank() { xclip -selection clipboard ;}
