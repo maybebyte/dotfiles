@@ -23,7 +23,7 @@ fi
 
 grab_emoji() {
   emoji_file="${HOME}/.local/share/emoji"
-  [ -r "${emoji_file}" ] || err 'Emoji file isn'\''t available.'
+  [ -r "${emoji_file}" ] || err "Emoji file isn't available."
 
   chosen="$(cut -d ';' -f1 "${emoji_file}" | menu -l 20)"
   [ -n "${chosen}" ] || err 'Must choose an emoji.'
@@ -33,9 +33,4 @@ grab_emoji() {
   printf '%s' "${chosen%% *}" | yank
 }
 
-main() {
-  import_colors
-  grab_emoji
-}
-
-main
+main() { import_colors; grab_emoji; }; main

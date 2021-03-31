@@ -15,23 +15,6 @@ set -e
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-# check that the library file is readable. if it is, source it so its
-# functions are available. if not, exit due to potentially unpredictable
-# behavior.
-library="${HOME}/.local/bin/common.sh"
-if [ -r "${library}" ]; then
-  . "${library}"
-else
-  cat >&2 <<EOF
-${library} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it; exiting for safety.
-EOF
-  exit 1
-fi
-
 # encodes all flac files in ${PWD} to opus with parallelization
-main() {
-  parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac
-}
-
-main || err 'Unable to convert files properly.'
+main() { parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac; }
+main || echo 'Unable to convert files properly.' >&2; exit 1
