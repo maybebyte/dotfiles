@@ -60,7 +60,8 @@ grabipv6() {
 # to send a GET request to ipinfo.io with $1 as the path. Then, send the
 # results to STDOUT.
 #
-# $1 is an IP address.
+# $1 is an IP address. If left blank, ipinf will return results for our
+# public IP.
 ipinf() { ftp -VMo - "https://ipinfo.io/$1"; }
 
 # if $1 ends in '.bak', remove '.bak' from the filename.
@@ -94,5 +95,7 @@ unlockhdd() { priv bioctl -c C -l "$1" softraid0; }
 # verbose mode, use ftp(1) to send a GET request to wttr.in with $1 as
 # the path. Then, send the results to STDOUT.
 #
-# $1 is a geographical location for weather forecasting purposes.
+# $1 is a geographical location for weather forecasting purposes. If
+# left blank, wttr will return results for the geographical location
+# associated with our public IP.
 wttr() { ftp -U 'curl' -VMo - "https://wttr.in/$1"; }
