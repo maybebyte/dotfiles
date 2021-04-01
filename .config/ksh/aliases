@@ -1,7 +1,6 @@
 general_aliases() {
   # assorted
   alias \
-    b64='openssl enc -base64' \
     cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr' \
     exifrm='exiftool -all= ' \
     irssi='proxychains4 irssi' \

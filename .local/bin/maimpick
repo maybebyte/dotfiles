@@ -70,7 +70,7 @@ present_options() {
 }
 
 main() {
-  common_maim_args='-d 1 -u -q -B'
+  common_maim_args='-uqBd 1'
   savedir="${HOME}/screenshots"
   import_colors
   present_options <<'EOF'
