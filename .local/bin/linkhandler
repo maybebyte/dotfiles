@@ -69,7 +69,7 @@ linkhandler() {
       notify-send "${duration}"
       ;;
     'read')
-      ftp -VMo - "${URL}" | zathura - >/dev/null 2>&1
+      ftp -VMno - -U '' "${URL}" | zathura - >/dev/null 2>&1
       ;;
     'view image')
       viewimg "${URL}"
