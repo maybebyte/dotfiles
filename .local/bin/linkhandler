@@ -1,0 +1,99 @@
+#!/usr/bin/env sh
+# shellcheck disable=SC1090
+set -e
+# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# check that the library file is readable. if it is, source it so its
+# functions are available. if not, exit due to potentially unpredictable
+# behavior.
+library="${HOME}/.local/bin/common.sh"
+if [ -r "${library}" ]; then
+  . "${library}"
+else
+  cat >&2 <<EOF
+${library} doesn't exist or isn't readable.
+${0##*/} may not function correctly without it; exiting for safety.
+EOF
+  exit 1
+fi
+
+# if no arg is passed and STDIN is empty, exit with an error.
+check_opts() {
+  if [ -n "$1" ]; then
+    URL="$1"
+  elif [ ! -t 0 ]; then
+    read -r URL
+  else
+    err "${0##*/} needs a URL!"
+  fi
+}
+
+# given a URL and a choice, perform the associated action.
+#
+# output is squelched for most options since I primarily use this with
+# newsboat.
+linkhandler() {
+  case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
+    'copy duration')
+      youtube-dl --get-duration "${URL}" | yank
+      ;;
+    'download audio')
+      youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1
+      ;;
+    'download video')
+      youtube-dl --embed-subs "${URL}" >/dev/null 2>&1
+      ;;
+    'listen')
+      mpv --no-video --speed=1 "${URL}" >/dev/null 2>&1
+      ;;
+    'print duration')
+      duration="$(youtube-dl --get-duration "${URL}")"
+      notify-send "${duration}"
+      ;;
+    'read')
+      ftp -VMo - "${URL}" | zathura - >/dev/null 2>&1
+      ;;
+    'view image')
+      viewimg "${URL}"
+      ;;
+    'watch')
+      mpv "${URL}" >/dev/null 2>&1
+      ;;
+    'watch (loop)')
+      mpv --speed=1 --loop=inf "${URL}" >/dev/null 2>&1
+      ;;
+    *)
+      err "linkhandler doesn't support that option."
+  esac
+}
+
+# defines options. count the number of options, then pass them + that
+# number to linkhandler.
+main() {
+  options='copy duration
+download audio
+download video
+listen
+print duration
+read
+view image
+watch
+watch (loop)'
+  check_opts "$@"
+  num_of_opts="$(echo "${options}" | wc -l)"
+  echo "${options}" | linkhandler "$@"
+}
+
+main "$@"
