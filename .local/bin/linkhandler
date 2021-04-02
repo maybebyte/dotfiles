@@ -49,6 +49,9 @@ linkhandler() {
     'copy duration')
       youtube-dl --get-duration "${URL}" 2>/dev/null | yank
       ;;
+    'copy title')
+      youtube-dl -e "${URL}" 2>/dev/null | yank
+      ;;
     'download audio')
       youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1
       ;;
@@ -86,6 +89,7 @@ linkhandler() {
 # number to linkhandler.
 main() {
   options='copy duration
+copy title
 download audio
 download file
 download video
