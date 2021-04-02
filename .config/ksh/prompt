@@ -1,3 +1,4 @@
+# shellcheck disable=SC2116
 esc="$(echo \\001)"
 
 case "$(id -u)" in
