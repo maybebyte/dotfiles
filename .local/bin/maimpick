@@ -58,7 +58,7 @@ maim_full_copy() {
 }
 
 present_options() {
-  case "$(menu -l 6 -p "Screenshot which area?")" in
+  case "$(menu -l "${num_of_opts}" -p "Screenshot which area?")" in
     'a selected area')        maim_sel_save           ;;
     'current window')         maim_cur_save           ;;
     'full screen')            maim_full_save          ;;
@@ -70,17 +70,17 @@ present_options() {
 }
 
 main() {
-  common_maim_args='-uqBd 1'
-  savedir="${HOME}/screenshots"
-  import_colors
-  present_options <<'EOF'
-a selected area
+  options='a selected area
 current window
 full screen
 a selected area (copy)
 current window (copy)
-full screen (copy)
-EOF
+full screen (copy)'
+  common_maim_args='-uqBd 1'
+  savedir="${HOME}/screenshots"
+  import_colors
+  num_of_opts="$(echo "${options}" | wc -l)"
+  echo "${options}" | present_options
 }
 
 main
