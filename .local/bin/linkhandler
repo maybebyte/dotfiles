@@ -81,7 +81,7 @@ linkhandler() {
       mpv --speed=1 --loop=inf "${URL}" >/dev/null 2>&1
       ;;
     *)
-      err "linkhandler doesn't support that option."
+      err "${0##*/} doesn't support that option."
   esac
 }
 
