@@ -92,6 +92,7 @@ view image
 watch
 watch (loop)'
   check_opts "$@"
+  import_colors
   num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | linkhandler "$@"
 }
