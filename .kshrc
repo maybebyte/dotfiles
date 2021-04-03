@@ -12,7 +12,7 @@ import_colors
   && (tmux attach || tmux) >/dev/null 2>&1
 
 # ksh options
-set -o vi vi-esccomplete
+set -o vi
 
 grep -qi 'pd' <<EOF && set -o vi-show8
 ${KSH_VERSION}
