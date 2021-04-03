@@ -91,6 +91,9 @@ linkhandler() {
 # defines options. count the number of options, then pass them + that
 # number to linkhandler.
 main() {
+  check_grafix
+  check_opts "$@"
+  import_colors
   options='copy duration
 copy title
 download audio
@@ -102,8 +105,6 @@ read
 view image
 watch
 watch (loop)'
-  check_opts "$@"
-  import_colors
   num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | linkhandler "$@"
 }

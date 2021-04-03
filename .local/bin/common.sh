@@ -23,6 +23,11 @@ arg_ge() {
   [ "$#" -ge "${arguments_needed}" ] || err "${usage_details}"
 }
 
+# if Xorg isn't running, exit with an error.
+check_grafix() {
+  [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
+}
+
 # err() is the generic way to print an error message and exit a script.
 # all of its output goes to STDERR.
 #

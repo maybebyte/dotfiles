@@ -44,6 +44,7 @@ launch() {
 }
 
 main() {
+  check_grafix
   import_colors
   launch || err 'launch() failed.'
 }

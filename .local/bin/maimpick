@@ -70,6 +70,8 @@ present_options() {
 }
 
 main() {
+  check_grafix
+  import_colors
   options='a selected area
 current window
 full screen
@@ -78,7 +80,6 @@ current window (copy)
 full screen (copy)'
   common_maim_args='-uqBd 1'
   savedir="${HOME}/screenshots"
-  import_colors
   num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | present_options
 }

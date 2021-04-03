@@ -33,4 +33,4 @@ grab_emoji() {
   printf '%s' "${chosen%% *}" | yank
 }
 
-main() { import_colors; grab_emoji; }; main
+main() { check_grafix; import_colors; grab_emoji; }; main

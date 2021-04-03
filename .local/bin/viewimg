@@ -36,6 +36,7 @@ viewimg() {
 }
 
 main() {
+  check_grafix
   arguments_needed=1
   usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
