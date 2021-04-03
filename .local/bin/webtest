@@ -46,7 +46,6 @@ mkdir -p ${srvdir}
 mv ${htmldir}/* ${srvdir}/
 find ${srvdir} \( -type f ! -perm 644 -exec chmod 644 '{}' \; \) \
   -o \( -type d ! -perm 755 -exec chmod 755 '{}' \; \)
-chown -R ${unpriv_user}:${unpriv_user} ${srvdir}
 rcctl reload httpd >/dev/null
 EOF
 }
