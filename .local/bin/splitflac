@@ -38,7 +38,7 @@ splitflac() {
     || err 'Unable to split the FLAC file.'
   mv "$2" "$2.bak"
   cuetag "$1" ./*.flac || err 'Unable to tag FLAC files.'
-  rm "$2.bak"
+  [ "${DELETE}" = "yes" ] && rm "$2.bak"
 }
 
 main() {
@@ -46,7 +46,16 @@ main() {
   usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
-${0##*/} [cue file] [FLAC file]"
+${0##*/} [cue file] [FLAC file]
+
+Note that '-d' can be passed to delete the original FLAC file."
+  while getopts d opt; do
+    case "${opt}" in
+      d) DELETE='yes' ;;
+      *) err "${usage_details}" ;;
+    esac
+  done
+  shift $((OPTIND - 1))
   arg_eq "$@"
   splitflac "$@"
 }
