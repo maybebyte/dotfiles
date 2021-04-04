@@ -33,11 +33,21 @@ EOF
   exit 1
 fi
 
+assign_cuetag() {
+  if [ -x "$(command -v cuetag)" ]; then
+    cuetag='cuetag'
+  elif [ -x "$(command -v cuetag.sh)" ]; then
+    cuetag='cuetag.sh'
+  else
+    err 'Neither cuetag nor cuetag.sh found.'
+  fi
+}
+
 splitflac() {
   shnsplit -f "$1" -o flac -t '%n %t' "$2" \
     || err 'Unable to split the FLAC file.'
   mv "$2" "$2.bak"
-  cuetag "$1" ./*.flac || err 'Unable to tag FLAC files.'
+  "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
   [ "${DELETE}" = "yes" ] && rm "$2.bak"
 }
 
@@ -57,6 +67,7 @@ Note that '-d' can be passed to delete the original FLAC file."
   done
   shift $((OPTIND - 1))
   arg_eq "$@"
+  assign_cuetag
   splitflac "$@"
 }
 
