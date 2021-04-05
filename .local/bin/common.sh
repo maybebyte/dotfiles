@@ -79,7 +79,7 @@ today() { date '+%Y-%m-%d'; }
 # $1 is a positive integer (supporting rational numbers would require
 # some additional code to handle exceptions).
 #
-# bug: 1024000 returns 0MB.
+# bug: 1024000 returns 0MB. maybe fix it by checking modulus?
 hreadable() {
   no_of_loops=0
   size="$1"
