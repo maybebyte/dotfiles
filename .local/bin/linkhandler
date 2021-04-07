@@ -81,7 +81,7 @@ linkhandler() {
       mpv "${URL}" >/dev/null 2>&1
       ;;
     'watch (loop)')
-      mpv --speed=1 --loop=inf "${URL}" >/dev/null 2>&1
+      mpv --speed=1 --loop "${URL}" >/dev/null 2>&1
       ;;
     *)
       err "${0##*/} doesn't support that option."

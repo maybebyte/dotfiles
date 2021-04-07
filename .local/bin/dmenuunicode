@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC1090,SC2154
 
+# rewrite of Luke Smith's dmenuunicode:
+# https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
+
+# his dotfiles can be accessed here:
+# https://github.com/LukeSmithxyz/voidrice
+
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
@@ -14,12 +20,6 @@ ${0##*/} may not function correctly without it; exiting for safety.
 EOF
   exit 1
 fi
-
-# rewrite of Luke Smith's dmenuunicode:
-# https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
-
-# his dotfiles can be accessed here:
-# https://github.com/LukeSmithxyz/voidrice
 
 grab_emoji() {
   emoji_file="${HOME}/.local/share/emoji"
