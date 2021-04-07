@@ -281,6 +281,9 @@ void_aliases() {
   alias \
     xi='xbps-install' \
     xq='xbps-query' \
+    xqchlg='xbps-query -p changelog' \
+    xqhp='xbps-query -p homepage' \
+    xqsize='xbps-query -p installed_size' \
     xr='xbps-remove'
 
   # alternatives
