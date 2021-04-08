@@ -36,8 +36,10 @@ EOF
 ${picture_dirs}
 EOF
       )"
-      [ -n "${dest}" ] && mv "${file}" "${dest}/${file##*/}"
-      notify-send "${file##*/} moved to ${dest}"
+      if [ -n "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
+        dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
+        notify-send "${file##*/} moved to ${dest}"
+      fi
       ;;
     'n')
       file="$(readlink -f "${file}")"
