@@ -19,7 +19,7 @@ import_colors
 while read -r file; do
   case "$1" in
     # delete file
-    "d")
+    'd')
       if [ "$(menu -p "Really delete ${file}?" <<'EOF'
 Yes
 No
@@ -45,24 +45,24 @@ EOF
       notify-send "${file} renamed to ${new_filename}"
       ;;
     # rotate clockwise
-    "r")
+    'r')
       convert -rotate 90 "${file}" "${file}"
       ;;
     # rotate counter-clockwise
-    "R")
+    'R')
       convert -rotate -90 "${file}" "${file}"
       ;;
     # horizontally invert file, aka 'flop' it
-    "f")
+    'f')
       convert -flop "${file}" "${file}"
       ;;
     # yank the relative file path
-    "y")
+    'y')
       printf '%s' "${file}" | yank
       notify-send "${file} copied to clipboard."
       ;;
     # yank the absolute file path
-    "Y")
+    'Y')
       readlink -f "${file}" | yank
       notify-send "$(readlink -f "${file}") copied to clipboard."
       ;;
