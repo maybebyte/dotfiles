@@ -36,8 +36,8 @@ EOF
 ${picture_dirs}
 EOF
       )"
-      [ -n "${dest}" ] && mv "${file}" "${dest}/$(basename "${file}")"
-      notify-send "$(basename "${file}") moved to ${dest}"
+      [ -n "${dest}" ] && mv "${file}" "${dest}/${file##*/}"
+      notify-send "${file##*/} moved to ${dest}"
       ;;
     'n')
       new_filename="$(menu -p "Rename ${file} to what?")"
