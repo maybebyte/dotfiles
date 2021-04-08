@@ -44,7 +44,7 @@ EOF
       new_filename="$(menu -p "Rename ${file##*/} to what?")"
       [ -n "${new_filename}" ] \
         && mv "${file}" "${file%/*}/${new_filename}" \
-        && notify-send "${file%/*} renamed to ${new_filename}"
+        && notify-send "${file##*/} renamed to ${new_filename}"
       ;;
     # rotate clockwise
     'r')
