@@ -29,6 +29,10 @@ EOF
         notify-send "${file} deleted."
       fi
       ;;
+    'n')
+      new_filename="$(menu -p "Rename ${file} to what?")"
+      [ -n "${new_filename}" ] && mv "${file}" "${new_filename}"
+      ;;
     # rotate clockwise
     "r")
       convert -rotate 90 "${file}" "${file}"
