@@ -36,7 +36,7 @@ noremap : ;
 let mapleader=","
 
 nnoremap <leader>n :NERDTreeToggle
-nnoremap <leader>f :FZF
+nnoremap <leader>f :FZF $HOME
 nnoremap <leader>g :Goyo
 
 " spell-check set to <leader>o, 'o' for 'orthography':
