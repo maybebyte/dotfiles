@@ -32,10 +32,7 @@ EOF
     'm')
       file="$(readlink -f "${file}")"
       picture_dirs="$(find "${HOME}/pictures" -type d)"
-      dest="$(menu -l 10 -p "Move ${file} where?" <<EOF
-${picture_dirs}
-EOF
-      )"
+      dest="$(echo "${picture_dirs}" | menu -l 10 -p "Move ${file} where?")"
       if [ -n "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
         dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
         notify-send "${file##*/} moved to ${dest}"
