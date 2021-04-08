@@ -33,6 +33,10 @@ general_aliases() {
     efont="e \${HOME}/.config/fontconfig/fonts.conf" \
     ehst='e /etc/hosts' \
     ek="e \${HOME}/.kshrc" \
+    eka="e \${HOME}/.config/ksh/aliases" \
+    ekf="e \${HOME}/.config/ksh/functions" \
+    ekp="e \${HOME}/.config/ksh/prompt" \
+    ekv="e \${HOME}/.config/ksh/vars" \
     empv="e \${HOME}/.config/mpv/mpv.conf" \
     emusb="e \${HOME}/.config/ncmpcpp/bindings" \
     emusc="e \${HOME}/.config/ncmpcpp/config" \
