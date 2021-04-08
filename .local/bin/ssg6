@@ -106,12 +106,12 @@ main() {
 
 readlink_f() {
   file="$1"
-  cd "$(dirname "${file}")"
-  file="$(basename "${file}")"
+  cd "${file%/*}"
+  file="${file##*/}"
   while [ -L "${file}" ]; do
     file="$(readlink "${file}")"
-    cd "$(dirname "${file}")"
-    file="$(basename "${file}")"
+    cd "${file%/*}"
+    file="${file##*/}"
   done
   dir="$(pwd -P)"
   echo "${dir}/${file}"
