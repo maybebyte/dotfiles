@@ -40,6 +40,9 @@ cpbak() {
   fi
 }
 
+# choose a file in ~/.config with fzf and edit it
+econf() { "${EDITOR}" "${HOME}/.config/$( (cd "${HOME}/.config" && fzf ) )"; }
+
 # perform an A record lookup on $1 and return the IP address.
 #
 # $1 is a domain.
