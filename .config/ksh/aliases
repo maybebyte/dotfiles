@@ -1,97 +1,98 @@
+# shellcheck disable=SC2154
 general_aliases() {
   # assorted
-  alias \
+  alias                                                             \
     cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr' \
-    exifrm='exiftool -all= ' \
-    irssi='proxychains4 irssi' \
-    mus='ncmpcpp' \
-    n='nnn' \
-    nb='newsboat' \
-    o='mimeopen' \
-    rmus='mus --host 192.168.1.79' \
+    exifrm='exiftool -all= '                                        \
+    irssi='proxychains4 irssi'                                      \
+    mus='ncmpcpp'                                                   \
+    n='nnn'                                                         \
+    nb='newsboat'                                                   \
+    o='mimeopen'                                                    \
+    rmus='mus --host 192.168.1.79'                                  \
     tuir='torsocks tuir'
 
   # basic utilities
-  alias \
-    c='clear' \
-    df='df -h' \
-    du='du -h' \
-    la='ll -A' \
-    ll='ls -lh' \
-    llb='ll -Sr' \
-    lln='ll -tr' \
-    ls="\${ls} -F" \
-    mkd='mkdir -p' \
+  alias                                        \
+    c='clear'                                  \
+    df='df -h'                                 \
+    du='du -h'                                 \
+    la='ll -A'                                 \
+    ll='ls -lh'                                \
+    llb='ll -Sr'                               \
+    lln='ll -tr'                               \
+    ls="\${ls} -F"                             \
+    mkd='mkdir -p'                             \
     lsd="find . -maxdepth 1 -iname \".[^.]*\"" \
-    mkd="mkdir -p" \
+    mkd="mkdir -p"                             \
     shre=". \${HOME}/.kshrc"
 
   # editing
-  alias \
-    e="\${EDITOR}" \
+  alias                                                    \
+    e="\${EDITOR}"                                         \
     eduj="e -d \${HOME}/builds/user.js/user.js \${userjs}" \
-    efont="e \${HOME}/.config/fontconfig/fonts.conf" \
-    ehst='e /etc/hosts' \
-    ek="e \${HOME}/.kshrc" \
-    eka="e \${HOME}/.config/ksh/aliases" \
-    ekf="e \${HOME}/.config/ksh/functions" \
-    ekp="e \${HOME}/.config/ksh/prompt" \
-    ekv="e \${HOME}/.config/ksh/vars" \
-    empv="e \${HOME}/.config/mpv/mpv.conf" \
-    emusb="e \${HOME}/.config/ncmpcpp/bindings" \
-    emusc="e \${HOME}/.config/ncmpcpp/config" \
-    enb="e \${HOME}/.config/newsboat/config" \
-    enbu="e \${HOME}/.config/newsboat/urls" \
-    enm="e \${HOME}/.config/neomutt/neomuttrc" \
-    eres='e /etc/resolv.conf' \
-    esxh="e \${HOME}/.config/sxhkd/sxhkdrc" \
-    esys='e /etc/sysctl.conf' \
-    etm="e \${HOME}/.tmux.conf" \
-    euj="e \${userjs}" \
-    ev="e \${HOME}/.config/nvim/init.vim" \
-    exm="e \${HOME}/.xmonad/xmonad.hs" \
-    exmb="e \${HOME}/.config/xmobar/xmobarrc" \
-    exr="e \${HOME}/.Xresources" \
+    efont="e \${HOME}/.config/fontconfig/fonts.conf"       \
+    ehst='e /etc/hosts'                                    \
+    ek="e \${HOME}/.kshrc"                                 \
+    eka="e \${HOME}/.config/ksh/aliases"                   \
+    ekf="e \${HOME}/.config/ksh/functions"                 \
+    ekp="e \${HOME}/.config/ksh/prompt"                    \
+    ekv="e \${HOME}/.config/ksh/vars"                      \
+    empv="e \${HOME}/.config/mpv/mpv.conf"                 \
+    emusb="e \${HOME}/.config/ncmpcpp/bindings"            \
+    emusc="e \${HOME}/.config/ncmpcpp/config"              \
+    enb="e \${HOME}/.config/newsboat/config"               \
+    enbu="e \${HOME}/.config/newsboat/urls"                \
+    enm="e \${HOME}/.config/neomutt/neomuttrc"             \
+    eres='e /etc/resolv.conf'                              \
+    esxh="e \${HOME}/.config/sxhkd/sxhkdrc"                \
+    esys='e /etc/sysctl.conf'                              \
+    etm="e \${HOME}/.tmux.conf"                            \
+    euj="e \${userjs}"                                     \
+    ev="e \${HOME}/.config/nvim/init.vim"                  \
+    exm="e \${HOME}/.xmonad/xmonad.hs"                     \
+    exmb="e \${HOME}/.config/xmobar/xmobarrc"              \
+    exr="e \${HOME}/.Xresources"                           \
     exs="e \${HOME}/.xsession"
 
   # git
-  alias \
+  alias                                                         \
     d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
-    da='d add' \
-    dcmt='d commit -a' \
-    ddiff='d diff' \
-    dgr='d grep' \
-    dlg='d log' \
-    dls="d ls-files \${HOME}" \
-    dpsh='d push' \
-    dre='d restore' \
-    ds='d status' \
-    g='git' \
-    ga='g add' \
-    gcl='g clone' \
-    gcmt='g commit -a' \
-    gdiff='g diff' \
-    ggr='g grep' \
-    glg='g log' \
-    gls='g ls-files' \
-    gpsh='g push' \
-    gre='g restore' \
+    da='d add'                                                  \
+    dcmt='d commit -a'                                          \
+    ddiff='d diff'                                              \
+    dgr='d grep'                                                \
+    dlg='d log'                                                 \
+    dls="d ls-files \${HOME}"                                   \
+    dpsh='d push'                                               \
+    dre='d restore'                                             \
+    ds='d status'                                               \
+    g='git'                                                     \
+    ga='g add'                                                  \
+    gcl='g clone'                                               \
+    gcmt='g commit -a'                                          \
+    gdiff='g diff'                                              \
+    ggr='g grep'                                                \
+    glg='g log'                                                 \
+    gls='g ls-files'                                            \
+    gpsh='g push'                                               \
+    gre='g restore'                                             \
     gs='g status'
 
   # keepass
-  alias \
-    kp='keepassxc-cli' \
+  alias                                                   \
+    kp='keepassxc-cli'                                    \
     kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
 
   # man
-  alias \
-    apr='apropos' \
+  alias                                \
+    apr='apropos'                      \
     pdfman='MANPAGER=zathura man -T pdf'
 
   # navigation
-  alias \
-    ..='cd ..' \
-    ...='cd ../..' \
+  alias                       \
+    ..='cd ..'                \
+    ...='cd ../..'            \
     cdmd="cd \${markdowndir}" \
     cdsrv="cd \${srvdir}"
 
@@ -99,76 +100,76 @@ general_aliases() {
   alias tnet="ping \${site##*//}"
 
   # sec
-  alias \
+  alias                                          \
     nk="nikto -output nikto-\$(today).txt -host" \
-    scan='nmap -sn' \
+    scan='nmap -sn'                              \
     sspl='searchsploit'
 
   # system
-  alias \
-    dtsu='shutdown now' \
+  alias                                    \
+    dtsu='shutdown now'                    \
     mntsafe='mount -o noexec,nosuid,nodev' \
-    off='shutdown -p now' \
-    re='shutdown -r now' \
+    off='shutdown -p now'                  \
+    re='shutdown -r now'                   \
     up='uptime'
 
   # taskwarrior
-  alias \
-    t='task' \
-    ta='t add' \
-    tafin='ta project:finances' \
-    tagroc='ta project:groceries' \
-    taedu='ta project:education' \
-    taself='ta project:selfcare' \
-    tashop='ta project:shopping' \
-    tatech='ta project:tech' \
-    tconf='t config' \
-    td='t done' \
-    tdel='t delete' \
+  alias                              \
+    t='task'                         \
+    ta='t add'                       \
+    tafin='ta project:finances'      \
+    tagroc='ta project:groceries'    \
+    taedu='ta project:education'     \
+    taself='ta project:selfcare'     \
+    tashop='ta project:shopping'     \
+    tatech='ta project:tech'         \
+    tconf='t config'                 \
+    td='t done'                      \
+    tdel='t delete'                  \
     tdue='task due.before:today ids' \
-    tedu='tls project:education' \
-    tfin='tls project:finances' \
-    tgroc='tls project:groceries' \
-    tid='t ids' \
-    tls='t list' \
-    tmod='t modify' \
-    tself='tls project:selfcare' \
-    tshop='tls project:shopping' \
-    tt='tls due:today' \
-    ttech='tls project:tech' \
+    tedu='tls project:education'     \
+    tfin='tls project:finances'      \
+    tgroc='tls project:groceries'    \
+    tid='t ids'                      \
+    tls='t list'                     \
+    tmod='t modify'                  \
+    tself='tls project:selfcare'     \
+    tshop='tls project:shopping'     \
+    tt='tls due:today'               \
+    ttech='tls project:tech'         \
     tup="td \$(tdue)"
 
   # tmux
-  alias \
-    tm='tmux' \
-    tma='tm attach' \
+  alias                  \
+    tm='tmux'            \
+    tma='tm attach'      \
     tmk='tm kill-server' \
     tml='tm list-sessions'
 
   # web
-  alias \
-    anonftp="torsocks ftp" \
-    anonsh='torsocks --shell' \
-    ftp="ftp -nU ''" \
-    m='neomutt' \
+  alias                                                                  \
+    anonftp="torsocks ftp"                                               \
+    anonsh='torsocks --shell'                                            \
+    ftp="ftp -nU ''"                                                     \
+    m='neomutt'                                                          \
     mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
-    mpva='mpv --no-video --speed=1' \
-    stcli='speedtest-cli' \
+    mpva='mpv --no-video --speed=1'                                      \
+    stcli='speedtest-cli'                                                \
     trem='transmission-remote'
 
   # viewing log files
-  alias \
-    readmsg='less /var/log/messages' \
-    readx='less /var/log/Xorg.0.log' \
+  alias                               \
+    readmsg='less /var/log/messages'  \
+    readx='less /var/log/Xorg.0.log'  \
     tailmsg='tail -f /var/log/messages'
 
   # youtube-dl
-  alias \
-    yt='youtube-dl' \
-    yta='yt -xf bestaudio/best' \
+  alias                           \
+    yt='youtube-dl'               \
+    yta='yt -xf bestaudio/best'   \
     ytdesc='yt --get-description' \
-    ytlen='yt --get-duration' \
-    ytrm='yt --rm-cache-dir' \
+    ytlen='yt --get-duration'     \
+    ytrm='yt --rm-cache-dir'      \
     ytv='yt --embed-subs'
 }
 
@@ -187,92 +188,92 @@ linux_aliases() {
 
 openbsd_aliases() {
   # check the date of the latest snapshot
-  alias chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64" \
+  alias chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64"
 
   # editing
-  alias \
+  alias                           \
     ehn="e /etc/hostname.\${nic}" \
-    epf='e /etc/pf.conf' \
+    epf='e /etc/pf.conf'          \
     eunw='e /etc/unwind.conf'
 
   # networking
-  alias \
+  alias                                           \
     exip="ftp -VMo - https://ifconfig.me && echo" \
-    nicdel="ifconfig \${nic} delete" \
-    nicoff="ifconfig \${nic} down" \
-    nicon="ifconfig \${nic} up" \
-    nicre='nicoff && nicon' \
-    nicshow="ifconfig \${nic}" \
-    nictail="tcpdump -pi \${nic}" \
-    ntstr6='netstat -rnf inet6' \
-    ntstr='netstat -rnf inet' \
-    ntst6='netstat -nf inet6' \
-    ntst='netstat -nf inet' \
-    ntstl6='netstat -lnf inet6' \
-    ntstl='netstat -lnf inet' \
-    renet='sh /etc/netstart' \
-    renetnic="renet \${nic}" \
-    sysnet='systat netstat' \
+    nicdel="ifconfig \${nic} delete"              \
+    nicoff="ifconfig \${nic} down"                \
+    nicon="ifconfig \${nic} up"                   \
+    nicre='nicoff && nicon'                       \
+    nicshow="ifconfig \${nic}"                    \
+    nictail="tcpdump -pi \${nic}"                 \
+    ntstr6='netstat -rnf inet6'                   \
+    ntstr='netstat -rnf inet'                     \
+    ntst6='netstat -nf inet6'                     \
+    ntst='netstat -nf inet'                       \
+    ntstl6='netstat -lnf inet6'                   \
+    ntstl='netstat -lnf inet'                     \
+    renet='sh /etc/netstart'                      \
+    renetnic="renet \${nic}"                      \
+    sysnet='systat netstat'                       \
     tlan="ping \${gateway}"
 
   # pf
-  alias \
-    pfc='pfctl' \
-    pfdump='tcpdump -r /var/log/pflog' \
+  alias                                              \
+    pfc='pfctl'                                      \
+    pfdump='tcpdump -r /var/log/pflog'               \
     pfdumpb='tcpdump -r /var/log/pflog action block' \
-    pfdumpp='tcpdump -r /var/log/pflog action pass' \
-    pfif='pfshow Interfaces' \
-    pfinfo='pfshow info' \
-    pfload='pfc -f /etc/pf.conf' \
-    pfnic="pfif -vvi \${nic}" \
-    pfoff='pfc -d' \
-    pfon='pfc -e' \
-    pfrules='pfshow rules' \
-    pfshow='pfc -s' \
-    pftest='pfload -nvvv' \
-    pftail='tcpdump -i pflog0' \
-    pftailb='pftail action block' \
+    pfdumpp='tcpdump -r /var/log/pflog action pass'  \
+    pfif='pfshow Interfaces'                         \
+    pfinfo='pfshow info'                             \
+    pfload='pfc -f /etc/pf.conf'                     \
+    pfnic="pfif -vvi \${nic}"                        \
+    pfoff='pfc -d'                                   \
+    pfon='pfc -e'                                    \
+    pfrules='pfshow rules'                           \
+    pfshow='pfc -s'                                  \
+    pftest='pfload -nvvv'                            \
+    pftail='tcpdump -i pflog0'                       \
+    pftailb='pftail action block'                    \
     pftailp='pftail action pass'
 
   # pkg
-  alias \
-    pkgL='pkgq -L' \
-    pkga='pkg_add' \
-    pkgas='pkga -D snap' \
-    pkgd='pkg_delete' \
-    pkgda='pkgd -a' \
-    pkgl='pkgq -mz' \
-    pkgq='pkg_info' \
-    pkgqo='pkgq -E' \
-    pkgs='pkgq -Q' \
+  alias                     \
+    pkgL='pkgq -L'          \
+    pkga='pkg_add'          \
+    pkgas='pkga -D snap'    \
+    pkgd='pkg_delete'       \
+    pkgda='pkgd -a'         \
+    pkgl='pkgq -mz'         \
+    pkgq='pkg_info'         \
+    pkgqo='pkgq -E'         \
+    pkgs='pkgq -Q'          \
     pkgss='pkgq -D snap -Q' \
-    pkgup='pkga -u' \
+    pkgup='pkga -u'         \
     pkgups='pkgup -D snap'
 
   # service management
-  alias \
-    rc='rcctl' \
-    rcoff='rc disable' \
-    rcon='rc enable' \
-    rcg='rc get' \
+  alias                    \
+    rc='rcctl'             \
+    rcoff='rc disable'     \
+    rcon='rc enable'       \
+    rcg='rc get'           \
     rclfail='rc ls failed' \
-    rclon='rc ls on' \
+    rclon='rc ls on'       \
     rclstr='rc ls started' \
-    rcre='rc restart' \
-    rcrel='rc reload' \
-    rcset='rc set' \
-    rcst='rc stop' \
-    rcstr='rc start' \
+    rcre='rc restart'      \
+    rcrel='rc reload'      \
+    rcset='rc set'         \
+    rcst='rc stop'         \
+    rcstr='rc start'       \
     rcstrf='rc -f start'
 
   # system
   alias dsklab='disklabel -p g'
 
   # viewing log files
-  alias \
-    readhttp='less /var/www/logs/access.log' \
-    readmail='less /var/log/maillog' \
-    readsec='less /var/log/secure' \
+  alias                                         \
+    readhttp='less /var/www/logs/access.log'    \
+    readmail='less /var/log/maillog'            \
+    readsec='less /var/log/secure'              \
     tailhttp='tail -f /var/www/logs/access.log' \
     tailmail='tail -f /var/log/maillog'
 
@@ -282,11 +283,11 @@ openbsd_aliases() {
 
 void_aliases() {
   # xbps
-  alias \
-    xi='xbps-install' \
-    xq='xbps-query' \
-    xqchlg='xbps-query -p changelog' \
-    xqhp='xbps-query -p homepage' \
+  alias                                   \
+    xi='xbps-install'                     \
+    xq='xbps-query'                       \
+    xqchlg='xbps-query -p changelog'      \
+    xqhp='xbps-query -p homepage'         \
     xqsize='xbps-query -p installed_size' \
     xr='xbps-remove'
 
