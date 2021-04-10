@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# shellcheck disable=SC1090
 
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
@@ -29,7 +30,6 @@ EOF
         notify-send "${file} deleted."
       fi
       ;;
-
     # TODO: write a shell script called 'filehandler' that handles the
     # behavior of at least 'm' and 'n'. a shell script is more flexible.
     #
@@ -38,7 +38,7 @@ EOF
     # but would be messy here.
     'm')
       file="$(readlink -f "${file}")"
-      picture_dirs="$(find "${HOME}/pictures" -type d)"
+      picture_dirs="$(find "${HOME}/pics" -type d)"
       dest="$(echo "${picture_dirs}" | menu -l 10 -p "Move ${file} where?")"
       if [ -n "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
         dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
