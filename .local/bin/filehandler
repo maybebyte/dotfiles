@@ -89,12 +89,12 @@ main() {
   usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
-${0##*/} [file]
+${0##*/} [options] [file]
 -h: help
 -m: move file
 -n: rename file
 
-If invoked without any flags, ${0##*/} will behave interactively."
+If invoked without any options, ${0##*/} will behave interactively."
   while getopts hmn opt; do
     case "${opt}" in
       'h') err "${usage_details}" ;;
