@@ -92,6 +92,7 @@ main() {
     esac
   done
   shift $((OPTIND - 1))
+  [ -f "$1" ] || err 'Not a file.'
   file="$(readlink -f "$1")"
   choose_operation "${file}"
 }
