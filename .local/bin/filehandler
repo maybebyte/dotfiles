@@ -90,11 +90,20 @@ main() {
 
 usage:
 ${0##*/} [options] [file]
--h: help
--m: move file
--n: rename file
 
-If invoked without any options, ${0##*/} will behave interactively."
+options:
+-h: help
+-m: move file (operation)
+-n: rename file (operation)
+
+If invoked without any options, ${0##*/} behaves interactively and asks
+the user for an operation.
+
+If an operation is specified, ${0##*/} skips the operation query and
+moves on to the next prompt.
+
+Note that only one operation should be specified at a time. In fact,
+${0##*/} only processes the first operation it sees."
   while getopts hmn opt; do
     case "${opt}" in
       'h') echo "${usage_details}" && exit 0 ;;
