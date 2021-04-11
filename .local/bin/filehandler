@@ -52,6 +52,7 @@ move_file() {
     echo 'exit') | menu -l 10 -p "Move ${file} where?"
   )"
   [ "${dest}" = 'exit' ] && exit 0
+  [ -z "${dest}" ] && exit 0
   if [ -d "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
     dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
     notify-send "${file##*/} moved to ${dest}"
