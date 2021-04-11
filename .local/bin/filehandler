@@ -75,9 +75,9 @@ rename'
     sleep 0.3
   fi
   case "${operation}" in
-    'move')   move_file "${file}"                      ;;
-    'rename') rename_file "${file}"                    ;;
-    *)        err 'Operation not currently supported.' ;;
+    'move')   move_file "${file}"    ;;
+    'rename') rename_file "${file}"  ;;
+    *)        err "${usage_details}" ;;
   esac
 }
 
