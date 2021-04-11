@@ -85,23 +85,25 @@ rename'
 # the first argument for choose_operation.
 main() {
   check_grafix
-  while getopts mn opt; do
-    case "${opt}" in
-      'm') operation='move'   ;;
-      'n') operation='rename' ;;
-      *)   break              ;;
-    esac
-  done
-  shift $((OPTIND - 1))
   arguments_needed=1
   usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
 ${0##*/} [file]
+-h: help
 -m: move file
 -n: rename file
 
 If invoked without any flags, ${0##*/} will behave interactively."
+  while getopts hmn opt; do
+    case "${opt}" in
+      'h') err "${usage_details}" ;;
+      'm') operation='move'       ;;
+      'n') operation='rename'     ;;
+      *)   break                  ;;
+    esac
+  done
+  shift $((OPTIND - 1))
   arg_eq "$@"
   [ -f "$1" ] || err 'Not a file.'
   file="$(readlink -f "$1")"
