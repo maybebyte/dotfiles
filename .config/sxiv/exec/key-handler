@@ -37,20 +37,10 @@ EOF
     # to suggest based on file extension is possible in a shell script,
     # but would be messy here.
     'm')
-      file="$(readlink -f "${file}")"
-      picture_dirs="$(find "${HOME}/pics" -type d)"
-      dest="$(echo "${picture_dirs}" | menu -l 10 -p "Move ${file} where?")"
-      if [ -n "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
-        dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
-        notify-send "${file##*/} moved to ${dest}"
-      fi
+      filehandler -m "${file}"
       ;;
     'n')
-      file="$(readlink -f "${file}")"
-      new_filename="$(menu -p "Rename ${file##*/} to what?")"
-      [ -n "${new_filename}" ] \
-        && mv "${file}" "${file%/*}/${new_filename}" \
-        && notify-send "${file##*/} renamed to ${new_filename}"
+      filehandler -n "${file}"
       ;;
     # rotate clockwise
     'r')

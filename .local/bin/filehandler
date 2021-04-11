@@ -1,0 +1,100 @@
+#!/usr/bin/env sh
+# shellcheck disable=SC1090
+set -e
+# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# check that the library file is readable. if it is, source it so its
+# functions are available. if not, exit due to potentially unpredictable
+# behavior.
+library="${HOME}/.local/bin/common.sh"
+if [ -r "${library}" ]; then
+  . "${library}"
+else
+  cat >&2 <<EOF
+${library} doesn't exist or isn't readable.
+${0##*/} may not function correctly without it; exiting for safety.
+EOF
+  exit 1
+fi
+
+# assigns a value to ${preload_dir} based on the file's mimetype.
+determine_preload_dir() {
+  mimetype="$(file -ib "${file}")"
+  case "${mimetype}" in
+    # these are organized alphabetically by mimetype
+    application/epub*) preload_dir="${HOME}/books"                            ;;
+    application/pdf*)  preload_dir="${HOME}/books"                            ;;
+    image/*)           preload_dir="${HOME}/pics"                             ;;
+    video/*)           preload_dir="${HOME}/videos"                           ;;
+    *)                 err "${mimetype} isn't handled by ${0##*/} currently." ;;
+  esac
+}
+
+# uses ${preload_dir} to display a list of directories that a given file
+# can be moved to. once the user chooses a destination with dmenu, move
+# the file there and send a notification.
+move_file() {
+  determine_preload_dir
+  dest="$(find "${preload_dir}" -type d | menu -l 10 -p "Move ${file} where?")"
+  if [ -d "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
+    dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
+    notify-send "${file##*/} moved to ${dest}"
+  fi
+}
+
+# once the user chooses a filename with dmenu, rename the file
+# accordingly and send a notification.
+rename_file() {
+  new_filename="$(menu -p "Rename ${file##*/} to what?")"
+  [ -n "${new_filename}" ] \
+    && mv "${file}" "${file%/*}/${new_filename}" \
+    && notify-send "${file##*/} renamed to ${new_filename}"
+}
+
+# determines how to operate on the file. if nothing was assigned to
+# ${operation} by getopts, the user chooses the operation with dmenu.
+choose_operation() {
+  # if no flags are passed, assign ${operation} interactively.
+  if [ -z "${operation}" ]; then
+    options='move
+rename'
+    operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
+    # a small delay needs to be here. without it, the subsequent menu
+    # won't appear sometimes.
+    sleep 0.3
+  fi
+  case "${operation}" in
+    'move')   move_file "${file}"                      ;;
+    'rename') rename_file "${file}"                    ;;
+    *)        err 'Operation not currently supported.' ;;
+  esac
+}
+
+# parse options. get the absolute pathname of the file and use that as
+# the first argument for choose_operation.
+main() {
+  while getopts mn opt; do
+    case "${opt}" in
+      'm') operation='move'   ;;
+      'n') operation='rename' ;;
+      *)   break              ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+  file="$(readlink -f "$1")"
+  choose_operation "${file}"
+}
+
+main "$@"
