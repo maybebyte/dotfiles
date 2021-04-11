@@ -30,12 +30,6 @@ EOF
         notify-send "${file} deleted."
       fi
       ;;
-    # TODO: write a shell script called 'filehandler' that handles the
-    # behavior of at least 'm' and 'n'. a shell script is more flexible.
-    #
-    # for instance, preloading a list of directories with find + dmenu
-    # to suggest based on file extension is possible in a shell script,
-    # but would be messy here.
     'm')
       filehandler -m "${file}"
       ;;
