@@ -116,7 +116,7 @@ ${0##*/} only processes the first operation it sees."
   arg_eq "$@"
   [ -f "$1" ] || err 'Not a file.'
   file="$(readlink -f "$1")"
-  choose_operation "${file}"
+  choose_operation
 }
 
 main "$@"
