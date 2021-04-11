@@ -37,7 +37,7 @@ check_grafix() {
 # after that, print everything passed as an argument.
 # exit with a return code of 1.
 err() {
-  printf '%s\n' "[$(date '+%Y-%m-%d|%H:%M:%S')]: $*" >&2
+  printf '%s\n' "$*" >&2
   exit 1
 }
 
