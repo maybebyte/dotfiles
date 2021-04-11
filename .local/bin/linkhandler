@@ -106,7 +106,7 @@ view image
 watch
 watch (loop)'
   num_of_opts="$(echo "${options}" | wc -l)"
-  echo "${options}" | linkhandler "$@"
+  echo "${options}" | linkhandler
 }
 
 main "$@"
