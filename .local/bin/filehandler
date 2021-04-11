@@ -48,16 +48,21 @@ determine_preload_dir() {
 move_file() {
   determine_preload_dir
   dest="$(
-    (find "${preload_dir}" -type d ! \( -name '.*' -prune \)
-    echo 'exit') | menu -l 10 -p "Move ${file} where?"
+    (
+      find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
+        | sed "s|${HOME}|~|g"
+      echo 'exit'
+    ) | menu -l 10 -p "Move ${file##*/} where?"
   )"
   [ "${dest}" = 'exit' ] && exit 0
   [ -z "${dest}" ] && exit 0
-  if [ -d "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
-    dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
-    notify-send "${file##*/} moved to ${dest}"
+  dest="$(echo "${dest}" | sed "s|~|${HOME}|g")"
+  if [ -d "${dest}" ]; then
+    mv "${file}" "${dest}/${file##*/}" \
+      || err "Failed to move ${file##*/}" \
+      && notify-send "${file##*/} moved to ~${dest##${HOME}}"
   else
-    err "Failed to move ${file##*/} or specified destination isn't a directory."
+    err "Specified destination isn't a directory."
   fi
 }
 
