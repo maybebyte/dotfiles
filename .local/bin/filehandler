@@ -57,12 +57,12 @@ move_file() {
   [ "${dest}" = 'exit' ] && exit 0
   [ -z "${dest}" ] && exit 0
   dest="$(echo "${dest}" | sed "s|~|${HOME}|g")"
-  if [ -d "${dest}" ]; then
+  if [ -d "${dest}" ] || mkdir -p "${dest}"; then
     mv "${file}" "${dest}/${file##*/}" \
       || err "Failed to move ${file##*/}" \
       && notify-send "${file##*/} moved to ~${dest##${HOME}}"
   else
-    err "Specified destination isn't a directory."
+    err "~${dest##${HOME}} not found nor created."
   fi
 }
 
