@@ -47,7 +47,11 @@ determine_preload_dir() {
 # the file there and send a notification.
 move_file() {
   determine_preload_dir
-  dest="$(find "${preload_dir}" -type d | menu -l 10 -p "Move ${file} where?")"
+  dest="$(
+    (find "${preload_dir}" -type d; echo 'exit') \
+      | menu -l 10 -p "Move ${file} where?"
+  )"
+  [ "${dest}" = 'exit' ] && exit 0
   if [ -d "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
     dest="$(echo "${dest}" | sed "s|${HOME}|~|g")"
     notify-send "${file##*/} moved to ${dest}"
@@ -56,6 +60,8 @@ move_file() {
 
 # once the user chooses a filename with dmenu, rename the file
 # accordingly and send a notification.
+#
+# dmenu seems to need at least one item from STDIN to behave properly.
 rename_file() {
   new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
   if [ -n "${new_filename}" ]; then
