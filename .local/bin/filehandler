@@ -114,6 +114,7 @@ ${0##*/} only processes the first operation it sees."
   done
   shift $((OPTIND - 1))
   arg_eq "$@"
+  import_colors
   [ -f "$1" ] || err 'Not a file.'
   file="$(readlink -f "$1")"
   choose_operation
