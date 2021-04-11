@@ -34,11 +34,11 @@ determine_preload_dir() {
   mimetype="$(file -ib "${file}")"
   case "${mimetype}" in
     # these are organized alphabetically by mimetype
-    application/epub*) preload_dir="${HOME}/books"                            ;;
-    application/pdf*)  preload_dir="${HOME}/books"                            ;;
-    image/*)           preload_dir="${HOME}/pics"                             ;;
-    video/*)           preload_dir="${HOME}/videos"                           ;;
-    *)                 err "${mimetype} isn't handled by ${0##*/} currently." ;;
+    application/epub*) preload_dir="${HOME}/books"  ;;
+    application/pdf*)  preload_dir="${HOME}/books"  ;;
+    image/*)           preload_dir="${HOME}/pics"   ;;
+    video/*)           preload_dir="${HOME}/videos" ;;
+    *)                 preload_dir="${HOME}"        ;;
   esac
 }
 
@@ -48,8 +48,8 @@ determine_preload_dir() {
 move_file() {
   determine_preload_dir
   dest="$(
-    (find "${preload_dir}" -type d; echo 'exit') \
-      | menu -l 10 -p "Move ${file} where?"
+    (find "${preload_dir}" -type d ! \( -name '.*' -prune \)
+    echo 'exit') | menu -l 10 -p "Move ${file} where?"
   )"
   [ "${dest}" = 'exit' ] && exit 0
   if [ -d "${dest}" ] && mv "${file}" "${dest}/${file##*/}"; then
