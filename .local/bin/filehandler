@@ -97,10 +97,10 @@ ${0##*/} [options] [file]
 If invoked without any options, ${0##*/} will behave interactively."
   while getopts hmn opt; do
     case "${opt}" in
-      'h') err "${usage_details}" ;;
-      'm') operation='move'       ;;
-      'n') operation='rename'     ;;
-      *)   break                  ;;
+      'h') echo "${usage_details}" && exit 0 ;;
+      'm') operation='move' && break         ;;
+      'n') operation='rename' && break       ;;
+      *)   err "${usage_details}"            ;;
     esac
   done
   shift $((OPTIND - 1))
