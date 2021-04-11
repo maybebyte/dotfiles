@@ -57,10 +57,12 @@ move_file() {
 # once the user chooses a filename with dmenu, rename the file
 # accordingly and send a notification.
 rename_file() {
-  new_filename="$(menu -p "Rename ${file##*/} to what?")"
-  [ -n "${new_filename}" ] \
-    && mv "${file}" "${file%/*}/${new_filename}" \
-    && notify-send "${file##*/} renamed to ${new_filename}"
+  new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
+  if [ -n "${new_filename}" ]; then
+    [ "${new_filename}" = 'exit' ] && exit 0
+    mv "${file}" "${file%/*}/${new_filename}"
+    notify-send "${file##*/} renamed to ${new_filename}"
+  fi
 }
 
 # determines how to operate on the file. if nothing was assigned to
@@ -75,8 +77,8 @@ rename'
     sleep 0.3
   fi
   case "${operation}" in
-    'move')   move_file "${file}"    ;;
-    'rename') rename_file "${file}"  ;;
+    'move')   move_file              ;;
+    'rename') rename_file            ;;
     *)        err "${usage_details}" ;;
   esac
 }
