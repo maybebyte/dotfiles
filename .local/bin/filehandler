@@ -49,6 +49,7 @@ move_file() {
   determine_preload_dir
   dest="$(
     (
+      # tilde expansion with sed for readability in dmenu
       find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
         | sed "s|${HOME}|~|g"
       echo 'exit'
@@ -56,6 +57,8 @@ move_file() {
   )"
   [ "${dest}" = 'exit' ] && exit 0
   [ -z "${dest}" ] && exit 0
+  # reverses tilde expansion. it's reinstated in certain lines below
+  # with parameter expansion in the form "~${dest##${HOME}}"
   dest="$(echo "${dest}" | sed "s|~|${HOME}|g")"
   if [ -d "${dest}" ] || mkdir -p "${dest}"; then
     mv "${file}" "${dest}/${file##*/}" \
