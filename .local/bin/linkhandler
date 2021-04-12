@@ -92,7 +92,7 @@ linkhandler() {
 # number to linkhandler.
 main() {
   check_grafix
-  check_opts "$@"
+  check_opts "$1"
   import_colors
   options='copy duration
 copy title

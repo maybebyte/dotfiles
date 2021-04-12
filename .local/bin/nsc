@@ -57,7 +57,7 @@ ${0##*/} [target] [options]"
   workdir="${sec}/$1/nmap"
   arg_ge "$@"
   create_workdir "$1" || err 'Unable to create directory, do you have permission?'
-  nsc "$@" || err 'Unable to scan target.'
+  nsc "$1" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'
 }
 

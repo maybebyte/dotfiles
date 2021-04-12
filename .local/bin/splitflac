@@ -68,7 +68,7 @@ Note that '-d' can be passed to delete the original FLAC file."
   shift $((OPTIND - 1))
   arg_eq "$@"
   assign_cuetag
-  splitflac "$@"
+  splitflac "$1" "$2"
 }
 
 main "$@"
