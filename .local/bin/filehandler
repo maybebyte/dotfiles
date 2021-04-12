@@ -77,8 +77,8 @@ rename_file() {
   new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
   if [ -n "${new_filename}" ]; then
     [ "${new_filename}" = 'exit' ] && exit 0
-    mv "${file}" "${file%/*}/${new_filename}"
-    notify-send "${file##*/} renamed to ${new_filename}"
+    mv "${file}" "${file%/*}/${new_filename}" \
+      && notify-send "${file##*/} renamed to ${new_filename}"
   else
     err "${0##*/} needs a new name to rename ${file##*/} to."
   fi
