@@ -56,7 +56,7 @@ move_file() {
     ) | menu -l 10 -p "Move ${file##*/} where?"
   )"
   [ "${dest}" = 'exit' ] && exit 0
-  [ -z "${dest}" ] && exit 0
+  [ -z "${dest}" ] && err "${0##*/} needs a destination."
   # reverses tilde expansion. it's reinstated in certain lines below
   # with parameter expansion in the form "~${dest##${HOME}}"
   dest="$(echo "${dest}" | sed "s|~|${HOME}|g")"
