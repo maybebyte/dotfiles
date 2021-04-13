@@ -32,9 +32,9 @@ fi
 # if no arg is passed and STDIN is empty, exit with an error.
 check_opts() {
   if [ -n "$1" ]; then
-    URL="$1"
+    readonly URL="$1"
   elif [ ! -t 0 ]; then
-    read -r URL
+    read -r URL && readonly URL
   else
     err "${0##*/} needs a URL!"
   fi
