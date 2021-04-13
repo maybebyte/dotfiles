@@ -18,7 +18,7 @@ set -e
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
-library="${HOME}/.local/bin/common.sh"
+readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
@@ -94,7 +94,7 @@ main() {
   check_grafix
   check_opts "$1"
   import_colors
-  options='copy duration
+  readonly options='copy duration
 copy title
 download audio
 download file
@@ -105,7 +105,7 @@ read
 view image
 watch
 watch (loop)'
-  num_of_opts="$(echo "${options}" | wc -l)"
+  readonly num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | linkhandler
 }
 

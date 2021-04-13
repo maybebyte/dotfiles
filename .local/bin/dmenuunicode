@@ -10,7 +10,7 @@
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
-library="${HOME}/.local/bin/common.sh"
+readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
@@ -22,10 +22,10 @@ EOF
 fi
 
 grab_emoji() {
-  emoji_file="${HOME}/.local/share/emoji"
+  readonly emoji_file="${HOME}/.local/share/emoji"
   [ -r "${emoji_file}" ] || err "Emoji file isn't available."
 
-  chosen="$(cut -d ';' -f1 "${emoji_file}" | menu -l 20)"
+  readonly chosen="$(cut -d ';' -f1 "${emoji_file}" | menu -l 20)"
   [ -n "${chosen}" ] || err 'Must choose an emoji.'
   grep -q "${chosen}" "${emoji_file}" || err 'Emoji not found.'
 

@@ -22,7 +22,7 @@ set -e
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
-library="${HOME}/.local/bin/common.sh"
+readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
@@ -35,9 +35,9 @@ fi
 
 assign_cuetag() {
   if [ -x "$(command -v cuetag)" ]; then
-    cuetag='cuetag'
+    readonly cuetag='cuetag'
   elif [ -x "$(command -v cuetag.sh)" ]; then
-    cuetag='cuetag.sh'
+    readonly cuetag='cuetag.sh'
   else
     err 'Neither cuetag nor cuetag.sh found.'
   fi
@@ -52,8 +52,8 @@ splitflac() {
 }
 
 main() {
-  arguments_needed=2
-  usage_details="${0##*/} requires ${arguments_needed} argument(s).
+  readonly arguments_needed=2
+  readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
 ${0##*/} [cue file] [FLAC file]
@@ -61,7 +61,7 @@ ${0##*/} [cue file] [FLAC file]
 Note that '-d' can be passed to delete the original FLAC file."
   while getopts d opt; do
     case "${opt}" in
-      d) DELETE='yes' ;;
+      d) readonly DELETE='yes' ;;
       *) err "${usage_details}" ;;
     esac
   done

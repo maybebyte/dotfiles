@@ -18,7 +18,7 @@ set -e
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
-library="${HOME}/.local/bin/common.sh"
+readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
@@ -57,14 +57,14 @@ cleanup() {
 # TODO: a conf file is likely a better implementation than positional
 # parameters in the long run.
 main() {
-  arguments_needed=3
-  usage_details="usage: ${0##*/} [domain] [md dir] [srv dir]"
+  readonly arguments_needed=3
+  readonly usage_details="usage: ${0##*/} [domain] [md dir] [srv dir]"
   arg_eq "$@"
-  site="$1"
-  markdowndir="$2"
-  srvdir="$3"
-  htmldir="$(mktemp -d)"
-  unpriv_user="$(id -un)"
+  readonly site="$1"
+  readonly markdowndir="$2"
+  readonly srvdir="$3"
+  readonly htmldir="$(mktemp -d)"
+  readonly unpriv_user="$(id -un)"
   gen_site || (cleanup; err 'Unable to generate site.')
   sync_site || (cleanup; err 'Unable to sync web server.')
   cleanup

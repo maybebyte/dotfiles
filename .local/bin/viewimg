@@ -18,7 +18,7 @@ set -e
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
-library="${HOME}/.local/bin/common.sh"
+readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
@@ -30,15 +30,15 @@ EOF
 fi
 
 viewimg() {
-  filename="$(mktemp)"
+  readonly filename="$(mktemp)"
   ftp -VMnU '' -o "${filename}" "$1" >/dev/null 2>&1
   sxiv "${filename}" >/dev/null 2>&1
 }
 
 main() {
   check_grafix
-  arguments_needed=1
-  usage_details="${0##*/} requires ${arguments_needed} argument(s).
+  readonly arguments_needed=1
+  readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
 ${0##*/} [URL]"

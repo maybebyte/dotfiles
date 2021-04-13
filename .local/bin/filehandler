@@ -18,7 +18,7 @@ set -e
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
-library="${HOME}/.local/bin/common.sh"
+readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
@@ -31,14 +31,14 @@ fi
 
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
-  mimetype="$(file -ib "${file}")"
+  readonly mimetype="$(file -ib "${file}")"
   case "${mimetype}" in
     # these are organized alphabetically by mimetype
-    application/epub*) preload_dir="${HOME}/books"  ;;
-    application/pdf*)  preload_dir="${HOME}/books"  ;;
-    image/*)           preload_dir="${HOME}/pics"   ;;
-    video/*)           preload_dir="${HOME}/videos" ;;
-    *)                 preload_dir="${HOME}"        ;;
+    application/epub*) readonly preload_dir="${HOME}/books"  ;;
+    application/pdf*)  readonly preload_dir="${HOME}/books"  ;;
+    image/*)           readonly preload_dir="${HOME}/pics"   ;;
+    video/*)           readonly preload_dir="${HOME}/videos" ;;
+    *)                 readonly preload_dir="${HOME}"        ;;
   esac
 }
 
@@ -74,7 +74,7 @@ move_file() {
 #
 # dmenu seems to need at least one item from STDIN to behave properly.
 rename_file() {
-  new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
+  readonly new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
   if [ -n "${new_filename}" ]; then
     [ "${new_filename}" = 'exit' ] && exit 0
     mv "${file}" "${file%/*}/${new_filename}" \
@@ -88,9 +88,9 @@ rename_file() {
 # ${operation} by getopts, the user chooses the operation with dmenu.
 choose_operation() {
   if [ -z "${operation}" ]; then
-    options='move
+    readonly options='move
 rename'
-    operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
+    readonly operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
     # a small delay needs to be here. without it, the subsequent menu
     # won't appear sometimes.
     sleep 0.3
@@ -106,8 +106,8 @@ rename'
 # the first argument for choose_operation.
 main() {
   check_grafix
-  arguments_needed=1
-  usage_details="${0##*/} requires ${arguments_needed} argument(s).
+  readonly arguments_needed=1
+  readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
 ${0##*/} [options] [file]
@@ -127,17 +127,17 @@ Note that only one operation should be specified at a time. In fact,
 ${0##*/} only processes the first operation it sees."
   while getopts hmn opt; do
     case "${opt}" in
-      'h') echo "${usage_details}" && exit 0 ;;
-      'm') operation='move' && break         ;;
-      'n') operation='rename' && break       ;;
-      *)   err "${usage_details}"            ;;
+      'h') echo "${usage_details}" && exit 0    ;;
+      'm') readonly operation='move' && break   ;;
+      'n') readonly operation='rename' && break ;;
+      *)   err "${usage_details}"               ;;
     esac
   done
   shift $((OPTIND - 1))
   arg_eq "$@"
   import_colors
   [ -f "$1" ] || err 'Not a file.'
-  file="$(readlink -f "$1")"
+  readonly file="$(readlink -f "$1")"
   choose_operation
 }
 
