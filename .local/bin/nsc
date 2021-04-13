@@ -44,7 +44,8 @@ nsc() {
 }
 
 fix_perms() {
-  priv chown -R ashlen:ashlen "${sec}"
+  unpriv_user="$(id -un)"
+  priv chown -R "${unpriv_user}:${unpriv_user}" "${sec}"
 }
 
 main() {
@@ -53,9 +54,9 @@ main() {
 
 usage:
 ${0##*/} [target] [options]"
+  arg_ge "$@"
   sec="${HOME}/sec"
   workdir="${sec}/$1/nmap"
-  arg_ge "$@"
   create_workdir "$1" || err 'Unable to create directory, do you have permission?'
   nsc "$@" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'
