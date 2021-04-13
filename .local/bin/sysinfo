@@ -42,6 +42,9 @@ show_battery() {
   case "${adapter_status}" in
     0) # disconnected (on battery)
       estimated_battery_life="$(apm -m)"
+      echo "${estimated_battery_life}" \
+        | grep -q '[^[:digit:]]' \
+        && err "${estimated_battery_life} must only contain digits."
       ebl_minutes=$((estimated_battery_life % 60))
       ebl_hours=$((estimated_battery_life / 60))
       remaining="~${ebl_hours}h & ${ebl_minutes}m"
