@@ -29,23 +29,14 @@ EOF
   exit 1
 fi
 
-# (n)etwork (sc)anner
-# creates dir, places nmap scan results in dir
-
-# usage: nsc [target] [options]
-
-create_workdir() {
-  mkdir -p "${workdir}"
-}
-
 nsc() {
-  priv nmap -Av -p 0-65535 --osscan-limit \
-    --privileged -oA "${workdir}/nmap-$(today)" "$1"
+  priv nmap -Av --osscan-limit \
+    --privileged -oA "${tmpdir}/nmap-$(today)" "$@"
 }
 
 fix_perms() {
   unpriv_user="$(id -un)"
-  priv chown -R "${unpriv_user}:${unpriv_user}" "${sec}"
+  priv chown -R "${unpriv_user}:${unpriv_user}" "${tmpdir}"
 }
 
 main() {
@@ -55,11 +46,10 @@ main() {
 usage:
 ${0##*/} [target] [options]"
   arg_ge "$@"
-  sec="${HOME}/sec"
-  workdir="${sec}/$1/nmap"
-  create_workdir "$1" || err 'Unable to create directory, do you have permission?'
+  tmpdir="$(mktemp -d)"
   nsc "$@" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'
+  echo "Scan finished, results available in ${tmpdir}."
 }
 
 main "$@"
