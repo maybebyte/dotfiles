@@ -46,6 +46,7 @@ assign_cuetag() {
 splitflac() {
   shnsplit -f "$1" -o flac -t '%n %t' "$2" \
     || err 'Unable to split the FLAC file.'
+  [ -f "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
   mv "$2" "$2.bak"
   "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
   [ "${DELETE}" = "yes" ] && rm "$2.bak"
