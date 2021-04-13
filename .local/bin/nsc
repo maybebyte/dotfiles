@@ -37,6 +37,8 @@ nsc() {
 fix_perms() {
   unpriv_user="$(id -un)"
   priv chown -R "${unpriv_user}:${unpriv_user}" "${tmpdir}"
+  find "${tmpdir}" \( -type f ! -perm 600 -exec chmod 600 '{}' \; \) \
+    -o \( -type d ! -perm 700 -exec chmod 700 '{}' \; \)
 }
 
 main() {
