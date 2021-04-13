@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
-# shellcheck disable=SC2086,SC1090,SC2154
-# command_maim_args doesn't work when quoted, so SC2086 is disabled
+# shellcheck disable=SC1090,SC2154
 
 # rewrite of Luke Smith's maimpick
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick
@@ -28,33 +27,38 @@ yankpic() {
   yank -t image/png || err 'Unable to copy selection to clipboard.'
 }
 
+# --hide-cursor, --quiet, --capturebackground, --delay
+maim_with_flags() {
+  maim -uqBd 0.5 "$@"
+}
+
 maim_sel_save() {
   readonly filename="selected-$(cur_date).png"
-  maim ${common_maim_args} -s "${savedir}/${filename}"
+  maim_with_flags -s "${savedir}/${filename}"
 }
 
 maim_sel_copy() {
-  maim ${common_maim_args} -s | yankpic
+  maim_with_flags -s | yankpic
 }
 
 maim_cur_save() {
   readonly filename="window-$(cur_date).png"
-  maim ${common_maim_args} -i "$(xdotool getactivewindow)" \
+  maim_with_flags -i "$(xdotool getactivewindow)" \
     "${savedir}/${filename}"
 }
 
 maim_cur_copy() {
-  maim ${common_maim_args} -i "$(xdotool getactivewindow)" \
+  maim_with_flags -i "$(xdotool getactivewindow)" \
     | yankpic
 }
 
 maim_full_save() {
   readonly filename="full-$(cur_date).png"
-  maim ${common_maim_args} "${savedir}/${filename}"
+  maim_with_flags "${savedir}/${filename}"
 }
 
 maim_full_copy() {
-  maim ${common_maim_args} | yankpic
+  maim_with_flags | yankpic
 }
 
 present_options() {
@@ -78,7 +82,6 @@ full screen
 a selected area (copy)
 current window (copy)
 full screen (copy)'
-  readonly common_maim_args='-uqBd 1'
   readonly savedir="${HOME}/screenshots"
   readonly num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | present_options
