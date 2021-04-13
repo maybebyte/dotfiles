@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# shellcheck disable=SC1090,SC2154
+# shellcheck disable=SC1090
 
 # rewrite of Luke Smith's maimpick
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick
