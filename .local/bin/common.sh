@@ -45,7 +45,7 @@ err() {
 # 1) interactive ksh(1) sessions won't terminate.
 # 2) dmenu scripts still work without colors.
 import_colors() {
-  readonly colors_sh="${HOME}/.cache/wal/colors.sh"
+  colors_sh="${HOME}/.cache/wal/colors.sh"
   [ -r "${colors_sh}" ] \
     && . "${colors_sh}" \
     || echo "${colors_sh} not readable/found." >&2
@@ -68,7 +68,7 @@ must_be_root() {
 }
 
 # print date in yyyy-mm-dd format.
-today() { date '+%Y-%m-%d'; }
+today() { date '+%F'; }
 
 # if $1 is less than 1024, print it and exit successfully.
 # if $1 is not an integer, exit with an error.
