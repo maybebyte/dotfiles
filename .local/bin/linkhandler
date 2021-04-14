@@ -47,10 +47,20 @@ check_opts() {
 linkhandler() {
   case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
     'copy duration')
-      youtube-dl --get-duration "${URL}" 2>/dev/null | yank
+      duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"
+      if echo "${duration}" | yank; then
+        notify-send "Copied video duration (${duration})."
+      else
+        err 'Failed to copy video duration.'
+      fi
       ;;
     'copy title')
-      youtube-dl -e "${URL}" 2>/dev/null | yank
+      title="$(youtube-dl -e "${URL}" 2>/dev/null)"
+      if echo "${title}" | yank; then
+        notify-send "Copied video title (${title})."
+      else
+        err 'Failed to copy video title.'
+      fi
       ;;
     'download audio')
       youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1 \
