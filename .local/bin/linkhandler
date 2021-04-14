@@ -48,7 +48,7 @@ linkhandler() {
   case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
     'copy duration')
       duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"
-      if echo "${duration}" | yank; then
+      if printf '%s' "${duration}" | yank; then
         notify-send "Copied video duration (${duration})."
       else
         err 'Failed to copy video duration.'
@@ -56,7 +56,7 @@ linkhandler() {
       ;;
     'copy title')
       title="$(youtube-dl -e "${URL}" 2>/dev/null)"
-      if echo "${title}" | yank; then
+      if printf '%s' "${title}" | yank; then
         notify-send "Copied video title (${title})."
       else
         err 'Failed to copy video title.'
