@@ -93,7 +93,7 @@ main() {
   # sitemap
 
   base_url="$4"
-  date="$(date +%Y-%m-%d)"
+  date="$(date '+%F')"
   urls="$(list_pages "${src}")"
 
   [ -n "${urls}" ] \
