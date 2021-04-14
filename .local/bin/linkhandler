@@ -47,17 +47,19 @@ check_opts() {
 linkhandler() {
   case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
     'copy duration')
-      duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"
-      if printf '%s' "${duration}" | yank; then
-        notify-send "Copied video duration (${duration})."
+      if duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"; then
+        printf '%s' "${duration}" \
+          | yank \
+          && notify-send "Copied video duration (${duration})."
       else
         err 'Failed to copy video duration.'
       fi
       ;;
     'copy title')
-      title="$(youtube-dl -e "${URL}" 2>/dev/null)"
-      if printf '%s' "${title}" | yank; then
-        notify-send "Copied video title (${title})."
+      if title="$(youtube-dl -e "${URL}" 2>/dev/null)"; then
+        printf '%s' "${title}" \
+          | yank \
+          && notify-send "Copied video title (${title})."
       else
         err 'Failed to copy video title.'
       fi
@@ -78,8 +80,11 @@ linkhandler() {
       mpv --no-video --speed=1 "${URL}" >/dev/null 2>&1
       ;;
     'print duration')
-      duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"
-      notify-send "${duration}"
+      if duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"; then
+        notify-send "${duration}"
+      else
+        err "Duration couldn't be printed."
+      fi
       ;;
     'read')
       ftp -VMno - -U '' "${URL}" | zathura - >/dev/null 2>&1
