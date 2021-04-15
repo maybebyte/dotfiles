@@ -65,16 +65,22 @@ linkhandler() {
       fi
       ;;
     'download audio')
-      youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1 \
-        && notify-send "Finished downloading audio from ${URL}."
+      youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1
+      notify-send "Finished downloading audio from ${URL}."
       ;;
     'download file')
       (cd "${HOME}/Downloads" && ftp -VMnU '' "${URL}") >/dev/null 2>&1 \
         && notify-send "Finished downloading ${URL##*/}."
       ;;
     'download video')
-      youtube-dl --embed-subs "${URL}" >/dev/null 2>&1 \
-        && notify-send "Finished downloading video from ${URL}."
+      # sometimes youtube-dl will 'fail' because it can't embed an image
+      # as a thumbnail, but it actually succeeded otherwise (downloaded
+      # the video properly). an 'AND' list or if conditional doesn't
+      # work here the way one would expect.
+      #
+      # also, notifications don't work for some reason here.
+      youtube-dl --embed-subs "${URL}" >/dev/null 2>&1
+      notify-send "Finished downloading video from ${URL}."
       ;;
     'listen')
       mpv --no-video --speed=1 "${URL}" >/dev/null 2>&1
