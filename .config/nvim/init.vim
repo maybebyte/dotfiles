@@ -108,7 +108,7 @@ call plug#begin("$HOME/.local/share/nvim/site/autoload/plugged")
   Plug 'scrooloose/nerdtree'
   Plug 'scrooloose/syntastic'
   Plug 'tpope/vim-surround'
-  if $DISPLAY != ""
+  if $DISPLAY != ''
     Plug 'ap/vim-css-color'
     Plug 'dylanaraps/wal.vim'
     Plug 'kovetskiy/sxhkd-vim'
@@ -117,6 +117,6 @@ call plug#begin("$HOME/.local/share/nvim/site/autoload/plugged")
 call plug#end()
 
 " https://github.com/dylanaraps/pywal
-if $DISPLAY != ""
+if $DISPLAY != ''
   colorscheme wal
 endif

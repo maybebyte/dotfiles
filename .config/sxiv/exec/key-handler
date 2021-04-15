@@ -25,7 +25,7 @@ while read -r file; do
 Yes
 No
 EOF
-      )" = "Yes" ]; then
+      )" = 'Yes' ]; then
         rm "${file}"
         notify-send "${file} deleted."
       fi
