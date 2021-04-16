@@ -27,11 +27,15 @@ export \
   VISUAL="${EDITOR}" \
   site='https://amissing.link'
 
-if [ "$(uname)" = 'OpenBSD' ]; then
-  export \
-    markdowndir="${HOME}/builds/website_md" \
-    srvdir='/var/www/htdocs/aml'
-fi
+# written so it can be expanded later if needed
+case "$(uname)" in
+  'OpenBSD')
+    export \
+      markdowndir="${HOME}/builds/website_md" \
+      srvdir='/var/www/htdocs/aml' \
+      icons='/usr/local/share/icons/gnome/scalable'
+    ;;
+esac
 
 # PATH acts funny w/ indentation
 if [ -d '/data/data/com.termux' ]; then
