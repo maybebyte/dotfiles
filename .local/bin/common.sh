@@ -29,9 +29,10 @@ check_grafix() {
   [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 }
 
-# check that all commands needed are executable and available.
+# reads from STDIN and checks that all commands needed are executable
+# and available.
 deps_check() {
-  for dependency in "$@"; do
+  while read -r dependency; do
     if [ -x "$(command -v "${dependency}")" ]; then
       continue
     else
