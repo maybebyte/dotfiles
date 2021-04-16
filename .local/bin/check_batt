@@ -30,7 +30,10 @@ fi
 
 # simple script on a 15 minute cron job to warn if battery is low
 main() {
-  deps_check 'apm' 'notify-send'
+  deps_check <<EOF
+apm
+notify-send
+EOF
   batt_percent="$(apm -l)"
   warning_icon="${icons:?}/status/battery-caution-symbolic.svg"
   if [ "${batt_percent}" -lt 30 ]; then
