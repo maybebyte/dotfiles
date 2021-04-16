@@ -1,0 +1,44 @@
+#!/usr/bin/env sh
+set -e
+# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# check that the library file is readable. if it is, source it so its
+# functions are available. if not, exit due to potentially unpredictable
+# behavior.
+readonly library="${HOME}/.local/bin/common.sh"
+if [ -r "${library}" ]; then
+  . "${library}"
+else
+  cat >&2 <<EOF
+${library} doesn't exist or isn't readable.
+${0##*/} may not function correctly without it; exiting for safety.
+EOF
+  exit 1
+fi
+
+# simple script on a 15 minute cron job to warn if battery is low
+main() {
+  deps_check 'apm' 'notify-send'
+  batt_percent="$(apm -l)"
+  warning_icon="${icons:?}/status/battery-caution-symbolic.svg"
+  if [ "${batt_percent}" -lt 30 ]; then
+    notify-send -i "${warning_icon}" \
+      "Charge your laptop, it's at ${batt_percent}%!"
+  else
+    exit 0
+  fi
+}
+
+main

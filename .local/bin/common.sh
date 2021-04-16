@@ -29,6 +29,17 @@ check_grafix() {
   [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 }
 
+# check that all commands needed are executable and available.
+deps_check() {
+  for dependency in "$@"; do
+    if [ -x "$(command -v "${dependency}")" ]; then
+      continue
+    else
+      err "${0##*/} cannot function without ${dependency}."
+    fi
+  done
+}
+
 # err() is the generic way to print an error message and exit a script.
 # all of its output goes to STDERR.
 #
