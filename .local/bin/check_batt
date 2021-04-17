@@ -28,7 +28,9 @@ EOF
   exit 1
 fi
 
-# simple script on a 15 minute cron job to warn if battery is low
+# TODO: figure out the necessary dbus nonsense to make this work with
+# cron. probably involves passing the value of
+# ${DBUS_SESSION_BUS_ADDRESS} somehow.
 main() {
   check_deps <<'EOF'
 apm
