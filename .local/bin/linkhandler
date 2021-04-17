@@ -113,6 +113,15 @@ linkhandler() {
 # number to linkhandler.
 main() {
   check_grafix
+  check_deps <<'EOF'
+dmenu
+ftp
+mpv
+notify-send
+sxiv
+xclip
+youtube-dl
+EOF
   check_opts "$1"
   import_colors
   readonly options='copy duration

@@ -31,6 +31,8 @@ check_grafix() {
 
 # reads from STDIN and checks that all commands needed are executable
 # and available.
+#
+# note that I only check executables that aren't accounted for in dotfiles.
 check_deps() {
   while read -r dependency; do
     if [ -x "$(command -v "${dependency}")" ]; then

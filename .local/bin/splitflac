@@ -15,10 +15,6 @@ set -e
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-# dependencies:
-#   - cuetools
-#   - shntool
-
 # check that the library file is readable. if it is, source it so its
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
@@ -53,6 +49,12 @@ splitflac() {
 }
 
 main() {
+  # cuetag is checked in assign_cuetag() rather than check_deps() since
+  # the executable's name isn't consistent among operating systems.
+  check_deps <<'EOF'
+flac
+shnsplit
+EOF
   readonly arguments_needed=2
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 

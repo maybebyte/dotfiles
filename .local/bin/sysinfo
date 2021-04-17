@@ -113,6 +113,11 @@ $(show_date)"
 }
 
 main() {
+  check_deps <<'EOF'
+apm
+mpc
+sndioctl
+EOF
   import_colors
   batt_status="$(apm -b)"
   delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "

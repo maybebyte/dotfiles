@@ -37,4 +37,14 @@ grab_emoji() {
   fi
 }
 
-main() { check_grafix; import_colors; grab_emoji; }; main
+main() {
+  check_grafix
+  check_deps <<'EOF'
+dmenu
+notify-send
+EOF
+  import_colors
+  grab_emoji
+}
+
+main

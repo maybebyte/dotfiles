@@ -106,6 +106,10 @@ rename'
 # the first argument for choose_operation.
 main() {
   check_grafix
+  check_deps <<'EOF'
+dmenu
+notify-send
+EOF
   readonly arguments_needed=1
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 

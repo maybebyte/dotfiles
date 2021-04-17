@@ -45,6 +45,7 @@ launch() {
 
 main() {
   check_grafix
+  echo 'dmenu_run' | check_deps
   import_colors
   launch || err 'launch() failed.'
 }

@@ -37,6 +37,10 @@ viewimg() {
 
 main() {
   check_grafix
+  check_deps <<'EOF'
+ftp
+sxiv
+EOF
   readonly arguments_needed=1
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 

@@ -42,6 +42,7 @@ fix_perms() {
 }
 
 main() {
+  echo 'nmap' | check_deps
   readonly arguments_needed=1
   readonly usage_details="${0##*/} requires at least ${arguments_needed} argument(s).
 

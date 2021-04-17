@@ -40,6 +40,7 @@ genfavi() {
 }
 
 main() {
+  echo 'convert' | check_deps
   readonly arguments_needed=1
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 

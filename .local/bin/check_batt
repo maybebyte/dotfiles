@@ -30,7 +30,7 @@ fi
 
 # simple script on a 15 minute cron job to warn if battery is low
 main() {
-  check_deps <<EOF
+  check_deps <<'EOF'
 apm
 notify-send
 EOF
