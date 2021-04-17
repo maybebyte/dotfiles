@@ -28,7 +28,13 @@ EOF
   exit 1
 fi
 
+# assign an icon (or not) depending on whether the icon is readable.
+#
+# handle_icons() is here because an inability to locate an icon
+# shouldn't be fatal. the user should still get a notification
+# regardless.
 handle_icons() {
+  # these paths will likely differ between operating systems.
   icons='/usr/local/share/icons/gnome/scalable'
   warning_icon="${icons}/status/battery-caution-symbolic.svg"
   if [ -r "${warning_icon}" ]; then
@@ -39,7 +45,10 @@ handle_icons() {
   fi
 }
 
+# handle prerequisites. designed to exit if prerequisites aren't in
+# place so that the script behaves more predictably.
 handle_prereqs() {
+  # if needed dependencies aren't available, exit.
   check_deps <<'EOF'
 apm
 notify-send
@@ -54,10 +63,14 @@ EOF
   fi
 }
 
+# exporting ${DISPLAY} is needed for cron(8) jobs.
 set_display() {
   [ -z "${DISPLAY}" ] && export DISPLAY=:0
 }
 
+# depending on whether ${ICONS} is 'true' or 'false', send a
+# notification with ${message} as content with or without an appropriate
+# icon.
 warn_user() {
   message="Charge your laptop, it's at ${batt_percent}%!"
   case "${ICONS}" in
@@ -66,6 +79,10 @@ warn_user() {
   esac
 }
 
+# handle the prerequisites. determine battery percentage. if it's below
+# 30%, then set ${DISPLAY}, set an icon (or not, if it isn't readable),
+# and send the user a notification about the low battery. otherwise,
+# exit silently.
 main() {
   handle_prereqs
   batt_percent="$(apm -l)"
