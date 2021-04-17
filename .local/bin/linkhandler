@@ -98,6 +98,9 @@ linkhandler() {
     'view image')
       viewimg "${URL}"
       ;;
+    # TODO: make 'watch' options more responsive. perhaps a notification
+    # when the video is ready to play or something to that effect. the
+    # absence of any visual indication affects my productivity negatively.
     'watch')
       mpv "${URL}" >/dev/null 2>&1
       ;;
