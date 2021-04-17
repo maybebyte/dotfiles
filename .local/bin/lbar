@@ -30,5 +30,5 @@ EOF
 fi
 
 lbar() { lemonbar-xft -f sans-14 -f 'Noto Sans CJK JP-14' -pd; }
-main() { check_grafix; echo 'lemonbar-xft' | check_deps; lbar; }
-main || err 'lbar encountered a problem.'
+prereqs() { check_grafix; echo 'lemonbar-xft' | check_deps; }
+main() { prereqs; lbar; }; main

@@ -73,7 +73,7 @@ present_options() {
   esac
 }
 
-main() {
+prereqs() {
   check_grafix
   check_deps <<'EOF'
 dmenu
@@ -82,6 +82,10 @@ xclip
 xdotool
 EOF
   import_colors
+}
+
+main() {
+  prereqs
   readonly options='a selected area
 current window
 full screen

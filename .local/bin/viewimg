@@ -35,7 +35,7 @@ viewimg() {
   sxiv "${filename}" >/dev/null 2>&1
 }
 
-main() {
+prereqs() {
   check_grafix
   check_deps <<'EOF'
 ftp
@@ -47,6 +47,10 @@ EOF
 usage:
 ${0##*/} [URL]"
   arg_eq "$@"
+}
+
+main() {
+  prereqs "$@"
   viewimg "$1"
   wait
   rm "${filename}"

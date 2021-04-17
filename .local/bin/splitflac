@@ -48,6 +48,8 @@ splitflac() {
   [ "${DELETE}" = 'yes' ] && rm "$2.bak"
 }
 
+# no prereqs() here because two tiny functions would be the result. if
+# prerequisites expand, it can be reexamined then.
 main() {
   # cuetag is checked in assign_cuetag() rather than check_deps() since
   # the executable's name isn't consistent among operating systems.

@@ -54,9 +54,7 @@ cleanup() {
   rm -rf "${htmldir:?}"
 }
 
-# TODO: a conf file is likely a better implementation than positional
-# parameters in the long run.
-main() {
+prereqs() {
   check_deps <<'EOF'
 httpd
 rcctl
@@ -64,6 +62,12 @@ EOF
   readonly arguments_needed=3
   readonly usage_details="usage: ${0##*/} [domain] [md dir] [srv dir]"
   arg_eq "$@"
+}
+
+# TODO: a conf file is likely a better implementation than positional
+# parameters in the long run.
+main() {
+  prereqs "$@"
   readonly site="$1"
   readonly markdowndir="$2"
   readonly srvdir="$3"

@@ -112,9 +112,7 @@ linkhandler() {
   esac
 }
 
-# defines options. count the number of options, then pass them + that
-# number to linkhandler.
-main() {
+prereqs() {
   check_grafix
   check_deps <<'EOF'
 dmenu
@@ -127,6 +125,12 @@ youtube-dl
 EOF
   check_opts "$1"
   import_colors
+}
+
+# defines options. count the number of options, then pass them + that
+# number to linkhandler.
+main() {
+  prereqs "$1"
   readonly options='copy duration
 copy title
 download audio

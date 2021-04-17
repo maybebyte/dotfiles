@@ -47,7 +47,7 @@ handle_icons() {
 
 # handle prerequisites. designed to exit if prerequisites aren't in
 # place so that the script behaves more predictably.
-handle_prereqs() {
+prereqs() {
   # if needed dependencies aren't available, exit.
   check_deps <<'EOF'
 apm
@@ -84,7 +84,7 @@ warn_user() {
 # and send the user a notification about the low battery. otherwise,
 # exit silently.
 main() {
-  handle_prereqs
+  prereqs
   batt_percent="$(apm -l)"
   if [ "${batt_percent}" -lt 30 ]; then
     set_display

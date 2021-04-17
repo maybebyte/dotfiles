@@ -102,15 +102,25 @@ rename'
   esac
 }
 
-# parse options. get the absolute pathname of the file and use that as
-# the first argument for choose_operation.
-main() {
+prereqs1() {
   check_grafix
   check_deps <<'EOF'
 dmenu
 notify-send
 EOF
+}
+
+prereqs2() {
   readonly arguments_needed=1
+  arg_eq "$@"
+  import_colors
+  [ -f "$1" ] || err 'Not a file.'
+}
+
+# parse options. get the absolute pathname of the file and use that as
+# the first argument for choose_operation.
+main() {
+  prereqs1
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
@@ -138,9 +148,7 @@ ${0##*/} only processes the first operation it sees."
     esac
   done
   shift $((OPTIND - 1))
-  arg_eq "$@"
-  import_colors
-  [ -f "$1" ] || err 'Not a file.'
+  prereqs2 "$@"
   readonly file="$(readlink -f "$1")"
   choose_operation
 }

@@ -41,7 +41,7 @@ fix_perms() {
     -o \( -type d ! -perm 700 -exec chmod 700 '{}' \; \)
 }
 
-main() {
+prereqs() {
   echo 'nmap' | check_deps
   readonly arguments_needed=1
   readonly usage_details="${0##*/} requires at least ${arguments_needed} argument(s).
@@ -49,6 +49,10 @@ main() {
 usage:
 ${0##*/} [target] [options]"
   arg_ge "$@"
+}
+
+main() {
+  prereqs "$@"
   readonly tmpdir="$(mktemp -d)"
   nsc "$@" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'

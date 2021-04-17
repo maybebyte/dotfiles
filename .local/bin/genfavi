@@ -35,11 +35,12 @@ genfavi() {
     \( -clone 0 -resize 32x32 -extent 32x32 \) \
     \( -clone 0 -resize 48x48 -extent 48x48 \) \
     \( -clone 0 -resize 64x64 -extent 64x64 \) \
-    -delete 0 -alpha off -colors 256 favicon.ico
-  cp favicon.ico favicon.png
+    -delete 0 -alpha off -colors 256 favicon.ico \
+    || err 'Unable to generate favicon.' \
+    && cp favicon.ico favicon.png
 }
 
-main() {
+prereqs() {
   echo 'convert' | check_deps
   readonly arguments_needed=1
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
@@ -47,7 +48,6 @@ main() {
 usage:
 ${0##*/} [image]"
   arg_eq "$@"
-  genfavi "$1" || err 'Unable to generate favicon.'
 }
 
-main "$@"
+main() { prereqs "$@"; genfavi "$1"; }; main "$@"

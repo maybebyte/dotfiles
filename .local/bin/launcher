@@ -43,11 +43,10 @@ launch() {
     -sf "${color7:=#e0cef3}"
 }
 
-main() {
+prereqs() {
   check_grafix
   echo 'dmenu_run' | check_deps
   import_colors
-  launch || err 'launch() failed.'
 }
 
-main
+main() { prereqs; launch; }; main

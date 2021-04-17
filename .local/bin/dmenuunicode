@@ -37,14 +37,13 @@ grab_emoji() {
   fi
 }
 
-main() {
+prereqs() {
   check_grafix
   check_deps <<'EOF'
 dmenu
 notify-send
 EOF
   import_colors
-  grab_emoji
 }
 
-main
+main() { prereqs; grab_emoji; }; main
