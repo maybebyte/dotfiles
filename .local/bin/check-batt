@@ -36,13 +36,22 @@ main() {
 apm
 notify-send
 EOF
+  # if A/C is connected, exit.
+  [ "$(apm -a)" = 1 ] && exit
+
+  # if battery is missing, exit.
+  batt_status="$(apm -b)"
+  if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
+    exit
+  fi
+
   batt_percent="$(apm -l)"
   warning_icon="${icons:?}/status/battery-caution-symbolic.svg"
   if [ "${batt_percent}" -lt 30 ]; then
     notify-send -i "${warning_icon}" \
       "Charge your laptop, it's at ${batt_percent}%!"
   else
-    exit 0
+    exit
   fi
 }
 
