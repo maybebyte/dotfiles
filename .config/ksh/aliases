@@ -244,9 +244,10 @@ openbsd_aliases() {
     pkgda='pkgd -a'                                                      \
     pkgl='pkgq -mz'                                                      \
     pkgq='pkg_info'                                                      \
+    pkgqs='pkg_info -D snap'                                             \
     pkgqo='pkgq -E'                                                      \
     pkgs='pkgq -Q'                                                       \
-    pkgss='pkgq -D snap -Q'                                              \
+    pkgss='pkgqs -Q'                                                     \
     pkgup='pkga -u'                                                      \
     pkgups='pkgup -D snap'
 
