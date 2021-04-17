@@ -28,9 +28,10 @@ EOF
   exit 1
 fi
 
-# TODO: figure out the necessary dbus nonsense to make this work with
-# cron. probably involves passing the value of
-# ${DBUS_SESSION_BUS_ADDRESS} somehow.
+set_display() {
+  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+}
+
 main() {
   check_deps <<'EOF'
 apm
@@ -46,8 +47,10 @@ EOF
   fi
 
   batt_percent="$(apm -l)"
-  warning_icon="${icons:?}/status/battery-caution-symbolic.svg"
+  icons='/usr/local/share/icons/gnome/scalable'
+  warning_icon="${icons}/status/battery-caution-symbolic.svg"
   if [ "${batt_percent}" -lt 30 ]; then
+    set_display
     notify-send -i "${warning_icon}" \
       "Charge your laptop, it's at ${batt_percent}%!"
   else
