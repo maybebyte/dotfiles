@@ -28,11 +28,18 @@ EOF
   exit 1
 fi
 
-set_display() {
-  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+handle_icons() {
+  icons='/usr/local/share/icons/gnome/scalable'
+  warning_icon="${icons}/status/battery-caution-symbolic.svg"
+  if [ -r "${warning_icon}" ]; then
+    ICONS='true'
+  else
+    unset "${icons}" "${warning_icon}"
+    ICONS='false'
+  fi
 }
 
-main() {
+handle_prereqs() {
   check_deps <<'EOF'
 apm
 notify-send
@@ -45,14 +52,27 @@ EOF
   if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
     exit
   fi
+}
 
+set_display() {
+  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+}
+
+warn_user() {
+  message="Charge your laptop, it's at ${batt_percent}%!"
+  case "${ICONS}" in
+    'true') notify-send -i "${warning_icon}" "${message}" ;;
+    'false') notify-send "${message}"                     ;;
+  esac
+}
+
+main() {
+  handle_prereqs
   batt_percent="$(apm -l)"
-  icons='/usr/local/share/icons/gnome/scalable'
-  warning_icon="${icons}/status/battery-caution-symbolic.svg"
   if [ "${batt_percent}" -lt 30 ]; then
     set_display
-    notify-send -i "${warning_icon}" \
-      "Charge your laptop, it's at ${batt_percent}%!"
+    handle_icons
+    warn_user
   else
     exit
   fi
