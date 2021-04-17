@@ -72,7 +72,7 @@ set_display() {
 # notification with ${message} as content with or without an appropriate
 # icon.
 warn_user() {
-  message="Charge your laptop, it's at ${batt_percent}%!"
+  message="Your device is at ${batt_percent}%!"
   case "${ICONS}" in
     'true') notify-send -i "${warning_icon}" "${message}" ;;
     'false') notify-send "${message}"                     ;;
