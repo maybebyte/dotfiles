@@ -111,7 +111,6 @@ EOF
 }
 
 prereqs2() {
-  readonly arguments_needed=1
   arg_eq "$@"
   import_colors
   [ -f "$1" ] || err 'Not a file.'
@@ -121,6 +120,7 @@ prereqs2() {
 # the first argument for choose_operation.
 main() {
   prereqs1
+  readonly arguments_needed=1
   readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
 
 usage:
