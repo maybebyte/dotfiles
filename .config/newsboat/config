@@ -39,7 +39,7 @@ macro c set browser "printf '%s' '%u' | xclip -selection clipboard"; open-in-bro
 
 player "mpv"
 
-reload-threads 20
+reload-threads 4
 
 save-path "~/books/newsboat/"
 
