@@ -8,7 +8,7 @@
   format               = "<b>%s</b>\n%b"
   frame_color          = "#e0cef3"
   frame_width          = 2
-  geometry             = "350x5-0+50"
+  geometry             = "350x5-20+55"
   hide_duplicate_count = true
   horizontal_padding   = 15
   icon_path            = /usr/local/share/icons/gnome/scalable/status/:/usr/local/share/icons/gnome/scalable/devices/

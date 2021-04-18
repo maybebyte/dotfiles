@@ -1,0 +1,85 @@
+#!/usr/bin/env sh
+set -e
+# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# check that the library file is readable. if it is, source it so its
+# functions are available. if not, exit due to potentially unpredictable
+# behavior.
+readonly library="${HOME}/.local/bin/common.sh"
+if [ -r "${library}" ]; then
+  . "${library}"
+else
+  cat >&2 <<EOF
+${library} doesn't exist or isn't readable.
+${0##*/} may not function correctly without it; exiting for safety.
+EOF
+  exit 1
+fi
+
+# check prerequisites (Xorg instance + dependencies).
+prereqs() {
+  check_grafix
+  check_deps <<'EOF'
+dunstify
+sndioctl
+EOF
+}
+
+# either increase, decrease, or mute the volume if the appropriate
+# argument is given. if not, error and display usage details.
+vol() {
+  case "$1" in
+    'inc')  sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
+    'dec')  sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
+    'mute') sndioctl output.mute=!      >/dev/null 2>&1 ;;
+    *)      err "${usage_details}"                      ;;
+  esac
+}
+
+# query volume, format it appropriately, and then display a notification
+# based on whether sndio(7) output.mute is 0 (not muted) or 1 (muted).
+#
+# TODO: add icons based on volume level.
+notify() {
+  # arbitrary ID to get rid of duplicate notifications.
+  msg_id="25231"
+  raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+    case "${raw_vol}" in
+    1.000) formatted_vol=100                                    ;;
+    0.000) formatted_vol=0                                      ;;
+    *)     formatted_vol="$(printf '%.2s' "${raw_vol##*.}")"    ;;
+  esac
+  muted="$(sndioctl -n output.mute 2>/dev/null)"
+  if [ "${muted}" = 0 ]; then
+    dunstify -u low -r "${msg_id}" "vol: ${formatted_vol}%"
+  else
+    dunstify -u low -r "${msg_id}" "vol: MUTED"
+  fi
+}
+
+# check prerequisites. perform the specified action with vol()
+# (inc|dec|mute), then display the appropriate notification if
+# successful.
+main() {
+  prereqs
+  arguments_needed=1
+  usage_details="${0##*/} needs ${arguments_needed} argument(s).
+
+usage:
+${0##*/} [inc|dec|mute]"
+ vol "$1" && notify
+}
+
+main "$1"
