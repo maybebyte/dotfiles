@@ -35,12 +35,12 @@ fi
 # regardless.
 handle_icons() {
   # these paths will likely differ between operating systems.
-  icons='/usr/local/share/icons/gnome/scalable'
-  warning_icon="${icons}/status/battery-caution-symbolic.svg"
+  icon_dir='/usr/local/share/icons/gnome/scalable'
+  warning_icon="${icon_dir}/status/battery-caution-symbolic.svg"
   if [ -r "${warning_icon}" ]; then
     ICONS='true'
   else
-    unset "${icons}" "${warning_icon}"
+    unset "${icon_dir}" "${warning_icon}"
     ICONS='false'
   fi
 }
