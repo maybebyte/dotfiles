@@ -83,9 +83,9 @@ notify() {
   readonly msg_id="25231"
   readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
     case "${raw_vol}" in
-    1.000) readonly formatted_vol=100                                    ;;
-    0.000) readonly formatted_vol=0                                      ;;
-    *)     readonly formatted_vol="$(printf '%.2s' "${raw_vol##*.}")"    ;;
+    1.000) readonly formatted_vol=100                                 ;;
+    0.000) readonly formatted_vol=0                                   ;;
+    *)     readonly formatted_vol="$(printf '%.2s' "${raw_vol##*.}")" ;;
   esac
   readonly muted="$(sndioctl -n output.mute 2>/dev/null)"
   choose_icon
