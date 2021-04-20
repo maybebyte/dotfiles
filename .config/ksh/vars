@@ -14,7 +14,7 @@ fi
 
 # out of necessity, some variables must be here (i.e. since EDITOR is
 # defined here due to appearing in the 'aliases' + 'functions'
-# files, all variables related to it must be here too)
+# files, all variables related to it must be here, too).
 export \
   FCEDIT="${EDITOR}" \
   VISUAL="${EDITOR}"
