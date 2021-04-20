@@ -55,6 +55,8 @@ choose_icon() {
   # if icon_dir isn't readable, don't choose an icon.
   if ! [ -r "${icon_dir}" ]; then
     unset icon_dir && return 1
+  else
+    readonly icon_dir
   fi
   # handle the edge cases first.
   if [ "${formatted_vol}" = 100 ]; then
