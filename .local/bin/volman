@@ -49,7 +49,7 @@ vol() {
 }
 
 # query volume, format it appropriately, and then display a notification
-# based on whether sndio(7) output.mute is 0 (not muted) or 1 (muted).
+# based on whether `sndioctl -n output.mute` returns 0 (not muted) or 1 (muted).
 #
 # TODO: add icons based on volume level.
 notify() {
