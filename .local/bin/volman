@@ -51,6 +51,10 @@ vol() {
 # based on the current output level, choose an appropriate volume-related icon.
 choose_icon() {
   icon_dir='/usr/local/share/icons/gnome/scalable'
+  # if icon_dir isn't readable, don't choose an icon.
+  if ! [ -r "${icon_dir}" ]; then
+    unset icon_dir && return
+  fi
   # handle the edge cases first.
   if [ "${formatted_vol}" = 100 ]; then
     vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
@@ -83,9 +87,18 @@ notify() {
   muted="$(sndioctl -n output.mute 2>/dev/null)"
   choose_icon
   if [ "${muted}" = 1 ]; then
-    dunstify -i "${vol_icon}" -u low -r "${msg_id}" "MUTED"
+    dunstify_with_flags "MUTED"
   else
-    dunstify -i "${vol_icon}" -u low -r "${msg_id}" "${formatted_vol}%"
+    dunstify_with_flags "${formatted_vol}%"
+  fi
+}
+
+# here to handle the presence or absence of vol_icon, mainly.
+dunstify_with_flags() {
+  if [ -n "${vol_icon}" ]; then
+    dunstify -i "${vol_icon}" -u low -r "${msg_id}" "$@"
+  else
+    dunstify -u low -r "${msg_id}" "$@"
   fi
 }
 
