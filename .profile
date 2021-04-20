@@ -36,7 +36,6 @@ case "$(uname)" in
     ;;
 esac
 
-# PATH acts funny w/ indentation
 gateway="$(netstat -rn 2>/dev/null | awk '/default/{print $2}')" \
   && export gateway
 
