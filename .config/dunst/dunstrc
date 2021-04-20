@@ -15,8 +15,6 @@
   icon_position        = left
   idle_threshold       = 120
   markup               = full
-  max_icon_size        = 40
-  min_icon_size        = 25
   padding              = 15
   separator_color      = frame
   show_age_threshold   = 120
