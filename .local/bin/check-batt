@@ -30,10 +30,10 @@ fi
 
 # assign an icon (or not) depending on whether the icon is readable.
 #
-# handle_icons() is here because an inability to locate an icon
+# choose_icon() is here because an inability to locate an icon
 # shouldn't be fatal. the user should still get a notification
 # regardless.
-handle_icons() {
+choose_icon() {
   # these paths will likely differ between operating systems.
   icon_dir='/usr/local/share/icons/gnome/scalable'
   warning_icon="${icon_dir}/status/battery-caution-symbolic.svg"
@@ -42,6 +42,7 @@ handle_icons() {
   else
     unset "${icon_dir}" "${warning_icon}"
     ICONS='false'
+    return 1
   fi
 }
 
@@ -88,7 +89,7 @@ main() {
   batt_percent="$(apm -l)"
   if [ "${batt_percent}" -lt 30 ]; then
     set_display
-    handle_icons
+    choose_icon
     warn_user
   else
     exit
