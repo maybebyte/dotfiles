@@ -5,7 +5,7 @@
   && export ENV="${HOME}/.kshrc"
 
 # PATH acts funny w/ indentation
-if [ -d '/data/data/com.termux' ]; then
+if command -v termux-info >/dev/null 2>&1; then
   export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
 /data/data/com.termux/files/usr/bin/applets"
 else
