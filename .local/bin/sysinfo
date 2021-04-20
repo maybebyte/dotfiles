@@ -113,7 +113,7 @@ main() {
   batt_status="$(apm -b)"
   delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
   bgfg="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
-  while :; do
+  while true; do
     sysinfo
     sleep 30
   done
