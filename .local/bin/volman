@@ -58,19 +58,19 @@ choose_icon() {
   fi
   # handle the edge cases first.
   if [ "${formatted_vol}" = 100 ]; then
-    vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
+    readonly vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${formatted_vol}" = 0 ] || [ "${muted}" = 1 ]; then
-    vol_icon="${icon_dir}/status/audio-volume-muted-symbolic.svg"
+    readonly vol_icon="${icon_dir}/status/audio-volume-muted-symbolic.svg"
   fi
   # if vol_icon has already been assigned, we can exit the function.
   if [ -n "${vol_icon}" ]; then
     return
   elif [ "${formatted_vol}" -ge 50 ]; then
-    vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
+    readonly vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${formatted_vol}" -ge 25 ]; then
-    vol_icon="${icon_dir}/status/audio-volume-medium-symbolic.svg"
+    readonly vol_icon="${icon_dir}/status/audio-volume-medium-symbolic.svg"
   elif [ "${formatted_vol}" -lt 25 ]; then
-    vol_icon="${icon_dir}/status/audio-volume-low-symbolic.svg"
+    readonly vol_icon="${icon_dir}/status/audio-volume-low-symbolic.svg"
   fi
 }
 
@@ -78,14 +78,14 @@ choose_icon() {
 # based on whether `sndioctl -n output.mute` returns 0 (not muted) or 1 (muted).
 notify() {
   # arbitrary ID to get rid of duplicate notifications.
-  msg_id="25231"
-  raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+  readonly msg_id="25231"
+  readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
     case "${raw_vol}" in
-    1.000) formatted_vol=100                                    ;;
-    0.000) formatted_vol=0                                      ;;
-    *)     formatted_vol="$(printf '%.2s' "${raw_vol##*.}")"    ;;
+    1.000) readonly formatted_vol=100                                    ;;
+    0.000) readonly formatted_vol=0                                      ;;
+    *)     readonly formatted_vol="$(printf '%.2s' "${raw_vol##*.}")"    ;;
   esac
-  muted="$(sndioctl -n output.mute 2>/dev/null)"
+  readonly muted="$(sndioctl -n output.mute 2>/dev/null)"
   choose_icon
   if [ "${muted}" = 1 ]; then
     dunstify_with_flags "MUTED"
@@ -108,8 +108,8 @@ dunstify_with_flags() {
 # successful.
 main() {
   prereqs
-  arguments_needed=1
-  usage_details="${0##*/} needs ${arguments_needed} argument(s).
+  readonly arguments_needed=1
+  readonly usage_details="${0##*/} needs ${arguments_needed} argument(s).
 
 usage:
 ${0##*/} [inc|dec|mute]"
