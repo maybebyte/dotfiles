@@ -54,7 +54,7 @@ choose_icon() {
   icon_dir='/usr/local/share/icons/gnome/scalable'
   # if icon_dir isn't readable, don't choose an icon.
   if ! [ -r "${icon_dir}" ]; then
-    unset icon_dir && return
+    unset icon_dir && return 1
   fi
   # handle the edge cases first.
   if [ "${formatted_vol}" = 100 ]; then
