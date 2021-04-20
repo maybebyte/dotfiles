@@ -71,7 +71,7 @@ choose_icon() {
     readonly vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${formatted_vol}" -ge 25 ]; then
     readonly vol_icon="${icon_dir}/status/audio-volume-medium-symbolic.svg"
-  elif [ "${formatted_vol}" -lt 25 ]; then
+  else
     readonly vol_icon="${icon_dir}/status/audio-volume-low-symbolic.svg"
   fi
 }
