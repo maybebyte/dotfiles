@@ -60,7 +60,7 @@ choose_icon() {
   # if vol_icon has already been assigned, we can exit the function.
   if [ -n "${vol_icon}" ]; then
     return
-  elif [ "${formatted_vol}" -gt 50 ]; then
+  elif [ "${formatted_vol}" -ge 50 ]; then
     vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${formatted_vol}" -ge 25 ]; then
     vol_icon="${icon_dir}/status/audio-volume-medium-symbolic.svg"
