@@ -43,13 +43,6 @@ check_deps() {
   done
 }
 
-# clears the clipboard.
-# if 'notify' is the first argument, clear_clip will notify the user.
-clear_clip() {
-  yank -i /dev/null
-  [ "$1" = 'notify' ] && notify-send 'Clipboard cleared.'
-}
-
 # err() is the generic way to print an error message and exit a script.
 # all of its output goes to STDERR.
 #
@@ -122,4 +115,4 @@ hreadable() {
 }
 
 # copy STDIN to the clipboard so it can be pasted elsewhere.
-yank() { xclip -selection clipboard; }
+yank() { xclip -selection clipboard "$@"; }

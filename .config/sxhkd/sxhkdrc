@@ -6,6 +6,9 @@ super + {Return, d, u, B, W, P}
 super + n
 	pkill -USR1 xidle
 
+shift + super + x
+	${HOME}/.local/bin/clear_clip notify
+
 # full screenshot
 Print
 	maim -uq ${HOME}/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
