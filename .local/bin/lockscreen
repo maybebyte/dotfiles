@@ -37,6 +37,9 @@ EOF
 }
 
 # clears sensitive information, then locks the screen.
+#
+# note that 'set -e' is not set in this script because the screen must
+# be locked even if the other steps fail.
 main() {
   clear_clip
   pkill -q keepass
