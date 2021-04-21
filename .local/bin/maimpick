@@ -61,6 +61,8 @@ maim_full_copy() {
   maim_with_flags | yankpic
 }
 
+# TODO: maimpick should clear its clipboard on 'copy' options after a
+# delay.
 present_options() {
   case "$(menu -l "${num_of_opts}" -p "Screenshot which area?")" in
     'a selected area')        maim_sel_save                      ;;

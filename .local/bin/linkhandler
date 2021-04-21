@@ -129,6 +129,8 @@ EOF
 
 # defines options. count the number of options, then pass them + that
 # number to linkhandler.
+#
+# TODO: linkhandler should clear its clipboard after a delay.
 main() {
   prereqs "$1"
   readonly options='copy duration

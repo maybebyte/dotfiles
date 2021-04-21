@@ -49,6 +49,8 @@ EOF
       convert -flop "${file}" "${file}"
       ;;
     # yank the relative file path
+    #
+    # TODO: clear clipboard after a delay.
     'y')
       printf '%s' "${file}" | yank
       notify-send "${file} copied to clipboard."
