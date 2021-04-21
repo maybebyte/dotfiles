@@ -11,5 +11,5 @@ Xft.rgba:      rgb
 
 ! sets up xidle to execute slock instead of xlock after 90 seconds,
 ! turns off screen
-XIdle.program: /usr/local/bin/slock xset dpms force off
+XIdle.program: .local/bin/lockscreen
 XIdle.timeout: 90
