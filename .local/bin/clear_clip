@@ -40,7 +40,10 @@ EOF
 main() {
   prereqs
   yank -i /dev/null || err 'Unable to clear the clipboard.'
-  [ "$1" = 'notify' ] && notify-send 'Cleared the clipboard.'
+  case "$1" in
+    'notify') notify-send 'Cleared the clipboard.' ;;
+    *)        return                               ;;
+  esac
 }
 
 main "$@"
