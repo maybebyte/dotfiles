@@ -46,4 +46,4 @@ EOF
   import_colors
 }
 
-main() { prereqs; grab_emoji; }; main
+main() { prereqs; grab_emoji; sleep 10 && clear_clip notify; }; main
