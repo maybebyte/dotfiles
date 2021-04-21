@@ -52,18 +52,21 @@ vol() {
 # based on the current output level, choose an appropriate volume-related icon.
 choose_icon() {
   icon_dir='/usr/local/share/icons/gnome/scalable'
+
   # if icon_dir isn't readable, don't choose an icon.
   if ! [ -r "${icon_dir}" ]; then
     unset icon_dir && return 1
   else
     readonly icon_dir
   fi
+
   # handle the edge cases first.
   if [ "${formatted_vol}" = 100 ]; then
     readonly vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${formatted_vol}" = 0 ] || [ "${muted}" = 1 ]; then
     readonly vol_icon="${icon_dir}/status/audio-volume-muted-symbolic.svg"
   fi
+
   # if vol_icon has already been assigned, we can exit the function.
   if [ -n "${vol_icon}" ]; then
     return
@@ -79,16 +82,16 @@ choose_icon() {
 # query volume, format it appropriately, and then display a notification
 # based on whether `sndioctl -n output.mute` returns 0 (not muted) or 1 (muted).
 notify() {
-  # arbitrary ID to get rid of duplicate notifications.
-  readonly msg_id="25231"
   readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
-    case "${raw_vol}" in
+  case "${raw_vol}" in
     1.000) readonly formatted_vol=100                                 ;;
     0.000) readonly formatted_vol=0                                   ;;
     *)     readonly formatted_vol="$(printf '%.2s' "${raw_vol##*.}")" ;;
   esac
+
   readonly muted="$(sndioctl -n output.mute 2>/dev/null)"
   choose_icon
+
   if [ "${muted}" = 1 ]; then
     dunstify_with_flags "MUTED"
   else
@@ -98,6 +101,8 @@ notify() {
 
 # here to handle the presence or absence of vol_icon, mainly.
 dunstify_with_flags() {
+  # arbitrary ID to get rid of duplicate notifications.
+  readonly msg_id="25231"
   if [ -n "${vol_icon}" ]; then
     dunstify -i "${vol_icon}" -u low -r "${msg_id}" "$@"
   else
