@@ -39,7 +39,7 @@ EOF
 # clears sensitive information, then locks the screen.
 main() {
   clear_clip
-  pkill keepass
+  pkill -q keepass
   slock xset dpms force off
 }
 
