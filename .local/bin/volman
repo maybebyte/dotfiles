@@ -33,6 +33,7 @@ fi
 prereqs() {
   check_grafix
   check_deps <<'EOF'
+bc
 dunstify
 sndioctl
 EOF
@@ -40,7 +41,7 @@ EOF
 
 # either increase, decrease, or mute the volume if the appropriate
 # argument is given. if not, error and display usage details.
-vol() {
+adjust_vol() {
   case "$1" in
     'inc')  sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
     'dec')  sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
@@ -49,7 +50,7 @@ vol() {
   esac
 }
 
-# based on the current output level, choose an appropriate volume-related icon.
+# based on the current output level, print an appropriate volume-related icon.
 choose_icon() {
   icon_dir='/usr/local/share/icons/gnome/scalable'
 
@@ -61,51 +62,65 @@ choose_icon() {
   fi
 
   # handle the edge cases first.
-  if [ "${formatted_vol}" = 100 ]; then
-    readonly vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
-  elif [ "${formatted_vol}" = 0 ] || [ "${muted}" = 1 ]; then
-    readonly vol_icon="${icon_dir}/status/audio-volume-muted-symbolic.svg"
+  if [ "${vol}" = 100 ]; then
+    echo "${icon_dir}/status/audio-volume-high-symbolic.svg" && return
+  elif [ "${vol}" = 0 ] || [ "${MUTED}" = 'true' ]; then
+    echo "${icon_dir}/status/audio-volume-muted-symbolic.svg" && return
   fi
 
-  # if vol_icon has already been assigned, we can exit the function.
-  if [ -n "${vol_icon}" ]; then
-    return
-  elif [ "${formatted_vol}" -ge 50 ]; then
-    readonly vol_icon="${icon_dir}/status/audio-volume-high-symbolic.svg"
-  elif [ "${formatted_vol}" -ge 25 ]; then
-    readonly vol_icon="${icon_dir}/status/audio-volume-medium-symbolic.svg"
+  if [ "${vol}" -ge 50 ]; then
+    echo "${icon_dir}/status/audio-volume-high-symbolic.svg"
+  elif [ "${vol}" -ge 25 ]; then
+    echo "${icon_dir}/status/audio-volume-medium-symbolic.svg"
   else
-    readonly vol_icon="${icon_dir}/status/audio-volume-low-symbolic.svg"
+    echo "${icon_dir}/status/audio-volume-low-symbolic.svg"
   fi
 }
 
-# query volume, format it appropriately, and then display a notification
-# based on whether `sndioctl -n output.mute` returns 0 (not muted) or 1 (muted).
+# if muted, display 'MUTED.'
+# otherwise, display volume.
+#
+# ${MUTED} is set in main(), as multiple functions need the value.
 notify() {
-  readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
-  case "${raw_vol}" in
-    1.000) readonly formatted_vol=100                                 ;;
-    0.000) readonly formatted_vol=0                                   ;;
-    *)     readonly formatted_vol="$(printf '%.2s' "${raw_vol##*.}")" ;;
-  esac
-
-  readonly muted="$(sndioctl -n output.mute 2>/dev/null)"
-  choose_icon
-
-  if [ "${muted}" = 1 ]; then
+  if [ "${MUTED}" = 'true' ]; then
     dunstify_with_flags "MUTED"
   else
-    dunstify_with_flags "${formatted_vol}%"
+    vol="$(get_vol)"
+    dunstify_with_flags "${vol}%"
   fi
 }
 
-# here to handle the presence or absence of vol_icon, mainly.
+# if muted, succeed.
+# if not muted, fail.
+muted() {
+  case "$(sndioctl -n output.mute 2>/dev/null)" in
+    0) return 1 ;;
+    1) return 0 ;;
+  esac
+}
+
+# get raw output level and convert it to something more parsable.
+get_vol() {
+  raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+  case "${raw_vol}" in
+    1.000) echo 100                                                  ;;
+    0.000) echo 0                                                    ;;
+    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc ;;
+  esac
+}
+
+# dunstify but with extra bells and whistles, used in notify().
+#
+# if choose_icon returns the path of an icon, include it with the
+# notification.
 dunstify_with_flags() {
   # arbitrary ID to get rid of duplicate notifications.
   readonly msg_id="25231"
+  vol_icon="$(choose_icon)"
   if [ -n "${vol_icon}" ]; then
     dunstify -i "${vol_icon}" -u low -r "${msg_id}" "$@"
   else
+    unset vol_icon
     dunstify -u low -r "${msg_id}" "$@"
   fi
 }
@@ -120,7 +135,9 @@ main() {
 
 usage:
 ${0##*/} [inc|dec|mute]"
- vol "$1" && notify
+  adjust_vol "$1"
+  muted && MUTED='true'
+  notify
 }
 
 main "$1"
