@@ -29,6 +29,16 @@ EOF
   exit 1
 fi
 
+usage() {
+  cat >&2 <<EOF
+${0##*/} requires ${args_needed} argument(s).
+
+usage:
+${0##*/} [image]
+EOF
+  exit 1
+}
+
 genfavi() {
   convert "$1" -background white \
     \( -clone 0 -resize 16x16 -extent 16x16 \) \
@@ -42,12 +52,12 @@ genfavi() {
 
 prereqs() {
   echo 'convert' | check_deps
-  readonly arguments_needed=1
-  readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
-
-usage:
-${0##*/} [image]"
-  arg_eq "$@"
+  readonly args_needed=1
+  [ "$#" = "${args_needed}" ] || usage
+  case "$(file -ib "$1")" in
+    image/*) return                   ;;
+    *)       err "$1 isn't an image." ;;
+  esac
 }
 
 main() { prereqs "$@"; genfavi "$1"; }; main "$@"

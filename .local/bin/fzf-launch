@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-# shellcheck disable=SC1090
 set -e
 # Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
 
@@ -31,38 +30,26 @@ fi
 
 usage() {
   cat >&2 <<EOF
-${0##*/} requires at least ${args_needed} argument(s).
+${0##*/} requires ${args_needed} argument(s).
 
 usage:
-${0##*/} [target] [options]
+${0##*/} [command] [dir for fzf]
 EOF
   exit 1
 }
 
-nsc() {
-  priv nmap -Av --osscan-limit \
-    --privileged -oA "${tmpdir}/nmap-$(today)" "$@"
-}
-
-fix_perms() {
-  readonly unpriv_user="$(id -un)"
-  priv chown -R "${unpriv_user}:${unpriv_user}" "${tmpdir}"
-  find "${tmpdir}" \( -type f ! -perm 600 -exec chmod 600 '{}' \; \) \
-    -o \( -type d ! -perm 700 -exec chmod 700 '{}' \; \)
-}
-
 prereqs() {
-  echo 'nmap' | check_deps
-  readonly args_needed=1
-  [ "$#" = "${args_needed}" ] || usage
+  readonly args_needed=2
+  [ "$#" -eq "${args_needed}" ] || usage
+  [ -x "$(command -v "$1")" ] || err "$1 not found or not executable."
+  if ! [ -r "$2" ] || ! [ -d "$2" ]; then
+    err "$2 not readable or not a directory."
+  fi
 }
 
 main() {
   prereqs "$@"
-  readonly tmpdir="$(mktemp -d)"
-  nsc "$@" || err 'Unable to scan target.'
-  fix_perms || err 'Unable to fix permissions.'
-  echo "Scan finished, results available in ${tmpdir}."
+  "$1" "$2/$( (cd "$2" && fzf) )"
 }
 
 main "$@"

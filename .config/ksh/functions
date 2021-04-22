@@ -43,8 +43,8 @@ cpbak() {
   fi
 }
 
-# choose a file in ~/.config with fzf and edit it
-econf() { "${EDITOR}" "${HOME}/.config/$( (cd "${HOME}/.config" && fzf ) )"; }
+# choose a file in ~/.config with fzf and edit it.
+econf() { fzf-launch "${EDITOR}" "${HOME}/.config"; }
 
 # perform an A record lookup on $1 and return the IP address.
 #

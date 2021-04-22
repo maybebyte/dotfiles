@@ -29,6 +29,16 @@ EOF
   exit 1
 fi
 
+usage() {
+  cat >&2 <<EOF
+${0##*/} requires ${args_needed} argument(s).
+
+usage:
+${0##*/} [URL]
+EOF
+  exit 1
+}
+
 viewimg() {
   readonly filename="$(mktemp)"
   ftp -VMnU '' -o "${filename}" "$1" >/dev/null 2>&1
@@ -41,12 +51,8 @@ prereqs() {
 ftp
 sxiv
 EOF
-  readonly arguments_needed=1
-  readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
-
-usage:
-${0##*/} [URL]"
-  arg_eq "$@"
+  readonly args_needed=1
+  [ "$#" = "${args_needed}" ] || usage
 }
 
 main() {

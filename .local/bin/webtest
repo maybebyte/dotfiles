@@ -29,6 +29,8 @@ EOF
   exit 1
 fi
 
+usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
+
 # TODO: articles.md should be a variable instead of hard-coded
 gen_site() {
   ssg6 "${markdowndir}" "${htmldir}" "${unpriv_user}" \
@@ -59,9 +61,8 @@ prereqs() {
 httpd
 rcctl
 EOF
-  readonly arguments_needed=3
-  readonly usage_details="usage: ${0##*/} [domain] [md dir] [srv dir]"
-  arg_eq "$@"
+  readonly args_needed=3
+  [ "$#" = "${args_needed}" ] || usage
 }
 
 # TODO: a conf file is likely a better implementation than positional

@@ -29,6 +29,18 @@ EOF
   exit 1
 fi
 
+usage() {
+  cat >&2 <<EOF
+${0##*/} requires ${args_needed} argument(s).
+
+usage:
+${0##*/} [cue file] [FLAC file]
+
+Note that '-d' can be passed to delete the original FLAC file.
+EOF
+  exit 1
+}
+
 assign_cuetag() {
   if [ -x "$(command -v cuetag)" ]; then
     readonly cuetag='cuetag'
@@ -57,21 +69,15 @@ main() {
 flac
 shnsplit
 EOF
-  readonly arguments_needed=2
-  readonly usage_details="${0##*/} requires ${arguments_needed} argument(s).
-
-usage:
-${0##*/} [cue file] [FLAC file]
-
-Note that '-d' can be passed to delete the original FLAC file."
+  readonly args_needed=2
   while getopts d opt; do
     case "${opt}" in
       d) readonly DELETE='yes' ;;
-      *) err "${usage_details}" ;;
+      *) usage                 ;;
     esac
   done
   shift $((OPTIND - 1))
-  arg_eq "$@"
+  [ "$#" = "${args_needed}" ] || usage
   assign_cuetag
   splitflac "$1" "$2"
 }
