@@ -4,6 +4,9 @@
 # a program is documented in a comment and the flag to enable that
 # behavior isn't present, it may be in "${HOME}/.config/ksh/aliases".
 
+# a wrapper around curl(1) that passes -x to use tor(1).
+anoncurl() { curl -x socks5://127.0.0.1:9050 "$@"; }
+
 # using torsocks(1) and ftp(1) with no auto-login or user agent, send a
 # GET request to $1 and send the results to STDOUT. zathura(1) reads
 # from STDIN and displays the document.
