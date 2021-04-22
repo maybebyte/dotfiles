@@ -85,7 +85,7 @@ notify() {
   if [ "${MUTED}" = 'true' ]; then
     dunstify_with_flags "MUTED"
   else
-    vol="$(get_vol)"
+    readonly vol="$(get_vol)"
     dunstify_with_flags "${vol}%"
   fi
 }
@@ -118,6 +118,7 @@ dunstify_with_flags() {
   readonly msg_id="25231"
   vol_icon="$(choose_icon)"
   if [ -n "${vol_icon}" ]; then
+    readonly vol_icon
     dunstify -i "${vol_icon}" -u low -r "${msg_id}" "$@"
   else
     unset vol_icon
