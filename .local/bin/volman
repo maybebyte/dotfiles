@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC1090
-set -e
 # Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
@@ -56,7 +55,7 @@ choose_icon() {
 
   # if icon_dir isn't readable, don't choose an icon.
   if ! [ -r "${icon_dir}" ]; then
-    unset icon_dir && return
+    unset icon_dir && return 1
   else
     readonly icon_dir
   fi
