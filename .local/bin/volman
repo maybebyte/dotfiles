@@ -52,8 +52,6 @@ adjust_vol() {
 # based on the current output level, print an appropriate volume-related icon.
 choose_icon() {
   # if gnome_icon_dir isn't readable or isn't a directory, don't choose an icon.
-  #
-  # best not to make gnome_icon_dir readonly, as the user may set it in environ(7).
   if ! [ -r "${gnome_icon_dir}" ] || ! [ -d "${gnome_icon_dir}" ]; then
     unset gnome_icon_dir && return 1
   fi
@@ -129,6 +127,7 @@ dunstify_with_flags() {
 # successful.
 main() {
   prereqs
+  # it's best not to make gnome_icon_dir readonly. the user might set it in environ(7).
   : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
   readonly arguments_needed=1
   readonly usage_details="${0##*/} needs ${arguments_needed} argument(s).
