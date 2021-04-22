@@ -52,6 +52,8 @@ adjust_vol() {
 # based on the current output level, print an appropriate volume-related icon.
 choose_icon() {
   # if gnome_icon_dir isn't readable or isn't a directory, don't choose an icon.
+  #
+  # best not to make gnome_icon_dir readonly, as the user may set it in environ(7).
   if ! [ -r "${gnome_icon_dir}" ] || ! [ -d "${gnome_icon_dir}" ]; then
     unset gnome_icon_dir && return 1
   fi
@@ -96,7 +98,7 @@ muted() {
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
-  raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+  readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
   case "${raw_vol}" in
     1.000) echo 100                                                  ;;
     0.000) echo 0                                                    ;;
@@ -137,7 +139,7 @@ ${0##*/} [inc|dec|mute]
 Set gnome_icon_dir to override the default path.
 Currently, gnome_icon_dir is set to ${gnome_icon_dir}."
   adjust_vol "$1"
-  muted && MUTED='true'
+  muted && readonly MUTED='true'
   notify
 }
 
