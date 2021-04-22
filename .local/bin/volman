@@ -94,8 +94,8 @@ notify() {
 # if not muted, fail.
 muted() {
   case "$(sndioctl -n output.mute 2>/dev/null)" in
-    0) return 1 ;;
     1) return 0 ;;
+    0) return 1 ;;
   esac
 }
 
