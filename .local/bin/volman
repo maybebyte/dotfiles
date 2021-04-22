@@ -51,8 +51,8 @@ adjust_vol() {
 
 # based on the current output level, print an appropriate volume-related icon.
 choose_icon() {
-  # if gnome_icon_dir isn't readable, don't choose an icon.
-  if ! [ -r "${gnome_icon_dir}" ]; then
+  # if gnome_icon_dir isn't readable or isn't a directory, don't choose an icon.
+  if ! [ -r "${gnome_icon_dir}" ] || ! [ -d "${gnome_icon_dir}" ]; then
     unset gnome_icon_dir && return 1
   fi
 
@@ -100,6 +100,7 @@ get_vol() {
   case "${raw_vol}" in
     1.000) echo 100                                                  ;;
     0.000) echo 0                                                    ;;
+           # division is here to truncate the floating point number.
     *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc ;;
   esac
 }
