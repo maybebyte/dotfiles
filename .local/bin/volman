@@ -117,7 +117,7 @@ dunstify_with_flags() {
   # arbitrary ID to get rid of duplicate notifications.
   readonly msg_id="25231"
   vol_icon="$(choose_icon)"
-  if [ -n "${vol_icon}" ]; then
+  if [ -r "${vol_icon}" ]; then
     readonly vol_icon
     dunstify -i "${vol_icon}" -u low -r "${msg_id}" "$@"
   else
