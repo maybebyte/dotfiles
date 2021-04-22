@@ -26,7 +26,7 @@ check_deps() {
     if [ -x "$(command -v "${dependency}")" ]; then
       continue
     else
-      err "${0##*/} cannot function without ${dependency}."
+      err "${dependency} not found in PATH or not executable."
     fi
   done
 }
