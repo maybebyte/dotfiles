@@ -51,28 +51,24 @@ adjust_vol() {
 
 # based on the current output level, print an appropriate volume-related icon.
 choose_icon() {
-  icon_dir='/usr/local/share/icons/gnome/scalable'
-
-  # if icon_dir isn't readable, don't choose an icon.
-  if ! [ -r "${icon_dir}" ]; then
-    unset icon_dir && return 1
-  else
-    readonly icon_dir
+  # if gnome_icon_dir isn't readable, don't choose an icon.
+  if ! [ -r "${gnome_icon_dir}" ]; then
+    unset gnome_icon_dir && return 1
   fi
 
   # handle the edge cases first.
   if [ "${vol}" = 100 ]; then
-    echo "${icon_dir}/status/audio-volume-high-symbolic.svg" && return
+    echo "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg" && return
   elif [ "${vol}" = 0 ] || [ "${MUTED}" = 'true' ]; then
-    echo "${icon_dir}/status/audio-volume-muted-symbolic.svg" && return
+    echo "${gnome_icon_dir}/status/audio-volume-muted-symbolic.svg" && return
   fi
 
   if [ "${vol}" -ge 50 ]; then
-    echo "${icon_dir}/status/audio-volume-high-symbolic.svg"
+    echo "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${vol}" -ge 25 ]; then
-    echo "${icon_dir}/status/audio-volume-medium-symbolic.svg"
+    echo "${gnome_icon_dir}/status/audio-volume-medium-symbolic.svg"
   else
-    echo "${icon_dir}/status/audio-volume-low-symbolic.svg"
+    echo "${gnome_icon_dir}/status/audio-volume-low-symbolic.svg"
   fi
 }
 
@@ -130,11 +126,15 @@ dunstify_with_flags() {
 # successful.
 main() {
   prereqs
+  : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
   readonly arguments_needed=1
   readonly usage_details="${0##*/} needs ${arguments_needed} argument(s).
 
 usage:
-${0##*/} [inc|dec|mute]"
+${0##*/} [inc|dec|mute]
+
+Set gnome_icon_dir to override the default path.
+Currently, gnome_icon_dir is set to ${gnome_icon_dir}."
   adjust_vol "$1"
   muted && MUTED='true'
   notify
