@@ -56,7 +56,7 @@ choose_icon() {
 
   # if icon_dir isn't readable, don't choose an icon.
   if ! [ -r "${icon_dir}" ]; then
-    unset icon_dir && return 1
+    unset icon_dir && return
   else
     readonly icon_dir
   fi
