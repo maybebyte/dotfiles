@@ -53,9 +53,9 @@ EOF
 main() {
   prereqs "$@"
   chosen_file="$( (cd "$2" && fzf) )"
-  [ -n "${chosen_file}" ] || err 'A file must be chosen.'
-  [ -r "${chosen_file}" ] || err 'File not readable.'
   full_path_of_file="$(readlink -f "$2/${chosen_file}")"
+  [ -n "${full_path_of_file}" ] || err 'A file must be chosen.'
+  [ -r "${full_path_of_file}" ] || err 'File not readable.'
   "$1" "${full_path_of_file}"
 }
 
