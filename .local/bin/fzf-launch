@@ -39,12 +39,12 @@ EOF
 }
 
 prereqs() {
+  readonly args_needed=2
+  [ "$#" -eq "${args_needed}" ] || usage
   check_deps <<EOF
 fzf
 $1
 EOF
-  readonly args_needed=2
-  [ "$#" -eq "${args_needed}" ] || usage
   if ! [ -r "$2" ] || ! [ -d "$2" ]; then
     err "$2 not readable or not a directory."
   fi
