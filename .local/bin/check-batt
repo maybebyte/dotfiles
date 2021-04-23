@@ -87,10 +87,10 @@ main() {
   prereqs
   batt_percent="$(apm -l)"
   if [ "${batt_percent}" -lt 30 ]; then
+    set_display
     # it's best not to make gnome_icon_dir readonly.
     # the user might set it in environ(7).
     : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-    set_display
     choose_icon
     warn_user
   else
