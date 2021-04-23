@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -e
+# shellcheck disable=SC1090,SC2154
 # Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
@@ -35,12 +35,10 @@ fi
 # regardless.
 choose_icon() {
   # these paths will likely differ between operating systems.
-  icon_dir='/usr/local/share/icons/gnome/scalable'
-  warning_icon="${icon_dir}/status/battery-caution-symbolic.svg"
+  warning_icon="${gnome_icon_dir}/status/battery-caution-symbolic.svg"
   if [ -r "${warning_icon}" ]; then
     ICONS='true'
   else
-    unset "${icon_dir}" "${warning_icon}"
     ICONS='false'
     return 1
   fi
@@ -88,6 +86,9 @@ main() {
   prereqs
   batt_percent="$(apm -l)"
   if [ "${batt_percent}" -lt 30 ]; then
+    # it's best not to make gnome_icon_dir readonly.
+    # the user might set it in environ(7).
+    : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
     set_display
     choose_icon
     warn_user
