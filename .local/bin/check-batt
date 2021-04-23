@@ -38,6 +38,7 @@ choose_icon() {
   warning_icon="${gnome_icon_dir}/status/battery-caution-symbolic.svg"
   if [ -r "${warning_icon}" ]; then
     ICONS='true'
+    return 0
   else
     ICONS='false'
     return 1
