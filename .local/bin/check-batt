@@ -93,7 +93,7 @@ main() {
     choose_icon
     warn_user
   else
-    exit
+    exit 0
   fi
 }
 
