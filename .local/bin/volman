@@ -63,10 +63,10 @@ adjust_vol() {
 }
 
 # based on the current output level, print an appropriate volume-related icon.
-choose_icon() {
+print_icon() {
   # if gnome_icon_dir isn't readable or isn't a directory, don't choose an icon.
   if ! [ -r "${gnome_icon_dir}" ] || ! [ -d "${gnome_icon_dir}" ]; then
-    unset gnome_icon_dir && return 1
+    return 1
   fi
 
   # handle the edge cases first.
@@ -82,19 +82,6 @@ choose_icon() {
     echo "${gnome_icon_dir}/status/audio-volume-medium-symbolic.svg"
   else
     echo "${gnome_icon_dir}/status/audio-volume-low-symbolic.svg"
-  fi
-}
-
-# if muted, display 'MUTED.'
-# otherwise, display volume.
-#
-# ${MUTED} is set in main(), as multiple functions need the value.
-notify() {
-  if [ "${MUTED}" = 'true' ]; then
-    dunstify_with_flags "MUTED"
-  else
-    readonly vol="$(get_vol)"
-    dunstify_with_flags "${vol}%"
   fi
 }
 
@@ -118,23 +105,6 @@ get_vol() {
   esac
 }
 
-# dunstify but with extra bells and whistles, used in notify().
-#
-# if choose_icon returns the path of an icon, include it with the
-# notification.
-dunstify_with_flags() {
-  # arbitrary ID to get rid of duplicate notifications.
-  readonly msg_id="25231"
-  vol_icon="$(choose_icon)"
-  if [ -r "${vol_icon}" ]; then
-    readonly vol_icon
-    dunstify -i "${vol_icon}" -u low -r "${msg_id}" "$@"
-  else
-    unset vol_icon
-    dunstify -u low -r "${msg_id}" "$@"
-  fi
-}
-
 # check prerequisites. perform the specified action with vol()
 # (inc|dec|mute), then display the appropriate notification if
 # successful.
@@ -144,8 +114,14 @@ main() {
   : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
   readonly args_needed=1
   adjust_vol "$1"
+  readonly msg_id="25231"
+  readonly vol="$(get_vol)"
   muted && readonly MUTED='true'
-  notify
+  if [ "${MUTED}" = 'true' ]; then
+    print_icon | notify -u low -r "${msg_id}" 'MUTED'
+  else
+    print_icon | notify -u low -r "${msg_id}" "${vol}%"
+  fi
 }
 
 main "$1"

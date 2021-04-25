@@ -77,11 +77,11 @@ notify() {
   if ! [ -t 0 ]; then
     read -r icon
     if [ -r "${icon}" ]; then
-      notify-send -i "${icon}" "$@"
+      dunstify -i "${icon}" "$@"
       return
     fi
   fi
-  notify-send "$@"
+  dunstify "$@"
 }
 
 # print date in yyyy-mm-dd format.
