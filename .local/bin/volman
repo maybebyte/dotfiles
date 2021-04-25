@@ -108,6 +108,9 @@ get_vol() {
 # check prerequisites. perform the specified action with vol()
 # (inc|dec|mute), then display the appropriate notification if
 # successful.
+#
+# TODO: prevent volume from incrementing/decrementing when
+# muted.
 main() {
   prereqs
   # it's best not to make gnome_icon_dir readonly. the user might set it in environ(7).
