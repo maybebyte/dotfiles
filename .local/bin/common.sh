@@ -72,35 +72,5 @@ must_be_root() {
 # print date in yyyy-mm-dd format.
 today() { date '+%F'; }
 
-# if $1 is less than 1024, print it and exit successfully.
-# if $1 is not an integer, exit with an error.
-# otherwise, convert $1 to its human readable counterpart.
-#
-# $1 is a positive integer (supporting rational numbers would require
-# some additional code to handle exceptions).
-#
-# bug: 1024000 returns 0MB. maybe fix it by checking modulus?
-hreadable() {
-  no_of_loops=0
-  size="$1"
-  echo "${size}" \
-    | grep -q '[^[:digit:]]' \
-    && err 'Only integers are accepted.'
-  [ "${size}" -lt 1024 ] \
-    && echo "${size}" \
-    && return 0
-  until [ "${#size}" -le 3 ]; do
-    : $((no_of_loops += 1))
-    : $((size /= 1024))
-  done
-  case ${no_of_loops} in
-    1) echo "${size}KB"                                    ;;
-    2) echo "${size}MB"                                    ;;
-    3) echo "${size}GB"                                    ;;
-    4) echo "${size}TB"                                    ;;
-    *) err 'hreadable() can only convert up to terabytes.' ;;
-  esac
-}
-
 # copy STDIN to the clipboard so it can be pasted elsewhere.
 yank() { xclip -selection clipboard "$@"; }
