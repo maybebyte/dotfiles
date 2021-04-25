@@ -69,6 +69,21 @@ must_be_root() {
   [ "$(id -u)" = 0 ] || err "Execute ${0##*/} with root privileges."
 }
 
+# if STDIN is open, read its contents (a path) and assign it to icon.
+#
+# then, print a notification with or without an icon, based on
+# whether or not that path is readable.
+notify() {
+  if ! [ -t 0 ]; then
+    read -r icon
+    if [ -r "${icon}" ]; then
+      notify-send -i "${icon}" "$@"
+      return
+    fi
+  fi
+  notify-send "$@"
+}
+
 # print date in yyyy-mm-dd format.
 today() { date '+%F'; }
 

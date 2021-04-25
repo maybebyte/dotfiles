@@ -29,27 +29,11 @@ EOF
 fi
 
 # prints the path of an icon. that's it.
-icon() { echo "${gnome_icon_dir}/status/battery-caution-symbolic.svg"; }
+print_icon() { echo "${gnome_icon_dir}/status/battery-caution-symbolic.svg"; }
 
 # exporting ${DISPLAY} is needed for cron(8) jobs.
 set_display() {
   [ -z "${DISPLAY}" ] && export DISPLAY=:0
-}
-
-# if STDIN is open, read its contents (a path) and assign it to warning_icon.
-#
-# then, print a warning notification with or without an icon, based on
-# whether or not that path is readable.
-warn_user() {
-  message="Your device is at ${batt_percent}%!"
-  if ! [ -t 0 ]; then
-    read -r warning_icon
-    if [ -r "${warning_icon}" ]; then
-      notify-send -i "${warning_icon}" "${message}"
-      return
-    fi
-  fi
-  notify-send "${message}"
 }
 
 # handle prerequisites. designed to exit if prerequisites aren't in
@@ -81,7 +65,7 @@ main() {
     # it's best not to make gnome_icon_dir readonly.
     # the user might set it in environ(7).
     : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-    icon | warn_user
+    print_icon | notify "Your device is at ${batt_percent}%!"
   else
     exit 0
   fi
