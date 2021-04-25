@@ -16,6 +16,8 @@ EOF
 fi
 
 import_colors
+: "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
+clip_icon="${gnome_icon_dir}/actions/edit-copy-symbolic.svg"
 
 while read -r file; do
   case "$1" in
@@ -53,13 +55,13 @@ EOF
     # TODO: clear clipboard after a delay.
     'y')
       printf '%s' "${file}" | yank
-      notify-send "${file} copied to clipboard."
+      echo "${clip_icon}" | notify "${file} copied to clipboard."
       ;;
     # yank the absolute file path
     'Y')
       file="$(readlink -f "${file}")"
       echo "${file}" | yank
-      notify-send "${file} copied to clipboard."
+      echo "${clip_icon}" | notify "${file} copied to clipboard."
       ;;
   esac
 done
