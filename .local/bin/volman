@@ -55,10 +55,10 @@ EOF
 # argument is given. if not, error and display usage details.
 adjust_vol() {
   case "$1" in
-    'inc')  sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-    'dec')  sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
-    'mute') sndioctl output.mute=!      >/dev/null 2>&1 ;;
-    *)      usage                                       ;;
+    'inc')  muted || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
+    'dec')  muted || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
+    'mute') sndioctl output.mute=! >/dev/null 2>&1               ;;
+    *)      usage                                                ;;
   esac
 }
 
@@ -108,9 +108,6 @@ get_vol() {
 # check prerequisites. perform the specified action with vol()
 # (inc|dec|mute), then display the appropriate notification if
 # successful.
-#
-# TODO: prevent volume from incrementing/decrementing when
-# muted.
 main() {
   prereqs
   # it's best not to make gnome_icon_dir readonly. the user might set it in environ(7).
