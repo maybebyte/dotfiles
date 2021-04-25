@@ -32,7 +32,7 @@ case "$(uname)" in
     export \
       markdowndir="${HOME}/builds/website_md" \
       srvdir='/var/www/htdocs/aml' \
-      icons='/usr/local/share/icons/gnome/scalable'
+      gnome_icon_dir='/usr/local/share/icons/gnome/scalable'
     ;;
 esac
 
