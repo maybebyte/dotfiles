@@ -28,21 +28,28 @@ EOF
   exit 1
 fi
 
-# assign an icon (or not) depending on whether the icon is readable.
+# prints the path of an icon. that's it.
+icon() { echo "${gnome_icon_dir}/status/battery-caution-symbolic.svg"; }
+
+# exporting ${DISPLAY} is needed for cron(8) jobs.
+set_display() {
+  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+}
+
+# if STDIN is open, read its contents (a path) and assign it to warning_icon.
 #
-# choose_icon() is here because an inability to locate an icon
-# shouldn't be fatal. the user should still get a notification
-# regardless.
-choose_icon() {
-  # these paths will likely differ between operating systems.
-  warning_icon="${gnome_icon_dir}/status/battery-caution-symbolic.svg"
-  if [ -r "${warning_icon}" ]; then
-    ICONS='true'
-    return 0
-  else
-    ICONS='false'
-    return 1
+# then, print a warning notification with or without an icon, based on
+# whether or not that path is readable.
+warn_user() {
+  message="Your device is at ${batt_percent}%!"
+  if ! [ -t 0 ]; then
+    read -r warning_icon
+    if [ -r "${warning_icon}" ]; then
+      notify-send -i "${warning_icon}" "${message}"
+      return
+    fi
   fi
+  notify-send "${message}"
 }
 
 # handle prerequisites. designed to exit if prerequisites aren't in
@@ -63,26 +70,9 @@ EOF
   fi
 }
 
-# exporting ${DISPLAY} is needed for cron(8) jobs.
-set_display() {
-  [ -z "${DISPLAY}" ] && export DISPLAY=:0
-}
-
-# depending on whether ${ICONS} is 'true' or 'false', send a
-# notification with ${message} as content with or without an appropriate
-# icon.
-warn_user() {
-  message="Your device is at ${batt_percent}%!"
-  case "${ICONS}" in
-    'true') notify-send -i "${warning_icon}" "${message}" ;;
-    'false') notify-send "${message}"                     ;;
-  esac
-}
-
 # handle the prerequisites. determine battery percentage. if it's below
-# 30%, then set ${DISPLAY}, set an icon (or not, if it isn't readable),
-# and send the user a notification about the low battery. otherwise,
-# exit silently.
+# 30%, then send the user a notification about the low battery.
+# otherwise, exit silently.
 main() {
   prereqs
   batt_percent="$(apm -l)"
@@ -91,8 +81,7 @@ main() {
     # it's best not to make gnome_icon_dir readonly.
     # the user might set it in environ(7).
     : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-    choose_icon
-    warn_user
+    icon | warn_user
   else
     exit 0
   fi
