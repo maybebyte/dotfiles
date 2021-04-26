@@ -75,16 +75,22 @@ grabipv6() {
 hreadable() {
   no_of_loops=0
   size="$1"
+
+  # sanity check so math below works.
   echo "${size}" \
     | grep -q '[^[:digit:]]' \
     && err 'Only integers are accepted.'
+
+  # size < 1024 means the value printed should be in bytes.
   [ "${size}" -lt 1024 ] \
-    && echo "${size}" \
+    && echo "${size}B" \
     && return 0
+
   until [ "${#size}" -le 3 ]; do
     : $((no_of_loops += 1))
     : $((size /= 1024))
   done
+
   case ${no_of_loops} in
     1) echo "${size}KB"                                    ;;
     2) echo "${size}MB"                                    ;;
