@@ -120,6 +120,20 @@ mvbak() {
   fi
 }
 
+# checks the headers of a website with tor(1).
+# nc_head [path] [domain] 80 for HTTP.
+# nc_head [path] -c [domain] 443 for HTTPS.
+nc_head() {
+  path="$1"
+  shift
+  printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
+}
+
+# nc(1) + tor(1) = fun.
+nc_tor() {
+  nc -X 5 -x 127.0.0.1:9050 "$@"
+}
+
 # obtains the estimated size of a package and returns it in a human
 # readable format.
 #
