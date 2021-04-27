@@ -68,7 +68,7 @@ def_key "t"
   show_tag_editor
 
 def_key "v"
-  show_visualizer
+  reverse_selection
 
 def_key "G"
   move_end
