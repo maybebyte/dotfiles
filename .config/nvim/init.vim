@@ -38,6 +38,7 @@ let mapleader=","
 nnoremap <leader>n :NERDTreeToggle
 nnoremap <leader>f :FZF $HOME
 nnoremap <leader>g :Goyo
+nnoremap <leader>d :r !date '+\%F'
 
 " spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :set spell! spelllang=en_us
