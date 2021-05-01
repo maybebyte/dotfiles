@@ -10,6 +10,8 @@ export LANG='en_US.UTF-8'
 dunst &
 sxhkd &
 unclutter -idle 3 -grab &
+# xcompmgr(1) seems to cause horizontal screen tearing on x1c7 with mpv(1).
+# with it disabled, horizontal screen tearing is absent.
 xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
 xidle &
 
