@@ -24,6 +24,9 @@ export \
   QT_STYLE_OVERRIDE='adwaita' \
   READER='zathura' \
   TERMINAL='xst' \
+  XMONAD_CACHE_DIR="${HOME}/.cache/xmonad" \
+  XMONAD_CONFIG_DIR="${HOME}/.config/xmonad" \
+  XMONAD_DATA_DIR="${HOME}/.local/share/xmonad" \
   site='https://amissing.link'
 
 # written so it can be expanded later if needed
