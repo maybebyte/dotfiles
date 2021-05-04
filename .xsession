@@ -2,9 +2,6 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
-# vars
-export LANG='en_US.UTF-8'
-
 # daemons
 "${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
 dunst &
