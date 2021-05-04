@@ -1,4 +1,3 @@
-# $OpenBSD: dot.mailrc,v 1.3 2014/07/10 11:18:23 jasper Exp $
 set append
 set ask
 set autoinc
