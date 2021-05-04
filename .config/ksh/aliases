@@ -25,7 +25,7 @@ general_aliases() {
     mkd='mkdir -p'                                                       \
     lsd="find . -maxdepth 1 -iname \".[^.]*\""                           \
     mkd="mkdir -p"                                                       \
-    shre=". \${HOME}/.kshrc"
+    shre=". \${HOME}/.config/ksh/kshrc"
 
   # editing
   alias                                                                  \
@@ -33,7 +33,7 @@ general_aliases() {
     eduj="e -d \${HOME}/builds/user.js/user.js \${userjs}"               \
     efont="e \${HOME}/.config/fontconfig/fonts.conf"                     \
     ehst='e /etc/hosts'                                                  \
-    ek="e \${HOME}/.kshrc"                                               \
+    ek="e \${HOME}/.config/ksh/kshrc"                                    \
     eka="e \${HOME}/.config/ksh/aliases"                                 \
     ekf="e \${HOME}/.config/ksh/functions"                               \
     ekp="e \${HOME}/.config/ksh/prompt"                                  \

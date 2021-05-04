@@ -59,7 +59,7 @@ autocmd BufWritePre * %s/\n\+\%$//e
 
 " automatically reload configs
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
-autocmd BufWritePost $HOME/.kshrc !. %
+autocmd BufWritePost $HOME/.config/ksh/kshrc !. %
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " Enable Goyo by default for mutt writing

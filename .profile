@@ -1,6 +1,6 @@
 # sh/ksh initialization
-[ -r "${HOME}/.kshrc" ] \
-  && export ENV="${HOME}/.kshrc"
+[ -r "${HOME}/.config/ksh/kshrc" ] \
+  && export ENV="${HOME}/.config/ksh/kshrc"
 
 # PATH acts funny w/ indentation
 if command -v termux-info >/dev/null 2>&1; then
@@ -19,6 +19,7 @@ export \
   HISTSIZE=10000 \
   LANG='en_US.UTF-8' \
   LESS='-iMR' \
+  MAILRC="${HOME}/.config/mail/mailrc" \
   PAGER='less' \
   QT_STYLE_OVERRIDE='adwaita' \
   READER='zathura' \
