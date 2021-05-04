@@ -19,6 +19,7 @@ export \
   GNUPGHOME="${HOME}/.config/gnupg" \
   HISTFILE="${HOME}/.history" \
   HISTSIZE=10000 \
+  LANG='en_US.UTF-8' \
   LESS='-iMR' \
   PAGER='less' \
   QT_STYLE_OVERRIDE='adwaita' \
