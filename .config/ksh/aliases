@@ -50,7 +50,7 @@ general_aliases() {
     etm="e \${HOME}/.tmux.conf"                                          \
     euj="e \${userjs}"                                                   \
     ev="e \${HOME}/.config/nvim/init.vim"                                \
-    exm="e \${HOME}/.xmonad/xmonad.hs"                                   \
+    exm="e \${HOME}/.config/xmonad/xmonad.hs"                            \
     exmb="e \${HOME}/.config/xmobar/xmobarrc"                            \
     exr="e \${HOME}/.Xresources"                                         \
     exs="e \${HOME}/.xsession"
