@@ -46,8 +46,6 @@ sync_site() {
 rm -rf ${srvdir:?}
 mkdir -p ${srvdir}
 mv ${htmldir}/* ${srvdir}/
-find ${srvdir} \( -type f ! -perm 644 -exec chmod 644 '{}' \; \) \
-  -o \( -type d ! -perm 755 -exec chmod 755 '{}' \; \)
 rcctl reload httpd >/dev/null
 EOF
 }
@@ -68,6 +66,7 @@ EOF
 # TODO: a conf file is likely a better implementation than positional
 # parameters in the long run.
 main() {
+  umask 022
   prereqs "$@"
   readonly site="$1"
   readonly markdowndir="$2"
