@@ -3,6 +3,9 @@
 # note that some of these functions use aliases. if certain behavior for
 # a program is documented in a comment and the flag to enable that
 # behavior isn't present, it may be in "${HOME}/.config/ksh/aliases".
+#
+# one may also use `typeset -f [function]` or `functions [function]` to
+# display what aliases expand to within a function.
 
 # a wrapper around curl(1) that passes -x to use tor(1).
 anoncurl() { curl -x socks5://127.0.0.1:9050 "$@"; }
