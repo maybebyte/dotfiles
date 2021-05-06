@@ -117,6 +117,7 @@ mpv() {
   case "$(hostname -s)" in
     'lain')      LD_PRELOAD=/usr/X11R6/lib/modules/dri/iris_dri.so mpv "$@" ;;
     'aphrodite') LD_PRELOAD=/usr/X11R6/lib/modules/dri/radeonsi.so mpv "$@" ;;
+    *)           mpv "$@"                                                   ;;
   esac
 }
 
