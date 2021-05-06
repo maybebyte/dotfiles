@@ -114,10 +114,18 @@ ipinf() { ftp -VMo - "https://ipinfo.io/$1"; }
 # dirty workaround for segfaults/coredumps, for now.
 # https://marc.info/?l=openbsd-ports&m=162020290731521&w=2
 mpv() {
+  # command -v will return the function
+  MPV="$(which mpv)"
   case "$(hostname -s)" in
-    'lain')      LD_PRELOAD=/usr/X11R6/lib/modules/dri/iris_dri.so mpv "$@" ;;
-    'aphrodite') LD_PRELOAD=/usr/X11R6/lib/modules/dri/radeonsi.so mpv "$@" ;;
-    *)           mpv "$@"                                                   ;;
+    'lain')
+      LD_PRELOAD=/usr/X11R6/lib/modules/dri/iris_dri.so "${MPV}" "$@"
+      ;;
+    'aphrodite')
+      LD_PRELOAD=/usr/X11R6/lib/modules/dri/radeonsi.so "${MPV}" "$@"
+      ;;
+    *)
+      "${MPV}" "$@"
+      ;;
   esac
 }
 
