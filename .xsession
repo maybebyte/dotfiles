@@ -3,7 +3,6 @@
 xrdb "${HOME}/.Xresources"
 
 # daemons
-"${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
 dunst &
 sxhkd &
 unclutter -idle 3 -grab &
@@ -29,6 +28,9 @@ if [ "$(hostname -s)" = 'lain' ]; then
   xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Button' 2
   xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Axes' 6 7 4 5
 fi
+
+# status bar.
+"${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
 
 # random manual page for didactic purposes
 # oddly, $TERMINAL in place of xst causes this not to run
