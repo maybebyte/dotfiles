@@ -2,15 +2,6 @@
 [ -r "${HOME}/.config/ksh/kshrc" ] \
   && export ENV="${HOME}/.config/ksh/kshrc"
 
-# PATH acts funny w/ indentation
-if command -v termux-info >/dev/null 2>&1; then
-  export PATH="${HOME}/.local/bin:/data/data/com.termux/files/usr/bin:\
-/data/data/com.termux/files/usr/bin/applets"
-else
-  export PATH="${HOME}/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:\
-/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games"
-fi
-
 export \
   BROWSER='firefox' \
   CLICOLOR=1 \
@@ -21,6 +12,7 @@ export \
   LESS='-iMR' \
   MAILRC="${HOME}/.config/mail/mailrc" \
   PAGER='less' \
+  PATH="${HOME}/.local/bin${PATH:+:${PATH}}" \
   QT_STYLE_OVERRIDE='adwaita' \
   READER='zathura' \
   TERMINAL='xst' \
