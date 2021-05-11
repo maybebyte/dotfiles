@@ -37,5 +37,5 @@ gateway="$(netstat -rn 2>/dev/null | awk '/default/{print $2}')" \
 nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
   && export nic
 
-userjs="$(find "${HOME}/.mozilla" -iname user.js 2>/dev/null)" \
+userjs="$(find "${HOME}/.mozilla" -iname 'user.js' 2>/dev/null | head -1)" \
   && export userjs
