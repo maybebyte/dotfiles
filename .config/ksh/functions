@@ -54,18 +54,12 @@ enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
 # perform an A record lookup on $1 and return the IP address.
 #
 # $1 is a domain.
-grabipv4() {
-  ipv4="$(host -t A "$1")"
-  echo "${ipv4##*address }"
-}
+grabipv4() { dig A +short "$1"; }
 
 # perform an AAAA record lookup on $1 and return the IPv6 address.
 #
 # $1 is a domain.
-grabipv6() {
-  ipv6="$(host -t AAAA "$1")"
-  echo "${ipv6##*address }"
-}
+grabipv6() { dig AAAA +short "$1"; }
 
 # if $1 is less than 1024, print it and exit successfully.
 # if $1 is not an integer, exit with an error.
