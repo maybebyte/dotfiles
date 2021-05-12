@@ -9,11 +9,12 @@ import_colors
 # if attachment fails, start a new session
 [ -x "$(command -v tmux)" ] \
   && [ -z "${TMUX}" ] \
-  && (tmux attach || tmux) >/dev/null 2>&1
+  && { tmux attach || tmux; } >/dev/null 2>&1
 
 # ksh options
 set -o vi
 
+# shellcheck disable=SC2039
 grep -qi 'pd' <<EOF && set -o vi-show8
 ${KSH_VERSION}
 EOF

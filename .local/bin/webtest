@@ -73,8 +73,8 @@ main() {
   readonly srvdir="$3"
   readonly htmldir="$(mktemp -d)"
   readonly unpriv_user="$(id -un)"
-  gen_site || (cleanup; err 'Unable to generate site.')
-  sync_site || (cleanup; err 'Unable to sync web server.')
+  gen_site || { cleanup; err 'Unable to generate site.'; }
+  sync_site || { cleanup; err 'Unable to sync web server.'; }
   cleanup
   echo 'Web server synced.'
 }
