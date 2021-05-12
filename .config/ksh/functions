@@ -115,7 +115,7 @@ mpv() {
       LD_PRELOAD=/usr/X11R6/lib/modules/dri/iris_dri.so "${MPV}" "$@"
       ;;
     'aphrodite')
-      LD_PRELOAD=/usr/X11R6/lib/modules/dri/radeonsi.so "${MPV}" "$@"
+      LD_PRELOAD=/usr/X11R6/lib/modules/dri/radeonsi_dri.so "${MPV}" "$@"
       ;;
     *)
       "${MPV}" "$@"
