@@ -5,9 +5,13 @@ xrdb "${HOME}/.Xresources"
 # daemons
 dunst &
 sxhkd &
-unclutter -idle 3 -grab &
-# xcompmgr(1) seems to cause horizontal screen tearing on x1c7 with mpv(1).
-# with it disabled, horizontal screen tearing is absent.
+# don't use -grab. it doesn't play nice with slock(1).
+unclutter -idle 3 &
+# xcompmgr(1) seems to cause horizontal screen tearing on x1c7 with
+# mpv(1) and modesetting(4).
+#
+# with either xcompmgr(1) or modesetting(4) disabled, horizontal screen
+# tearing is absent.
 xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
 xidle &
 
