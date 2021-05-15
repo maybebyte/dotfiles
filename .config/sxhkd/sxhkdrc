@@ -1,11 +1,32 @@
-# applications
-super + {Return, d, u, B, W, P}
-	{$\{TERMINAL\}, $\{HOME\}/.local/bin/launcher, $\{HOME\}/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
+# terminal emulator
+super + Return
+	${TERMINAL}
+
+# launcher (dmenu_run script that adds wal colors)
+super + d
+	${HOME}/.local/bin/launcher
+
+# dmenuunicode (pick an emoji and copy it to clipboard)
+super + u
+	${HOME}/.local/bin/dmenuunicode
+
+# web browser
+super + B
+	${BROWSER}
+
+# tor browser
+super + W
+	tor-browser
+
+# password manager
+super + P
+	keepassxc
 
 # screen lock
 super + n
 	pkill -USR1 xidle
 
+# clear the clipboard and notify the user about it
 shift + super + x
 	${HOME}/.local/bin/clear_clip notify
 
@@ -18,21 +39,17 @@ shift + Print
 	${HOME}/.local/bin/maimpick
 
 # music {skip,play,pause}
-super + {greater, less, T}
-	mpc {next, prev, toggle}
+super + {greater,less,T}
+	mpc {next,prev,toggle}
 
 # seek to beginning, 5 sec {back,forward}, 1 min {back,forward}
-shift + super + {0, Left, Right, Down, Up}
-	 mpc seek {0, -5, +5, -1:00, +1:00}
+shift + super + {0,Left,Right,Down,Up}
+	 mpc seek {0,-5,+5,-1:00,+1:00}
 
-# mute audio
-F1
-	${HOME}/.local/bin/volman mute
-
-# {lower,raise} volume
-{F2, F3}
-	${HOME}/.local/bin/volman {dec,inc}
+# {mute,lower,raise} volume
+{F1,F2,F3}
+	${HOME}/.local/bin/volman {mute,dec,inc}
 
 # {dim,brighten} display
-{F5, F6}
+{F5,F6}
 	 xbacklight {-dec,-inc} 10
