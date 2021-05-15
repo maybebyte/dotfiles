@@ -1,6 +1,6 @@
 # applications
 super + {Return, d, u, B, W, P}
-	{xst, $\{HOME\}/.local/bin/launcher, $\{HOME\}/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
+	{$\{TERMINAL\}, $\{HOME\}/.local/bin/launcher, $\{HOME\}/.local/bin/dmenuunicode, firefox, tor-browser, keepassxc}
 
 # screen lock
 super + n
