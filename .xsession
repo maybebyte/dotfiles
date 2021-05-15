@@ -37,7 +37,6 @@ fi
 "${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
 
 # random manual page for didactic purposes
-# oddly, $TERMINAL in place of xst causes this not to run
-xst -e man "$("${HOME}/.local/bin/randman")" &
+"${TERMINAL}" -e man "$("${HOME}/.local/bin/randman")" &
 
 exec xmonad
