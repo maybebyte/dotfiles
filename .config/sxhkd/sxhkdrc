@@ -19,15 +19,20 @@ super + W
 	tor-browser
 
 # password manager
+#
+# TODO: unbind xmonad's default keybinding for 'super + p' (regular dmenu)
+# and change this to 'super + p' instead of 'super + P'. then, assign
+# 'super + P' such that it will pause/play MPD. then, assign tor browser
+# to 'super + T' instead of 'super + a'.
 super + P
 	keepassxc
 
 # screen lock
-super + n
+super + s
 	pkill -USR1 xidle
 
 # clear the clipboard and notify the user about it
-shift + super + x
+super + X
 	${HOME}/.local/bin/clear_clip notify
 
 # full screenshot
