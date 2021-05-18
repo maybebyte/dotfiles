@@ -46,32 +46,51 @@ check_opts() {
 # newsboat.
 linkhandler() {
   case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
+
     'copy duration')
       if duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"; then
-        printf '%s' "${duration}" \
-          | yank \
-          && notify-send "Copied video duration (${duration})."
+
+        if printf '%s' "${duration}" | yank; then
+          notify-send "Copied video duration (${duration})."
+        else
+          err 'Failed to copy video duration.'
+        fi
+
       else
-        err 'Failed to copy video duration.'
+        err 'Failed to get video duration.'
       fi
       ;;
+
     'copy title')
       if title="$(youtube-dl -e "${URL}" 2>/dev/null)"; then
-        printf '%s' "${title}" \
-          | yank \
-          && notify-send "Copied video title (${title})."
+
+        if printf '%s' "${title}" | yank; then
+          notify-send "Copied video title (${title})."
+        else
+          err 'Failed to copy video title.'
+        fi
+
       else
-        err 'Failed to copy video title.'
+        err 'Failed to get video title.'
       fi
       ;;
+
     'download audio')
-      youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1
-      notify-send "Finished downloading audio from ${URL}."
+      if youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1; then
+        notify-send "Finished downloading audio from ${URL}."
+      else
+        err "Failed to download audio from ${URL}."
+      fi
       ;;
+
     'download file')
-      (cd "${HOME}/Downloads" && ftp -VMnU '' "${URL}") >/dev/null 2>&1 \
-        && notify-send "Finished downloading ${URL##*/}."
+      if (cd "${HOME}/Downloads" && ftp -VMnU '' "${URL}") >/dev/null 2>&1; then
+        notify-send "Finished downloading ${URL##*/}."
+      else
+        err "Failed to download ${URL##*/}."
+      fi
       ;;
+
     'download video')
       # sometimes youtube-dl will 'fail' because it can't embed an image
       # as a thumbnail, but it actually succeeded otherwise (downloaded
@@ -82,33 +101,41 @@ linkhandler() {
       youtube-dl --embed-subs "${URL}" >/dev/null 2>&1
       notify-send "Finished downloading video from ${URL}."
       ;;
+
     'listen')
       mpv --no-video --speed=1 "${URL}" >/dev/null 2>&1
       ;;
+
     'print duration')
       if duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"; then
         notify-send "${duration}"
       else
-        err "Duration couldn't be printed."
+        err 'Failed to print duration.'
       fi
       ;;
+
     'read')
       ftp -VMno - -U '' "${URL}" | zathura - >/dev/null 2>&1
       ;;
+
     'view image')
       viewimg "${URL}"
       ;;
+
     # TODO: make 'watch' options more responsive. perhaps a notification
     # when the video is ready to play or something to that effect. the
     # absence of any visual indication affects my productivity negatively.
     'watch')
       mpv "${URL}" >/dev/null 2>&1
       ;;
+
     'watch (loop)')
       mpv --speed=1 --loop "${URL}" >/dev/null 2>&1
       ;;
+
     *)
       err "${0##*/} doesn't support that option."
+
   esac
 }
 
