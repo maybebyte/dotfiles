@@ -37,25 +37,34 @@ show_battery() {
   if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
     return 1
   fi
+
   adapter_status="$(apm -a)"
   percentage="$(apm -l)"
+
   case "${adapter_status}" in
+
     0) # disconnected (on battery)
       estimated_battery_life="$(apm -m)"
-      echo "${estimated_battery_life}" \
-        | grep -q '[^[:digit:]]' \
-        && err "${estimated_battery_life} must only contain digits."
+
+      if echo "${estimated_battery_life}" | grep -q '[^[:digit:]]'; then
+        err "${estimated_battery_life} must only contain digits."
+      fi
+
       ebl_minutes=$((estimated_battery_life % 60))
       ebl_hours=$((estimated_battery_life / 60))
       remaining="~${ebl_hours}h & ${ebl_minutes}m"
+
       echo "bat: ${remaining}, at ${percentage}%"
       ;;
+
     1) # charging
       echo "chr: at ${percentage}%"
       ;;
+
     *) # there's no battery information to display
       return 1
       ;;
+
   esac
 }
 
@@ -65,6 +74,7 @@ show_temp() {
     'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)" ;;
     *)           return 1                                          ;;
   esac
+
   if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
     echo "temp: ${temperature%%.*} °C"
   else
@@ -96,6 +106,7 @@ sysinfo() {
 stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_disk_space)\
 $(show_date)"
+
   echo "${stats}"
 }
 
@@ -105,14 +116,17 @@ apm
 mpc
 sndioctl
 EOF
+
   import_colors
 }
 
 main() {
   prereqs
+
   batt_status="$(apm -b)"
   delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
   bgfg="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
+
   while true; do
     sysinfo
     sleep 30
