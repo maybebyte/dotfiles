@@ -135,6 +135,7 @@ linkhandler() {
 
     *)
       err "${0##*/} doesn't support that option."
+      ;;
 
   esac
 }
