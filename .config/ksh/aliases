@@ -218,20 +218,19 @@ openbsd_aliases() {
 
   # pf
   alias                                                                  \
-    pfc='pfctl'                                                          \
-    pfdump='tcpdump -r /var/log/pflog'                                   \
-    pfdumpb='tcpdump -r /var/log/pflog action block'                     \
-    pfdumpp='tcpdump -r /var/log/pflog action pass'                      \
+    pfdump='tcpdump -tttr /var/log/pflog'                                \
+    pfdumpb='pfdump action block'                                        \
+    pfdumpp='pfdump action pass'                                         \
     pfif='pfshow Interfaces'                                             \
     pfinfo='pfshow info'                                                 \
-    pfload='pfc -f /etc/pf.conf'                                         \
+    pfload='pfctl -f /etc/pf.conf'                                       \
     pfnic="pfif -vvi \${nic}"                                            \
-    pfoff='pfc -d'                                                       \
-    pfon='pfc -e'                                                        \
+    pfoff='pfctl -d'                                                     \
+    pfon='pfctl -e'                                                      \
     pfrules='pfshow rules'                                               \
-    pfshow='pfc -s'                                                      \
+    pfshow='pfctl -s'                                                    \
     pftest='pfload -nvvv'                                                \
-    pftail='tcpdump -i pflog0'                                           \
+    pftail='tcpdump -tttti pflog0'                                       \
     pftailb='pftail action block'                                        \
     pftailp='pftail action pass'
 
