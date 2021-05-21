@@ -181,7 +181,12 @@ linux_aliases() {
       'Void Linux') void_aliases ;;
     esac
   else
-    echo "Install lsb_release!" >&2
+    cat >&2 <<'EOF'
+Install lsb_release so linux_aliases() in ~/.config/ksh/aliases can
+detect the current OS and set ksh(1) aliases accordingly.
+
+Currently, Void is the only Linux distribution detected.
+EOF
     return 1
   fi
 }
