@@ -16,6 +16,7 @@ EOF
 fi
 
 import_colors
+
 : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
 clip_icon="${gnome_icon_dir}/actions/edit-copy-symbolic.svg"
 
@@ -32,36 +33,45 @@ EOF
         notify-send "${file} deleted."
       fi
       ;;
+
     'm')
       filehandler -m "${file}"
       ;;
+
     'n')
       filehandler -n "${file}"
       ;;
+
     # rotate clockwise
     'r')
       convert -rotate 90 "${file}" "${file}"
       ;;
+
     # rotate counter-clockwise
     'R')
       convert -rotate -90 "${file}" "${file}"
       ;;
+
     # horizontally invert file, aka 'flop' it
     'f')
       convert -flop "${file}" "${file}"
       ;;
+
     # yank the relative file path
     #
     # TODO: clear clipboard after a delay.
     'y')
-      printf '%s' "${file}" | yank
-      echo "${clip_icon}" | notify "${file} copied to clipboard."
+      printf '%s\n' "${file}" | yank
+      printf '%s\n' "${clip_icon}" | notify "${file} copied to clipboard."
       ;;
+
     # yank the absolute file path
     'Y')
       file="$(readlink -f "${file}")"
-      echo "${file}" | yank
-      echo "${clip_icon}" | notify "${file} copied to clipboard."
+
+      printf '%s\n' "${file}" | yank
+      printf '%s\n' "${clip_icon}" | notify "${file} copied to clipboard."
       ;;
+
   esac
 done
