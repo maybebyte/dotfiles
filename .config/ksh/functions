@@ -73,7 +73,9 @@ hreadable() {
   no_of_loops=0
   size="$1"
 
-  # sanity check so math below works.
+  # sanity check so math below works. also alleviates the need to use
+  # printf(1) below since we can at least know that ${size} is an
+  # integer.
   echo "${size}" \
     | grep -q '[^[:digit:]]' \
     && err 'Only integers are accepted.'
