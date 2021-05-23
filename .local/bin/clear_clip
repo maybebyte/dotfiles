@@ -40,8 +40,10 @@ EOF
 main() {
   prereqs
   yank -i /dev/null || err 'Unable to clear the clipboard.'
+
   : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
   clipboard="${gnome_icon_dir}/actions/edit-paste-symbolic.svg"
+
   case "$1" in
     'notify') echo "${clipboard}" | notify 'Cleared the clipboard.' ;;
     *)        return                                                ;;
