@@ -29,7 +29,7 @@ EOF
 fi
 
 # prints the path of an icon. that's it.
-print_icon() { echo "${gnome_icon_dir}/status/battery-caution-symbolic.svg"; }
+print_icon() { printf '%s' "${gnome_icon_dir}/status/battery-caution-symbolic.svg"; }
 
 # exporting ${DISPLAY} is needed for cron(8) jobs.
 set_display() {

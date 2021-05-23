@@ -71,17 +71,17 @@ print_icon() {
 
   # handle the edge cases first.
   if [ "${vol}" = 100 ]; then
-    echo "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg" && return
+    printf '%s' "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg" && return
   elif [ "${vol}" = 0 ] || [ "${MUTED}" = 'true' ]; then
-    echo "${gnome_icon_dir}/status/audio-volume-muted-symbolic.svg" && return
+    printf '%s' "${gnome_icon_dir}/status/audio-volume-muted-symbolic.svg" && return
   fi
 
   if [ "${vol}" -ge 50 ]; then
-    echo "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg"
+    printf '%s' "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg"
   elif [ "${vol}" -ge 25 ]; then
-    echo "${gnome_icon_dir}/status/audio-volume-medium-symbolic.svg"
+    printf '%s' "${gnome_icon_dir}/status/audio-volume-medium-symbolic.svg"
   else
-    echo "${gnome_icon_dir}/status/audio-volume-low-symbolic.svg"
+    printf '%s' "${gnome_icon_dir}/status/audio-volume-low-symbolic.svg"
   fi
 }
 
