@@ -61,16 +61,16 @@ EOF
     #
     # TODO: clear clipboard after a delay.
     'y')
-      printf '%s\n' "${file}" | yank
-      printf '%s\n' "${clip_icon}" | notify "${file} copied to clipboard."
+      printf '%s' "${file}" | yank
+      printf '%s' "${clip_icon}" | notify "${file} copied to clipboard."
       ;;
 
     # yank the absolute file path
     'Y')
       file="$(readlink -f "${file}")"
 
-      printf '%s\n' "${file}" | yank
-      printf '%s\n' "${clip_icon}" | notify "${file} copied to clipboard."
+      printf '%s' "${file}" | yank
+      printf '%s' "${clip_icon}" | notify "${file} copied to clipboard."
       ;;
 
   esac
