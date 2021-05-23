@@ -79,15 +79,22 @@ move_file() {
       echo 'exit';
     } | menu -l 10 -p "Move ${file##*/} where?"
   )"
+
   [ "${dest}" = 'exit' ] && exit 0
   [ -z "${dest}" ] && err "${0##*/} needs a destination."
+
   # reverses tilde expansion. it's reinstated in certain lines below
   # with parameter expansion in the form "~${dest##${HOME}}"
   dest="$(echo "${dest}" | sed "s|~|${HOME}|g")"
+
   if [ -d "${dest}" ] || mkdir -p "${dest}"; then
-    mv "${file}" "${dest}/${file##*/}" \
-      || err "Failed to move ${file##*/}" \
-      && notify-send "${file##*/} moved to ~${dest##${HOME}}"
+
+    if mv "${file}" "${dest}/${file##*/}"; then
+      notify-send "${file##*/} moved to ~${dest##${HOME}}"
+    else
+      err "Failed to move ${file##*/}"
+    fi
+
   else
     err "~${dest##${HOME}} not found nor created."
   fi
@@ -101,8 +108,13 @@ rename_file() {
   readonly new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
   if [ -n "${new_filename}" ]; then
     [ "${new_filename}" = 'exit' ] && exit 0
-    mv "${file}" "${file%/*}/${new_filename}" \
-      && notify-send "${file##*/} renamed to ${new_filename}"
+
+    if mv "${file}" "${file%/*}/${new_filename}"; then
+      notify-send "${file##*/} renamed to ${new_filename}"
+    else
+      err "Failed to rename ${file}."
+    fi
+
   else
     err "${0##*/} needs a new name to rename ${file##*/} to."
   fi
@@ -115,10 +127,12 @@ choose_operation() {
     readonly options='move
 rename'
     readonly operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
+
     # a small delay needs to be here. without it, the subsequent menu
     # won't appear sometimes.
     sleep 0.3
   fi
+
   case "${operation}" in
     'move')   move_file   ;;
     'rename') rename_file ;;
@@ -137,7 +151,7 @@ EOF
 prereqs2() {
   [ "$#" = "${args_needed}" ] || usage
   import_colors
-  [ -f "$1" ] || err 'Not a file.'
+  [ -f "$1" ] || err 'Not a file or does not exist.'
 }
 
 # parse options. get the absolute pathname of the file and use that as
@@ -145,6 +159,7 @@ prereqs2() {
 main() {
   prereqs1
   readonly args_needed=1
+
   while getopts hmn opt; do
     case "${opt}" in
       'h') usage                                ;;
@@ -154,7 +169,9 @@ main() {
     esac
   done
   shift $((OPTIND - 1))
+
   prereqs2 "$@"
+
   readonly file="$(readlink -f "$1")"
   choose_operation
 }
