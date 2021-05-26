@@ -61,20 +61,23 @@ main() {
     echo "${fs}" | tee "${dst}/.files"
 
     if echo "${fs}" | grep -q '\.md$'; then
+
       if [ -x "$(command -v lowdown)" ]; then
         echo "${fs}" \
           | grep '\.md$' \
           | render_md_files_lowdown "${src}" "${dst}" "${title}"
+
+      elif [ -x "$(command -v Markdown.pl)" ]; then
+        echo "${fs}" \
+          | grep '\.md$' \
+          | render_md_files_Markdown_pl "${src}" "${dst}" "${title}"
+
       else
-        if [ -x "$(command -v Markdown.pl)" ]; then
-          echo "${fs}" \
-            | grep '\.md$' \
-            | render_md_files_Markdown_pl "${src}" "${dst}" "${title}"
-        else
-          echo "couldn't find lowdown nor Markdown.pl"
-          exit 3
-        fi
+        echo "couldn't find lowdown nor Markdown.pl"
+        exit 3
+
       fi
+
     fi
 
     echo "${fs}" \
@@ -84,6 +87,7 @@ main() {
     echo "${fs}" \
       | grep -Ev '\.md$|\.html$' \
       | (cd "${src}" && cpio -pu "${dst}")
+
   fi
 
   printf '[ssg] ' >&2
