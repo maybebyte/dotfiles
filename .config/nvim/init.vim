@@ -71,9 +71,9 @@ autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " Enable Goyo for help files
 autocmd BufRead /usr/local/share/nvim/runtime/doc/* :Goyo
-autocmd BufRead /usr/local/share/nvim/runtime/doc/* noremap ZQ :Goyo!\|q!
+autocmd BufRead /usr/local/share/nvim/runtime/doc/* nnoremap ZQ :Goyo!\|q!
 autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
-autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* noremap ZQ :Goyo!\|q!
+autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!
 
 " shell script syntax for xsession
 autocmd BufRead $HOME/.xsession set filetype=sh
