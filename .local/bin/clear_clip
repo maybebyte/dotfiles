@@ -45,11 +45,17 @@ main() {
   prereqs
   yank -i /dev/null || err 'Unable to clear the clipboard.'
 
-  : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-
   case "$1" in
-    'notify') print_icon | notify 'Cleared the clipboard.' ;;
-    *)        return                                       ;;
+
+    'notify')
+      : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
+      print_icon | notify 'Cleared the clipboard.'
+      ;;
+
+    *)
+      return
+      ;;
+
   esac
 }
 
