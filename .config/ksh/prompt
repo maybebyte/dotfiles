@@ -22,15 +22,15 @@ _ps1_clear="${esc}\\033[0m${esc}"
 # TODO: if a more portable solution for displaying PWD with tilde
 # expansion is found (so far sed isn't working), get rid of this case
 # statement and implement it in a single PS1 assignment
-case "${KSH_VERSION%%KSH*}" in
+case "${KSH_VERSION%%\ KSH*}" in
 
-  '@(#)PD ')
+  '@(#)PD')
     PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
 ${_ps1_clear}@${_ps1_hostname}\\h${_ps1_clear} \
 ${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ ")"
     ;;
 
-  '@(#)MIRBSD ')
+  '@(#)MIRBSD')
     PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
 ${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
 ${_ps1_path}$(echo "\${PWD/#\${HOME}/\\~}")\
