@@ -1,6 +1,7 @@
--ic
+--ignore-errors
+--continue
 --add-metadata
 --embed-thumbnail
 --restrict-filenames
 --format "(bestvideo[width>=1920]/bestvideo)+bestaudio/best"
--o "${HOME}/Downloads/%(uploader)s/%(upload_date)s.%(title)s.%(id)s.%(ext)s"
+--output "${HOME}/Downloads/%(uploader)s/%(upload_date)s.%(title)s.%(id)s.%(ext)s"
