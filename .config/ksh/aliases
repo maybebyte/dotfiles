@@ -169,8 +169,7 @@ general_aliases() {
     yta='yt -xf bestaudio/best'                                          \
     ytdesc='yt --get-description'                                        \
     ytlen='yt --get-duration'                                            \
-    ytrm='yt --rm-cache-dir'                                             \
-    ytv='yt --embed-subs'
+    ytrm='yt --rm-cache-dir'
 }
 
 linux_aliases() {

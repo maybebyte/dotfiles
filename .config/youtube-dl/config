@@ -1,6 +1,7 @@
 --ignore-errors
 --continue
 --add-metadata
+--embed-subs
 --embed-thumbnail
 --restrict-filenames
 --format "(bestvideo[width>=1920]/bestvideo)+bestaudio/best"
