@@ -1,8 +1,8 @@
---ignore-errors
---continue
 --add-metadata
+--continue
 --embed-subs
 --embed-thumbnail
---restrict-filenames
 --format "(bestvideo[width>=1920]/bestvideo)+bestaudio/best"
+--ignore-errors
 --output "${HOME}/Downloads/%(uploader)s/%(upload_date)s.%(title)s.%(id)s.%(ext)s"
+--restrict-filenames
