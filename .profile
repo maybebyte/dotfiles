@@ -10,6 +10,7 @@ export \
   HISTSIZE=10000 \
   LANG='en_US.UTF-8' \
   LESS='-iMR' \
+  LESSSECURE=1 \
   MAILRC="${HOME}/.config/mail/mailrc" \
   PAGER='less' \
   PATH="${HOME}/.local/bin${PATH:+:${PATH}}" \
