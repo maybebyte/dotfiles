@@ -4,20 +4,20 @@ esc="$(echo \\001)"
 case "$(id -u)" in
 
   0)
-    _ps1_user="${esc}\\033[1;33m${esc}"
-    _ps1_path="${esc}\\033[1;35m${esc}"
+    _ps1_user="${esc}\033[1;33m${esc}"
+    _ps1_path="${esc}\033[1;35m${esc}"
     ;;
 
   *)
-    _ps1_user="${esc}\\033[1;35m${esc}"
-    _ps1_path="${esc}\\033[1;33m${esc}"
+    _ps1_user="${esc}\033[1;35m${esc}"
+    _ps1_path="${esc}\033[1;33m${esc}"
     ;;
 
 esac
 
-_ps1_bracket="${esc}\\033[1;36m${esc}"
-_ps1_hostname="${esc}\\033[1;32m${esc}"
-_ps1_clear="${esc}\\033[0m${esc}"
+_ps1_bracket="${esc}\033[1;36m${esc}"
+_ps1_hostname="${esc}\033[1;32m${esc}"
+_ps1_clear="${esc}\033[0m${esc}"
 
 # TODO: if a more portable solution for displaying PWD with tilde
 # expansion is found (so far sed isn't working), get rid of this case
