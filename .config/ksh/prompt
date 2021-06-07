@@ -25,16 +25,16 @@ _ps1_clear="${esc}\\033[0m${esc}"
 case "${KSH_VERSION%%\ KSH*}" in
 
   '@(#)PD')
-    PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\\u\
-${_ps1_clear}@${_ps1_hostname}\\h${_ps1_clear} \
-${_ps1_path}\\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ ")"
+    PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}\u\
+${_ps1_clear}@${_ps1_hostname}\h${_ps1_clear} \
+${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\$ ")"
     ;;
 
   '@(#)MIRBSD')
     PS1="$(echo "${_ps1_bracket}[${_ps1_clear}${_ps1_user}$(id -un)\
 ${_ps1_clear}@${_ps1_hostname}$(hostname -s)${_ps1_clear} \
 ${_ps1_path}$(echo "\${PWD/#\${HOME}/\\~}")\
-${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ ")"
+${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\$ ")"
     ;;
 
   *)
