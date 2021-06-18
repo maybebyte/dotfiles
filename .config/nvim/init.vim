@@ -1,25 +1,26 @@
 set autochdir
 set backup
-set backupdir    =$HOME/.local/share/nvim/backup
-set conceallevel =2
-set diffexpr     =
+set backupdir     =$HOME/.local/share/nvim/backup
+set conceallevel  =2
+set diffexpr      =
 set diffopt      +=iwhiteall
 set expandtab
 set ignorecase
+set laststatus    =0
 set lazyredraw
 set linebreak
 " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
-set modelines    =0
+set modelines     =0
 set nomodeline
 set number
 set relativenumber
-set shiftwidth   =2
+set shiftwidth    =2
 set smartcase
 set smartindent
 set splitbelow
 set splitright
-set tabstop      =2
-set textwidth    =72
+set tabstop       =2
+set textwidth     =72
 set undofile
 set wrap
 set wrapscan
@@ -75,17 +76,13 @@ autocmd BufRead /usr/local/share/nvim/runtime/doc/* nnoremap ZQ :Goyo!\|q!
 autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
 autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!
 
-" shell script syntax for xsession
-autocmd BufRead $HOME/.xsession set filetype=sh
-
-" ksh is a shell :)
-autocmd BufRead $HOME/.config/ksh/* set filetype=sh
+" shell script syntax for xsession and ksh files
+autocmd BufRead $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
 
 " no more automatic commenting on newline
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " no more status bar
-autocmd VimEnter * set laststatus=0
 
 " if vim-plug isn't installed, install it
 if empty(glob('$HOME/.local/share/nvim/site/autoload/plug.vim'))
