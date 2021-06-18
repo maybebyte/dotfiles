@@ -71,10 +71,13 @@ autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 "autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!
 
 " Enable Goyo for help files
-autocmd BufRead /usr/local/share/nvim/runtime/doc/* :Goyo
-autocmd BufRead /usr/local/share/nvim/runtime/doc/* nnoremap ZQ :Goyo!\|q!
-autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
-autocmd BufRead $HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!
+autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
+  \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
+
+" one ZQ fully exits out of Goyo when reading help files.
+" (ordinarily, one would need to ZQ twice).
+autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
+  \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!
 
 " shell script syntax for xsession and ksh files
 autocmd BufRead $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
