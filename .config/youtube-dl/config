@@ -4,6 +4,8 @@
 --embed-thumbnail
 --format "(bestvideo[width>=1920]/bestvideo)+bestaudio/best"
 --ignore-errors
+--match-filter "playlist_title != 'Liked videos' & playlist_title != 'Favorites'"
 --output "${HOME}/Downloads/%(uploader)s/%(upload_date)s.%(title)s.%(id)s.%(ext)s"
 --restrict-filenames
+--write-description
 --write-info-json
