@@ -160,6 +160,9 @@ pkgsize() {
   hreadable "${size}"
 }
 
+# choose a book with fzf and read it.
+readabook() { fzf-open "${READER}" "${HOME}/books"; }
+
 # use bioctl(8) to unlock an encrypted partition and attach it to
 # softraid0.
 #
