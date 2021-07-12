@@ -8,7 +8,7 @@ library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
-  cat >&2 <<EOF
+  cat >&2 -- <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
@@ -20,7 +20,7 @@ import_colors
 : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
 clip_icon="${gnome_icon_dir}/actions/edit-copy-symbolic.svg"
 
-while read -r file; do
+while read -r -- file; do
   case "$1" in
     # delete file
     'd')
@@ -30,7 +30,7 @@ No
 EOF
       )" = 'Yes' ]; then
         rm -- "${file}"
-        notify-send "${file} deleted."
+        notify-send -- "${file} deleted."
       fi
       ;;
 
@@ -44,33 +44,33 @@ EOF
 
     # rotate clockwise
     'r')
-      convert -rotate 90 "${file}" "${file}"
+      convert -rotate 90 -- "${file}" "${file}"
       ;;
 
     # rotate counter-clockwise
     'R')
-      convert -rotate -90 "${file}" "${file}"
+      convert -rotate -90 -- "${file}" "${file}"
       ;;
 
     # horizontally invert file, aka 'flop' it
     'f')
-      convert -flop "${file}" "${file}"
+      convert -flop -- "${file}" "${file}"
       ;;
 
     # yank the relative file path
     #
     # TODO: clear clipboard after a delay.
     'y')
-      printf '%s' "${file}" | yank
-      printf '%s' "${clip_icon}" | notify "${file} copied to clipboard."
+      printf '%s' "${file}" | yank --
+      printf '%s' "${clip_icon}" | notify -- "${file} copied to clipboard."
       ;;
 
     # yank the absolute file path
     'Y')
-      file="$(readlink -f "${file}")"
+      file="$(readlink -f -- "${file}")"
 
-      printf '%s' "${file}" | yank
-      printf '%s' "${clip_icon}" | notify "${file} copied to clipboard."
+      printf '%s' "${file}" | yank --
+      printf '%s' "${clip_icon}" | notify -- "${file} copied to clipboard."
       ;;
 
   esac
