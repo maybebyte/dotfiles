@@ -16,7 +16,7 @@ anoncurl() { curl -x socks5://127.0.0.1:9050 "$@"; }
 #
 # $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
 # zathura(1) can open.
-anonread() { anonftp -o - -- "$1" | zathura - --; }
+anonread() { anonftp -o - -- "$1" | zathura -- -; }
 
 # invoke apropos(1) to match $1 against any available macro key of
 # manpages that match the current machine architecture.
