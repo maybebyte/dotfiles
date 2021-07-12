@@ -22,7 +22,7 @@ readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
-  cat >&2 <<EOF
+  cat >&2 -- <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
@@ -30,7 +30,7 @@ EOF
 fi
 
 usage() {
-  cat >&2 <<EOF
+  cat >&2 -- <<EOF
 ${0##*/} requires ${args_needed} argument(s).
 
 usage:
@@ -55,7 +55,7 @@ EOF
 
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
-  readonly mimetype="$(file -ib "${file}")"
+  readonly mimetype="$(file -ib -- "${file}")"
   case "${mimetype}" in
     # these are organized alphabetically by mimetype
     application/epub*) readonly preload_dir="${HOME}/books"  ;;
@@ -75,7 +75,7 @@ move_file() {
     {
       # tilde expansion with sed for readability in dmenu
       find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
-        | sed "s|${HOME}|~|g"
+        | sed -- "s|${HOME}|~|g"
       echo 'exit';
     } | menu -l 10 -p "Move ${file##*/} where?"
   )"
@@ -85,12 +85,12 @@ move_file() {
 
   # reverses tilde expansion. it's reinstated in certain lines below
   # with parameter expansion in the form "~${dest##${HOME}}"
-  dest="$(echo "${dest}" | sed "s|~|${HOME}|g")"
+  dest="$(echo "${dest}" | sed -- "s|~|${HOME}|g")"
 
-  if [ -d "${dest}" ] || mkdir -p "${dest}"; then
+  if [ -d "${dest}" ] || mkdir -p -- "${dest}"; then
 
-    if mv "${file}" "${dest}/${file##*/}"; then
-      notify-send "${file##*/} moved to ~${dest##${HOME}}"
+    if mv -- "${file}" "${dest}/${file##*/}"; then
+      notify-send -- "${file##*/} moved to ~${dest##${HOME}}"
     else
       err "Failed to move ${file##*/}"
     fi
@@ -109,8 +109,8 @@ rename_file() {
   if [ -n "${new_filename}" ]; then
     [ "${new_filename}" = 'exit' ] && exit 0
 
-    if mv "${file}" "${file%/*}/${new_filename}"; then
-      notify-send "${file##*/} renamed to ${new_filename}"
+    if mv -- "${file}" "${file%/*}/${new_filename}"; then
+      notify-send -- "${file##*/} renamed to ${new_filename}"
     else
       err "Failed to rename ${file}."
     fi
@@ -172,7 +172,7 @@ main() {
 
   prereqs2 "$@"
 
-  readonly file="$(readlink -f "$1")"
+  readonly file="$(readlink -f -- "$1")"
   choose_operation
 }
 
