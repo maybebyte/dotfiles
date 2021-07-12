@@ -16,7 +16,7 @@ unclutter -idle 3 &
 xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
 xidle &
 
-[ -x "$(command -v dbus-launch)" ] \
+[ -x "$(command -v -- dbus-launch)" ] \
   && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
   && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
@@ -26,7 +26,7 @@ sct 3500
 xset b off
 
 # laptop adjustments
-if [ "$(hostname -s)" = 'lain' ]; then
+if [ "$(hostname -s --)" = 'lain' ]; then
   xset m 3/1 0
   # trackpad scrolling with middle button
   xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
@@ -38,6 +38,6 @@ fi
 "${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
 
 # random manual page for didactic purposes
-"${TERMINAL}" -e man "$("${HOME}/.local/bin/randman")" &
+"${TERMINAL}" -e man -- "$("${HOME}/.local/bin/randman")" &
 
 exec xmonad
