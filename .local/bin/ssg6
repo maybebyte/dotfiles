@@ -60,7 +60,7 @@ main() {
   if [ -n "${fs}" ]; then
     echo "${fs}" | tee -- "${dst}/.files"
 
-    if echo "${fs}" | grep -q '\.md$'; then
+    if echo "${fs}" | grep -q -- '\.md$'; then
 
       if [ -x "$(command -v -- lowdown)" ]; then
         echo "${fs}" \
