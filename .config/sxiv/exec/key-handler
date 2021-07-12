@@ -29,7 +29,7 @@ Yes
 No
 EOF
       )" = 'Yes' ]; then
-        rm "${file}"
+        rm -- "${file}"
         notify-send "${file} deleted."
       fi
       ;;

@@ -57,7 +57,7 @@ splitflac() {
     || err 'Unable to split the FLAC file.'
   mv "$2" "$2.bak"
   "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
-  [ "${DELETE}" = 'yes' ] && rm "$2.bak"
+  [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
 }
 
 # no prereqs() here because two tiny functions would be the result. if

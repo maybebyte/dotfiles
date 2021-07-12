@@ -43,7 +43,7 @@ sync_site() {
   # oddly, can't call this in the form 'priv sync_site' in
   # main(). thus, a heredoc is needed.
   priv /usr/bin/env sh <<EOF
-rm -rf ${srvdir:?}
+rm -rf -- ${srvdir:?}
 mkdir -p ${srvdir}
 mv ${htmldir}/* ${srvdir}/
 rcctl reload httpd >/dev/null
@@ -51,7 +51,7 @@ EOF
 }
 
 cleanup() {
-  rm -rf "${htmldir:?}"
+  rm -rf -- "${htmldir:?}"
 }
 
 prereqs() {

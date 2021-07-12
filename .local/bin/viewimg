@@ -59,7 +59,7 @@ main() {
   prereqs "$@"
   viewimg "$1"
   wait
-  rm "${filename}"
+  rm -- "${filename}"
 }
 
 main "$@"
