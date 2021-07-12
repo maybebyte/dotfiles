@@ -61,7 +61,7 @@ EOF
     #
     # TODO: clear clipboard after a delay.
     'y')
-      printf '%s' "${file}" | yank --
+      printf '%s' "${file}" | yank
       printf '%s' "${clip_icon}" | notify -- "${file} copied to clipboard."
       ;;
 
@@ -69,7 +69,7 @@ EOF
     'Y')
       file="$(readlink -f -- "${file}")"
 
-      printf '%s' "${file}" | yank --
+      printf '%s' "${file}" | yank
       printf '%s' "${clip_icon}" | notify -- "${file} copied to clipboard."
       ;;
 
