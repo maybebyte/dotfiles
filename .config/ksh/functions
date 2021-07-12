@@ -16,20 +16,20 @@ anoncurl() { curl -x socks5://127.0.0.1:9050 "$@"; }
 #
 # $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
 # zathura(1) can open.
-anonread() { anonftp -o - "$1" | zathura -; }
+anonread() { anonftp -o - -- "$1" | zathura - --; }
 
 # invoke apropos(1) to match $1 against any available macro key of
 # manpages that match the current machine architecture.
 #
 # $1 is a word/phrase to search for (phrases must be quoted).
-aprv() { apr -S "$(uname -m)" any="$1"; }
+aprv() { apr -S "$(uname -m --)" -- any="$1"; }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
 # the path and send the results to STDOUT.
 #
 # $1 is a program one wants to learn more about.
-cht() { ftp -U 'curl' -VMo - "https://cht.sh/$1"; }
+cht() { ftp -U 'curl' -VMo - -- "https://cht.sh/$1"; }
 
 # if $1 ends in '.bak', copy $1 to an identically named file except the
 # new file omits '.bak'.
@@ -77,7 +77,7 @@ hreadable() {
   # printf(1) below since we can at least know that ${size} is an
   # integer.
   echo "${size}" \
-    | grep -q '[^[:digit:]]' \
+    | grep -q -- '[^[:digit:]]' \
     && err 'Only integers are accepted.'
 
   # size < 1024 means the value printed should be in bytes.
@@ -105,14 +105,14 @@ hreadable() {
 #
 # $1 is an IP address. If left blank, ipinf will return results for our
 # public IP.
-ipinf() { ftp -VMo - "https://ipinfo.io/$1"; }
+ipinf() { ftp -VMo - -- "https://ipinfo.io/$1"; }
 
 # dirty workaround for segfaults/coredumps, for now.
 # https://marc.info/?l=openbsd-ports&m=162020290731521&w=2
 mpv() {
   # command -v will return the function
-  MPV="$(which mpv)"
-  case "$(hostname -s)" in
+  MPV="$(which -- mpv)"
+  case "$(hostname -s --)" in
     'lain')
       LD_PRELOAD=/usr/X11R6/lib/modules/dri/iris_dri.so "${MPV}" "$@"
       ;;
@@ -131,9 +131,9 @@ mpv() {
 # $1 is a file.
 mvbak() {
   if [ -z "${1##*.bak}" ]; then
-    mv "$1" "${1%.bak}"
+    mv -- "$1" "${1%.bak}"
   else
-    mv "$1" "$1.bak"
+    mv -- "$1" "$1.bak"
   fi
 }
 
@@ -156,7 +156,7 @@ nc_tor() {
 #
 # $1 is the name of a valid package.
 pkgsize() {
-  size="$(pkgq -s "$1" | awk '/Size/{print $2}')"
+  size="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
   hreadable "${size}"
 }
 
@@ -176,4 +176,4 @@ unlockhdd() { priv bioctl -c C -l "$1" softraid0; }
 # $1 is a geographical location for weather forecasting purposes. If
 # left blank, wttr will return results for the geographical location
 # associated with our public IP.
-wttr() { ftp -U 'curl' -VMo - "https://wttr.in/$1"; }
+wttr() { ftp -U 'curl' -VMo - -- "https://wttr.in/$1"; }
