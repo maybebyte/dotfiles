@@ -22,8 +22,8 @@ check_grafix() {
 #
 # note that I only check executables that aren't accounted for in dotfiles.
 check_deps() {
-  while read -r dependency; do
-    if [ -x "$(command -v "${dependency}")" ]; then
+  while read -r -- dependency; do
+    if [ -x "$(command -v -- "${dependency}")" ]; then
       continue
     else
       err "${dependency} not found in PATH or not executable."
@@ -75,7 +75,7 @@ must_be_root() {
 # whether or not that path is readable.
 notify() {
   if ! [ -t 0 ]; then
-    read -r icon
+    read -r -- icon
     if [ -r "${icon}" ]; then
       dunstify -i "${icon}" "$@"
       return
@@ -85,7 +85,7 @@ notify() {
 }
 
 # print date in yyyy-mm-dd format.
-today() { date '+%F'; }
+today() { date -- '+%F'; }
 
 # copy STDIN to the clipboard so it can be pasted elsewhere.
 yank() { xclip -selection clipboard "$@"; }

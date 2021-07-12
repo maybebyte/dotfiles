@@ -32,7 +32,7 @@ main() {
       printf ' ! -path "*/.*"'
       return
     fi
-    while read -r x; do
+    while read -r -- x; do
       [ -n "${x}" ] || continue
       printf ' ! -path "*/%s*"' "${x}"
     done < "${src}/.ssgignore"
@@ -44,10 +44,10 @@ main() {
 
   h_file="${src}/_header.html"
   f_file="${src}/_footer.html"
-  [ -f "${f_file}" ] && FOOTER="$(cat "${f_file}")" && export FOOTER
-  [ -f "${h_file}" ] && HEADER="$(cat "${h_file}")" && export HEADER
+  [ -f "${f_file}" ] && FOOTER="$(cat -- "${f_file}")" && export FOOTER
+  [ -f "${h_file}" ] && HEADER="$(cat -- "${h_file}")" && export HEADER
 
-  list_dirs "${src}" | (cd "${src}" && cpio -pdu "${dst}")
+  list_dirs "${src}" | (cd "${src}" && cpio -pdu -- "${dst}")
 
   fs="$(
     if [ -f "${dst}/.files" ]; then
@@ -58,18 +58,18 @@ main() {
   )"
 
   if [ -n "${fs}" ]; then
-    echo "${fs}" | tee "${dst}/.files"
+    echo "${fs}" | tee -- "${dst}/.files"
 
     if echo "${fs}" | grep -q '\.md$'; then
 
-      if [ -x "$(command -v lowdown)" ]; then
+      if [ -x "$(command -v -- lowdown)" ]; then
         echo "${fs}" \
-          | grep '\.md$' \
+          | grep -- '\.md$' \
           | render_md_files_lowdown "${src}" "${dst}" "${title}"
 
-      elif [ -x "$(command -v Markdown.pl)" ]; then
+      elif [ -x "$(command -v -- Markdown.pl)" ]; then
         echo "${fs}" \
-          | grep '\.md$' \
+          | grep -- '\.md$' \
           | render_md_files_Markdown_pl "${src}" "${dst}" "${title}"
 
       else
@@ -81,12 +81,12 @@ main() {
     fi
 
     echo "${fs}" \
-      | grep '\.html$' \
+      | grep -- '\.html$' \
       | render_html_files "${src}" "${dst}" "${title}"
 
     echo "${fs}" \
-      | grep -Ev '\.md$|\.html$' \
-      | (cd "${src}" && cpio -pu "${dst}")
+      | grep -Ev -- '\.md$|\.html$' \
+      | (cd "${src}" && cpio -pu -- "${dst}")
 
   fi
 
@@ -97,7 +97,7 @@ main() {
   # sitemap
 
   base_url="$4"
-  date="$(date '+%F')"
+  date="$(date -- '+%F')"
   urls="$(list_pages "${src}")"
 
   [ -n "${urls}" ] \
@@ -113,11 +113,11 @@ readlink_f() {
   cd "${file%/*}"
   file="${file##*/}"
   while [ -L "${file}" ]; do
-    file="$(readlink "${file}")"
+    file="$(readlink -- "${file}")"
     cd "${file%/*}"
     file="${file##*/}"
   done
-  dir="$(pwd -P)"
+  dir="$(pwd -P --)"
   echo "${dir}/${file}"
 }
 
@@ -165,7 +165,7 @@ list_newer_files() {
 
 
 has_partials() {
-  grep -qE '^./_.*\.html$|^./_.*\.js$|^./_.*\.css$'
+  grep -qE -- '^./_.*\.html$|^./_.*\.js$|^./_.*\.css$'
 }
 
 
@@ -181,19 +181,19 @@ list_affected_files() {
 
 
 render_html_files() {
-  while read -r f; do
+  while read -r -- f; do
     render_html_file "$3" < "$1/${f}" > "$2/${f}"
   done
 }
 
 
 render_md_files_lowdown() {
-  while read -r f; do
+  while read -r -- f; do
     lowdown \
       --html-no-escapehtml \
       --html-no-skiphtml \
       --parse-no-metadata \
-      --parse-no-autolink < "$1/${f}" \
+      --parse-no-autolink -- < "$1/${f}" \
       | render_html_file "$3" \
       > "$2/${f%\.md}.html"
   done
@@ -201,8 +201,8 @@ render_md_files_lowdown() {
 
 
 render_md_files_Markdown_pl() {
-  while read -r f; do
-    Markdown.pl < "$1/${f}" \
+  while read -r -- f; do
+    Markdown.pl -- < "$1/${f}" \
       | render_html_file "$3" \
       > "$2/${f%\.md}.html"
   done
@@ -243,7 +243,7 @@ list_pages() {
   e="\\( -name '*.html' -o -name '*.md' \\)"
   cd "$1" \
     && eval "find . -type f ! -path '*/.*' ! -path '*/_*' ${IGNORE} ${e}" \
-    | sed 's#^./##;s#.md$#.html#;s#/index.html$#/#'
+    | sed -- 's#^./##;s#.md$#.html#;s#/index.html$#/#'
 }
 
 
@@ -258,7 +258,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-  echo "${urls}" | sed -E 's#^(.*)$#<url><loc>'"${base_url}"'/\1</loc><lastmod>'\
+  echo "${urls}" | sed -E -- 's#^(.*)$#<url><loc>'"${base_url}"'/\1</loc><lastmod>'\
 "${date}"'</lastmod><priority>1.0</priority></url>#'
   echo '</urlset>'
 }

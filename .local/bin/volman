@@ -55,10 +55,10 @@ EOF
 # argument is given. if not, error and display usage details.
 adjust_vol() {
   case "$1" in
-    'inc')  muted || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-    'dec')  muted || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
-    'mute') sndioctl output.mute=! >/dev/null 2>&1               ;;
-    *)      usage                                                ;;
+    'inc')  muted || sndioctl -- output.level=+0.05 >/dev/null 2>&1 ;;
+    'dec')  muted || sndioctl -- output.level=-0.05 >/dev/null 2>&1 ;;
+    'mute') sndioctl -- output.mute=! >/dev/null 2>&1               ;;
+    *)      usage                                                   ;;
   esac
 }
 
@@ -88,7 +88,7 @@ print_icon() {
 # if muted, succeed.
 # if not muted, fail.
 muted() {
-  case "$(sndioctl -n output.mute 2>/dev/null)" in
+  case "$(sndioctl -n -- output.mute 2>/dev/null)" in
     1) return 0                                 ;;
     0) return 1                                 ;;
     *) err 'Unable to access sndio(7) device.'  ;;
@@ -97,12 +97,12 @@ muted() {
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
-  readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+  readonly raw_vol="$(sndioctl -n -- output.level 2>/dev/null)"
   case "${raw_vol}" in
-    1.000) echo 100                                                  ;;
-    0.000) echo 0                                                    ;;
+    1.000) echo 100                                                     ;;
+    0.000) echo 0                                                       ;;
            # division is here to truncate the floating point number.
-    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc ;;
+    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc -- ;;
   esac
 }
 
@@ -119,9 +119,9 @@ main() {
   readonly vol="$(get_vol)"
   muted && readonly MUTED='true'
   if [ "${MUTED}" = 'true' ]; then
-    print_icon | notify -u low -r "${msg_id}" 'MUTED'
+    print_icon | notify -u low -r "${msg_id}" -- 'MUTED'
   else
-    print_icon | notify -u low -r "${msg_id}" "${vol}%"
+    print_icon | notify -u low -r "${msg_id}" -- "${vol}%"
   fi
 }
 

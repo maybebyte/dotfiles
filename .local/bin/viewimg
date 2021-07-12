@@ -40,9 +40,9 @@ EOF
 }
 
 viewimg() {
-  readonly filename="$(mktemp)"
-  ftp -VMnU '' -o "${filename}" "$1" >/dev/null 2>&1
-  sxiv "${filename}" >/dev/null 2>&1
+  readonly filename="$(mktemp --)"
+  ftp -VMnU '' -o "${filename}" -- "$1" >/dev/null 2>&1
+  sxiv -- "${filename}" >/dev/null 2>&1
 }
 
 prereqs() {

@@ -34,7 +34,7 @@ check_opts() {
   if [ -n "$1" ]; then
     readonly URL="$1"
   elif [ ! -t 0 ]; then
-    read -r URL && readonly URL
+    read -r -- URL && readonly URL
   else
     err "${0##*/} needs a URL!"
   fi
@@ -47,11 +47,12 @@ check_opts() {
 linkhandler() {
   case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
 
+    # TODO: seems to not grab duration properly.
     'copy duration')
-      if duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"; then
+      if duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"; then
 
         if printf '%s' "${duration}" | yank; then
-          notify-send "Copied video duration (${duration})."
+          notify-send -- "Copied video duration (${duration})."
         else
           err 'Failed to copy video duration.'
         fi
@@ -62,10 +63,10 @@ linkhandler() {
       ;;
 
     'copy title')
-      if title="$(youtube-dl -e "${URL}" 2>/dev/null)"; then
+      if title="$(youtube-dl -e -- "${URL}" 2>/dev/null)"; then
 
         if printf '%s' "${title}" | yank; then
-          notify-send "Copied video title (${title})."
+          notify-send -- "Copied video title (${title})."
         else
           err 'Failed to copy video title.'
         fi
@@ -76,16 +77,16 @@ linkhandler() {
       ;;
 
     'download audio')
-      if youtube-dl -xf bestaudio/best "${URL}" >/dev/null 2>&1; then
-        notify-send "Finished downloading audio from ${URL}."
+      if youtube-dl -xf bestaudio/best -- "${URL}" >/dev/null 2>&1; then
+        notify-send -- "Finished downloading audio from ${URL}."
       else
         err "Failed to download audio from ${URL}."
       fi
       ;;
 
     'download file')
-      if (cd "${HOME}/Downloads" && ftp -VMnU '' "${URL}") >/dev/null 2>&1; then
-        notify-send "Finished downloading ${URL##*/}."
+      if (cd "${HOME}/Downloads" && ftp -VMnU '' -- "${URL}") >/dev/null 2>&1; then
+        notify-send -- "Finished downloading ${URL##*/}."
       else
         err "Failed to download ${URL##*/}."
       fi
@@ -98,24 +99,24 @@ linkhandler() {
       # work here the way one would expect.
       #
       # also, notifications don't work for some reason here.
-      youtube-dl --embed-subs "${URL}" >/dev/null 2>&1
-      notify-send "Finished downloading video from ${URL}."
+      youtube-dl -- "${URL}" >/dev/null 2>&1
+      notify-send -- "Finished downloading video from ${URL}."
       ;;
 
     'listen')
-      mpv --no-video --speed=1 "${URL}" >/dev/null 2>&1
+      mpv --no-video --speed=1 -- "${URL}" >/dev/null 2>&1
       ;;
 
     'print duration')
-      if duration="$(youtube-dl --get-duration "${URL}" 2>/dev/null)"; then
-        notify-send "${duration}"
+      if duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"; then
+        notify-send -- "${duration}"
       else
         err 'Failed to print duration.'
       fi
       ;;
 
     'read')
-      ftp -VMno - -U '' "${URL}" | zathura - >/dev/null 2>&1
+      ftp -VMno - -U '' -- "${URL}" | zathura - -- >/dev/null 2>&1
       ;;
 
     'view image')
@@ -126,11 +127,11 @@ linkhandler() {
     # when the video is ready to play or something to that effect. the
     # absence of any visual indication affects my productivity negatively.
     'watch')
-      mpv "${URL}" >/dev/null 2>&1
+      mpv -- "${URL}" >/dev/null 2>&1
       ;;
 
     'watch (loop)')
-      mpv --speed=1 --loop "${URL}" >/dev/null 2>&1
+      mpv --speed=1 --loop -- "${URL}" >/dev/null 2>&1
       ;;
 
     *)
@@ -172,7 +173,7 @@ read
 view image
 watch
 watch (loop)'
-  readonly num_of_opts="$(echo "${options}" | wc -l)"
+  readonly num_of_opts="$(echo "${options}" | wc -l --)"
   echo "${options}" | linkhandler
 }
 
