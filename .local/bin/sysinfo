@@ -98,7 +98,7 @@ show_disk_space() {
 }
 
 show_date() {
-  date '+%a %m-%d %H:%M'
+  date -- '+%a %m-%d %H:%M'
 }
 
 sysinfo() {
