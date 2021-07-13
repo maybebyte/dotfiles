@@ -22,7 +22,7 @@ readonly library="${HOME}/.local/bin/common.sh"
 if [ -r "${library}" ]; then
   . "${library}"
 else
-  cat >&2 -- <<EOF
+  cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
@@ -30,7 +30,7 @@ EOF
 fi
 
 usage() {
-  cat >&2 -- <<EOF
+  cat >&2 <<EOF
 ${0##*/} requires at least ${args_needed} argument(s).
 
 usage:
