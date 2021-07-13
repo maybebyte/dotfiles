@@ -32,7 +32,7 @@ case "$(uname)" in
     ;;
 esac
 
-gateway="$(netstat -rn 2>/dev/null | awk '/default/{print $2}')" \
+gateway="$(netstat -rn 2>/dev/null | awk -- '/default/{print $2}')" \
   && export gateway
 
 nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
