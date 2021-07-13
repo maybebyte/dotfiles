@@ -81,7 +81,7 @@ get_title() {
 
 
 get_url() {
-  grep -i -- '<a .*rss.xml"' | head -1 -- | sed -- 's#.*href="\(.*\)".*#\1#'
+  grep -i -- '<a .*rss.xml"' | head -1 | sed -- 's#.*href="\(.*\)".*#\1#'
 }
 
 
@@ -173,7 +173,7 @@ render_feed() {
   title="$(echo "$2" | remove_nbsp)"
   description="$3"
 
-  base_url="$(echo "${url}" | cut -d '/' -f1-3 --)"
+  base_url="$(echo "${url}" | cut -d '/' -f1-3)"
 
   echo '<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -183,7 +183,7 @@ render_feed() {
 <description>'"${description}"'</description>
 <link>'"${base_url}"'/</link>
 <lastBuildDate>'"$(date_rfc_822 date)"'</lastBuildDate>
-'"$(cat --)"'
+'"$(cat)"'
 </channel></rss>'
 }
 

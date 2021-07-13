@@ -95,7 +95,7 @@ a selected area (copy)
 current window (copy)
 full screen (copy)'
   readonly savedir="${HOME}/screenshots"
-  readonly num_of_opts="$(echo "${options}" | wc -l --)"
+  readonly num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | present_options
 }
 

@@ -99,10 +99,10 @@ muted() {
 get_vol() {
   readonly raw_vol="$(sndioctl -n -- output.level 2>/dev/null)"
   case "${raw_vol}" in
-    1.000) echo 100                                                     ;;
-    0.000) echo 0                                                       ;;
+    1.000) echo 100                                                  ;;
+    0.000) echo 0                                                    ;;
            # division is here to truncate the floating point number.
-    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc -- ;;
+    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc ;;
   esac
 }
 

@@ -71,8 +71,8 @@ main() {
   readonly site="$1"
   readonly markdowndir="$2"
   readonly srvdir="$3"
-  readonly htmldir="$(mktemp -d --)"
-  readonly unpriv_user="$(id -un --)"
+  readonly htmldir="$(mktemp -d)"
+  readonly unpriv_user="$(id -un)"
   gen_site || { cleanup; err 'Unable to generate site.'; }
   sync_site || { cleanup; err 'Unable to sync web server.'; }
   cleanup

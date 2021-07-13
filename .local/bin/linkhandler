@@ -116,7 +116,7 @@ linkhandler() {
       ;;
 
     'read')
-      ftp -VMno - -U '' -- "${URL}" | zathura - -- >/dev/null 2>&1
+      ftp -VMno - -U '' -- "${URL}" | zathura -- - >/dev/null 2>&1
       ;;
 
     'view image')
@@ -173,7 +173,7 @@ read
 view image
 watch
 watch (loop)'
-  readonly num_of_opts="$(echo "${options}" | wc -l --)"
+  readonly num_of_opts="$(echo "${options}" | wc -l)"
   echo "${options}" | linkhandler
 }
 

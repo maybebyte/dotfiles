@@ -26,7 +26,7 @@ sct 3500
 xset b off
 
 # laptop adjustments
-if [ "$(hostname -s --)" = 'lain' ]; then
+if [ "$(hostname -s)" = 'lain' ]; then
   xset m 3/1 0
   # trackpad scrolling with middle button
   xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1

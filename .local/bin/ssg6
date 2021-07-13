@@ -117,7 +117,7 @@ readlink_f() {
     cd "${file%/*}"
     file="${file##*/}"
   done
-  dir="$(pwd -P --)"
+  dir="$(pwd -P)"
   echo "${dir}/${file}"
 }
 

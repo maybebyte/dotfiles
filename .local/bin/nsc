@@ -45,7 +45,7 @@ nsc() {
 }
 
 fix_perms() {
-  readonly unpriv_user="$(id -un --)"
+  readonly unpriv_user="$(id -un)"
   priv chown -R -- "${unpriv_user}:${unpriv_user}" "${tmpdir}"
   find "${tmpdir}" \( -type f ! -perm 600 -exec chmod 600 '{}' + \) \
     -o \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
@@ -59,7 +59,7 @@ prereqs() {
 
 main() {
   prereqs "$@"
-  readonly tmpdir="$(mktemp -d --)"
+  readonly tmpdir="$(mktemp -d)"
   nsc "$@" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'
   echo "Scan finished, results available in ${tmpdir}."
