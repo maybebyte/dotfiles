@@ -65,7 +65,7 @@ main() {
     # it's best not to make gnome_icon_dir readonly.
     # the user might set it in environ(7).
     : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-    print_icon | notify "Your device is at ${batt_percent}%!"
+    print_icon | notify -- "Your device is at ${batt_percent}%!"
   else
     exit 0
   fi

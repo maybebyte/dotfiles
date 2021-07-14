@@ -34,7 +34,7 @@ maim_with_flags() {
 
 maim_sel_save() {
   readonly filename="selected-$(cur_date).png"
-  maim_with_flags -s "${savedir}/${filename}"
+  maim_with_flags -s -- "${savedir}/${filename}"
 }
 
 maim_sel_copy() {
@@ -43,7 +43,7 @@ maim_sel_copy() {
 
 maim_cur_save() {
   readonly filename="window-$(cur_date).png"
-  maim_with_flags -i "$(xdotool getactivewindow)" \
+  maim_with_flags -i "$(xdotool getactivewindow)" -- \
     "${savedir}/${filename}"
 }
 
@@ -54,7 +54,7 @@ maim_cur_copy() {
 
 maim_full_save() {
   readonly filename="full-$(cur_date).png"
-  maim_with_flags "${savedir}/${filename}"
+  maim_with_flags -- "${savedir}/${filename}"
 }
 
 maim_full_copy() {

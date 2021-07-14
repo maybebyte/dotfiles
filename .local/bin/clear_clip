@@ -49,7 +49,7 @@ main() {
 
     'notify')
       : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-      print_icon | notify 'Cleared the clipboard.'
+      print_icon | notify -- 'Cleared the clipboard.'
       ;;
 
     *)
