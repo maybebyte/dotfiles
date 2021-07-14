@@ -125,7 +125,7 @@ readlink_f() {
 print_status() {
   [ -z "$3" ] && printf 'no %s' "$2" && return
 
-  echo "$3" | awk -v singular="$1" -v plural="$2" '
+  echo "$3" | awk -v singular="$1" -v plural="$2" -- '
   END {
     if (NR==1) printf NR " " singular
     if (NR>1) printf NR " " plural
@@ -211,7 +211,7 @@ render_md_files_Markdown_pl() {
 
 render_html_file() {
   # h/t Devin Teske
-  awk -v title="$1" '
+  awk -v title="$1" -- '
   { body = body "\n" $0 }
   END {
     body = substr(body, 2)

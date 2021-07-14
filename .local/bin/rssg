@@ -76,7 +76,7 @@ md_to_html() {
 
 
 get_title() {
-  awk 'tolower($0)~/^<h1/{gsub(/<[^>]*>/,"",$0);print;exit}'
+  awk -- 'tolower($0)~/^<h1/{gsub(/<[^>]*>/,"",$0);print;exit}'
 }
 
 
@@ -94,7 +94,7 @@ get_items() {
 get_description() {
   start='sub("^.*<"s"*"t"("s"[^>]*)?>","")'
   stop='sub("</"s"*"t""s"*>.*","")&&x=1'
-  awk -v 's=[[:space:]]' -v 't=[Pp]' "${start},${stop};x{exit}"
+  awk -v 's=[[:space:]]' -v 't=[Pp]' -- "${start},${stop};x{exit}"
 }
 
 remove_tags() {
