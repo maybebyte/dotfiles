@@ -69,7 +69,7 @@ show_battery() {
 }
 
 show_temp() {
-  case "$(hostname -s --)" in
+  case "$(hostname -s)" in
     'lain')      temperature="$(sysctl -n -- hw.sensors.cpu0.temp0)"  ;;
     'aphrodite') temperature="$(sysctl -n -- hw.sensors.ksmn0.temp0)" ;;
     *)           return 1                                             ;;
