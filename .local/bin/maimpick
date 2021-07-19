@@ -20,7 +20,7 @@ EOF
 fi
 
 cur_date() {
-  date -- '+%Y%m%d-%H%M%S'
+  date '+%Y%m%d-%H%M%S'
 }
 
 yankpic() {

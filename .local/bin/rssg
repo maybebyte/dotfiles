@@ -48,7 +48,7 @@ main() {
       | render_feed "${url}" "${title}" "${description}"
   )"
 
-  >&2 echo "[rssg] ${index_file##$(pwd)/} $(echo "${rss}" | grep -c -- '<item>') items"
+  >&2 echo "[rssg] ${index_file##$(pwd)/} $(echo "${rss}" | grep -c '<item>') items"
   echo "${rss}"
 }
 
@@ -66,7 +66,7 @@ no_file() {
 
 
 md_to_html() {
-  [ -x "$(command -v -- lowdown)" ] || exit 3
+  [ -x "$(command -v 'lowdown')" ] || exit 3
   lowdown \
     --html-no-escapehtml \
     --html-no-skiphtml \
@@ -118,8 +118,8 @@ rel_to_abs_urls() {
 
 
 date_rfc_822() {
-  date -j -- '+%a, %d %b %Y %H:%M:%S %z' \
-  "$(echo "$1"| tr -cd -- '[:digit:]')0000"
+  date -j '+%a, %d %b %Y %H:%M:%S %z' \
+  "$(echo "$1"| tr -cd '[:digit:]')0000"
 }
 
 

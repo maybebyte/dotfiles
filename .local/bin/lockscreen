@@ -42,8 +42,8 @@ EOF
 # be locked even if the other steps fail.
 main() {
   clear_clip
-  pkill -q -- keepass
-  slock -- xset dpms force off
+  pkill -q 'keepass'
+  slock xset dpms force off
 }
 
 main

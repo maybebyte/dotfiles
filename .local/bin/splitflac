@@ -42,9 +42,9 @@ EOF
 }
 
 assign_cuetag() {
-  if [ -x "$(command -v -- cuetag)" ]; then
+  if [ -x "$(command -v 'cuetag')" ]; then
     readonly cuetag='cuetag'
-  elif [ -x "$(command -v -- cuetag.sh)" ]; then
+  elif [ -x "$(command -v 'cuetag.sh')" ]; then
     readonly cuetag='cuetag.sh'
   else
     err 'Neither cuetag nor cuetag.sh found.'

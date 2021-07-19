@@ -47,7 +47,7 @@ genfavi() {
     \( -clone 0 -resize 64x64 -extent 64x64 \) \
     -delete 0 -alpha off -colors 256 favicon.ico \
     || err 'Unable to generate favicon.' \
-    && cp -- favicon.ico favicon.png
+    && cp 'favicon.ico' 'favicon.png'
 }
 
 prereqs() {

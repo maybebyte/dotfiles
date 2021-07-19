@@ -46,7 +46,7 @@ sync_site() {
 rm -rf -- ${srvdir:?}
 mkdir -p -- ${srvdir}
 mv -- ${htmldir}/* ${srvdir}/
-rcctl -- reload httpd >/dev/null
+rcctl reload httpd >/dev/null
 EOF
 }
 
