@@ -11,8 +11,11 @@ myMouseFocusRule     = False
 myTerminal           = "${TERMINAL}"
 
 {-
- -    web browsers are floating windows so that they aren't super easy
- -    to fingerprint.
+ -    web browsers become floating windows so that they aren't super
+ -    easy to fingerprint.
+ -
+ -    otherwise, windows that correspond to specific programs are moved
+ -    to certain workspaces to keep things organized.
  -}
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
@@ -24,6 +27,7 @@ myManageHook = composeAll
   , className =? "mpv" --> doShift "9"
   , manageDocks ]
 
+-- https://wiki.archlinux.org/title/Xmonad#Equally_sized_gaps_between_windows
 myLayoutHook = avoidStruts
   $ spacingRaw False (Border 20 0 20 0) True (Border 0 20 0 20) True
   $ Tall 1 (3/100) (1/2) ||| Full
