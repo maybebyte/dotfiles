@@ -10,6 +10,10 @@ myModMask            = mod4Mask
 myMouseFocusRule     = False
 myTerminal           = "${TERMINAL}"
 
+{-
+ -    web browsers are floating windows so that they aren't super easy
+ -    to fingerprint.
+ -}
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
   , className =? "Firefox" --> doCenterFloat
