@@ -15,9 +15,9 @@ import_colors
 set -o vi
 
 # shellcheck disable=SC2039
-grep -qi 'pd' <<EOF && set -o vi-show8
-${KSH_VERSION}
-EOF
+case "${KSH_VERSION%%\ KSH*}" in
+  '@(#)PD') set -o vi-show8 ;;
+esac
 
 for srcfile in 'aliases' 'functions' 'prompt' 'vars'; do
   [ -r "${HOME}/.config/ksh/${srcfile}" ] \
