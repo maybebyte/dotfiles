@@ -76,9 +76,9 @@ hreadable() {
   # sanity check so math below works. also alleviates the need to use
   # printf(1) below since we can at least know that ${size} is an
   # integer.
-  echo "${size}" \
-    | grep -q -- '[^[:digit:]]' \
-    && err 'Only integers are accepted.'
+  case "${size}" in
+    ''|*[!0-9]*) err 'Only integers are accepted.' ;;
+  esac
 
   # size < 1024 means the value printed should be in bytes.
   [ "${size}" -lt 1024 ] \
