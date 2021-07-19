@@ -46,9 +46,9 @@ show_battery() {
     0) # disconnected (on battery)
       estimated_battery_life="$(apm -m)"
 
-      if echo "${estimated_battery_life}" | grep -q -- '[^[:digit:]]'; then
-        err "${estimated_battery_life} must only contain digits."
-      fi
+      case "${estimated_battery_life}" in
+        ''|*[!0-9]*) err 'show_battery() only accepts integers.' ;;
+      esac
 
       ebl_minutes=$((estimated_battery_life % 60))
       ebl_hours=$((estimated_battery_life / 60))
