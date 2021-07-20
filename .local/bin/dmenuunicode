@@ -25,13 +25,14 @@ grab_emoji() {
   readonly emoji_file="${HOME}/.local/share/emoji"
   [ -r "${emoji_file}" ] || err "Emoji file isn't available."
 
-  readonly chosen="$(cut -d ';' -f1 -- "${emoji_file}" | menu -l 20)"
+  chosen="$(cut -d ';' -f1 -- "${emoji_file}" | menu -l 20)"
   [ -n "${chosen}" ] || err 'Must choose an emoji.'
+  readonly chosen="${chosen%% *}"
   grep -q -- "^${chosen}" "${emoji_file}" || err 'Emoji not found.'
 
   # important to use printf %s here, as ${chosen} is user input
-  if printf '%s' "${chosen%% *}" | yank; then
-    notify-send -- "${chosen%% *} copied to clipboard."
+  if printf '%s' "${chosen}" | yank; then
+    notify-send -- "${chosen} copied to clipboard."
   else
     err 'Unable to grab emoji.'
   fi
