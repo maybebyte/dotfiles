@@ -43,6 +43,7 @@ prereqs() {
   check_deps <<'EOF'
 dmenu
 notify-send
+xclip
 EOF
   import_colors
 }
