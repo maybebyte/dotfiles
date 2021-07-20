@@ -57,4 +57,4 @@ shift + super + {0,Left,Right,Down,Up}
 
 # {dim,brighten} display
 {F5,F6}
-	 xbacklight {-dec,-inc} 10
+	 xbacklight {-dec,-inc} 10 -steps 1
