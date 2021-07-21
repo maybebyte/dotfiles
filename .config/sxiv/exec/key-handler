@@ -67,10 +67,10 @@ EOF
 
     # yank the absolute file path
     'Y')
-      file="$(readlink -f -- "${file}")"
+      abs_path_of_file="$(readlink -f -- "${file}")"
 
-      printf '%s' "${file}" | yank
-      printf '%s' "${clip_icon}" | notify -- "${file} copied to clipboard."
+      printf '%s' "${abs_path_of_file}" | yank
+      printf '%s' "${clip_icon}" | notify -- "${abs_path_of_file} copied to clipboard."
       ;;
 
   esac
