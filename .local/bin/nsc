@@ -45,7 +45,7 @@ nsc() {
 }
 
 fix_perms() {
-  readonly unpriv_user="$(id -un)"
+  readonly unpriv_user="${LOGNAME}"
   priv chown -R -- "${unpriv_user}:${unpriv_user}" "${tmpdir}"
   find "${tmpdir}" \( -type f ! -perm 600 -exec chmod 600 '{}' + \) \
     -o \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
