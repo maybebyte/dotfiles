@@ -104,7 +104,7 @@ linkhandler() {
       ;;
 
     'listen')
-      mpv --no-video --speed=1 -- "${URL}" >/dev/null 2>&1
+      mpv --no-video --no-pause --no-resume-playback -- "${URL}" >/dev/null 2>&1
       ;;
 
     'print duration')
