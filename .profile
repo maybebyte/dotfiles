@@ -41,4 +41,8 @@ nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
 userjs="$(find "${HOME}/.mozilla" -iname 'user.js' 2>/dev/null | head -1)" \
   && export userjs
 
-[ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
+case "$(hostname -s)" in
+  'aphrodite'|'lain')
+    [ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
+    ;;
+esac
