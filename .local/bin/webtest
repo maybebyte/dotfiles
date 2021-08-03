@@ -31,11 +31,11 @@ fi
 
 usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
 
-# TODO: articles.md should be a variable instead of hard-coded
+# TODO: index.md could be a variable instead of hard-coded
 gen_site() {
   ssg6 "${markdowndir}" "${htmldir}" "${unpriv_user}" \
     "${site##*//}" >/dev/null 2>&1
-  rssg "${markdowndir}/articles.md" 2>/dev/null \
+  rssg "${markdowndir}/index.md" 2>/dev/null \
     "Newsletter - ${site##*//}" > "${htmldir}/rss.xml"
 }
 
