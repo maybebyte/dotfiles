@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 # sourced files
 # shellcheck disable=SC1090
 . "${HOME}/.profile"
