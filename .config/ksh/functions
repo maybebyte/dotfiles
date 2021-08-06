@@ -168,8 +168,7 @@ readabook() { fzf-open "${READER}" "${HOME}/books"; }
 # $1 is a domain name associated with a Matrix homeserver.
 testfed() {
   ftp -U '' -VMno - -- \
-    "https://federationtester.matrix.org/api/report?server_name=$1" \
-    | jq . -
+    "https://federationtester.matrix.org/api/report?server_name=$1"
 }
 
 # use bioctl(8) to unlock an encrypted partition and attach it to
