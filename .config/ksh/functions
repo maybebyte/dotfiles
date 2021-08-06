@@ -163,6 +163,15 @@ pkgsize() {
 # choose a book with fzf and read it.
 readabook() { fzf-open "${READER}" "${HOME}/books"; }
 
+# test Matrix federation and output the JSON.
+#
+# $1 is a domain name associated with a Matrix homeserver.
+testfed() {
+  ftp -U '' -VMno - -- \
+    "https://federationtester.matrix.org/api/report?server_name=$1" \
+    | jq . -
+}
+
 # use bioctl(8) to unlock an encrypted partition and attach it to
 # softraid0.
 #
