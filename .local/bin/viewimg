@@ -40,7 +40,7 @@ EOF
 }
 
 viewimg() {
-  readonly filename="$(mktemp)"
+  filename="$(mktemp)" && readonly filename
   ftp -VMnU '' -o "${filename}" -- "$1" >/dev/null 2>&1
   sxiv -- "${filename}" >/dev/null 2>&1
 }

@@ -173,7 +173,7 @@ read
 view image
 watch
 watch (loop)'
-  readonly num_of_opts="$(echo "${options}" | wc -l)"
+  num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
   echo "${options}" | linkhandler
 }
 

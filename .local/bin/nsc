@@ -59,7 +59,7 @@ prereqs() {
 
 main() {
   prereqs "$@"
-  readonly tmpdir="$(mktemp -d)"
+  tmpdir="$(mktemp -d)" && readonly tmpdir
   nsc "$@" || err 'Unable to scan target.'
   fix_perms || err 'Unable to fix permissions.'
   echo "Scan finished, results available in ${tmpdir}."

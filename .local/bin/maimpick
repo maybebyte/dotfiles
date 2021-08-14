@@ -33,7 +33,7 @@ maim_with_flags() {
 }
 
 maim_sel_save() {
-  readonly filename="selected-$(cur_date).png"
+  filename="selected-$(cur_date).png" && readonly filename
   maim_with_flags -s -- "${savedir}/${filename}"
 }
 
@@ -42,7 +42,7 @@ maim_sel_copy() {
 }
 
 maim_cur_save() {
-  readonly filename="window-$(cur_date).png"
+  filename="window-$(cur_date).png" && readonly filename
   maim_with_flags -i "$(xdotool getactivewindow)" -- \
     "${savedir}/${filename}"
 }
@@ -53,7 +53,7 @@ maim_cur_copy() {
 }
 
 maim_full_save() {
-  readonly filename="full-$(cur_date).png"
+  filename="full-$(cur_date).png" && readonly filename
   maim_with_flags -- "${savedir}/${filename}"
 }
 
@@ -95,7 +95,7 @@ a selected area (copy)
 current window (copy)
 full screen (copy)'
   readonly savedir="${HOME}/screenshots"
-  readonly num_of_opts="$(echo "${options}" | wc -l)"
+  num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
   echo "${options}" | present_options
 }
 

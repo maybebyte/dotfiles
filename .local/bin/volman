@@ -97,7 +97,7 @@ muted() {
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
-  readonly raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+  raw_vol="$(sndioctl -n output.level 2>/dev/null)" && readonly raw_vol
   case "${raw_vol}" in
     1.000) echo 100                                                  ;;
     0.000) echo 0                                                    ;;
@@ -116,7 +116,7 @@ main() {
   readonly args_needed=1
   adjust_vol "$1"
   readonly msg_id="25231"
-  readonly vol="$(get_vol)"
+  vol="$(get_vol)" && readonly vol
   muted && readonly MUTED='true'
   if [ "${MUTED}" = 'true' ]; then
     print_icon | notify -u low -r "${msg_id}" 'MUTED'

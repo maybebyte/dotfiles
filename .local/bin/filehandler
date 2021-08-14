@@ -55,7 +55,7 @@ EOF
 
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
-  readonly mimetype="$(file -ib -- "${file}")"
+  mimetype="$(file -ib -- "${file}")" && readonly mimetype
   case "${mimetype}" in
     # these are organized alphabetically by mimetype
     application/epub*) readonly preload_dir="${HOME}/books"  ;;
@@ -105,7 +105,8 @@ move_file() {
 #
 # dmenu seems to need at least one item from STDIN to behave properly.
 rename_file() {
-  readonly new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
+  new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")" \
+    && readonly new_filename
   if [ -n "${new_filename}" ]; then
     [ "${new_filename}" = 'exit' ] && exit 0
 
@@ -126,7 +127,8 @@ choose_operation() {
   if [ -z "${operation}" ]; then
     readonly options='move
 rename'
-    readonly operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
+    operation="$(echo "${options}" | menu -p "What to do with ${file}?")" \
+      && readonly operation
 
     # a small delay needs to be here. without it, the subsequent menu
     # won't appear sometimes.
@@ -172,7 +174,7 @@ main() {
 
   prereqs2 "$@"
 
-  readonly file="$(readlink -f -- "$1")"
+  file="$(readlink -f -- "$1")" && readonly file
   choose_operation
 }
 
