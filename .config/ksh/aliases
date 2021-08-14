@@ -149,6 +149,9 @@ general_aliases() {
     tml='tm list-sessions'
 
   # web
+  # for whatever reason, anonftp requires the options from ftp to be
+  # specified again in the anonftp alias for them to work, i.e. for an
+  # empty user agent and auto-login suppression.
   alias                                                                  \
     anonftp="torsocks ftp -nU ''"                                        \
     anonsh='torsocks --shell'                                            \
