@@ -93,6 +93,8 @@ general_aliases() {
   alias                                                                  \
     ..='cd ..'                                                           \
     ...='cd ../..'                                                       \
+    ....='cd ../../..'                                                   \
+    .....='cd ../../../..'                                               \
     cdmd="cd \${markdowndir}"                                            \
     cdsrv="cd \${srvdir}"
 
