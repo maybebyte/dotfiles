@@ -148,7 +148,7 @@ general_aliases() {
 
   # web
   alias                                                                  \
-    anonftp="torsocks ftp"                                               \
+    anonftp="torsocks ftp -nU ''"                                        \
     anonsh='torsocks --shell'                                            \
     ftp="ftp -nU ''"                                                     \
     m='neomutt'                                                          \
