@@ -48,6 +48,7 @@ show_battery() {
 
       case "${estimated_battery_life}" in
         ''|*[!0-9]*) err 'show_battery() only accepts integers.' ;;
+        *)           :                                           ;;
       esac
 
       ebl_minutes=$((estimated_battery_life % 60))
