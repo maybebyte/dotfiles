@@ -73,5 +73,9 @@ EOF
       printf '%s' "${clip_icon}" | notify -- "${abs_path_of_file} copied to clipboard."
       ;;
 
+    *)
+      err 'Key not bound.'
+      ;;
+
   esac
 done
