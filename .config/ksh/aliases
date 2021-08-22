@@ -46,7 +46,6 @@ general_aliases() {
     esxh="e \${HOME}/.config/sxhkd/sxhkdrc"                              \
     esys='e /etc/sysctl.conf'                                            \
     etm="e \${HOME}/.tmux.conf"                                          \
-    euj="e \${userjs}"                                                   \
     ev="e \${HOME}/.config/nvim/init.vim"                                \
     exm="e \${HOME}/.config/xmonad/xmonad.hs"                            \
     exmb="e \${HOME}/.config/xmobar/xmobarrc"                            \
