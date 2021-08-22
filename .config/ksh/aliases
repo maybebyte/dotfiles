@@ -181,7 +181,8 @@ linux_aliases() {
     distro="$(lsb_release -d | awk -- '{print $2,$3}')"
     # this is written as a case statement so it can be expanded later
     case "${distro}" in
-      'Void Linux') void_aliases ;;
+      'Void Linux') void_aliases                                        ;;
+      *)            # no distro specific aliases defined, so do nothing ;;
     esac
   else
     cat >&2 <<'EOF'

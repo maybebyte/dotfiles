@@ -54,7 +54,7 @@ main() {
       ;;
 
     *)
-      return
+      # undefined positional parameters should do nothing
       ;;
 
   esac

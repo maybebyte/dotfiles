@@ -77,7 +77,8 @@ hreadable() {
   # printf(1) below since we can at least know that ${size} is an
   # integer.
   case "${size}" in
-    ''|*[!0-9]*) err 'Only integers are accepted.' ;;
+    ''|*[!0-9]*) err 'Only integers are accepted.'               ;;
+    *)           # size is an integer, so do nothing and proceed ;;
   esac
 
   # size < 1024 means the value printed should be in bytes.

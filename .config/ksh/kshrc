@@ -1,4 +1,4 @@
-# shellcheck disable=SC2034,SC1090
+# shellcheck disable=SC2034,SC1090,SC1091
 [ -r  "${HOME}/.local/bin/common.sh" ] \
   && . "${HOME}/.local/bin/common.sh"
 
@@ -14,9 +14,10 @@ import_colors
 # ksh options
 set -o vi
 
-# shellcheck disable=SC2039
+# shellcheck disable=SC3040
 case "${KSH_VERSION%%\ KSH*}" in
-  '@(#)PD') set -o vi-show8 ;;
+  '@(#)PD') set -o vi-show8                  ;;
+  *)        # do nothing for other ksh types ;;
 esac
 
 for srcfile in 'aliases' 'functions' 'prompt' 'vars'; do

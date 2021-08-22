@@ -24,12 +24,18 @@ export \
 
 # written so it can be expanded later if needed
 case "$(uname)" in
+
   'OpenBSD')
     export \
       markdowndir="${HOME}/builds/website_md" \
       srvdir='/var/www/htdocs/aml' \
       gnome_icon_dir='/usr/local/share/icons/gnome/scalable'
     ;;
+
+  *)
+    # if not a recognized OS, do nothing
+    ;;
+
 esac
 
 gateway="$(netstat -rn 2>/dev/null | awk -- '/default/{print $2}')" \
@@ -42,7 +48,13 @@ userjs="$(find "${HOME}/.mozilla" -iname 'user.js' 2>/dev/null | head -1)" \
   && export userjs
 
 case "$(hostname -s)" in
+
   'aphrodite'|'lain')
     [ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
     ;;
+
+  *)
+    # only defined hosts should launch a gpg-agent
+    ;;
+
 esac
