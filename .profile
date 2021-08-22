@@ -22,6 +22,7 @@ export \
   XMONAD_DATA_DIR="${HOME}/.local/share/xmonad" \
   site='https://amissing.link'
 
+# OS specific actions
 # written so it can be expanded later if needed
 case "$(uname)" in
 
@@ -30,6 +31,13 @@ case "$(uname)" in
       markdowndir="${HOME}/builds/website_md" \
       srvdir='/var/www/htdocs/aml' \
       gnome_icon_dir='/usr/local/share/icons/gnome/scalable'
+
+    gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')" \
+      && export gateway
+
+    nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
+      && export nic
+
     ;;
 
   *)
@@ -37,12 +45,6 @@ case "$(uname)" in
     ;;
 
 esac
-
-gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')" \
-  && export gateway
-
-nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
-  && export nic
 
 case "$(hostname -s)" in
 
