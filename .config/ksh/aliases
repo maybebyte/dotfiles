@@ -28,6 +28,7 @@ general_aliases() {
 
   # editing
   alias                                                                  \
+    e="\${EDITOR}"                                                       \
     efont="e \${HOME}/.config/fontconfig/fonts.conf"                     \
     ehst='e /etc/hosts'                                                  \
     ek="e \${HOME}/.config/ksh/kshrc"                                    \
