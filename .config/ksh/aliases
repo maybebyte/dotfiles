@@ -28,8 +28,6 @@ general_aliases() {
 
   # editing
   alias                                                                  \
-    e="\${EDITOR}"                                                       \
-    eduj="e -d \${HOME}/builds/user.js/user.js \${userjs}"               \
     efont="e \${HOME}/.config/fontconfig/fonts.conf"                     \
     ehst='e /etc/hosts'                                                  \
     ek="e \${HOME}/.config/ksh/kshrc"                                    \
