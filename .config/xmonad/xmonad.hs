@@ -11,11 +11,11 @@ myMouseFocusRule     = False
 myTerminal           = "${TERMINAL}"
 
 {-
- -    web browsers become floating windows so that they aren't super
- -    easy to fingerprint.
+ - web browsers become floating windows so that they aren't super
+ - easy to fingerprint.
  -
- -    otherwise, windows that correspond to specific programs are moved
- -    to certain workspaces to keep things organized.
+ - otherwise, windows that correspond to specific programs are moved
+ - to certain workspaces to keep things organized.
  -}
 myManageHook = composeAll
   [ className =? "Firefox" --> doShift "3"
