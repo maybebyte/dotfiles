@@ -37,7 +37,6 @@ case "$(uname)" in
 
     nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
       && export nic
-
     ;;
 
   *)
