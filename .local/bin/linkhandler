@@ -81,7 +81,7 @@ linkhandler() {
       ;;
 
     'download file')
-      tmux new-window "(cd ${HOME}/Downloads && ftp -nU '' -- ${URL}; read)"
+      tmux new-window "(cd ${HOME}/Downloads && ftp -nU '' -- ${URL}); read"
       ;;
 
     'download video')
