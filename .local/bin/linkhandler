@@ -85,12 +85,6 @@ linkhandler() {
       ;;
 
     'download video')
-      # sometimes youtube-dl will 'fail' because it can't embed an image
-      # as a thumbnail, but it actually succeeded otherwise (downloaded
-      # the video properly). an 'AND' list or if conditional doesn't
-      # work here the way one would expect.
-      #
-      # also, notifications don't work for some reason here.
       tmux new-window "youtube-dl -- ${URL}; read"
       ;;
 
