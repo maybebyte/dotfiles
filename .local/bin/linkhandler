@@ -104,12 +104,12 @@ linkhandler() {
       ;;
 
     'listen')
-      mpv \
+      tmux new-window "mpv \
         --no-video \
         --no-pause \
         --no-resume-playback \
         --no-keep-open \
-        -- "${URL}" >/dev/null 2>&1
+        -- ${URL}"
       ;;
 
     'print duration')
@@ -132,11 +132,11 @@ linkhandler() {
     # when the video is ready to play or something to that effect. the
     # absence of any visual indication affects my productivity negatively.
     'watch')
-      mpv -- "${URL}" >/dev/null 2>&1
+      tmux new-window "mpv -- ${URL}"
       ;;
 
     'watch (loop)')
-      mpv --speed=1 --loop -- "${URL}" >/dev/null 2>&1
+      tmux new-window "mpv --speed=1 --loop -- ${URL}"
       ;;
 
     *)
