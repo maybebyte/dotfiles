@@ -77,11 +77,7 @@ linkhandler() {
       ;;
 
     'download audio')
-      if youtube-dl -xf bestaudio/best -- "${URL}" >/dev/null 2>&1; then
-        notify-send -- "Finished downloading audio from ${URL}."
-      else
-        err "Failed to download audio from ${URL}."
-      fi
+      tmux new-window "youtube-dl -xf bestaudio/best -- ${URL}; read"
       ;;
 
     'download file')
@@ -99,8 +95,7 @@ linkhandler() {
       # work here the way one would expect.
       #
       # also, notifications don't work for some reason here.
-      youtube-dl -- "${URL}" >/dev/null 2>&1
-      notify-send -- "Finished downloading video from ${URL}."
+      tmux new-window "youtube-dl -- ${URL}; read"
       ;;
 
     'listen')
