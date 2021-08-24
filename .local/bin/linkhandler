@@ -47,32 +47,23 @@ check_opts() {
 linkhandler() {
   case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
 
-    # TODO: seems to not grab duration properly.
     'copy duration')
-      if duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"; then
-
-        if printf '%s' "${duration}" | yank; then
-          notify-send -- "Copied video duration (${duration})."
-        else
-          err 'Failed to copy video duration.'
-        fi
-
+      duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      if [ -n "${duration}" ]; then
+        printf '%s' "${duration}" | yank
+        notify-send -- "Copied video duration (${duration})."
       else
-        err 'Failed to get video duration.'
+        err 'Empty input, so no duration was yanked.'
       fi
       ;;
 
     'copy title')
-      if title="$(youtube-dl -e -- "${URL}" 2>/dev/null)"; then
-
-        if printf '%s' "${title}" | yank; then
-          notify-send -- "Copied video title (${title})."
-        else
-          err 'Failed to copy video title.'
-        fi
-
+      title="$(youtube-dl -e -- "${URL}" 2>/dev/null)"
+      if [ -n "${title}" ]; then
+        printf '%s' "${title}" | yank
+        notify-send -- "${title} yanked."
       else
-        err 'Failed to get video title.'
+        err 'Empty input, so no title yanked.'
       fi
       ;;
 
@@ -98,10 +89,11 @@ linkhandler() {
       ;;
 
     'print duration')
-      if duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"; then
+      duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      if [ -n "${duration}" ]; then
         notify-send -- "${duration}"
       else
-        err 'Failed to print duration.'
+        err 'Empty input, so no duration printed.'
       fi
       ;;
 
