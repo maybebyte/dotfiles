@@ -81,11 +81,7 @@ linkhandler() {
       ;;
 
     'download file')
-      if (cd "${HOME}/Downloads" && ftp -VMnU '' -- "${URL}") >/dev/null 2>&1; then
-        notify-send -- "Finished downloading ${URL##*/}."
-      else
-        err "Failed to download ${URL##*/}."
-      fi
+      tmux new-window "(cd ${HOME}/Downloads && ftp -nU '' -- ${URL}; read)"
       ;;
 
     'download video')
@@ -116,7 +112,7 @@ linkhandler() {
       ;;
 
     'read')
-      ftp -VMno - -U '' -- "${URL}" | zathura -- - >/dev/null 2>&1
+      tmux new-window "ftp -no - -U '' -- ${URL} | zathura -- -"
       ;;
 
     'view image')
