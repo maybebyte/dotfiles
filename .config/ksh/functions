@@ -22,7 +22,7 @@ anonread() { anonftp -o - -- "$1" | zathura -- -; }
 # manpages that match the current machine architecture.
 #
 # $1 is a word/phrase to search for (phrases must be quoted).
-aprv() { apr -S "$(uname -m)" -- any="$1"; }
+aprv() { apropos -S "$(uname -m)" -- any="$1"; }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
