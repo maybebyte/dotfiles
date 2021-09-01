@@ -54,7 +54,7 @@ fix_perms() {
 prereqs() {
   echo 'nmap' | check_deps
   readonly args_needed=1
-  [ "$#" = "${args_needed}" ] || usage
+  [ "$#" -ge "${args_needed}" ] || usage
 }
 
 main() {
