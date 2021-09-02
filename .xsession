@@ -40,6 +40,6 @@ fi
 "${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
 
 # random manual page for didactic purposes
-"${TERMINAL}" -e man -- "$("${HOME}/.local/bin/randman")" &
+"${HOME}/.local/bin/randman" | xargs "${TERMINAL}" -e man &
 
 exec xmonad
