@@ -56,12 +56,13 @@ import_colors() {
 # generic dmenu function to handle customizations. uses colors that
 # import_colors() gathers.
 menu() {
-  dmenu "$@" -i \
-    -fn 'mono-20' \
+  dmenu -i \
     -nb "${color0:=#040516}" \
     -nf "${color3:=#9974e7}" \
     -sb "${color0:=#040516}" \
-    -sf "${color7:=#e0cef3}"
+    -sf "${color7:=#e0cef3}" \
+    -fn 'mono-20' \
+    "$@"
 }
 
 # if the user isn't root, print an error message and exit.
