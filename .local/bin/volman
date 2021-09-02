@@ -64,19 +64,19 @@ adjust_vol() {
 print_volume() {
   # handle the edge cases first.
   if [ "${MUTED}" = 'true' ]; then
-    echo '🔇 MUTED' && return
+    echo '🔇  MUTED' && return
   elif [ "${vol}" = 100 ]; then
-    echo '🔊' "$@" && return
+    echo '🔊 ' "$@" && return
   elif [ "${vol}" = 0 ]; then
-    echo '🔇' "$@" && return
+    echo '🔇 ' "$@" && return
   fi
 
   if [ "${vol}" -ge 50 ]; then
-    echo '🔊' "$@"
+    echo '🔊 ' "$@"
   elif [ "${vol}" -ge 25 ]; then
-    echo '🔉' "$@"
+    echo '🔉 ' "$@"
   else
-    echo '🔈' "$@"
+    echo '🔈 ' "$@"
   fi
 }
 
