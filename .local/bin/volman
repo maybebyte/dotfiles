@@ -65,8 +65,6 @@ print_volume() {
   # handle the edge cases first.
   if [ "${MUTED}" = 'true' ]; then
     echo '🔇  MUTED' && return
-  elif [ "${vol}" = 100 ]; then
-    echo '🔊 ' "$@" && return
   elif [ "${vol}" = 0 ]; then
     echo '🔇 ' "$@" && return
   fi
