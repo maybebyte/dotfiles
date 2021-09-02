@@ -27,10 +27,9 @@ export                                          \
 case "$(uname)" in
 
   'OpenBSD')
-    export                                    \
+    export \
       markdowndir="${HOME}/builds/website_md" \
-      srvdir='/var/www/htdocs/aml'            \
-      gnome_icon_dir='/usr/local/share/icons/gnome/scalable'
+      srvdir='/var/www/htdocs/aml'
 
     gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')" \
       && export gateway

@@ -17,9 +17,6 @@ fi
 
 import_colors
 
-: "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-clip_icon="${gnome_icon_dir}/actions/edit-copy-symbolic.svg"
-
 while read -r -- file; do
   case "$1" in
     # delete file
@@ -62,7 +59,7 @@ EOF
     # TODO: clear clipboard after a delay.
     'y')
       printf '%s' "${file}" | yank
-      printf '%s' "${clip_icon}" | notify -- "${file} copied to clipboard."
+      notify-send -- "📋 ${file} copied to clipboard."
       ;;
 
     # yank the absolute file path
@@ -70,7 +67,7 @@ EOF
       abs_path_of_file="$(readlink -f -- "${file}")"
 
       printf '%s' "${abs_path_of_file}" | yank
-      printf '%s' "${clip_icon}" | notify -- "${abs_path_of_file} copied to clipboard."
+      notify-send "📋 ${abs_path_of_file} copied to clipboard."
       ;;
 
     *)

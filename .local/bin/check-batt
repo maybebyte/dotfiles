@@ -28,9 +28,6 @@ EOF
   exit 1
 fi
 
-# prints the path of an icon. that's it.
-print_icon() { printf '%s' "${gnome_icon_dir}/status/battery-caution-symbolic.svg"; }
-
 # exporting ${DISPLAY} is needed for cron(8) jobs.
 set_display() {
   [ -z "${DISPLAY}" ] && export DISPLAY=:0
@@ -62,10 +59,7 @@ main() {
   batt_percent="$(apm -l)"
   if [ "${batt_percent}" -lt 30 ]; then
     set_display
-    # it's best not to make gnome_icon_dir readonly.
-    # the user might set it in environ(7).
-    : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-    print_icon | notify -- "Your device is at ${batt_percent}%!"
+    notify-send -- "🔋 Your device is at ${batt_percent}%!"
   else
     exit 0
   fi

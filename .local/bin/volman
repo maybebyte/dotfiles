@@ -34,9 +34,6 @@ ${0##*/} requires ${args_needed} argument(s).
 
 usage:
 ${0##*/} [inc|dec|mute]
-
-Set gnome_icon_dir to override the default path.
-Currently, gnome_icon_dir is set to ${gnome_icon_dir}.
 EOF
   exit 1
 }
@@ -62,26 +59,24 @@ adjust_vol() {
   esac
 }
 
-# based on the current output level, print an appropriate volume-related icon.
-print_icon() {
-  # if gnome_icon_dir isn't readable or isn't a directory, don't choose an icon.
-  if ! [ -r "${gnome_icon_dir}" ] || ! [ -d "${gnome_icon_dir}" ]; then
-    return 1
-  fi
-
+# based on the current output level, print an appropriate volume-related
+# emoji. if output.mute=0, all positional parameters as well.
+print_volume() {
   # handle the edge cases first.
-  if [ "${vol}" = 100 ]; then
-    printf '%s' "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg" && return
-  elif [ "${vol}" = 0 ] || [ "${MUTED}" = 'true' ]; then
-    printf '%s' "${gnome_icon_dir}/status/audio-volume-muted-symbolic.svg" && return
+  if [ "${MUTED}" = 'true' ]; then
+    echo '🔇 MUTED' && return
+  elif [ "${vol}" = 100 ]; then
+    echo '🔊' "$@" && return
+  elif [ "${vol}" = 0 ]; then
+    echo '🔇' "$@" && return
   fi
 
   if [ "${vol}" -ge 50 ]; then
-    printf '%s' "${gnome_icon_dir}/status/audio-volume-high-symbolic.svg"
+    echo '🔊' "$@"
   elif [ "${vol}" -ge 25 ]; then
-    printf '%s' "${gnome_icon_dir}/status/audio-volume-medium-symbolic.svg"
+    echo '🔉' "$@"
   else
-    printf '%s' "${gnome_icon_dir}/status/audio-volume-low-symbolic.svg"
+    echo '🔈' "$@"
   fi
 }
 
@@ -111,18 +106,12 @@ get_vol() {
 # successful.
 main() {
   prereqs
-  # it's best not to make gnome_icon_dir readonly. the user might set it in environ(7).
-  : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
   readonly args_needed=1
   adjust_vol "$1"
   readonly msg_id="25231"
   vol="$(get_vol)" && readonly vol
   muted && readonly MUTED='true'
-  if [ "${MUTED}" = 'true' ]; then
-    print_icon | notify -u low -r "${msg_id}" 'MUTED'
-  else
-    print_icon | notify -u low -r "${msg_id}" -- "${vol}%"
-  fi
+  dunstify -u low -r "${msg_id}" "$(print_volume "${vol}%")"
 }
 
 main "$1"

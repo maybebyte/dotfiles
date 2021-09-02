@@ -4,7 +4,7 @@
   corner_radius        = 7
   dmenu                = /usr/local/bin/dmenu -p dunst:
   follow               = mouse
-  font                 = Monospace 14
+  font                 = Monospace 14, Symbola 14
   format               = "<b>%s</b>\n%b"
   frame_color          = "#e0cef3"
   frame_width          = 2

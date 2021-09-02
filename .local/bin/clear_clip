@@ -29,10 +29,6 @@ EOF
   exit 1
 fi
 
-# due to a bug in pdksh (see /usr/src/bin/ksh/NOTES), there must be a
-# newline here.
-print_icon() { printf '%s\n' "${gnome_icon_dir}/actions/edit-paste-symbolic.svg"; }
-
 prereqs() {
   check_deps <<'EOF'
 xclip
@@ -47,16 +43,8 @@ main() {
   yank -i /dev/null || err 'Unable to clear the clipboard.'
 
   case "$1" in
-
-    'notify')
-      : "${gnome_icon_dir:=/usr/local/share/icons/gnome/scalable}"
-      print_icon | notify 'Cleared the clipboard.'
-      ;;
-
-    *)
-      # undefined positional parameters should do nothing
-      ;;
-
+    'notify') notify-send '📋 Cleared the clipboard.'             ;;
+    *)        # undefined positional parameters should do nothing ;;
   esac
 }
 
