@@ -111,7 +111,7 @@ main() {
   readonly msg_id="25231"
   vol="$(get_vol)" && readonly vol
   muted && readonly MUTED='true'
-  dunstify -u low -r "${msg_id}" "$(print_volume "${vol}%")"
+  dunstify -u low -r "${msg_id}" -- "$(print_volume "${vol}%")"
 }
 
 main "$1"
