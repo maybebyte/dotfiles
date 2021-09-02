@@ -61,7 +61,7 @@ adjust_vol() {
 
 # based on the current output level, print an appropriate volume-related
 # emoji. if output.mute=0, all positional parameters as well.
-print_volume() {
+print_vol() {
   # handle the edge cases first.
   if [ "${MUTED}" = 'true' ]; then
     echo '🔇 MUTED' && return
@@ -109,7 +109,7 @@ main() {
   readonly msg_id="25231"
   vol="$(get_vol)" && readonly vol
   muted && readonly MUTED='true'
-  dunstify -u low -r "${msg_id}" -- "$(print_volume "${vol}%")"
+  dunstify -u low -r "${msg_id}" -- "$(print_vol "${vol}%")"
 }
 
 main "$1"
