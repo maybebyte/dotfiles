@@ -67,7 +67,7 @@ EOF
       abs_path_of_file="$(readlink -f -- "${file}")"
 
       printf '%s' "${abs_path_of_file}" | yank
-      notify-send "📋 ${abs_path_of_file} copied to clipboard."
+      notify-send -- "📋 ${abs_path_of_file} copied to clipboard."
       ;;
 
     *)
