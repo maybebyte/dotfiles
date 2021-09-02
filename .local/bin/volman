@@ -52,10 +52,10 @@ EOF
 # argument is given. if not, error and display usage details.
 adjust_vol() {
   case "$1" in
-    'inc')  muted || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-    'dec')  muted || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
-    'mute') sndioctl output.mute=! >/dev/null 2>&1               ;;
-    *)      usage                                                ;;
+    'inc')  check_mute || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
+    'dec')  check_mute || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
+    'mute') sndioctl output.mute=! >/dev/null 2>&1                    ;;
+    *)      usage                                                     ;;
   esac
 }
 
@@ -80,7 +80,7 @@ print_vol() {
 
 # if muted, succeed.
 # if not muted, fail.
-muted() {
+check_mute() {
   case "$(sndioctl -n output.mute 2>/dev/null)" in
     1) return 0                                 ;;
     0) return 1                                 ;;
@@ -108,7 +108,7 @@ main() {
   adjust_vol "$1"
   readonly msg_id="25231"
   vol="$(get_vol)" && readonly vol
-  muted && readonly MUTED='true'
+  check_mute && readonly MUTED='true'
   dunstify -u low -r "${msg_id}" -- "$(print_vol "${vol}%")"
 }
 
