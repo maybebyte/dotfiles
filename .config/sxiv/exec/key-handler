@@ -58,7 +58,7 @@ EOF
     'y')
       printf '%s' "${file}" | yank
       notify-send -- "📋 ${file} copied to clipboard."
-      sleep 10 && clear_clip notify
+      sleep 10 && clear_clip notify &
       ;;
 
     # yank the absolute file path
@@ -67,7 +67,7 @@ EOF
 
       printf '%s' "${abs_path_of_file}" | yank
       notify-send -- "📋 ${abs_path_of_file} copied to clipboard."
-      sleep 10 && clear_clip notify
+      sleep 10 && clear_clip notify &
       ;;
 
     *)
