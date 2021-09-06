@@ -193,25 +193,6 @@ general_aliases() {
     ytrm='yt --rm-cache-dir'
 }
 
-linux_aliases() {
-  if [ -x "$(command -v 'lsb_release')" ]; then
-    distro="$(lsb_release -d | awk -- '{print $2,$3}')"
-    # this is written as a case statement so it can be expanded later
-    case "${distro}" in
-      'Void Linux') void_aliases                                        ;;
-      *)            # no distro specific aliases defined, so do nothing ;;
-    esac
-  else
-    cat >&2 <<'EOF'
-Install lsb_release so linux_aliases() in ~/.config/ksh/aliases can
-detect the current OS and set ksh(1) aliases accordingly.
-
-Currently, Void is the only Linux distribution detected.
-EOF
-    return 1
-  fi
-}
-
 openbsd_aliases() {
   # check the date of the latest snapshot
   alias chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64"
@@ -289,20 +270,6 @@ openbsd_aliases() {
   alias webtest="webtest \${site} \${markdowndir} \${srvdir}"
 }
 
-void_aliases() {
-  # xbps
-  alias                                                                  \
-    xi='xbps-install'                                                    \
-    xq='xbps-query'                                                      \
-    xqchlg='xbps-query -p changelog'                                     \
-    xqhp='xbps-query -p homepage'                                        \
-    xqsize='xbps-query -p installed_size'                                \
-    xr='xbps-remove'
-
-  # alternatives
-  alias file='openbsd-file'
-}
-
 main() {
   OS="$(uname)"
 
@@ -314,7 +281,6 @@ main() {
 
   case "${OS}" in
     'OpenBSD') openbsd_aliases; general_aliases ;;
-    'Linux')   linux_aliases; general_aliases   ;;
     *)         general_aliases                  ;;
   esac
 }
