@@ -1,4 +1,17 @@
 # shellcheck disable=SC2154
+pf_aliases() {
+  # pf
+  alias                                                                  \
+    pfif='pfshow Interfaces'                                             \
+    pfinfo='pfshow info'                                                 \
+    pfload='pfctl -f /etc/pf.conf'                                       \
+    pfoff='pfctl -d'                                                     \
+    pfon='pfctl -e'                                                      \
+    pfrules='pfshow rules'                                               \
+    pfshow='pfctl -s'                                                    \
+    pftest='pfload -nvvv'
+}
+
 general_aliases() {
   # assorted
   alias                                                                  \
@@ -223,24 +236,6 @@ openbsd_aliases() {
     sysnet='systat netstat'                                              \
     tlan="ping \${gateway}"
 
-  # pf
-  alias                                                                  \
-    pfdump='tcpdump -tttr /var/log/pflog'                                \
-    pfdumpb='pfdump action block'                                        \
-    pfdumpp='pfdump action pass'                                         \
-    pfif='pfshow Interfaces'                                             \
-    pfinfo='pfshow info'                                                 \
-    pfload='pfctl -f /etc/pf.conf'                                       \
-    pfnic="pfif -vvi \${nic}"                                            \
-    pfoff='pfctl -d'                                                     \
-    pfon='pfctl -e'                                                      \
-    pfrules='pfshow rules'                                               \
-    pfshow='pfctl -s'                                                    \
-    pftest='pfload -nvvv'                                                \
-    pftail='tcpdump -tttti pflog0'                                       \
-    pftailb='pftail action block'                                        \
-    pftailp='pftail action pass'
-
   # pkg
   alias                                                                  \
     pkgL='pkgq -L'                                                       \
@@ -276,6 +271,15 @@ openbsd_aliases() {
   # system
   alias dsklab='disklabel -p g'
 
+  # tcpdump(8)
+  alias                                                                  \
+    pfdump='tcpdump -tttr /var/log/pflog'                                \
+    pfdumpb='pfdump action block'                                        \
+    pfdumpp='pfdump action pass'                                         \
+    pftail='tcpdump -tttti pflog0'                                       \
+    pftailb='pftail action block'                                        \
+    pftailp='pftail action pass'
+
   # viewing log files
   alias                                                                  \
     readhttp='less /var/www/logs/access.log'                             \
@@ -304,6 +308,13 @@ void_aliases() {
 
 main() {
   OS="$(uname)"
+
+  # if a *BSD, then pf aliases should be added
+  case "${OS}" in
+    *'BSD') [ -x "$(command -v pfctl)" ] && pf_aliases          ;;
+    *)      # do nothing, this is just here to complete the set ;;
+  esac
+
   case "${OS}" in
     'OpenBSD') openbsd_aliases; general_aliases ;;
     'Linux')   linux_aliases; general_aliases   ;;
