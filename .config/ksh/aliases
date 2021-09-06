@@ -122,8 +122,8 @@ general_aliases() {
 
   # keepass
   if [ -x "$(command -v 'keepassxc-cli')" ]; then
-    alias                                                                  \
-      kp='keepassxc-cli'                                                   \
+    alias                                                                \
+      kp='keepassxc-cli'                                                 \
       kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
   else
     complain_missing 'keepassxc-cli' 2>>"${dotfiles_log}"
@@ -142,6 +142,19 @@ general_aliases() {
     .....='cd ../../../..'                                               \
     cdmd="cd \${markdowndir}"                                            \
     cdsrv="cd \${srvdir}"
+
+  # netstat(1)
+  if [ -x "$(command -v 'netstat')" ]; then
+    alias                                                                \
+      ntstr6='netstat -rnf inet6'                                        \
+      ntstr='netstat -rnf inet'                                          \
+      ntst6='netstat -nf inet6'                                          \
+      ntst='netstat -nf inet'                                            \
+      ntstl6='netstat -lnf inet6'                                        \
+      ntstl='netstat -lnf inet'
+  else
+    complain_missing 'netstat' 2>>"${dotfiles_log}"
+  fi
 
   # networking
   alias tnet="ping \${site##*//}"
@@ -162,29 +175,29 @@ general_aliases() {
 
   # taskwarrior
   if [ -x "$(command -v 'task')" ]; then
-    alias                                                                  \
-      t='task'                                                             \
-      ta='t add'                                                           \
-      tafin='ta project:finances'                                          \
-      tagroc='ta project:groceries'                                        \
-      taedu='ta project:education'                                         \
-      taself='ta project:selfcare'                                         \
-      tashop='ta project:shopping'                                         \
-      tatech='ta project:tech'                                             \
-      tconf='t config'                                                     \
-      td='t done'                                                          \
-      tdel='t delete'                                                      \
-      tdue='task due.before:today ids'                                     \
-      tedu='tls project:education'                                         \
-      tfin='tls project:finances'                                          \
-      tgroc='tls project:groceries'                                        \
-      tid='t ids'                                                          \
-      tls='t list'                                                         \
-      tmod='t modify'                                                      \
-      tself='tls project:selfcare'                                         \
-      tshop='tls project:shopping'                                         \
-      tt='tls due:today'                                                   \
-      ttech='tls project:tech'                                             \
+    alias                                                                \
+      t='task'                                                           \
+      ta='t add'                                                         \
+      tafin='ta project:finances'                                        \
+      tagroc='ta project:groceries'                                      \
+      taedu='ta project:education'                                       \
+      taself='ta project:selfcare'                                       \
+      tashop='ta project:shopping'                                       \
+      tatech='ta project:tech'                                           \
+      tconf='t config'                                                   \
+      td='t done'                                                        \
+      tdel='t delete'                                                    \
+      tdue='task due.before:today ids'                                   \
+      tedu='tls project:education'                                       \
+      tfin='tls project:finances'                                        \
+      tgroc='tls project:groceries'                                      \
+      tid='t ids'                                                        \
+      tls='t list'                                                       \
+      tmod='t modify'                                                    \
+      tself='tls project:selfcare'                                       \
+      tshop='tls project:shopping'                                       \
+      tt='tls due:today'                                                 \
+      ttech='tls project:tech'                                           \
       tup="td \$(tdue)"
   else
     complain_missing 'task' 2>>"${dotfiles_log}"
@@ -192,10 +205,10 @@ general_aliases() {
 
   # tmux
   if [ -x "$(command -v 'tmux')" ]; then
-    alias                                                                  \
-      tm='tmux'                                                            \
-      tma='tm attach'                                                      \
-      tmk='tm kill-server'                                                 \
+    alias                                                                \
+      tm='tmux'                                                          \
+      tma='tm attach'                                                    \
+      tmk='tm kill-server'                                               \
       tml='tm list-sessions'
   else
     complain_missing 'tmux' 2>>"${dotfiles_log}"
@@ -223,11 +236,11 @@ general_aliases() {
 
   # youtube-dl
   if [ -x "$(command -v 'youtube-dl')" ]; then
-    alias                                                                  \
-      yt='youtube-dl'                                                      \
-      yta='yt -xf bestaudio/best'                                          \
-      ytdesc='yt --get-description'                                        \
-      ytlen='yt --get-duration'                                            \
+    alias                                                                \
+      yt='youtube-dl'                                                    \
+      yta='yt -xf bestaudio/best'                                        \
+      ytdesc='yt --get-description'                                      \
+      ytlen='yt --get-duration'                                          \
       ytrm='yt --rm-cache-dir'
   else
     complain_missing 'youtube-dl' 2>>"${dotfiles_log}"
@@ -244,21 +257,24 @@ openbsd_aliases() {
     epf='e /etc/pf.conf'                                                 \
     eunw='e /etc/unwind.conf'
 
+  # ifconfig(8)
+  if [ -z "${nic}" ]; then
+    # shellcheck disable=SC2016
+    echo >&2 '${nic} was undefined, so related aliases disabled.' \
+      2>>"${dotfiles_log}"
+  else
+    alias                                                                \
+      nicdel="ifconfig \${nic} delete"                                   \
+      nicoff="ifconfig \${nic} down"                                     \
+      nicon="ifconfig \${nic} up"                                        \
+      nicre='nicoff && nicon'                                            \
+      nicshow="ifconfig \${nic}"
+  fi
+
   # networking
   alias                                                                  \
     exip="ftp -VMo - https://ifconfig.me && echo"                        \
-    nicdel="ifconfig \${nic} delete"                                     \
-    nicoff="ifconfig \${nic} down"                                       \
-    nicon="ifconfig \${nic} up"                                          \
-    nicre='nicoff && nicon'                                              \
-    nicshow="ifconfig \${nic}"                                           \
     nictail="tcpdump -pi \${nic}"                                        \
-    ntstr6='netstat -rnf inet6'                                          \
-    ntstr='netstat -rnf inet'                                            \
-    ntst6='netstat -nf inet6'                                            \
-    ntst='netstat -nf inet'                                              \
-    ntstl6='netstat -lnf inet6'                                          \
-    ntstl='netstat -lnf inet'                                            \
     renet='sh /etc/netstart'                                             \
     renetnic="renet \${nic}"                                             \
     sysnet='systat netstat'                                              \
@@ -280,7 +296,7 @@ openbsd_aliases() {
     pkgup='pkga -u'                                                      \
     pkgups='pkgup -D snap'
 
-  # service management
+  # rcctl(8)
   alias                                                                  \
     rc='rcctl'                                                           \
     rcoff='rc disable'                                                   \
