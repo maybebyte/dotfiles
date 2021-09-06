@@ -273,7 +273,7 @@ openbsd_aliases() {
   # ifconfig(8)
   if [ -z "${nic}" ]; then
     # cat(1) used here to avoid a long line and shellcheck(1) nag
-    cat >&2 2>>"${dotfiles_log}" <<'EOF'
+    cat 2>>"${dotfiles_log}" >&2 <<'EOF'
 ${nic} was undefined, so related aliases disabled.
 EOF
   else
