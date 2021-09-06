@@ -22,6 +22,10 @@ export                                          \
   XMONAD_DATA_DIR="${HOME}/.local/share/xmonad" \
   site='https://amissing.link'
 
+# logging
+: "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+rm "${dotfiles_log}" && touch "${dotfiles_log}"
+
 # OS specific actions
 # written so it can be expanded later if needed
 case "$(uname)" in

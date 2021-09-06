@@ -1,19 +1,35 @@
 # shellcheck disable=SC2154
+complain_missing() {
+  echo >&2 "[$(date '+%F %H:%M:%S')]: $1 not found, so related aliases disabled."
+  return 1
+}
+
 pf_aliases() {
-  # pf
-  alias                                                                  \
-    pfdump='tcpdump -tttr /var/log/pflog'                                \
-    pfdumpb='pfdump action block'                                        \
-    pfdumpp='pfdump action pass'                                         \
-    pfload='pfctl -f /etc/pf.conf'                                       \
-    pfoff='pfctl -d'                                                     \
-    pfon='pfctl -e'                                                      \
-    pfrules='pfshow rules'                                               \
-    pfshow='pfctl -s'                                                    \
-    pftail='tcpdump -tttti pflog0'                                       \
-    pftailb='pftail action block'                                        \
-    pftailp='pftail action pass'                                         \
-    pftest='pfload -nv'
+  # pfctl(8)
+  if [ -x "$(command -v 'pfctl')" ]; then
+    alias                                                                \
+      pfload='pfctl -f /etc/pf.conf'                                     \
+      pfoff='pfctl -d'                                                   \
+      pfon='pfctl -e'                                                    \
+      pfrules='pfshow rules'                                             \
+      pfshow='pfctl -s'                                                  \
+      pftest='pfload -nv'
+  else
+    complain_missing 'pfctl' 2>>"${dotfiles_log}"
+  fi
+
+  # tcpdump(8)
+  if [ -x "$(command -v 'tcpdump')" ]; then
+    alias                                                                \
+      pfdump='tcpdump -tttr /var/log/pflog'                              \
+      pfdumpb='pfdump action block'                                      \
+      pfdumpp='pfdump action pass'                                       \
+      pftail='tcpdump -tttti pflog0'                                     \
+      pftailb='pftail action block'                                      \
+      pftailp='pftail action pass'
+  else
+    complain_missing 'tcpdump' 2>>"${dotfiles_log}"
+  fi
 }
 
 general_aliases() {
@@ -44,59 +60,71 @@ general_aliases() {
     shre=". \${HOME}/.config/ksh/kshrc"
 
   # editing
-  alias                                                                  \
-    e="\${EDITOR}"                                                       \
-    efont="e \${HOME}/.config/fontconfig/fonts.conf"                     \
-    ehst='e /etc/hosts'                                                  \
-    ek="e \${HOME}/.config/ksh/kshrc"                                    \
-    eka="e \${HOME}/.config/ksh/aliases"                                 \
-    ekf="e \${HOME}/.config/ksh/functions"                               \
-    ekp="e \${HOME}/.config/ksh/prompt"                                  \
-    ekv="e \${HOME}/.config/ksh/vars"                                    \
-    empv="e \${HOME}/.config/mpv/mpv.conf"                               \
-    emusb="e \${HOME}/.config/ncmpcpp/bindings"                          \
-    emusc="e \${HOME}/.config/ncmpcpp/config"                            \
-    enb="e \${HOME}/.config/newsboat/config"                             \
-    enbu="e \${HOME}/.config/newsboat/urls"                              \
-    enm="e \${HOME}/.config/neomutt/neomuttrc"                           \
-    eres='e /etc/resolv.conf'                                            \
-    esxh="e \${HOME}/.config/sxhkd/sxhkdrc"                              \
-    esys='e /etc/sysctl.conf'                                            \
-    etm="e \${HOME}/.tmux.conf"                                          \
-    ev="e \${HOME}/.config/nvim/init.vim"                                \
-    exm="e \${HOME}/.config/xmonad/xmonad.hs"                            \
-    exmb="e \${HOME}/.config/xmobar/xmobarrc"                            \
-    exr="e \${HOME}/.Xresources"                                         \
-    exs="e \${HOME}/.xsession"
+  if [ -x "$(command -v -- "${EDITOR}")" ]; then
+    alias                                                                \
+      e="\${EDITOR}"                                                     \
+      efont="e \${HOME}/.config/fontconfig/fonts.conf"                   \
+      ehst='e /etc/hosts'                                                \
+      ek="e \${HOME}/.config/ksh/kshrc"                                  \
+      eka="e \${HOME}/.config/ksh/aliases"                               \
+      ekf="e \${HOME}/.config/ksh/functions"                             \
+      ekp="e \${HOME}/.config/ksh/prompt"                                \
+      ekv="e \${HOME}/.config/ksh/vars"                                  \
+      empv="e \${HOME}/.config/mpv/mpv.conf"                             \
+      emusb="e \${HOME}/.config/ncmpcpp/bindings"                        \
+      emusc="e \${HOME}/.config/ncmpcpp/config"                          \
+      enb="e \${HOME}/.config/newsboat/config"                           \
+      enbu="e \${HOME}/.config/newsboat/urls"                            \
+      enm="e \${HOME}/.config/neomutt/neomuttrc"                         \
+      eres='e /etc/resolv.conf'                                          \
+      esxh="e \${HOME}/.config/sxhkd/sxhkdrc"                            \
+      esys='e /etc/sysctl.conf'                                          \
+      etm="e \${HOME}/.tmux.conf"                                        \
+      ev="e \${HOME}/.config/nvim/init.vim"                              \
+      exm="e \${HOME}/.config/xmonad/xmonad.hs"                          \
+      exmb="e \${HOME}/.config/xmobar/xmobarrc"                          \
+      exr="e \${HOME}/.Xresources"                                       \
+      exs="e \${HOME}/.xsession"
+  else
+    complain_missing "${EDITOR:-Editor}" 2>>"${dotfiles_log}"
+  fi
 
   # git
-  alias                                                                  \
-    d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"          \
-    da='d add'                                                           \
-    dcmt='d commit -a'                                                   \
-    ddiff='d diff'                                                       \
-    dgr='d grep'                                                         \
-    dlg='d log'                                                          \
-    dls="d ls-files \${HOME}"                                            \
-    dpsh='d push'                                                        \
-    dre='d restore'                                                      \
-    ds='d status'                                                        \
-    g='git'                                                              \
-    ga='g add'                                                           \
-    gcl='g clone'                                                        \
-    gcmt='g commit -a'                                                   \
-    gdiff='g diff'                                                       \
-    ggr='g grep'                                                         \
-    glg='g log'                                                          \
-    gls='g ls-files'                                                     \
-    gpsh='g push'                                                        \
-    gre='g restore'                                                      \
-    gs='g status'
+  if [ -x "$(command -v 'git' )" ]; then
+    alias                                                                \
+      d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"        \
+      da='d add'                                                         \
+      dcmt='d commit -a'                                                 \
+      ddiff='d diff'                                                     \
+      dgr='d grep'                                                       \
+      dlg='d log'                                                        \
+      dls="d ls-files \${HOME}"                                          \
+      dpsh='d push'                                                      \
+      dre='d restore'                                                    \
+      ds='d status'                                                      \
+      g='git'                                                            \
+      ga='g add'                                                         \
+      gcl='g clone'                                                      \
+      gcmt='g commit -a'                                                 \
+      gdiff='g diff'                                                     \
+      ggr='g grep'                                                       \
+      glg='g log'                                                        \
+      gls='g ls-files'                                                   \
+      gpsh='g push'                                                      \
+      gre='g restore'                                                    \
+      gs='g status'
+  else
+    complain_missing 'git' 2>>"${dotfiles_log}"
+  fi
 
   # keepass
-  alias                                                                  \
-    kp='keepassxc-cli'                                                   \
-    kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
+  if [ -x "$(command -v 'keepassxc-cli')" ]; then
+    alias                                                                  \
+      kp='keepassxc-cli'                                                   \
+      kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
+  else
+    complain_missing 'keepassxc-cli' 2>>"${dotfiles_log}"
+  fi
 
   # man
   alias                                                                  \
@@ -130,37 +158,45 @@ general_aliases() {
     up='uptime'
 
   # taskwarrior
-  alias                                                                  \
-    t='task'                                                             \
-    ta='t add'                                                           \
-    tafin='ta project:finances'                                          \
-    tagroc='ta project:groceries'                                        \
-    taedu='ta project:education'                                         \
-    taself='ta project:selfcare'                                         \
-    tashop='ta project:shopping'                                         \
-    tatech='ta project:tech'                                             \
-    tconf='t config'                                                     \
-    td='t done'                                                          \
-    tdel='t delete'                                                      \
-    tdue='task due.before:today ids'                                     \
-    tedu='tls project:education'                                         \
-    tfin='tls project:finances'                                          \
-    tgroc='tls project:groceries'                                        \
-    tid='t ids'                                                          \
-    tls='t list'                                                         \
-    tmod='t modify'                                                      \
-    tself='tls project:selfcare'                                         \
-    tshop='tls project:shopping'                                         \
-    tt='tls due:today'                                                   \
-    ttech='tls project:tech'                                             \
-    tup="td \$(tdue)"
+  if [ -x "$(command -v 'task')" ]; then
+    alias                                                                  \
+      t='task'                                                             \
+      ta='t add'                                                           \
+      tafin='ta project:finances'                                          \
+      tagroc='ta project:groceries'                                        \
+      taedu='ta project:education'                                         \
+      taself='ta project:selfcare'                                         \
+      tashop='ta project:shopping'                                         \
+      tatech='ta project:tech'                                             \
+      tconf='t config'                                                     \
+      td='t done'                                                          \
+      tdel='t delete'                                                      \
+      tdue='task due.before:today ids'                                     \
+      tedu='tls project:education'                                         \
+      tfin='tls project:finances'                                          \
+      tgroc='tls project:groceries'                                        \
+      tid='t ids'                                                          \
+      tls='t list'                                                         \
+      tmod='t modify'                                                      \
+      tself='tls project:selfcare'                                         \
+      tshop='tls project:shopping'                                         \
+      tt='tls due:today'                                                   \
+      ttech='tls project:tech'                                             \
+      tup="td \$(tdue)"
+  else
+    complain_missing 'task' 2>>"${dotfiles_log}"
+  fi
 
   # tmux
-  alias                                                                  \
-    tm='tmux'                                                            \
-    tma='tm attach'                                                      \
-    tmk='tm kill-server'                                                 \
-    tml='tm list-sessions'
+  if [ -x "$(command -v 'tmux')" ]; then
+    alias                                                                  \
+      tm='tmux'                                                            \
+      tma='tm attach'                                                      \
+      tmk='tm kill-server'                                                 \
+      tml='tm list-sessions'
+  else
+    complain_missing 'tmux' 2>>"${dotfiles_log}"
+  fi
 
   # web
   # for whatever reason, anonftp requires the options from ftp to be
@@ -183,12 +219,16 @@ general_aliases() {
     tailmsg='tail -f /var/log/messages'
 
   # youtube-dl
-  alias                                                                  \
-    yt='youtube-dl'                                                      \
-    yta='yt -xf bestaudio/best'                                          \
-    ytdesc='yt --get-description'                                        \
-    ytlen='yt --get-duration'                                            \
-    ytrm='yt --rm-cache-dir'
+  if [ -x "$(command -v 'youtube-dl')" ]; then
+    alias                                                                  \
+      yt='youtube-dl'                                                      \
+      yta='yt -xf bestaudio/best'                                          \
+      ytdesc='yt --get-description'                                        \
+      ytlen='yt --get-duration'                                            \
+      ytrm='yt --rm-cache-dir'
+  else
+    complain_missing 'youtube-dl' 2>>"${dotfiles_log}"
+  fi
 }
 
 openbsd_aliases() {
@@ -270,10 +310,12 @@ openbsd_aliases() {
 
 main() {
   OS="$(uname)"
+  : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+  mkdir -p "${dotfiles_log%/*}"
 
   # if a *BSD, then pf aliases should be added
   case "${OS}" in
-    *'BSD') [ -x "$(command -v pfctl)" ] && pf_aliases          ;;
+    *'BSD') pf_aliases                                          ;;
     *)      # do nothing, this is just here to complete the set ;;
   esac
 
