@@ -5,8 +5,6 @@ pf_aliases() {
     pfdump='tcpdump -tttr /var/log/pflog'                                \
     pfdumpb='pfdump action block'                                        \
     pfdumpp='pfdump action pass'                                         \
-    pfif='pfshow Interfaces'                                             \
-    pfinfo='pfshow info'                                                 \
     pfload='pfctl -f /etc/pf.conf'                                       \
     pfoff='pfctl -d'                                                     \
     pfon='pfctl -e'                                                      \
@@ -15,7 +13,7 @@ pf_aliases() {
     pftail='tcpdump -tttti pflog0'                                       \
     pftailb='pftail action block'                                        \
     pftailp='pftail action pass'                                         \
-    pftest='pfload -nvvv'
+    pftest='pfload -nv'
 }
 
 general_aliases() {
