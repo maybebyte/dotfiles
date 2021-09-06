@@ -1,7 +1,7 @@
 # shellcheck disable=SC2154
 #
-# TODO: add complain_missing to other areas that aren't OS specific, as
-# those should be handled in the case statement in main()
+# TODO: add complain_missing() to other areas that aren't OS specific,
+# as those should be handled in the case statement in main()
 complain_missing() {
   echo >&2 "[$(date '+%F %H:%M:%S')]: $1 not found, so related aliases disabled."
   return 1
