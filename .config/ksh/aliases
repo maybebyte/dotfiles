@@ -7,6 +7,11 @@ complain_missing() {
   return 1
 }
 
+complain_undefined() {
+  echo "[$(date '+%F %H:%M:%S')]: $1 undefined, so related aliases disabled." >&2
+  return 1
+}
+
 pf_aliases() {
   # pfctl(8)
   if [ -x "$(command -v 'pfctl')" ]; then
@@ -272,10 +277,8 @@ openbsd_aliases() {
 
   # ifconfig(8)
   if [ -z "${nic}" ]; then
-    # cat(1) used here to avoid a long line and shellcheck(1) nag
-    cat 2>>"${dotfiles_log}" >&2 <<'EOF'
-${nic} was undefined, so related aliases disabled.
-EOF
+    # shellcheck disable=SC2016
+    complain_undefined '${nic}' 2>>"${dotfiles_log}"
   else
     alias                                                                \
       nicdel="ifconfig \${nic} delete"                                   \
