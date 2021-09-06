@@ -2,6 +2,9 @@
 pf_aliases() {
   # pf
   alias                                                                  \
+    pfdump='tcpdump -tttr /var/log/pflog'                                \
+    pfdumpb='pfdump action block'                                        \
+    pfdumpp='pfdump action pass'                                         \
     pfif='pfshow Interfaces'                                             \
     pfinfo='pfshow info'                                                 \
     pfload='pfctl -f /etc/pf.conf'                                       \
@@ -9,6 +12,9 @@ pf_aliases() {
     pfon='pfctl -e'                                                      \
     pfrules='pfshow rules'                                               \
     pfshow='pfctl -s'                                                    \
+    pftail='tcpdump -tttti pflog0'                                       \
+    pftailb='pftail action block'                                        \
+    pftailp='pftail action pass'                                         \
     pftest='pfload -nvvv'
 }
 
@@ -270,15 +276,6 @@ openbsd_aliases() {
 
   # system
   alias dsklab='disklabel -p g'
-
-  # tcpdump(8)
-  alias                                                                  \
-    pfdump='tcpdump -tttr /var/log/pflog'                                \
-    pfdumpb='pfdump action block'                                        \
-    pfdumpp='pfdump action pass'                                         \
-    pftail='tcpdump -tttti pflog0'                                       \
-    pftailb='pftail action block'                                        \
-    pftailp='pftail action pass'
 
   # viewing log files
   alias                                                                  \
