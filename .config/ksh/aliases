@@ -146,12 +146,25 @@ general_aliases() {
   # netstat(1)
   if [ -x "$(command -v 'netstat')" ]; then
     alias                                                                \
-      ntstr6='netstat -rnf inet6'                                        \
-      ntstr='netstat -rnf inet'                                          \
-      ntst6='netstat -nf inet6'                                          \
-      ntst='netstat -nf inet'                                            \
-      ntstl6='netstat -lnf inet6'                                        \
-      ntstl='netstat -lnf inet'
+      ntstr6='netstat -rf inet6'                                         \
+      ntstr='netstat -rf inet'                                           \
+      ntst6='netstat -f inet6'                                           \
+      ntst='netstat -f inet'                                             \
+
+    case "${OS}" in
+
+      # FreeBSD netstat(1) has no -l
+      'FreeBSD')
+      ;;
+
+      *)
+        alias                                                            \
+          ntstl6='netstat -lf inet6'                                     \
+          ntstl='netstat -lf inet'
+      ;;
+
+    esac
+
   else
     complain_missing 'netstat' 2>>"${dotfiles_log}"
   fi
@@ -259,9 +272,10 @@ openbsd_aliases() {
 
   # ifconfig(8)
   if [ -z "${nic}" ]; then
-    # shellcheck disable=SC2016
-    echo >&2 '${nic} was undefined, so related aliases disabled.' \
-      2>>"${dotfiles_log}"
+    # cat(1) used here to avoid a long line and shellcheck(1) nag
+    cat >&2 2>>"${dotfiles_log}" <<'EOF'
+${nic} was undefined, so related aliases disabled.
+EOF
   else
     alias                                                                \
       nicdel="ifconfig \${nic} delete"                                   \
