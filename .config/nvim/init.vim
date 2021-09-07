@@ -85,8 +85,6 @@ autocmd BufRead $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
 " no more automatic commenting on newline
 autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" no more status bar
-
 " if vim-plug isn't installed, install it
 if empty(glob('$HOME/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs
