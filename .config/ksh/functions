@@ -108,6 +108,25 @@ hreadable() {
 # public IP.
 ipinf() { ftp -VMo - -- "https://ipinfo.io/$1"; }
 
+# journal
+jrnl() {
+  hnm="$(date '+%H:%M')"
+  today="$(today)"
+  jrnl_dir="${HOME}/notes/journal"
+  jrnl_entry="${jrnl_dir}/${today}.txt"
+
+  # easier to just create the directory than error
+  mkdir -p "${jrnl_dir}"
+
+  if ! [ -e "${jrnl_entry}" ]; then
+    printf '\n%s\n%s\n' "${today}" "${hnm}" >"${jrnl_entry}"
+  else
+    printf '\n%s\n%s\n' '-' "${hnm}" >>"${jrnl_entry}"
+  fi
+
+  "${EDITOR}" "${jrnl_entry}"
+}
+
 # dirty workaround for segfaults/coredumps, for now.
 # https://marc.info/?l=openbsd-ports&m=162020290731521&w=2
 mpv() {
