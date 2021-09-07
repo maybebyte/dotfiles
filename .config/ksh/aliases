@@ -72,7 +72,7 @@ general_aliases() {
     # shellcheck disable=SC2016
     complain_undefined '${EDITOR}' 2>>"${dotfiles_log}"
   elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
-    complain_noexec "${EDITOR:-Editor}" 2>>"${dotfiles_log}"
+    complain_noexec "${EDITOR}" 2>>"${dotfiles_log}"
   else
     alias                                                                \
       e="\${EDITOR}"                                                     \
