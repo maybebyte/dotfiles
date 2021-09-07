@@ -1,9 +1,9 @@
 # shellcheck disable=SC2154
 #
-# TODO: add complain_missing() to other areas that aren't OS specific,
+# TODO: add complain_noexec() to other areas that aren't OS specific,
 # as those should be handled in the case statement in main()
-complain_missing() {
-  echo "[$(date '+%F %H:%M:%S')]: $1 not found, so related aliases disabled." >&2
+complain_noexec() {
+  echo "[$(date '+%F %H:%M:%S')]: $1 not found or not executable, so related aliases disabled." >&2
   return 1
 }
 
@@ -14,7 +14,9 @@ complain_undefined() {
 
 pf_aliases() {
   # pfctl(8)
-  if [ -x "$(command -v 'pfctl')" ]; then
+  if ! [ -x "$(command -v 'pfctl')" ]; then
+    complain_noexec 'pfctl' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       pfload='pfctl -f /etc/pf.conf'                                     \
       pfoff='pfctl -d'                                                   \
@@ -22,12 +24,12 @@ pf_aliases() {
       pfrules='pfshow rules'                                             \
       pfshow='pfctl -s'                                                  \
       pftest='pfload -nv'
-  else
-    complain_missing 'pfctl' 2>>"${dotfiles_log}"
   fi
 
   # tcpdump(8)
-  if [ -x "$(command -v 'tcpdump')" ]; then
+  if ! [ -x "$(command -v 'tcpdump')" ]; then
+    complain_noexec 'tcpdump' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       pfdump='tcpdump -tttr /var/log/pflog'                              \
       pfdumpb='pfdump action block'                                      \
@@ -35,8 +37,6 @@ pf_aliases() {
       pftail='tcpdump -tttti pflog0'                                     \
       pftailb='pftail action block'                                      \
       pftailp='pftail action pass'
-  else
-    complain_missing 'tcpdump' 2>>"${dotfiles_log}"
   fi
 }
 
@@ -68,7 +68,12 @@ general_aliases() {
     shre=". \${HOME}/.config/ksh/kshrc"
 
   # editing
-  if [ -x "$(command -v -- "${EDITOR}")" ]; then
+  if [ -z "${EDITOR}" ]; then
+    # shellcheck disable=SC2016
+    complain_undefined '${EDITOR}' 2>>"${dotfiles_log}"
+  elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
+    complain_noexec "${EDITOR:-Editor}" 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       e="\${EDITOR}"                                                     \
       efont="e \${HOME}/.config/fontconfig/fonts.conf"                   \
@@ -93,12 +98,12 @@ general_aliases() {
       exmb="e \${HOME}/.config/xmobar/xmobarrc"                          \
       exr="e \${HOME}/.Xresources"                                       \
       exs="e \${HOME}/.xsession"
-  else
-    complain_missing "${EDITOR:-Editor}" 2>>"${dotfiles_log}"
   fi
 
   # git
-  if [ -x "$(command -v 'git' )" ]; then
+  if ! [ -x "$(command -v 'git' )" ]; then
+    complain_noexec 'git' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"        \
       da='d add'                                                         \
@@ -121,17 +126,15 @@ general_aliases() {
       gpsh='g push'                                                      \
       gre='g restore'                                                    \
       gs='g status'
-  else
-    complain_missing 'git' 2>>"${dotfiles_log}"
   fi
 
   # keepass
-  if [ -x "$(command -v 'keepassxc-cli')" ]; then
+  if ! [ -x "$(command -v 'keepassxc-cli')" ]; then
+    complain_noexec 'keepassxc-cli' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       kp='keepassxc-cli'                                                 \
       kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
-  else
-    complain_missing 'keepassxc-cli' 2>>"${dotfiles_log}"
   fi
 
   # man
@@ -149,7 +152,9 @@ general_aliases() {
     cdsrv="cd \${srvdir}"
 
   # netstat(1)
-  if [ -x "$(command -v 'netstat')" ]; then
+  if ! [ -x "$(command -v 'netstat')" ]; then
+    complain_noexec 'netstat' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       ntstr6='netstat -rf inet6'                                         \
       ntstr='netstat -rf inet'                                           \
@@ -170,8 +175,6 @@ general_aliases() {
 
     esac
 
-  else
-    complain_missing 'netstat' 2>>"${dotfiles_log}"
   fi
 
   # networking
@@ -192,7 +195,9 @@ general_aliases() {
     up='uptime'
 
   # taskwarrior
-  if [ -x "$(command -v 'task')" ]; then
+  if ! [ -x "$(command -v 'task')" ]; then
+    complain_noexec 'task' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       t='task'                                                           \
       ta='t add'                                                         \
@@ -217,19 +222,17 @@ general_aliases() {
       tt='tls due:today'                                                 \
       ttech='tls project:tech'                                           \
       tup="td \$(tdue)"
-  else
-    complain_missing 'task' 2>>"${dotfiles_log}"
   fi
 
   # tmux
-  if [ -x "$(command -v 'tmux')" ]; then
+  if ! [ -x "$(command -v 'tmux')" ]; then
+    complain_noexec 'tmux' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       tm='tmux'                                                          \
       tma='tm attach'                                                    \
       tmk='tm kill-server'                                               \
       tml='tm list-sessions'
-  else
-    complain_missing 'tmux' 2>>"${dotfiles_log}"
   fi
 
   # web
@@ -253,15 +256,15 @@ general_aliases() {
     tailmsg='tail -f /var/log/messages'
 
   # youtube-dl
-  if [ -x "$(command -v 'youtube-dl')" ]; then
+  if ! [ -x "$(command -v 'youtube-dl')" ]; then
+    complain_noexec 'youtube-dl' 2>>"${dotfiles_log}"
+  else
     alias                                                                \
       yt='youtube-dl'                                                    \
       yta='yt -xf bestaudio/best'                                        \
       ytdesc='yt --get-description'                                      \
       ytlen='yt --get-duration'                                          \
       ytrm='yt --rm-cache-dir'
-  else
-    complain_missing 'youtube-dl' 2>>"${dotfiles_log}"
   fi
 }
 
