@@ -50,6 +50,7 @@ general_aliases() {
     n='nnn'                                                              \
     nb='newsboat'                                                        \
     o='mimeopen'                                                         \
+    today='date +%F'                                                     \
     tuir='torsocks tuir'
 
   # basic utilities
