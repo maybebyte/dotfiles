@@ -110,7 +110,6 @@ ipinf() { ftp -VMo - -- "https://ipinfo.io/$1"; }
 
 # journal
 jrnl() {
-  hnm="$(date '+%H:%M')"
   today="$(date '+%F')"
   jrnl_dir="${HOME}/notes/journal"
   jrnl_entry="${jrnl_dir}/${today}.txt"
@@ -119,9 +118,9 @@ jrnl() {
   mkdir -p "${jrnl_dir}"
 
   if ! [ -e "${jrnl_entry}" ]; then
-    printf '\n%s\n%s\n' "${today}" "${hnm}" >"${jrnl_entry}"
+    { echo; echo "${today}"; date '+%H:%M'; } >"${jrnl_entry}"
   else
-    printf '\n%s\n%s\n' '-' "${hnm}" >>"${jrnl_entry}"
+    { echo; echo '-'; date '+%H:%M'; } >>"${jrnl_entry}"
   fi
 
   "${EDITOR}" "${jrnl_entry}"
