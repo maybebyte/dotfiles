@@ -41,7 +41,7 @@ EOF
 
 nsc() {
   priv nmap -Av --osscan-limit \
-    --privileged -oA "${tmpdir}/nmap-$(today)" "$@"
+    --privileged -oA "${tmpdir}/nmap-$(date '+%F')" "$@"
 }
 
 fix_perms() {

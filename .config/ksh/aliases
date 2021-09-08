@@ -182,7 +182,7 @@ general_aliases() {
 
   # sec
   alias                                                                  \
-    nk="nikto -output nikto-\$(today).txt -host"                         \
+    nk="nikto -output nikto-\$(date '+%F').txt -host"                    \
     scan='nmap -sn'                                                      \
     sspl='searchsploit'
 

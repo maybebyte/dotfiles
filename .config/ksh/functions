@@ -111,7 +111,7 @@ ipinf() { ftp -VMo - -- "https://ipinfo.io/$1"; }
 # journal
 jrnl() {
   hnm="$(date '+%H:%M')"
-  today="$(today)"
+  today="$(date '+%F')"
   jrnl_dir="${HOME}/notes/journal"
   jrnl_entry="${jrnl_dir}/${today}.txt"
 

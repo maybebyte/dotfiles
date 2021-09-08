@@ -70,8 +70,5 @@ must_be_root() {
   [ "$(id -u)" = 0 ] || err "Execute ${0##*/} with root privileges."
 }
 
-# print date in yyyy-mm-dd format.
-today() { date '+%F'; }
-
 # copy STDIN to the clipboard so it can be pasted elsewhere.
 yank() { xclip -selection clipboard "$@"; }
