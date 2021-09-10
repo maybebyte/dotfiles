@@ -111,11 +111,10 @@ ipinf() { ftp -VMo - -- "https://ipinfo.io/$1"; }
 # journal
 jrnl() {
   today="$(date '+%F')"
-  jrnl_dir="${HOME}/notes/journal"
-  jrnl_entry="${jrnl_dir}/${today}.txt"
+  jrnl_entry="${HOME}/notes/journal/${today}.txt"
 
   # easier to just create the directory than error
-  mkdir -p "${jrnl_dir}"
+  mkdir -p "${jrnl_entry%/*}"
 
   if ! [ -e "${jrnl_entry}" ]; then
     { echo; echo "${today}"; date '+%H:%M'; } >"${jrnl_entry}"
