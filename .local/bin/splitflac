@@ -58,7 +58,9 @@ assign_cuetag() {
 # $1 is a FLAC file to be converted.
 conv16() {
   staging_file="${1%.flac}-staging.flac"
-  if ffmpeg -hide_banner -i "$1" -af aresample=osf=s16:osr=48000 "${staging_file}"; then
+  # rematrix_maxval here to prevent clipping
+  # https://ffmpeg.org/ffmpeg-resampler.html
+  if ffmpeg -hide_banner -i "$1" -af aresample=osf=s16:osr=48000:rematrix_maxval=1.0 "${staging_file}"; then
     mv "${staging_file}" "$1"
   else
     err 'Failed to convert 24-bit FLAC file to 16-bit.'
