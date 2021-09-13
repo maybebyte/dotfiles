@@ -95,6 +95,7 @@ main() {
   # cuetag is checked in assign_cuetag() rather than check_deps() since
   # the executable's name isn't consistent among operating systems.
   check_deps <<'EOF'
+dos2unix
 flac
 shnsplit
 EOF
@@ -109,6 +110,7 @@ EOF
   shift $((OPTIND - 1))
   [ "$#" = "${args_needed}" ] || usage
   assign_cuetag
+  dos2unix -- "$1" # removes ^M and other such irregularities from cuesheet
   splitflac "$1" "$2"
 }
 
