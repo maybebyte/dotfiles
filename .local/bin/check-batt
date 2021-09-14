@@ -57,7 +57,7 @@ EOF
 main() {
   prereqs
   batt_percent="$(apm -l)"
-  if [ "${batt_percent}" -lt 30 ]; then
+  if [ "${batt_percent}" -lt 20 ]; then
     set_display
     notify-send -- "🔋 Your device is at ${batt_percent}%!"
   else
