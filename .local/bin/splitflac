@@ -53,14 +53,13 @@ assign_cuetag() {
   fi
 }
 
-# converts a 24-bit FLAC file to a 16-bit FLAC file with ffmpeg(1).
+# converts a 24-bit FLAC file to a 16-bit FLAC file with sox(1).
 #
 # $1 is a FLAC file to be converted.
 conv16() {
   staging_file="${1%.flac}-staging.flac"
-  # rematrix_maxval here to prevent clipping
-  # https://ffmpeg.org/ffmpeg-resampler.html
-  if ffmpeg -hide_banner -i "$1" -af aresample=osf=s16:osr=48000:rematrix_maxval=1.0 "${staging_file}"; then
+  # http://sox.sourceforge.net/Docs/FAQ
+  if sox "$1" -SGb 16 "${staging_file}" rate -vLs 48000 dither -s; then
     mv "${staging_file}" "$1"
   else
     err 'Failed to convert 24-bit FLAC file to 16-bit.'
@@ -81,7 +80,7 @@ splitflac() {
   [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
   if [ "${CONVERT}" = 'yes' ]; then
     # makes sense to check dependency only when it's really needed
-    echo 'ffmpeg' | check_deps
+    echo 'sox' | check_deps
     conv16 "$2" && fix_cue "$1"
   fi
   shnsplit -f "$1" -o flac -t '%n %t' -- "$2" \
