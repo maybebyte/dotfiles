@@ -116,6 +116,8 @@ EOF
     conv16 "$2"
   fi
 
+  # checks for sector boundary errors and fixes them if they are present
+  # before splitting the FLAC file.
   if shnfix -c -- "$2"; then
     shnfix -o flac -- "$2"
     mv -- "${2%.flac}-fixed.flac" "$2"
