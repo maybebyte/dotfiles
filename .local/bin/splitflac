@@ -117,7 +117,7 @@ EOF
   fi
 
   if shnfix -c "$2"; then
-    shnfix "$2" -o flac
+    shnfix -o flac "$2"
     mv "${2%.flac}-fixed.flac" "$2"
   fi
 
