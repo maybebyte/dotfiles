@@ -66,25 +66,19 @@ conv16() {
   fi
 }
 
-# pads the cuesheet with an extra 0 as a workaround for the following
-# error when trying to use shnsplit(1) on a converted FLAC file:
-#
-# shnsplit: error: m:ss.ff format can only be used with CD-quality files
-fix_cue() {
-  digit_pair='[[:digit:]][[:digit:]]'
-  regex="${digit_pair}:${digit_pair}:${digit_pair}"
-  sed -i "s/${regex}/&0/" "$1"
-}
-
 splitflac() {
   [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
   if [ "${CONVERT}" = 'yes' ]; then
-    # makes sense to check dependency only when it's really needed
-    echo 'sox' | check_deps
-    conv16 "$2" && fix_cue "$1"
-  fi
-  shnsplit -f "$1" -o flac -t '%n %t' -- "$2" \
-    || err 'Unable to split the FLAC file.'
+    # pads cuebreakpoints(1) output with an extra 0 as a workaround for
+    # the following error when trying to use shnsplit(1) on a converted
+    # FLAC file:
+    #
+    # shnsplit: error: m:ss.ff format can only be used with CD-quality
+    # files
+    cuebreakpoints -- "$1" | sed 's/$/0/' | shnsplit -o flac -- "$2"
+  else
+    cuebreakpoints -- "$1" | shnsplit -o flac -- "$2"
+  fi || err 'Unable to split the FLAC file.'
   mv -- "$2" "$2.bak"
   "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
   [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
@@ -96,6 +90,7 @@ main() {
   # cuetag is checked in assign_cuetag() rather than check_deps() since
   # the executable's name isn't consistent among operating systems.
   check_deps <<'EOF'
+cuebreakpoints
 dos2unix
 flac
 shnsplit
@@ -112,6 +107,11 @@ EOF
   [ "$#" = "${args_needed}" ] || usage
   assign_cuetag
   dos2unix -- "$1" # removes ^M and other such irregularities from cuesheet
+  if [ "${CONVERT}" = 'yes' ]; then
+    # makes sense to check dependency only when it's really needed
+    echo 'sox' | check_deps
+    conv16 "$2"
+  fi
   splitflac "$1" "$2"
 }
 
