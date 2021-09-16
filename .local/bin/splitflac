@@ -71,7 +71,10 @@ conv16() {
 
 splitflac() {
   [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
-  shnsplit -f "$1" -o flac -t '%n %t' -- "$2" || err 'Unable to split the FLAC file.'
+  # spaces in shnsplit filename messes up cue tagging, so just leave
+  # the default in place. it's the only way to be sure that we won't run
+  # into that issue, because %t will often add spaces too.
+  cuebreakpoints -- "$1" | shnsplit -o flac -- "$2" || err 'Unable to split the FLAC file.'
   mv -- "$2" "$2.bak"
   "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
   [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
