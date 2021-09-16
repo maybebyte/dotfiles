@@ -83,6 +83,7 @@ splitflac() {
 # no prereqs() here because two tiny functions would be the result. if
 # prerequisites expand, it can be reexamined then.
 main() {
+
   # cuetag is checked in assign_cuetag() rather than check_deps() since
   # the executable's name isn't consistent among operating systems.
   check_deps <<'EOF'
@@ -92,7 +93,9 @@ flac
 shnfix
 shnsplit
 EOF
+
   readonly args_needed=2
+
   while getopts cd opt; do
     case "${opt}" in
       c) readonly CONVERT='yes' ;;
@@ -101,18 +104,23 @@ EOF
     esac
   done
   shift $((OPTIND - 1))
+
   [ "$#" = "${args_needed}" ] || usage
+
   assign_cuetag
   dos2unix -- "$1" # removes ^M and other such irregularities from cuesheet
+
   if [ "${CONVERT}" = 'yes' ]; then
     # makes sense to check dependency only when it's really needed
     echo 'sox' | check_deps
     conv16 "$2"
   fi
+
   if shnfix -c "$2"; then
     shnfix "$2" -o flac
     mv "${2%.flac}-fixed.flac" "$2"
   fi
+
   splitflac "$1" "$2"
 }
 
