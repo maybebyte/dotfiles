@@ -89,6 +89,7 @@ main() {
 cuebreakpoints
 dos2unix
 flac
+shnfix
 shnsplit
 EOF
   readonly args_needed=2
@@ -107,6 +108,10 @@ EOF
     # makes sense to check dependency only when it's really needed
     echo 'sox' | check_deps
     conv16 "$2"
+  fi
+  if shnfix -c "$2"; then
+    shnfix "$2" -o flac
+    mv "${2%.flac}-fixed.flac" "$2"
   fi
   splitflac "$1" "$2"
 }
