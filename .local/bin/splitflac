@@ -36,7 +36,7 @@ ${0##*/} requires ${args_needed} argument(s).
 usage:
 ${0##*/} [cue file] [FLAC file]
 
--c : convert 24bit flac to 16bit before splitting (ffmpeg needed)
+-c : convert 24bit flac to 16bit before splitting (sox needed)
 -d : delete the original FLAC file.
 EOF
   exit 1
