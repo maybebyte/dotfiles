@@ -116,8 +116,8 @@ EOF
     conv16 "$2"
   fi
 
-  if shnfix -c "$2"; then
-    shnfix -o flac "$2"
+  if shnfix -c -- "$2"; then
+    shnfix -o flac -- "$2"
     mv "${2%.flac}-fixed.flac" "$2"
   fi
 
