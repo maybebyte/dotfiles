@@ -71,17 +71,7 @@ conv16() {
 
 splitflac() {
   [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
-  if [ "${CONVERT}" = 'yes' ]; then
-    # pads cuebreakpoints(1) output with an extra 0 as a workaround for
-    # the following error when trying to use shnsplit(1) on a converted
-    # FLAC file:
-    #
-    # shnsplit: error: m:ss.ff format can only be used with CD-quality
-    # files
-    cuebreakpoints -- "$1" | sed 's/$/0/' | shnsplit -o flac -- "$2"
-  else
-    cuebreakpoints -- "$1" | shnsplit -o flac -- "$2"
-  fi || err 'Unable to split the FLAC file.'
+  shnsplit -f "$1" -o flac -t '%n %t' -- "$2" || err 'Unable to split the FLAC file.'
   mv -- "$2" "$2.bak"
   "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
   [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
