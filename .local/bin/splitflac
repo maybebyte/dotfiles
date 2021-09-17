@@ -62,7 +62,7 @@ conv16() {
   #
   # according to sox(1), most noise shaping filters are only available
   # at 44.1kHz, so that is the chosen sample rate.
-  if sox "$1" -SGb 16 "${staging_file}" rate -vLs 44100 dither -s; then
+  if sox "$1" -SGb 16 "${staging_file}" rate -v 44100 dither -s; then
     mv -- "${staging_file}" "$1"
   else
     err 'Failed to convert 24-bit FLAC file to 16-bit.'
