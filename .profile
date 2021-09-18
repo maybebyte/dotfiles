@@ -24,7 +24,7 @@ export                                          \
 
 # logging
 : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
-rm "${dotfiles_log}" && touch "${dotfiles_log}"
+:>"${dotfiles_log}"
 
 # OS specific actions
 # written so it can be expanded later if needed
