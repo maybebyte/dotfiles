@@ -20,8 +20,7 @@ case "${KSH_VERSION%%\ KSH*}" in
   *)        # do nothing for other ksh types ;;
 esac
 
-# vars should come first
-for srcfile in 'vars' 'aliases' 'functions' 'prompt'; do
+for srcfile in 'aliases' 'functions' 'prompt'; do
   [ -r "${HOME}/.config/ksh/${srcfile}" ] \
     && . "${HOME}/.config/ksh/${srcfile}"
 done
