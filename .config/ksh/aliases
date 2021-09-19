@@ -39,7 +39,7 @@ pf_aliases() {
       pftailp='pftail action pass'
   fi
 
-  epf='e /etc/pf.conf'
+  alias epf='e /etc/pf.conf'
 }
 
 general_aliases() {
