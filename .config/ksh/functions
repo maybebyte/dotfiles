@@ -125,6 +125,9 @@ jrnl() {
   "${EDITOR}" "${jrnl_entry}"
 }
 
+# read a markdown document with man(1).
+manmd() { lowdown -T 'man' "$1" | mandoc -a; }
+
 # if $1 ends in '.bak', remove '.bak' from the filename.
 # otherwise, append '.bak' to the filename.
 #
@@ -170,6 +173,9 @@ pkgsize() {
 
 # choose a book with fzf and read it.
 readabook() { fzf-open "${READER}" "${HOME}/books"; }
+
+# read a markdown document with less(1). it has ANSI colors.
+readmd() { lowdown -T 'term' "$1" | less; }
 
 # test Matrix federation and output the JSON.
 #
