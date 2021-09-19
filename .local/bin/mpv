@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+ulimit -c 0
+exec /usr/local/bin/mpv "$@"
