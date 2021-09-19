@@ -38,6 +38,8 @@ pf_aliases() {
       pftailb='pftail action block'                                      \
       pftailp='pftail action pass'
   fi
+
+  epf='e /etc/pf.conf'
 }
 
 general_aliases() {
@@ -276,7 +278,6 @@ openbsd_aliases() {
   # editing
   alias                                                                  \
     ehn="e /etc/hostname.\${nic}"                                        \
-    epf='e /etc/pf.conf'                                                 \
     eunw='e /etc/unwind.conf'
 
   # ifconfig(8)
