@@ -1,10 +1,24 @@
-# sh/ksh initialization
-[ -r "${HOME}/.config/ksh/kshrc" ] \
-  && export ENV="${HOME}/.config/ksh/kshrc"
+# use nvim if it's installed, vi otherwise
+if [ -x "$(command -v 'nvim')" ]; then
+  export EDITOR='nvim'
+else
+  export EDITOR='vi'
+fi
+
+# use colorls if it's installed, ls otherwise
+if [ -x "$(command -v 'colorls')" ]; then
+  export ls='colorls'
+else
+  export ls='ls'
+fi
+
+GPG_TTY="$(tty)" && export GPG_TTY
 
 export                                          \
   BROWSER='firefox'                             \
   CLICOLOR=1                                    \
+  FCEDIT="${EDITOR}"                            \
+  VISUAL="${EDITOR}"                            \
   GNUPGHOME="${HOME}/.config/gnupg"             \
   HISTFILE="${HOME}/.history"                   \
   HISTSIZE=10000                                \
@@ -59,3 +73,11 @@ case "$(hostname -s)" in
     ;;
 
 esac
+
+# sh/ksh initialization
+#
+# this should come last in .profile so that one can assume
+# that any variables exported in .profile will carry over to
+# ksh(1).
+[ -r "${HOME}/.config/ksh/kshrc" ] \
+  && export ENV="${HOME}/.config/ksh/kshrc"
