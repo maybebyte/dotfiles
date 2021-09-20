@@ -36,6 +36,7 @@ ${0##*/} [filetype] [directory]
 
 filetype can be:
 video - webm, mp4, mkv
+pic   - jpg, jpeg, png
 any   - any filetype
 EOF
   exit 1
@@ -48,6 +49,16 @@ find_videos() {
   -iname    '*.webm' \
   -o -iname '*.mp4'  \
   -o -iname '*.mkv'  \
+  \)
+}
+
+# given a directory, print all photos in it.
+find_pics() {
+  find "$1" -type f  \
+  \(                 \
+  -iname    '*.jpg'  \
+  -o -iname '*.jpeg' \
+  -o -iname '*.png'  \
   \)
 }
 
@@ -77,6 +88,7 @@ prereqs "$@"
 # print a random file
 case "$1" in
   'video') find_videos "$2"        ;;
+  'pic')   find_pics "$2"          ;;
   'any')   find_any "$2"           ;;
   *)       err 'Invalid filetype.' ;;
 esac | sort -R | head -1
