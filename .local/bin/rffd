@@ -37,7 +37,7 @@ ${0##*/} [filetype] [directory]
 filetype can be:
 video - webm, mp4, mkv
 pic   - jpg, jpeg, png
-any   - any filetype
+any   - matches all files
 EOF
   exit 1
 }
