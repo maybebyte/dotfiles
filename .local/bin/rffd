@@ -1,0 +1,82 @@
+#!/usr/bin/env sh
+# shellcheck disable=SC1090
+set -e
+# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# check that the library file is readable. if it is, source it so its
+# functions are available. if not, exit due to potentially unpredictable
+# behavior.
+readonly library="${HOME}/.local/bin/common.sh"
+if [ -r "${library}" ]; then
+  . "${library}"
+else
+  cat >&2 <<EOF
+${library} doesn't exist or isn't readable.
+${0##*/} may not function correctly without it; exiting for safety.
+EOF
+  exit 1
+fi
+
+# usage information for random file from directory (rffd)
+usage() {
+  cat >&2 <<EOF
+${0##*/} [filetype] [directory]
+
+filetype can be:
+video - webm, mp4, mkv
+any   - any filetype
+EOF
+  exit 1
+}
+
+# given a directory, print all video files in it.
+find_videos() {
+  find "$1" -type f  \
+  \(                 \
+  -iname    '*.webm' \
+  -o -iname '*.mp4'  \
+  -o -iname '*.mkv'  \
+  \)
+}
+
+# given a directory, print all files in it.
+find_any() { find "$1" -type f; }
+
+prereqs() {
+  if [ -z "$1" ]; then
+    echo >&2 "${0##*/} needs a filetype."
+    echo >&2
+    usage
+  fi
+
+  if [ -z "$2" ]; then
+    echo >&2 "${0##*/} needs a directory to search."
+    echo >&2
+    usage
+  fi
+
+  if ! [ -d "$2" ]; then
+    err "$2 is not a directory"
+  fi
+}
+
+prereqs "$@"
+
+# print a random file
+case "$1" in
+  'video') find_videos "$2"                ;;
+  'any')   find_any "$2"                   ;;
+  *)       err 'Invalid filetype.'         ;;
+esac | sort -R | head -1
