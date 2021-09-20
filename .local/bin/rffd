@@ -32,7 +32,10 @@ fi
 # usage information for random file from directory (rffd)
 usage() {
   cat >&2 <<EOF
-${0##*/} [filetype] [directory]
+${0##*/} [flags] [filetype] [directory]
+
+flags can be:
+-c: number of files to return, aka (c)ount
 
 filetype can be:
 video - webm, mp4, mkv
@@ -83,7 +86,23 @@ prereqs() {
   fi
 }
 
+while getopts c: opt; do
+  case "${opt}" in
+    c) readonly COUNT="${OPTARG}" ;;
+    *) usage                      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 prereqs "$@"
+
+: "${COUNT:=1}"
+
+# sanity check
+case "${COUNT}" in
+  ''|*[!0-9]*) err 'The -c option only accepts integers.'       ;;
+  *)           # COUNT is an integer, so do nothing and proceed ;;
+esac
 
 # print a random file
 case "$1" in
@@ -91,4 +110,4 @@ case "$1" in
   'pic')   find_pics "$2"          ;;
   'any')   find_any "$2"           ;;
   *)       err 'Invalid filetype.' ;;
-esac | sort -R | head -1
+esac | sort -R | head -"${COUNT}"
