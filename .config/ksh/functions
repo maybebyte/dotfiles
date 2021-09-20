@@ -174,7 +174,7 @@ pkgsize() {
 # choose a book with fzf and read it.
 readabook() { fzf-open "${READER}" "${HOME}/books"; }
 
-# read a markdown document with less(1). it has ANSI colors.
+# read a markdown document with less(1).
 readmd() { lowdown -T 'term' --term-no-colour "$1" | less; }
 
 # test Matrix federation and output the JSON.
