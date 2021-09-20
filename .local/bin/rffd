@@ -76,7 +76,7 @@ prereqs "$@"
 
 # print a random file
 case "$1" in
-  'video') find_videos "$2"                ;;
-  'any')   find_any "$2"                   ;;
-  *)       err 'Invalid filetype.'         ;;
+  'video') find_videos "$2"        ;;
+  'any')   find_any "$2"           ;;
+  *)       err 'Invalid filetype.' ;;
 esac | sort -R | head -1
