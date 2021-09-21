@@ -18,16 +18,24 @@ fi
 import_colors_sh
 
 while read -r -- file; do
+
   case "$1" in
+
     # delete file
     'd')
-      if [ "$(menu -p "Really delete ${file}?" <<'EOF'
-Yes
-No
-EOF
-      )" = 'Yes' ]; then
+      really_delete="$(
+
+        {
+          echo 'Yes'
+          echo 'No'
+        } | menu -p "Really delete ${file}?"
+
+      )"
+
+      if [ "${really_delete}" = 'Yes' ]; then
         rm -- "${file}"
         notify-send -- "${file} deleted."
+
       fi
       ;;
 
@@ -75,4 +83,5 @@ EOF
       ;;
 
   esac
+
 done

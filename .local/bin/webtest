@@ -19,14 +19,18 @@ set -e
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
@@ -74,10 +78,13 @@ readonly unpriv_user="${LOGNAME}"
 if ! gen_site; then
   cleanup
   err 'Unable to generate site.'
+
 elif ! sync_site; then
   cleanup
   err 'Unable to sync web server.'
+
 else
   cleanup
   echo 'Web server synced.'
+
 fi

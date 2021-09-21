@@ -19,14 +19,18 @@ set -e
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 check_deps <<'EOF'
@@ -34,5 +38,6 @@ opusenc
 parallel
 EOF
 
-parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac \
-  || err 'Unable to convert from FLAC to opus.'
+if ! parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac; then
+  err 'Unable to convert from FLAC to opus.'
+fi

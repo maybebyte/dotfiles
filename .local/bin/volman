@@ -18,14 +18,18 @@
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 usage() {
@@ -35,6 +39,7 @@ ${0##*/} requires ${args_needed} argument(s).
 usage:
 ${0##*/} [inc|dec|mute]
 EOF
+
   exit 1
 }
 
@@ -62,19 +67,21 @@ adjust_vol() {
 # based on the current output level, print an appropriate volume-related
 # emoji. if output.mute=0, all positional parameters as well.
 print_vol() {
-  # handle the edge cases first.
   if [ "${MUTED}" = 'true' ]; then
     echo '🔇 MUTED' && return
+
   elif [ "${vol}" = 0 ]; then
     echo '🔇 ' "$@" && return
-  fi
 
-  if [ "${vol}" -ge 50 ]; then
+  elif [ "${vol}" -ge 50 ]; then
     echo '🔊 ' "$@"
+
   elif [ "${vol}" -ge 25 ]; then
     echo '🔉 ' "$@"
+
   else
     echo '🔈 ' "$@"
+
   fi
 }
 
@@ -91,6 +98,7 @@ check_mute() {
 # get raw output level and convert it to something more parsable.
 get_vol() {
   raw_vol="$(sndioctl -n output.level 2>/dev/null)" && readonly raw_vol
+
   case "${raw_vol}" in
     1.000) echo 100                                                  ;;
     0.000) echo 0                                                    ;;

@@ -19,14 +19,18 @@ set -e
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 usage() {
@@ -72,12 +76,16 @@ determine_preload_dir() {
 move_file() {
   determine_preload_dir
   dest="$(
+
     {
-      # tilde expansion with sed for readability in dmenu
+
       find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
         | sed -- "s|${HOME}|~|g"
+
       echo 'exit';
+
     } | menu -l 10 -p "Move ${file##*/} where?"
+
   )"
 
   [ "${dest}" = 'exit' ] && exit 0
@@ -87,16 +95,15 @@ move_file() {
   # with parameter expansion in the form "~${dest##${HOME}}"
   dest="$(echo "${dest}" | sed -- "s|~|${HOME}|g")"
 
-  if [ -d "${dest}" ] || mkdir -p -- "${dest}"; then
+  if ! [ -d "${dest}" ] || ! mkdir -p -- "${dest}"; then
+    err "~${dest##${HOME}} not found nor created."
 
-    if mv -- "${file}" "${dest}/${file##*/}"; then
-      notify-send -- "${file##*/} moved to ~${dest##${HOME}}"
-    else
-      err "Failed to move ${file##*/}"
-    fi
+  elif mv -- "${file}" "${dest}/${file##*/}"; then
+    notify-send -- "${file##*/} moved to ~${dest##${HOME}}"
 
   else
-    err "~${dest##${HOME}} not found nor created."
+    err "Failed to move ${file##*/}"
+
   fi
 }
 
@@ -107,17 +114,19 @@ move_file() {
 rename_file() {
   new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")" \
     && readonly new_filename
-  if [ -n "${new_filename}" ]; then
-    [ "${new_filename}" = 'exit' ] && exit 0
 
-    if mv -- "${file}" "${file%/*}/${new_filename}"; then
-      notify-send -- "${file##*/} renamed to ${new_filename}"
-    else
-      err "Failed to rename ${file}."
-    fi
+  if [ "${new_filename}" = 'exit' ]; then
+    exit 0
+
+  elif [ -z "${new_filename}" ]; then
+    err "${0##*/} needs a new name to rename ${file##*/} to."
+
+  elif mv -- "${file}" "${file%/*}/${new_filename}"; then
+    notify-send -- "${file##*/} renamed to ${new_filename}"
 
   else
-    err "${0##*/} needs a new name to rename ${file##*/} to."
+    err "Failed to rename ${file}."
+
   fi
 }
 
@@ -125,14 +134,15 @@ rename_file() {
 # ${operation} by getopts, the user chooses the operation with dmenu.
 choose_operation() {
   if [ -z "${operation}" ]; then
-    readonly options='move
-rename'
-    operation="$(echo "${options}" | menu -p "What to do with ${file}?")" \
-      && readonly operation
+    readonly options='move\nrename'
+
+    operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
+    readonly operation
 
     # a small delay needs to be here. without it, the subsequent menu
     # won't appear sometimes.
     sleep 0.3
+
   fi
 
   case "${operation}" in
@@ -160,13 +170,16 @@ prereqs1
 readonly args_needed=1
 
 while getopts hmn opt; do
+
   case "${opt}" in
     'h') usage                                ;;
     'm') readonly operation='move' && break   ;;
     'n') readonly operation='rename' && break ;;
     *)   usage                                ;;
   esac
+
 done
+
 shift $((OPTIND - 1))
 
 prereqs2 "$@"

@@ -4,12 +4,13 @@
 # management. therefore, it has no shebang and isn't executable.
 
 # instead of remembering/accounting for two different forms of privilege
-# elevation, one is assigned to the alias 'priv.' doas is preferred over
-# sudo.
+# elevation, one is assigned to the alias 'priv.'
 if [ -x "$(command -v 'doas')" ]; then
   alias priv='doas '
+
 elif [ -x "$(command -v 'sudo')" ]; then
   alias priv='sudo '
+
 fi
 
 # if Xorg isn't running, exit with an error.
@@ -23,11 +24,15 @@ check_grafix() {
 # note that I only check executables that aren't accounted for in dotfiles.
 check_deps() {
   while read -r -- dependency; do
+
     if [ -x "$(command -v -- "${dependency}")" ]; then
       continue
+
     else
       err "${dependency} not found in PATH or not executable."
+
     fi
+
   done
 }
 
@@ -48,11 +53,14 @@ err() {
 # 2) dmenu scripts still work without colors.
 import_colors_sh() {
   colors_sh="${HOME}/.cache/wal/colors.sh"
+
   if [ -r "${colors_sh}" ]; then
     . "${colors_sh}" # source the file
+
   else
     : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
     echo "${colors_sh} not readable/found." 2>>"${dotfiles_log}" >&2
+
   fi
 }
 

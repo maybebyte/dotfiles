@@ -41,8 +41,10 @@ cht() { ftp -U 'curl' -VMo - -- "https://cht.sh/$1"; }
 cpbak() {
   if [ -z "${1##*.bak}" ]; then
     cp -- "$1" "${1%.bak}"
+
   else
     cp -- "$1" "$1.bak"
+
   fi
 }
 
@@ -117,9 +119,19 @@ jrnl() {
   mkdir -p "${jrnl_entry%/*}"
 
   if ! [ -e "${jrnl_entry}" ]; then
-    { echo; echo "${today}"; date '+%H:%M'; } >"${jrnl_entry}"
+    {
+      echo
+      echo "${today}"
+      date '+%H:%M'
+    } > "${jrnl_entry}"
+
   else
-    { echo; echo '-'; date '+%H:%M'; } >>"${jrnl_entry}"
+    {
+      echo
+      echo '-'
+      date '+%H:%M'
+    } >> "${jrnl_entry}"
+
   fi
 
   "${EDITOR}" "${jrnl_entry}"
@@ -150,10 +162,12 @@ checks the headers of a website with tor(1).
 `nc_head [path] [domain] 80` for HTTP.
 `nc_head [path] -c [domain] 443` for HTTPS.
 EOF
+
   else
     path="$1"
     shift
     printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
+
   fi
 }
 

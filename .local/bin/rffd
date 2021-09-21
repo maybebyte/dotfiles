@@ -19,14 +19,18 @@ set -e
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 # usage information for random file from directory (rffd)
@@ -87,11 +91,14 @@ prereqs() {
 }
 
 while getopts c: opt; do
+
   case "${opt}" in
     c) readonly COUNT="${OPTARG}" ;;
     *) usage                      ;;
   esac
+
 done
+
 shift $((OPTIND - 1))
 
 prereqs "$@"
@@ -106,8 +113,10 @@ esac
 
 # print a random file
 case "$1" in
+
   'video') find_videos "$2"        ;;
   'pic')   find_pics "$2"          ;;
   'any')   find_any "$2"           ;;
   *)       err 'Invalid filetype.' ;;
+
 esac | sort -R | head -"${COUNT}"

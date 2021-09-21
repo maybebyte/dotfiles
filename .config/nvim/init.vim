@@ -89,6 +89,7 @@ autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 if empty(glob('$HOME/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
   autocmd VimEnter * PlugInstall --sync | source "$HOME/.config/nvim/init.vim"
 endif
 
@@ -107,12 +108,14 @@ call plug#begin("$HOME/.local/share/nvim/site/autoload/plugged")
   Plug 'scrooloose/nerdtree'
   Plug 'scrooloose/syntastic'
   Plug 'tpope/vim-surround'
+
   if $DISPLAY != ''
     Plug 'ap/vim-css-color'
     Plug 'dylanaraps/wal.vim'
     Plug 'kovetskiy/sxhkd-vim'
     Plug 'plasticboy/vim-markdown'
   endif
+
 call plug#end()
 
 " https://github.com/dylanaraps/pywal

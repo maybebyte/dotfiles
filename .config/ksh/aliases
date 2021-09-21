@@ -14,6 +14,7 @@ pf_aliases() {
   # pfctl(8)
   if ! [ -x "$(command -v 'pfctl')" ]; then
     complain_noexec 'pfctl' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       pfload='pfctl -f /etc/pf.conf'                                     \
@@ -22,11 +23,13 @@ pf_aliases() {
       pfrules='pfshow rules'                                             \
       pfshow='pfctl -s'                                                  \
       pftest='pfload -nv'
+
   fi
 
   # tcpdump(8)
   if ! [ -x "$(command -v 'tcpdump')" ]; then
     complain_noexec 'tcpdump' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       pfdump='tcpdump -tttr /var/log/pflog'                              \
@@ -35,6 +38,7 @@ pf_aliases() {
       pftail='tcpdump -tttti pflog0'                                     \
       pftailb='pftail action block'                                      \
       pftailp='pftail action pass'
+
   fi
 
   alias epf='e /etc/pf.conf'
@@ -72,8 +76,10 @@ general_aliases() {
   if [ -z "${EDITOR}" ]; then
     # shellcheck disable=SC2016
     complain_undefined '${EDITOR}' 2>>"${dotfiles_log}"
+
   elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
     complain_noexec "${EDITOR}" 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       e="\${EDITOR}"                                                     \
@@ -104,6 +110,7 @@ general_aliases() {
   # git
   if ! [ -x "$(command -v 'git' )" ]; then
     complain_noexec 'git' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"        \
@@ -127,15 +134,18 @@ general_aliases() {
       gpsh='g push'                                                      \
       gre='g restore'                                                    \
       gs='g status'
+
   fi
 
   # keepass
   if ! [ -x "$(command -v 'keepassxc-cli')" ]; then
     complain_noexec 'keepassxc-cli' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       kp='keepassxc-cli'                                                 \
       kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
+
   fi
 
   # man
@@ -155,6 +165,7 @@ general_aliases() {
   # netstat(1)
   if ! [ -x "$(command -v 'netstat')" ]; then
     complain_noexec 'netstat' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       ntstr6='netstat -rf inet6'                                         \
@@ -198,6 +209,7 @@ general_aliases() {
   # taskwarrior
   if ! [ -x "$(command -v 'task')" ]; then
     complain_noexec 'task' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       t='task'                                                           \
@@ -223,17 +235,20 @@ general_aliases() {
       tt='tls due:today'                                                 \
       ttech='tls project:tech'                                           \
       tup="td \$(tdue)"
+
   fi
 
   # tmux
   if ! [ -x "$(command -v 'tmux')" ]; then
     complain_noexec 'tmux' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       tm='tmux'                                                          \
       tma='tm attach'                                                    \
       tmk='tm kill-server'                                               \
       tml='tm list-sessions'
+
   fi
 
   # web
@@ -259,6 +274,7 @@ general_aliases() {
   # youtube-dl
   if ! [ -x "$(command -v 'youtube-dl')" ]; then
     complain_noexec 'youtube-dl' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       yt='youtube-dl'                                                    \
@@ -266,6 +282,7 @@ general_aliases() {
       ytdesc='yt --get-description'                                      \
       ytlen='yt --get-duration'                                          \
       ytrm='yt --rm-cache-dir'
+
   fi
 }
 
@@ -282,6 +299,7 @@ openbsd_aliases() {
   if [ -z "${nic}" ]; then
     # shellcheck disable=SC2016
     complain_undefined '${nic}' 2>>"${dotfiles_log}"
+
   else
     alias                                                                \
       nicdel="ifconfig \${nic} delete"                                   \
@@ -289,6 +307,7 @@ openbsd_aliases() {
       nicon="ifconfig \${nic} up"                                        \
       nicre='nicoff && nicon'                                            \
       nicshow="ifconfig \${nic}"
+
   fi
 
   # networking

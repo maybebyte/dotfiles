@@ -23,14 +23,18 @@ set -eh
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 show_battery() {
@@ -78,18 +82,23 @@ show_temp() {
 
   if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
     echo "temp: ${temperature%%.*} °C"
+
   else
     echo "${delimiter}temp: ${temperature%%.*} °C"
+
   fi
 }
 
 show_track() {
   if ! pgrep -q 'mpd'; then
     return 1
+
   elif mpc | grep -qi 'paused'; then
     return 1
+
   else
     mpc current
+
   fi
 }
 

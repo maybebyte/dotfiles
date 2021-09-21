@@ -11,14 +11,18 @@
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 grab_emoji() {
@@ -27,14 +31,17 @@ grab_emoji() {
 
   chosen="$(cut -d ';' -f1 -- "${emoji_file}" | menu -l 20 -fn 'Symbola-20')"
   [ -n "${chosen}" ] || err 'Must choose an emoji.'
+
   readonly chosen="${chosen%% *}"
   grep -q -- "^${chosen}" "${emoji_file}" || err "Emoji not found in ${emoji_file}."
 
   # important to use printf %s here, as ${chosen} is user input
   if printf '%s' "${chosen}" | yank; then
     notify-send -- "${chosen} copied to clipboard."
+
   else
     err 'Unable to grab emoji with xclip(1).'
+
   fi
 }
 

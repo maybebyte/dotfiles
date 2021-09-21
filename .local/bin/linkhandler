@@ -19,24 +19,31 @@ set -e
 # functions are available. if not, exit due to potentially unpredictable
 # behavior.
 readonly library="${HOME}/.local/bin/common.sh"
+
 if [ -r "${library}" ]; then
   . "${library}"
+
 else
   cat >&2 <<EOF
 ${library} doesn't exist or isn't readable.
 ${0##*/} may not function correctly without it; exiting for safety.
 EOF
+
   exit 1
+
 fi
 
 # if no arg is passed and STDIN is empty, exit with an error.
 check_opts() {
   if [ -n "$1" ]; then
     readonly URL="$1"
+
   elif [ ! -t 0 ]; then
     read -r -- URL && readonly URL
+
   else
     err "${0##*/} needs a URL!"
+
   fi
 }
 
@@ -49,23 +56,31 @@ linkhandler() {
 
     'copy duration')
       duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+
       if [ -n "${duration}" ]; then
         printf '%s' "${duration}" | yank
+
         notify-send -- "Copied video duration (${duration})."
         sleep 10 && clear_clip notify
+
       else
         err 'Empty input, so no duration was yanked.'
+
       fi
       ;;
 
     'copy title')
       title="$(youtube-dl -e -- "${URL}" 2>/dev/null)"
+
       if [ -n "${title}" ]; then
         printf '%s' "${title}" | yank
+
         notify-send -- "${title} yanked."
         sleep 10 && clear_clip notify
+
       else
         err 'Empty input, so no title yanked.'
+
       fi
       ;;
 
@@ -92,10 +107,13 @@ linkhandler() {
 
     'print duration')
       duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+
       if [ -n "${duration}" ]; then
         notify-send -- "${duration}"
+
       else
         err 'Empty input, so no duration printed.'
+
       fi
       ;;
 
