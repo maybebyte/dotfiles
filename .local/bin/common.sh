@@ -52,7 +52,6 @@ import_colors_sh() {
     . "${colors_sh}" # source the file
   else
     : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
-    mkdir -p "${dotfiles_log%/*}"
     echo "${colors_sh} not readable/found." 2>>"${dotfiles_log}" >&2
   fi
 }
