@@ -60,4 +60,5 @@ prereqs() {
   esac
 }
 
-main() { prereqs "$@"; genfavi "$1"; }; main "$@"
+prereqs "$@"
+genfavi "$1"

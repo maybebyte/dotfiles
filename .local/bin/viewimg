@@ -55,11 +55,7 @@ EOF
   [ "$#" = "${args_needed}" ] || usage
 }
 
-main() {
-  prereqs "$@"
-  viewimg "$1"
-  wait
-  rm -- "${filename}"
-}
-
-main "$@"
+prereqs "$@"
+viewimg "$1"
+wait
+rm -- "${filename}"

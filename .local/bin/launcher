@@ -49,4 +49,5 @@ prereqs() {
   import_colors_sh
 }
 
-main() { prereqs; launch; }; main
+prereqs
+launch

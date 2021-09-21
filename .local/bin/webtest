@@ -63,20 +63,22 @@ EOF
   [ "$#" = "${args_needed}" ] || usage
 }
 
-# TODO: a conf file is likely a better implementation than positional
-# parameters in the long run.
-main() {
-  umask 022
-  prereqs "$@"
-  readonly site="$1"
-  readonly markdowndir="$2"
-  readonly srvdir="$3"
-  htmldir="$(mktemp -d)" && readonly htmldir
-  readonly unpriv_user="${LOGNAME}"
-  gen_site || { cleanup; err 'Unable to generate site.'; }
-  sync_site || { cleanup; err 'Unable to sync web server.'; }
+umask 022
+prereqs "$@"
+
+readonly site="$1"
+readonly markdowndir="$2"
+readonly srvdir="$3"
+htmldir="$(mktemp -d)" && readonly htmldir
+readonly unpriv_user="${LOGNAME}"
+
+if ! gen_site; then
+  cleanup
+  err 'Unable to generate site.'
+elif ! sync_site; then
+  cleanup
+  err 'Unable to sync web server.'
+else
   cleanup
   echo 'Web server synced.'
-}
-
-main "$@"
+fi

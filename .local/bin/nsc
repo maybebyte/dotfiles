@@ -57,12 +57,11 @@ prereqs() {
   [ "$#" -ge "${args_needed}" ] || usage
 }
 
-main() {
-  prereqs "$@"
-  tmpdir="$(mktemp -d)" && readonly tmpdir
-  nsc "$@" || err 'Unable to scan target.'
-  fix_perms || err 'Unable to fix permissions.'
-  echo "Scan finished, results available in ${tmpdir}."
-}
+prereqs "$@"
 
-main "$@"
+tmpdir="$(mktemp -d)" && readonly tmpdir
+
+nsc "$@" || err 'Unable to scan target.'
+fix_perms || err 'Unable to fix permissions.'
+
+echo "Scan finished, results available in ${tmpdir}."

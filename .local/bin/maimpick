@@ -84,17 +84,17 @@ EOF
   import_colors_sh
 }
 
-main() {
-  prereqs
-  readonly options='a selected area
+prereqs
+
+readonly options='a selected area
 current window
 full screen
 a selected area (copy)
 current window (copy)
 full screen (copy)'
-  readonly savedir="${HOME}/screenshots"
-  num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
-  echo "${options}" | present_options
-}
 
-main
+readonly savedir="${HOME}/screenshots"
+
+num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
+
+echo "${options}" | present_options

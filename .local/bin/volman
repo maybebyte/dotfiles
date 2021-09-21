@@ -102,14 +102,14 @@ get_vol() {
 # check prerequisites. perform the specified action with vol()
 # (inc|dec|mute), then display the appropriate notification if
 # successful.
-main() {
-  prereqs
-  readonly args_needed=1
-  adjust_vol "$1"
-  readonly msg_id="25231"
-  vol="$(get_vol)" && readonly vol
-  check_mute && readonly MUTED='true'
-  dunstify -u low -r "${msg_id}" -- "$(print_vol "${vol}%")"
-}
 
-main "$1"
+prereqs
+
+readonly args_needed=1
+adjust_vol "$1"
+
+vol="$(get_vol)" && readonly vol
+check_mute && readonly MUTED='true'
+readonly msg_id="25231"
+
+dunstify -u low -r "${msg_id}" -- "$(print_vol "${vol}%")"

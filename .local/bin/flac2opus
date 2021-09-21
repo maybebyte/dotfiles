@@ -29,13 +29,10 @@ EOF
   exit 1
 fi
 
-# encodes all flac files in ${PWD} to opus with parallelization
-main() {
-  check_deps <<'EOF'
+check_deps <<'EOF'
 opusenc
 parallel
 EOF
-  parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac
-}
 
-main || err 'Unable to convert from FLAC to opus.'
+parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac \
+  || err 'Unable to convert from FLAC to opus.'

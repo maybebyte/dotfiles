@@ -137,11 +137,9 @@ EOF
   import_colors_sh
 }
 
-# defines options. count the number of options, then pass them + that
-# number to linkhandler.
-main() {
-  prereqs "$1"
-  readonly options='copy duration
+prereqs "$1"
+
+readonly options='copy duration
 copy title
 download audio
 download file
@@ -152,8 +150,7 @@ read
 view image
 watch
 watch (loop)'
-  num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
-  echo "${options}" | linkhandler
-}
 
-main "$@"
+num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
+
+echo "${options}" | linkhandler

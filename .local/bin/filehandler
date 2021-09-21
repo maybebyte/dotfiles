@@ -156,26 +156,20 @@ prereqs2() {
   [ -f "$1" ] || err 'Not a file or does not exist.'
 }
 
-# parse options. get the absolute pathname of the file and use that as
-# the first argument for choose_operation.
-main() {
-  prereqs1
-  readonly args_needed=1
+prereqs1
+readonly args_needed=1
 
-  while getopts hmn opt; do
-    case "${opt}" in
-      'h') usage                                ;;
-      'm') readonly operation='move' && break   ;;
-      'n') readonly operation='rename' && break ;;
-      *)   usage                                ;;
-    esac
-  done
-  shift $((OPTIND - 1))
+while getopts hmn opt; do
+  case "${opt}" in
+    'h') usage                                ;;
+    'm') readonly operation='move' && break   ;;
+    'n') readonly operation='rename' && break ;;
+    *)   usage                                ;;
+  esac
+done
+shift $((OPTIND - 1))
 
-  prereqs2 "$@"
+prereqs2 "$@"
 
-  file="$(readlink -f -- "$1")" && readonly file
-  choose_operation
-}
-
-main "$@"
+file="$(readlink -f -- "$1")" && readonly file
+choose_operation

@@ -51,18 +51,13 @@ EOF
   fi
 }
 
-# handle the prerequisites. determine battery percentage. if it's below
-# 30%, then send the user a notification about the low battery.
-# otherwise, exit silently.
-main() {
-  prereqs
-  batt_percent="$(apm -l)"
-  if [ "${batt_percent}" -lt 20 ]; then
-    set_display
-    notify-send -- "🔋 Your device is at ${batt_percent}%!"
-  else
-    exit 0
-  fi
-}
+prereqs
 
-main
+batt_percent="$(apm -l)"
+
+if [ "${batt_percent}" -lt 20 ]; then
+  set_display
+  notify-send -- "🔋 Your device is at ${batt_percent}%!"
+else
+  exit 0
+fi
