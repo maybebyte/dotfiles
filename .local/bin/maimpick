@@ -81,7 +81,7 @@ maim
 xclip
 xdotool
 EOF
-  import_colors
+  import_colors_sh
 }
 
 main() {

@@ -46,7 +46,7 @@ launch() {
 prereqs() {
   check_grafix
   echo 'dmenu_run' | check_deps
-  import_colors
+  import_colors_sh
 }
 
 main() { prereqs; launch; }; main

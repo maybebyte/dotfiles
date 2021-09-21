@@ -134,7 +134,7 @@ xclip
 youtube-dl
 EOF
   check_opts "$1"
-  import_colors
+  import_colors_sh
 }
 
 # defines options. count the number of options, then pass them + that

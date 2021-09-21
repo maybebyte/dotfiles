@@ -152,7 +152,7 @@ EOF
 
 prereqs2() {
   [ "$#" = "${args_needed}" ] || usage
-  import_colors
+  import_colors_sh
   [ -f "$1" ] || err 'Not a file or does not exist.'
 }
 

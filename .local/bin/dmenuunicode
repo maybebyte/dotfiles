@@ -45,7 +45,7 @@ dmenu
 notify-send
 xclip
 EOF
-  import_colors
+  import_colors_sh
 }
 
 main() { prereqs; grab_emoji; sleep 10 && clear_clip notify; }; main

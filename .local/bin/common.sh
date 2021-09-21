@@ -46,15 +46,17 @@ err() {
 # err isn't used here so that:
 # 1) interactive ksh(1) sessions won't terminate.
 # 2) dmenu scripts still work without colors.
-import_colors() {
+import_colors_sh() {
   colors_sh="${HOME}/.cache/wal/colors.sh"
-  [ -r "${colors_sh}" ] \
-    && . "${colors_sh}" \
-    || echo "${colors_sh} not readable/found." >&2
+  if [ -r "${colors_sh}" ]; then
+    . "${colors_sh}" # source the file
+  else
+    echo "${colors_sh} not readable/found." 2>>"${dotfiles_log}" >&2
+  fi
 }
 
 # generic dmenu function to handle customizations. uses colors that
-# import_colors() gathers.
+# import_colors_sh() gathers.
 menu() {
   dmenu -i \
     -nb "${color0:=#040516}" \
