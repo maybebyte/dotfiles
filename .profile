@@ -37,8 +37,8 @@ export                                          \
   site='https://amissing.link'
 
 # logging
-: "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
-:>"${dotfiles_log}"
+export dotfiles_log="${HOME}/.local/share/dotfiles.log"
+mkdir -p "${dotfiles_log%/*}" && :>"${dotfiles_log}"
 
 # OS specific actions
 # written so it can be expanded later if needed
