@@ -43,7 +43,7 @@ EOF
 main() {
   clear_clip
   pkill -q 'keepass'
-  slock xset dpms force off
+  xlock
 }
 
 main

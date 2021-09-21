@@ -9,7 +9,28 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba:      rgb
 
-! sets up xidle to execute slock instead of xlock after 90 seconds,
-! turns off screen
+! 5 seconds after lock for DPMS standby
+XLock.dpmsstandby: 5
+! 2 min after lock for DPMS suspend
+XLock.dpmssuspend: 120
+! 10 min after lock for DPMS off
+XLock.dpmsoff: 600
+
+XLock.usefirst: True
+XLock.mono: True
+XLock.mode: blank
+XLock.erasemode: no_fade
+XLock.description:
+XLock.info:
+XLock.validate:
+XLock.invalid:
+XLock.echokeys: True
+XLock.echokey: *
+XLock.sound: False
+XLock.timeelapsed: True
+XLock.username:
+XLock.password: password:
+
+! sets up xidle to execute lockscreen script after 90 seconds
 XIdle.program: .local/bin/lockscreen
 XIdle.timeout: 90
