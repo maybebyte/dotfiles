@@ -351,6 +351,11 @@ openbsd_aliases() {
 
 main() {
   OS="$(uname)"
+
+  # it is better to do this once per shell than in each complain_* function
+  # because otherwise one runs the risk of going through the procedure
+  # of assigning $dotfiles_log and creating the directory more than once
+  # which would be less efficient than just doing it once here.
   : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
   mkdir -p "${dotfiles_log%/*}"
 
