@@ -351,6 +351,8 @@ openbsd_aliases() {
 
 main() {
   OS="$(uname)"
+  : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+  mkdir -p "${dotfiles_log%/*}"
 
   # if a *BSD, then pf aliases should be added
   case "${OS}" in
