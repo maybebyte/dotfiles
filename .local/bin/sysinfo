@@ -60,14 +60,17 @@ show_battery() {
       remaining="~${ebl_hours}h & ${ebl_minutes}m"
 
       echo "bat: ${remaining}, at ${percentage}%"
+
       ;;
 
     1) # charging
       echo "chr: at ${percentage}%"
+
       ;;
 
     *) # there's no battery information to display
       return 1
+
       ;;
 
   esac

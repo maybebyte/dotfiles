@@ -1,15 +1,19 @@
 # use nvim if it's installed, vi otherwise
 if [ -x "$(command -v 'nvim')" ]; then
   export EDITOR='nvim'
+
 else
   export EDITOR='vi'
+
 fi
 
 # use colorls if it's installed, ls otherwise
 if [ -x "$(command -v 'colorls')" ]; then
   export ls='colorls'
+
 else
   export ls='ls'
+
 fi
 
 GPG_TTY="$(tty)" && export GPG_TTY
@@ -54,10 +58,12 @@ case "$(uname)" in
 
     nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
       && export nic
+
     ;;
 
   *)
     # if not a recognized OS, do nothing
+
     ;;
 
 esac
@@ -66,10 +72,12 @@ case "$(hostname -s)" in
 
   'aphrodite'|'lain')
     [ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
+
     ;;
 
   *)
     # only defined hosts should launch a gpg-agent
+
     ;;
 
 esac
