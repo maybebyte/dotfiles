@@ -67,6 +67,7 @@ linkhandler() {
         err 'Empty input, so no duration was yanked.'
 
       fi
+
       ;;
 
     'copy title')
@@ -82,18 +83,22 @@ linkhandler() {
         err 'Empty input, so no title yanked.'
 
       fi
+
       ;;
 
     'download audio')
       tmux new-window "youtube-dl -xf bestaudio/best -- ${URL}; read"
+
       ;;
 
     'download file')
       tmux new-window "(cd ${HOME}/Downloads && ftp -nU '' -- ${URL}); read"
+
       ;;
 
     'download video')
       tmux new-window "youtube-dl -- ${URL}; read"
+
       ;;
 
     'listen')
@@ -103,6 +108,7 @@ linkhandler() {
         --no-resume-playback \
         --no-keep-open \
         -- ${URL}"
+
       ;;
 
     'print duration')
@@ -115,26 +121,32 @@ linkhandler() {
         err 'Empty input, so no duration printed.'
 
       fi
+
       ;;
 
     'read')
       tmux new-window "ftp -no - -U '' -- ${URL} | zathura -- -"
+
       ;;
 
     'view image')
       viewimg "${URL}"
+
       ;;
 
     'watch')
       tmux new-window "mpv -- ${URL}"
+
       ;;
 
     'watch (loop)')
       tmux new-window "mpv --speed=1 --loop -- ${URL}"
+
       ;;
 
     *)
       err "${0##*/} doesn't support that option."
+
       ;;
 
   esac
@@ -142,6 +154,7 @@ linkhandler() {
 
 prereqs() {
   check_grafix
+
   check_deps <<'EOF'
 dmenu
 ftp
@@ -151,7 +164,9 @@ sxiv
 xclip
 youtube-dl
 EOF
+
   check_opts "$1"
+
   import_colors_sh
 }
 
