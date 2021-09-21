@@ -40,8 +40,7 @@ gen_site() {
 }
 
 sync_site() {
-  # oddly, can't call this in the form 'priv sync_site' in
-  # main(). thus, a heredoc is needed.
+  # can't call this in the form 'priv sync_site'. thus, a heredoc is needed.
   priv /usr/bin/env sh -- <<EOF
 rm -rf -- ${srvdir:?}
 mkdir -p -- ${srvdir}

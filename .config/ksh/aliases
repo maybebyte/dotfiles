@@ -1,7 +1,5 @@
 # shellcheck disable=SC2154
-#
-# TODO: add complain_noexec() to other areas that aren't OS specific,
-# as those should be handled in the case statement in main()
+
 complain_noexec() {
   echo "[$(date '+%F %H:%M:%S')]: $1 not found or not executable, so related aliases disabled." >&2
   return 1
@@ -349,20 +347,16 @@ openbsd_aliases() {
   alias webtest="webtest \${site} \${markdowndir} \${srvdir}"
 }
 
-main() {
-  OS="$(uname)"
-  : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+OS="$(uname)"
+: "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
 
-  # if a *BSD, then pf aliases should be added
-  case "${OS}" in
-    *'BSD') pf_aliases                                          ;;
-    *)      # do nothing, this is just here to complete the set ;;
-  esac
+# if a *BSD, then pf aliases should be added
+case "${OS}" in
+  *'BSD') pf_aliases                                          ;;
+  *)      # do nothing, this is just here to complete the set ;;
+esac
 
-  case "${OS}" in
-    'OpenBSD') openbsd_aliases; general_aliases ;;
-    *)         general_aliases                  ;;
-  esac
-}
-
-main
+case "${OS}" in
+  'OpenBSD') openbsd_aliases; general_aliases ;;
+  *)         general_aliases                  ;;
+esac
