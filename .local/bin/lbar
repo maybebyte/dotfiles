@@ -30,7 +30,6 @@ EOF
 fi
 
 check_grafix
-
 echo 'lemonbar-xft' | check_deps
 
 lemonbar-xft -f sans-14 -f 'Noto Sans CJK JP-14' -pd
