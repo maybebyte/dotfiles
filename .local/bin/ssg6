@@ -32,10 +32,12 @@ main() {
       printf ' ! -path "*/.*"'
       return
     fi
+
     while read -r -- x; do
       [ -n "${x}" ] || continue
       printf ' ! -path "*/%s*"' "${x}"
     done < "${src}/.ssgignore"
+
   )"
 
   # files
@@ -52,9 +54,12 @@ main() {
   fs="$(
     if [ -f "${dst}/.files" ]; then
       list_affected_files "${src}" "${dst}/.files"
+
     else
       list_files "$1"
+
     fi
+
   )"
 
   if [ -n "${fs}" ]; then
@@ -112,11 +117,13 @@ readlink_f() {
   file="$1"
   cd "${file%/*}"
   file="${file##*/}"
+
   while [ -L "${file}" ]; do
     file="$(readlink -- "${file}")"
     cd "${file%/*}"
     file="${file##*/}"
   done
+
   dir="$(pwd -P)"
   echo "${dir}/${file}"
 }
@@ -174,8 +181,10 @@ list_affected_files() {
 
   if echo "${fs}" | has_partials; then
     list_dependent_files "$1"
+
   else
     echo "${fs}"
+
   fi
 }
 
@@ -183,6 +192,7 @@ list_affected_files() {
 render_html_files() {
   while read -r -- f; do
     render_html_file "$3" < "$1/${f}" > "$2/${f}"
+
   done
 }
 
@@ -196,6 +206,7 @@ render_md_files_lowdown() {
       --parse-no-autolink -- < "$1/${f}" \
       | render_html_file "$3" \
       > "$2/${f%\.md}.html"
+
   done
 }
 
@@ -205,6 +216,7 @@ render_md_files_Markdown_pl() {
     Markdown.pl -- < "$1/${f}" \
       | render_html_file "$3" \
       > "$2/${f%\.md}.html"
+
   done
 }
 

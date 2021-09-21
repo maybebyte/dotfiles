@@ -21,9 +21,9 @@ main() {
   [ -n "$2" ] || usage
   [ -f "$1" ] || no_file "$1"
 
-  index_file=$(readlink -f -- "$1")
-  [ -z "${index_file##*html}" ] && html=$(cat "${index_file}")
-  [ -z "${index_file##*md}" ] && html=$(md_to_html "${index_file}")
+  index_file="$(readlink -f -- "$1")"
+  [ -z "${index_file##*html}" ] && html="$(cat "${index_file}")"
+  [ -z "${index_file##*md}" ] && html="$(md_to_html "${index_file}")"
   [ -n "${html}" ] || usage
 
   base="${index_file%/*}"
@@ -38,6 +38,7 @@ main() {
       | get_description \
       | remove_tags \
       | remove_nbsp
+
   )"
 
   items="$(echo "${html}" | get_items)"
@@ -46,6 +47,7 @@ main() {
     echo "${items}" \
       | render_items "${base}" "${base_url}" \
       | render_feed "${url}" "${title}" "${description}"
+
   )"
 
   >&2 echo "[rssg] ${index_file##$(pwd)/} $(echo "${rss}" | grep -c '<item>') items"
@@ -148,6 +150,7 @@ render_item() {
     echo "${html}" \
       | rel_to_abs_urls "${site_url}" "${base_url}" \
       | remove_nbsp
+
   )"
 
   title="$(echo "${description}" | get_title)"

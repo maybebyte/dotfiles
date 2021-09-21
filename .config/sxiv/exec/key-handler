@@ -24,7 +24,6 @@ while read -r -- file; do
     # delete file
     'd')
       really_delete="$(
-
         {
           echo 'Yes'
           echo 'No'
