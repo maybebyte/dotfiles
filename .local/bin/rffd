@@ -112,7 +112,6 @@ case "${COUNT}" in
   *)           # COUNT is an integer, so do nothing and proceed ;;
 esac
 
-# print a random file
 case "$1" in
 
   'video') find_videos "$2"        ;;
