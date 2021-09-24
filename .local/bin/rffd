@@ -47,6 +47,7 @@ video - webm, mp4, mkv
 pic   - jpg, jpeg, png
 any   - matches all files
 EOF
+
   exit 1
 }
 
@@ -78,16 +79,17 @@ prereqs() {
     echo >&2 "${0##*/} needs a filetype."
     echo >&2
     usage
-  fi
 
-  if [ -z "$2" ]; then
+
+  elif [ -z "$2" ]; then
     echo >&2 "${0##*/} needs a directory to search."
     echo >&2
     usage
-  fi
 
-  if ! [ -d "$2" ]; then
+
+  elif ! [ -d "$2" ]; then
     err "$2 is not a directory"
+
   fi
 }
 
