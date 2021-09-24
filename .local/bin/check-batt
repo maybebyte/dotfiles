@@ -52,8 +52,12 @@ EOF
   # if battery is missing, exit.
   batt_status="$(apm -b)"
 
-  if [ "${batt_status}" = 4 ] || [ "${batt_status}" = 255 ]; then
-    err 'Battery status is absent or unknown.'
+  if [ "${batt_status}" = 4 ]; then
+    err "Battery status is 'absent.'"
+
+  elif [ "${batt_status}" = 255 ]; then
+    err "Battery status is 'unknown.'"
+
   fi
 }
 
