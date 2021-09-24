@@ -104,6 +104,7 @@ shift $((OPTIND - 1))
 
 prereqs "$@"
 
+# if ${COUNT} is unset, 1 result is returned by default
 : "${COUNT:=1}"
 
 # sanity check
@@ -120,8 +121,11 @@ case "$1" in
   *)       err 'Invalid filetype.' ;;
 
 esac |
+
   if [ "${COUNT}" = 0 ]; then
     sort -R
+
   else
     sort -R | head -"${COUNT}"
+
   fi
