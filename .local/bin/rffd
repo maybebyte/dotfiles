@@ -80,12 +80,10 @@ prereqs() {
     echo >&2
     usage
 
-
   elif [ -z "$2" ]; then
     echo >&2 "${0##*/} needs a directory to search."
     echo >&2
     usage
-
 
   elif ! [ -d "$2" ]; then
     err "$2 is not a directory"
