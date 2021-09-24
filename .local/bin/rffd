@@ -41,6 +41,7 @@ ${0##*/} [flags] [filetype] [directory]
 flags can be:
 -c: number of files to return, aka (c)ount. specify 0 for no
     limit/count, i.e., return all results.
+-h: usage information
 
 filetype can be:
 video - webm, mp4, mkv
@@ -91,10 +92,11 @@ prereqs() {
   fi
 }
 
-while getopts c: opt; do
+while getopts c:h opt; do
 
   case "${opt}" in
     c) readonly COUNT="${OPTARG}" ;;
+    h) usage                      ;;
     *) usage                      ;;
   esac
 
