@@ -54,19 +54,23 @@ moves on to the next prompt.
 Note that only one operation should be specified at a time. In fact,
 ${0##*/} only processes the first operation it sees.
 EOF
+
   exit 1
 }
 
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
   mimetype="$(file -ib -- "${file}")" && readonly mimetype
+
   case "${mimetype}" in
+
     # these are organized alphabetically by mimetype
     application/epub*) readonly preload_dir="${HOME}/books"  ;;
     application/pdf*)  readonly preload_dir="${HOME}/books"  ;;
     image/*)           readonly preload_dir="${HOME}/pics"   ;;
     video/*)           readonly preload_dir="${HOME}/videos" ;;
     *)                 readonly preload_dir="${HOME}"        ;;
+
   esac
 }
 
@@ -75,15 +79,15 @@ determine_preload_dir() {
 # the file there and send a notification.
 move_file() {
   determine_preload_dir
+
   dest="$(
     {
       find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
         | sed -- "s|${HOME}|~|g"
 
-      echo 'exit';
+      echo 'exit'
 
     } | menu -l 10 -p "Move ${file##*/} where?"
-
   )"
 
   [ "${dest}" = 'exit' ] && exit 0
@@ -110,8 +114,8 @@ move_file() {
 #
 # dmenu seems to need at least one item from STDIN to behave properly.
 rename_file() {
-  new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")" \
-    && readonly new_filename
+  new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
+  readonly new_filename
 
   if [ "${new_filename}" = 'exit' ]; then
     exit 0
@@ -171,8 +175,8 @@ while getopts hmn opt; do
 
   case "${opt}" in
     'h') usage                                ;;
-    'm') readonly operation='move' && break   ;;
-    'n') readonly operation='rename' && break ;;
+    'm') readonly operation='move'; break     ;;
+    'n') readonly operation='rename'; break   ;;
     *)   usage                                ;;
   esac
 
