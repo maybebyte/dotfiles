@@ -32,11 +32,6 @@ EOF
 
 fi
 
-# exporting ${DISPLAY} is needed for cron(8) jobs.
-set_display() {
-  [ -z "${DISPLAY}" ] && export DISPLAY=:0
-}
-
 # handle prerequisites. designed to exit if prerequisites aren't in
 # place so that the script behaves more predictably.
 prereqs() {
@@ -66,7 +61,9 @@ prereqs
 batt_percent="$(apm -l)"
 
 if [ "${batt_percent}" -lt 20 ]; then
-  set_display
+  # exporting ${DISPLAY} is needed for cron(8) jobs.
+  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+
   notify-send -- "🔋 Your device is at ${batt_percent}%!"
 
 else
