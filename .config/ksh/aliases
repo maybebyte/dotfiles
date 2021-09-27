@@ -32,10 +32,10 @@ pf_aliases() {
 
   else
     alias                                                                \
-      pfdump='tcpdump -r /var/log/pflog'                                 \
+      pfdump='tcpdump -er /var/log/pflog'                                \
       pfdumpb='pfdump action block'                                      \
       pfdumpp='pfdump action pass'                                       \
-      pftail='tcpdump -i pflog0'                                         \
+      pftail='tcpdump -ei pflog0'                                        \
       pftailb='pftail action block'                                      \
       pftailp='pftail action pass'
 
