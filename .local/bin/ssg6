@@ -197,11 +197,13 @@ render_html_files() {
 
 render_md_files_lowdown() {
   while read -r -- f; do
-    lowdown \
-      --html-no-escapehtml \
-      --html-no-skiphtml \
-      --parse-no-metadata \
-      --parse-no-autolink -- < "$1/${f}" \
+
+    lowdown                   \
+    --html-no-escapehtml      \
+    --html-no-skiphtml        \
+    --parse-no-metadata       \
+    --parse-no-autolink       \
+    -- "$1/${f}"              \
       | render_html_file "$3" \
       > "$2/${f%\.md}.html"
 
@@ -211,7 +213,8 @@ render_md_files_lowdown() {
 
 render_md_files_Markdown_pl() {
   while read -r -- f; do
-    Markdown.pl -- < "$1/${f}" \
+
+    Markdown.pl -- "$1/${f}"  \
       | render_html_file "$3" \
       > "$2/${f%\.md}.html"
 

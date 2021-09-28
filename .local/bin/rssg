@@ -34,9 +34,9 @@ main() {
   title="$2"
 
   description="$(
-    echo "${html}" \
+    echo "${html}"      \
       | get_description \
-      | remove_tags \
+      | remove_tags     \
       | remove_nbsp
   )"
 
@@ -67,11 +67,13 @@ no_file() {
 
 md_to_html() {
   [ -x "$(command -v 'lowdown')" ] || exit 3
-  lowdown \
-    --html-no-escapehtml \
-    --html-no-skiphtml \
-    --parse-no-metadata \
-    --parse-no-autolink -- "$1"
+
+  lowdown              \
+  --html-no-escapehtml \
+  --html-no-skiphtml   \
+  --parse-no-metadata  \
+  --parse-no-autolink  \
+  -- "$1"
 }
 
 
@@ -145,7 +147,7 @@ render_item() {
   [ -f "${f%\.html}.md" ] && html="$(md_to_html "${f%\.html}.md")"
 
   description="$(
-    echo "${html}" \
+    echo "${html}"                                  \
       | rel_to_abs_urls "${site_url}" "${base_url}" \
       | remove_nbsp
   )"
