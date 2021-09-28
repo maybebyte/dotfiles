@@ -45,22 +45,29 @@ EOF
 }
 
 viewimg() {
-  filename="$(mktemp)" && readonly filename
-  ftp -VMnU '' -o "${filename}" -- "$1" >/dev/null 2>&1
-  sxiv -- "${filename}" >/dev/null 2>&1
+  filename="$(mktemp)"
+  readonly filename
+
+  ftp -nU '' -o "${filename}" -- "$1"
+
+  sxiv -- "${filename}"
 }
 
 prereqs() {
   check_grafix
+
   check_deps <<'EOF'
 ftp
 sxiv
 EOF
+
   readonly args_needed=1
   [ "$#" = "${args_needed}" ] || usage
 }
 
 prereqs "$@"
-viewimg "$1"
+
+viewimg "$1" >/dev/null 2>&1
+
 wait
 rm -- "${filename}"

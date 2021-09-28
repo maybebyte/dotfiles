@@ -37,7 +37,6 @@ main() {
       [ -n "${x}" ] || continue
       printf ' ! -path "*/%s*"' "${x}"
     done < "${src}/.ssgignore"
-
   )"
 
   # files
@@ -59,7 +58,6 @@ main() {
       list_files "$1"
 
     fi
-
   )"
 
   if [ -n "${fs}" ]; then

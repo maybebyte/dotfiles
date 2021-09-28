@@ -46,6 +46,7 @@ EOF
 # check prerequisites (Xorg instance + dependencies).
 prereqs() {
   check_grafix
+
   check_deps <<'EOF'
 bc
 dunstify
@@ -97,7 +98,8 @@ check_mute() {
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
-  raw_vol="$(sndioctl -n output.level 2>/dev/null)" && readonly raw_vol
+  raw_vol="$(sndioctl -n output.level 2>/dev/null)"
+  readonly raw_vol
 
   case "${raw_vol}" in
     1.000) echo 100                                                  ;;
@@ -116,8 +118,11 @@ prereqs
 readonly args_needed=1
 adjust_vol "$1"
 
-vol="$(get_vol)" && readonly vol
+vol="$(get_vol)"
+readonly vol
+
 check_mute && readonly MUTED='true'
+
 readonly msg_id="25231"
 
 dunstify -u low -r "${msg_id}" -- "$(print_vol "${vol}%")"
