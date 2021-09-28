@@ -38,7 +38,6 @@ main() {
       | get_description \
       | remove_tags \
       | remove_nbsp
-
   )"
 
   items="$(echo "${html}" | get_items)"
@@ -47,7 +46,6 @@ main() {
     echo "${items}" \
       | render_items "${base}" "${base_url}" \
       | render_feed "${url}" "${title}" "${description}"
-
   )"
 
   >&2 echo "[rssg] ${index_file##$(pwd)/} $(echo "${rss}" | grep -c '<item>') items"
@@ -150,7 +148,6 @@ render_item() {
     echo "${html}" \
       | rel_to_abs_urls "${site_url}" "${base_url}" \
       | remove_nbsp
-
   )"
 
   title="$(echo "${description}" | get_title)"
