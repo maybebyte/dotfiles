@@ -117,6 +117,8 @@ current window (copy)
 full screen (copy)'
 
 readonly savedir="${HOME}/screenshots"
-num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
+
+num_of_opts="$(echo "${options}" | wc -l)"
+readonly num_of_opts
 
 echo "${options}" | present_options
