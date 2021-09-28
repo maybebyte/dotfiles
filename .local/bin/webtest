@@ -39,6 +39,7 @@ usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
 gen_site() {
   ssg6 "${markdowndir}" "${htmldir}" "${unpriv_user}" \
     "${site}" >/dev/null 2>&1
+
   rssg "${markdowndir}/index.md" 2>/dev/null \
     "Newsletter - ${site##*//}" > "${htmldir}/rss.xml"
 }
@@ -62,6 +63,7 @@ prereqs() {
 httpd
 rcctl
 EOF
+
   readonly args_needed=3
   [ "$#" = "${args_needed}" ] || usage
 }
@@ -72,7 +74,10 @@ prereqs "$@"
 readonly site="$1"
 readonly markdowndir="$2"
 readonly srvdir="$3"
-htmldir="$(mktemp -d)" && readonly htmldir
+
+htmldir="$(mktemp -d)"
+readonly htmldir
+
 readonly unpriv_user="${LOGNAME}"
 
 if ! gen_site; then
