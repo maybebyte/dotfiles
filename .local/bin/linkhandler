@@ -56,6 +56,7 @@ linkhandler() {
 
     'copy duration')
       duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      readonly duration
 
       if [ -n "${duration}" ]; then
         printf '%s' "${duration}" | yank
@@ -72,12 +73,14 @@ linkhandler() {
 
     'copy title')
       title="$(youtube-dl -e -- "${URL}" 2>/dev/null)"
+      readonly title
 
       if [ -n "${title}" ]; then
         printf '%s' "${title}" | yank
 
         notify-send -- "${title} yanked."
-        sleep 10 && clear_clip notify
+        sleep 10
+        clear_clip notify
 
       else
         err 'Empty input, so no title yanked.'
@@ -103,11 +106,11 @@ linkhandler() {
 
     'listen')
       tmux new-window "mpv \
-        --no-video \
-        --no-pause \
-        --no-resume-playback \
-        --no-keep-open \
-        -- ${URL}"
+      --no-video           \
+      --no-pause           \
+      --no-resume-playback \
+      --no-keep-open       \
+      -- ${URL}"
 
       ;;
 
@@ -184,6 +187,7 @@ view image
 watch
 watch (loop)'
 
-num_of_opts="$(echo "${options}" | wc -l)" && readonly num_of_opts
+num_of_opts="$(echo "${options}" | wc -l)"
+readonly num_of_opts
 
 echo "${options}" | linkhandler
