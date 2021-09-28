@@ -45,7 +45,6 @@ ${0##*/} [cue file] [FLAC file]
 EOF
 
   exit 1
-
 }
 
 # determines which executable name to use for cuetag.
@@ -79,7 +78,6 @@ conv16() {
     err 'Failed to convert 24-bit FLAC file to 16-bit.'
 
   fi
-
 }
 
 splitflac() {
