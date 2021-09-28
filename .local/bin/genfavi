@@ -56,8 +56,10 @@ genfavi() {
 
 prereqs() {
   echo 'convert' | check_deps
+
   readonly args_needed=1
   [ "$#" = "${args_needed}" ] || usage
+
   case "$(file -ib -- "$1")" in
     image/*) :                        ;; # images are OK to process
     *)       err "$1 isn't an image." ;;

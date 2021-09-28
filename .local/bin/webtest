@@ -59,10 +59,9 @@ cleanup() {
 }
 
 prereqs() {
-  check_deps <<'EOF'
-httpd
-rcctl
-EOF
+  if ! [ "$(uname)" = 'OpenBSD' ]; then
+    err "${0##*/} only supports OpenBSD."
+  fi
 
   readonly args_needed=3
   [ "$#" = "${args_needed}" ] || usage

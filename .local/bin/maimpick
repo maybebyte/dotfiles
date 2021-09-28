@@ -98,12 +98,14 @@ present_options() {
 
 prereqs() {
   check_grafix
+
   check_deps <<'EOF'
 dmenu
 maim
 xclip
 xdotool
 EOF
+
   import_colors_sh
 }
 

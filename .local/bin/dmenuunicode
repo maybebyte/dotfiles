@@ -47,11 +47,13 @@ grab_emoji() {
 
 prereqs() {
   check_grafix
+
   check_deps <<'EOF'
 dmenu
 notify-send
 xclip
 EOF
+
   import_colors_sh
 }
 
