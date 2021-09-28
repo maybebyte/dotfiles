@@ -28,7 +28,7 @@ cur_date() {
 }
 
 yankpic() {
-  yank -t image/png || err 'Unable to copy selection to clipboard.'
+  yank -t image/png || err 'Unable to copy image data to clipboard.'
 }
 
 # --hide-cursor, --quiet, --capturebackground, --delay
@@ -36,44 +36,63 @@ maim_with_flags() {
   maim -uqBd 0.5 "$@"
 }
 
-maim_sel_save() {
-  filename="selected-$(cur_date).png" && readonly filename
-  maim_with_flags -s -- "${savedir}/${filename}"
-}
-
-maim_sel_copy() {
-  maim_with_flags -s | yankpic
-}
-
-maim_cur_save() {
-  filename="window-$(cur_date).png" && readonly filename
-  maim_with_flags -i "$(xdotool getactivewindow)" -- \
-    "${savedir}/${filename}"
-}
-
-maim_cur_copy() {
-  maim_with_flags -i "$(xdotool getactivewindow)" \
-    | yankpic
-}
-
-maim_full_save() {
-  filename="full-$(cur_date).png" && readonly filename
-  maim_with_flags -- "${savedir}/${filename}"
-}
-
-maim_full_copy() {
-  maim_with_flags | yankpic
-}
-
 present_options() {
   case "$(menu -l "${num_of_opts}" -p "Screenshot which area?")" in
-    'a selected area')        maim_sel_save                                   ;;
-    'current window')         maim_cur_save                                   ;;
-    'full screen')            maim_full_save                                  ;;
-    'a selected area (copy)') maim_sel_copy && sleep 10 && clear_clip notify  ;;
-    'current window (copy)')  maim_cur_copy && sleep 10 && clear_clip notify  ;;
-    'full screen (copy)')     maim_full_copy && sleep 10 && clear_clip notify ;;
-    *)                        err 'Not a valid area.'                         ;;
+
+    'a selected area')
+      filename="selected-$(cur_date).png"
+      readonly filename
+
+      maim_with_flags -s -- "${savedir}/${filename}"
+
+      ;;
+
+    'current window')
+      filename="window-$(cur_date).png"
+      readonly filename
+
+      maim_with_flags -i "$(xdotool getactivewindow)" -- "${savedir}/${filename}"
+
+      ;;
+
+
+    'full screen')
+      filename="full-$(cur_date).png"
+      readonly filename
+
+      maim_with_flags -- "${savedir}/${filename}"
+
+      ;;
+
+    'a selected area (copy)')
+      maim_with_flags -s | yankpic
+
+      sleep 10
+      clear_clip notify
+
+      ;;
+
+    'current window (copy)')
+      maim_with_flags -i "$(xdotool getactivewindow)" | yankpic
+
+      sleep 10
+      clear_clip notify
+
+      ;;
+
+    'full screen (copy)')
+      maim_with_flags | yankpic
+
+      sleep 10
+      clear_clip notify
+
+      ;;
+
+    *)
+      err 'Not a valid area.'
+
+      ;;
+
   esac
 }
 
