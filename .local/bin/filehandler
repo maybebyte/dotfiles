@@ -86,7 +86,6 @@ move_file() {
         | sed -- "s|${HOME}|~|g"
 
       echo 'exit'
-
     } | menu -l 10 -p "Move ${file##*/} where?"
   )"
 
