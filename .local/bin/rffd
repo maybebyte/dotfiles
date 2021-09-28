@@ -56,9 +56,9 @@ EOF
 find_videos() {
   find "$1" -type f  \
   \(                 \
-  -iname    '*.webm' \
-  -o -iname '*.mp4'  \
-  -o -iname '*.mkv'  \
+  -iname '*.webm' -o \
+  -iname '*.mp4'  -o \
+  -iname '*.mkv'     \
   \)
 }
 
@@ -66,9 +66,9 @@ find_videos() {
 find_pics() {
   find "$1" -type f  \
   \(                 \
-  -iname    '*.jpg'  \
-  -o -iname '*.jpeg' \
-  -o -iname '*.png'  \
+  -iname '*.jpg'  -o \
+  -iname '*.jpeg' -o \
+  -iname '*.png'     \
   \)
 }
 
