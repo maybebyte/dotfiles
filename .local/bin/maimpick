@@ -55,7 +55,6 @@ present_options() {
 
       ;;
 
-
     'full screen')
       filename="full-$(cur_date).png"
       readonly filename
