@@ -18,6 +18,10 @@ fi
 
 GPG_TTY="$(tty)" && export GPG_TTY
 
+# PATH parameter expansion explanation:
+# https://unix.stackexchange.com/a/415028
+#
+# the extra colon is intentional, it's the delimiter for PATH.
 export                                          \
   BROWSER='firefox'                             \
   CLICOLOR=1                                    \
