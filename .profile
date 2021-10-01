@@ -46,7 +46,7 @@ export                                          \
 
 # logging
 export dotfiles_log="${HOME}/.local/share/dotfiles.log"
-mkdir -p "${dotfiles_log%/*}"
+mkdir -p -- "${dotfiles_log%/*}"
 :>"${dotfiles_log}"
 
 # OS specific actions
