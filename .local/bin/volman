@@ -69,10 +69,10 @@ adjust_vol() {
 # emoji. if output.mute=0, all positional parameters as well.
 print_vol() {
   if [ "${MUTED}" = 'true' ]; then
-    echo '🔇 MUTED' && return
+    echo '🔇 MUTED'
 
   elif [ "${vol}" = 0 ]; then
-    echo '🔇 ' "$@" && return
+    echo '🔇 ' "$@"
 
   elif [ "${vol}" -ge 50 ]; then
     echo '🔊 ' "$@"
