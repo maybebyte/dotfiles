@@ -77,12 +77,12 @@ find_any() { find "$1" -type f; }
 
 prereqs() {
   if [ -z "$1" ]; then
-    echo >&2 "${0##*/} needs a filetype."
+    echo "${0##*/} needs a filetype." >&2
     echo >&2
     usage
 
   elif [ -z "$2" ]; then
-    echo >&2 "${0##*/} needs a directory to search."
+    echo "${0##*/} needs a directory to search." >&2
     echo >&2
     usage
 
