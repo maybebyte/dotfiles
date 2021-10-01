@@ -35,13 +35,7 @@ EOF
 
 fi
 
-prereqs() {
-  check_deps <<'EOF'
-slock
-xclip
-xset
-EOF
-}
+echo 'xlock' | check_deps
 
 clear_clip
 pkill -q 'keepass'
