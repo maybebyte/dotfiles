@@ -32,7 +32,6 @@ while read -r -- file; do
           echo 'Yes'
           echo 'No'
         } | menu -p "Really delete ${file}?"
-
       )"
 
       if [ "${really_delete}" = 'Yes' ]; then
