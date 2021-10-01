@@ -46,7 +46,8 @@ export                                          \
 
 # logging
 export dotfiles_log="${HOME}/.local/share/dotfiles.log"
-mkdir -p "${dotfiles_log%/*}" && :>"${dotfiles_log}"
+mkdir -p "${dotfiles_log%/*}"
+:>"${dotfiles_log}"
 
 # OS specific actions
 # written so it can be expanded later if needed
@@ -57,11 +58,11 @@ case "$(uname)" in
       markdowndir="${HOME}/builds/website_md" \
       srvdir='/var/www/htdocs/aml'
 
-    gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')" \
-      && export gateway
+    gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')"
+    export gateway
 
-    nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')" \
-      && export nic
+    nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')"
+    export nic
 
     ;;
 
@@ -91,5 +92,10 @@ esac
 # this should come last in .profile so that one can assume
 # that any variables exported in .profile will carry over to
 # ksh(1).
-[ -r "${HOME}/.config/ksh/kshrc" ] \
-  && export ENV="${HOME}/.config/ksh/kshrc"
+if [ -r "${HOME}/.config/ksh/kshrc" ]; then
+  export ENV="${HOME}/.config/ksh/kshrc"
+
+else
+  echo "${HOME}/.config/ksh/kshrc not readable." 2>>"${dotfiles_log}" >&2
+
+fi
