@@ -52,7 +52,11 @@ EOF
   exit 1
 }
 
-# given a directory, print all files in it.
+# the base find(1) command for find_* functions to use. will only return
+# files.
+#
+# $1 is a path for find(1) to search. base_find_cmd() then accepts all
+# positional parameters after that.
 base_find_cmd() {
   search_path="$1"
   shift
