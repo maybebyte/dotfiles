@@ -52,9 +52,17 @@ EOF
   exit 1
 }
 
+# given a directory, print all files in it.
+base_find_cmd() {
+  search_path="$1"
+  shift
+
+  find "${search_path}" -type f "$@"
+}
+
 # given a directory, print all video files in it.
 find_videos() {
-  find "$1" -type f  \
+  base_find_cmd "$1" \
   \(                 \
   -iname '*.webm' -o \
   -iname '*.mp4'  -o \
@@ -64,16 +72,13 @@ find_videos() {
 
 # given a directory, print all photos in it.
 find_pics() {
-  find "$1" -type f  \
+  base_find_cmd "$1" \
   \(                 \
   -iname '*.jpg'  -o \
   -iname '*.jpeg' -o \
   -iname '*.png'     \
   \)
 }
-
-# given a directory, print all files in it.
-find_any() { find "$1" -type f; }
 
 prereqs() {
   if [ -z "$1" ]; then
@@ -119,7 +124,7 @@ case "$1" in
 
   'video') find_videos "$2"        ;;
   'pic')   find_pics "$2"          ;;
-  'any')   find_any "$2"           ;;
+  'any')   base_find_cmd "$2"      ;;
   *)       err 'Invalid filetype.' ;;
 
 esac |
