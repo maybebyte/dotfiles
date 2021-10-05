@@ -101,7 +101,6 @@ splitflac() {
 # the executable's name isn't consistent among operating systems.
 check_deps <<'EOF'
 cuebreakpoints
-dos2unix
 flac
 shnfix
 shnsplit
@@ -124,7 +123,10 @@ shift $((OPTIND - 1))
 [ "$#" = "${args_needed}" ] || usage
 
 assign_cuetag
-dos2unix -- "$1" # removes ^M and other such irregularities from cuesheet
+
+# removes carriage returns from cuesheet
+tr -d '\r' "$1" >"$1.printable"
+mv "$1.printable" "$1"
 
 # TODO: this should back up the original 24-bit FLAC file. maybe
 # splitflac() can pick up on it and not back it up if ${CONVERT} =
