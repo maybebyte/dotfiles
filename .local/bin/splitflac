@@ -125,8 +125,9 @@ shift $((OPTIND - 1))
 assign_cuetag
 
 # removes carriage returns from cuesheet
-tr -d '\r' "$1" >"$1.printable"
-mv "$1.printable" "$1"
+printable_cuesheet="$(mktemp)"
+tr -d '\r' "$1" >"${printable_cuesheet}"
+mv "${printable_cuesheet}" "$1"
 
 # TODO: this should back up the original 24-bit FLAC file. maybe
 # splitflac() can pick up on it and not back it up if ${CONVERT} =
