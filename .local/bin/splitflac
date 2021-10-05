@@ -127,7 +127,7 @@ assign_cuetag
 # removes carriage returns from cuesheet
 printable_cuesheet="$(mktemp)"
 
-tr -d '\r' "$1" >"${printable_cuesheet}"
+tr -d '\r' <"$1" >"${printable_cuesheet}"
 mv "${printable_cuesheet}" "$1"
 
 unset printable_cuesheet
