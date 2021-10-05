@@ -1,29 +1,29 @@
 # terminal emulator
 super + Return
-	${TERMINAL}
+  ${TERMINAL}
 
 # launcher (dmenu_run script that adds wal colors)
 super + d
-	${HOME}/.local/bin/launcher
+  ${HOME}/.local/bin/launcher
 
 # dmenuunicode (pick an emoji and copy it to clipboard)
 super + u
-	${HOME}/.local/bin/dmenuunicode
+  ${HOME}/.local/bin/dmenuunicode
 
 # web browser
 super + B
-	${BROWSER}
+  ${BROWSER}
 
 # tor browser
 super + W
-	tor-browser
+  tor-browser
 
 # element-web
 #
 # this alias should be changed if ${BROWSER} != firefox since it uses
 # a flag specific to firefox.
 super + M
-	${BROWSER} -P 'matrix' 'http://localhost:8080'
+  ${BROWSER} -P 'matrix' 'http://localhost:8080'
 
 # password manager
 #
@@ -32,36 +32,36 @@ super + M
 # 'super + P' such that it will pause/play MPD. then, assign tor browser
 # to 'super + T' instead of 'super + B'.
 super + P
-	keepassxc
+  keepassxc
 
 # screen lock
 super + s
-	pkill -USR1 xidle
+  pkill -USR1 xidle
 
 # clear the clipboard and notify the user about it
 super + X
-	${HOME}/.local/bin/clear_clip notify
+  ${HOME}/.local/bin/clear_clip notify
 
 # full screenshot
 Print
-	maim -uq ${HOME}/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
+  maim -uq ${HOME}/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
 
 # screenshot menu
 shift + Print
-	${HOME}/.local/bin/maimpick
+  ${HOME}/.local/bin/maimpick
 
 # music {skip,play,pause}
 super + {greater,less,T}
-	mpc {next,prev,toggle}
+  mpc {next,prev,toggle}
 
 # seek to beginning, 5 sec {back,forward}, 1 min {back,forward}
 shift + super + {0,Left,Right,Down,Up}
-	 mpc seek {0,-5,+5,-1:00,+1:00}
+  mpc seek {0,-5,+5,-1:00,+1:00}
 
 # {mute,lower,raise} volume
 {F1,F2,F3}
-	${HOME}/.local/bin/volman {mute,dec,inc}
+  ${HOME}/.local/bin/volman {mute,dec,inc}
 
 # {dim,brighten} display
 {F5,F6}
-	 xbacklight {-dec,-inc} 10 -steps 1
+  xbacklight {-dec,-inc} 10 -steps 1
