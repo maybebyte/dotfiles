@@ -36,13 +36,13 @@ noremap : ;
 " plugin bindings
 let mapleader=","
 
-nnoremap <leader>n :NERDTreeToggle
-nnoremap <leader>f :FZF $HOME
-nnoremap <leader>g :Goyo
-nnoremap <leader>d :r !date '+\%F'
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>f :FZF $HOME<CR>
+nnoremap <leader>g :Goyo<CR>
+nnoremap <leader>d :r !date '+\%F'<CR>
 
 " spell-check set to <leader>o, 'o' for 'orthography':
-nnoremap <leader>o :set spell! spelllang=en_us
+nnoremap <leader>o :set spell! spelllang=en_us<CR>
 
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
@@ -67,8 +67,8 @@ autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 " Is buggy in Neomutt, nomodifiable bug
 "autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
 "autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=72
-"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZZ :Goyo!\|x!
-"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!
+"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZZ :Goyo!\|x!<CR>
+"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!<CR>
 
 " Enable Goyo for help files
 autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
@@ -77,7 +77,7 @@ autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
 " one ZQ fully exits out of Goyo when reading help files.
 " (ordinarily, one would need to ZQ twice).
 autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
-  \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!
+  \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
 
 " shell script syntax for xsession and ksh files
 autocmd BufRead $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
