@@ -80,14 +80,12 @@ determine_preload_dir() {
 move_file() {
   determine_preload_dir
 
-  dest="$(
-    {
-      find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
-        | sed -- "s|${HOME}|~|g"
+  dest="$( {
+    find "${preload_dir}" -type d ! \( -name '.*' -prune \) \
+      | sed -- "s|${HOME}|~|g"
 
-      echo 'exit'
-    } | menu -l 10 -p "Move ${file##*/} where?"
-  )"
+    echo 'exit'
+  } | menu -l 10 -p "Move ${file##*/} where?")"
 
   [ "${dest}" = 'exit' ] && exit 0
   [ -z "${dest}" ] && err "${0##*/} needs a destination."
