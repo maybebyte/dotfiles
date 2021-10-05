@@ -140,9 +140,9 @@ if shnfix -c -- "$2"; then
   mv -- "${2%.flac}-fixed.flac" "$2"
 fi
 
-# removes carriage returns from cuesheet
 crless_cuesheet="$(mktemp)"
 
+# removes carriage returns from cuesheet
 tr -d '\r' <"$1" >"${crless_cuesheet}"
 mv "${crless_cuesheet}" "$1"
 
