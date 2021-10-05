@@ -141,11 +141,11 @@ if shnfix -c -- "$2"; then
 fi
 
 # removes carriage returns from cuesheet
-printable_cuesheet="$(mktemp)"
+crless_cuesheet="$(mktemp)"
 
-tr -d '\r' <"$1" >"${printable_cuesheet}"
-mv "${printable_cuesheet}" "$1"
+tr -d '\r' <"$1" >"${crless_cuesheet}"
+mv "${crless_cuesheet}" "$1"
 
-unset printable_cuesheet
+unset crless_cuesheet
 
 splitflac "$1" "$2"
