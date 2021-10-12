@@ -91,10 +91,11 @@ move_file() {
   # with parameter expansion in the form "~${dest##${HOME}}"
   dest="$(echo "${dest}" | sed -- "s|~|${HOME}|g")"
 
-  if ! [ -d "${dest}" ] || ! mkdir -p -- "${dest}"; then
-    err "~${dest##${HOME}} not found nor created."
+  if ! [ -e "${dest}" ]; then
+    mkdir -p -- "${dest}" || err "~${dest##${HOME}} could not be created with mkdir(1)."
+  fi
 
-  elif mv -- "${file}" "${dest}/${file##*/}"; then
+  if mv -- "${file}" "${dest}/${file##*/}"; then
     notify-send -- "${file##*/} moved to ~${dest##${HOME}}"
 
   else
