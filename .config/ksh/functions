@@ -205,8 +205,10 @@ readmd() { lowdown -T 'term' --term-no-colour "$1" | less; }
 #
 # tarpv [archive target] > filename
 tarpv() {
-  if [ -z "$1" ] || [ "$1" = '-h' ]; then
-    cat >&2 <<'EOF'
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
 usage:
 
 tarpv [archive target] > filename
@@ -215,19 +217,25 @@ optionally, include compression in the pipeline as so:
 
 tarpv [archive target] | gzip -c > filename
 EOF
-  else
-    # command -v will match the alias
-    DU="$(which 'du')"
-    tab="$(printf '\t')"
 
-    size_of_dir="$(
-      "${DU}" -sh "$1" \
-        | sed -Ee "s/( +|${tab}{2,})/${tab}/" -e "s/\.([[:digit:]])+//" \
-        | cut -f 1
-    )"
+      ;;
 
-    tar -cf - "$1" | pv -s "${size_of_dir}"
-  fi
+    *)
+      # command -v will match the alias
+      DU="$(which 'du')"
+      tab="$(printf '\t')"
+
+      size_of_dir="$(
+        "${DU}" -sh "$1" \
+          | sed -Ee "s/( +|${tab}{2,})/${tab}/" -e "s/\.([[:digit:]])+//" \
+          | cut -f 1
+      )"
+
+      tar -cf - "$1" | pv -s "${size_of_dir}"
+
+      ;;
+
+  esac
 }
 
 # test Matrix federation and output the JSON.
