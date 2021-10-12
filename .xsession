@@ -5,6 +5,19 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
+# environment variables that either:
+#
+# a) don't make sense to put in ~/.profile
+# b) only make sense with a graphical environment and full color support
+#
+# some of these are overrides, and some are variables not specified in
+# ~/.profile.
+export                        \
+  BROWSER='firefox'           \
+  QT_STYLE_OVERRIDE='adwaita' \
+  READER='zathura'            \
+  TERMINAL='xst'
+
 # daemons
 dunst &
 sxhkd &

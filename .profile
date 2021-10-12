@@ -23,7 +23,7 @@ GPG_TTY="$(tty)" && export GPG_TTY
 #
 # the extra colon is intentional, it's the delimiter for PATH.
 export                                          \
-  BROWSER='firefox'                             \
+  BROWSER='lynx'                                \
   CLICOLOR=1                                    \
   FCEDIT="${EDITOR}"                            \
   VISUAL="${EDITOR}"                            \
@@ -36,9 +36,6 @@ export                                          \
   MAILRC="${HOME}/.config/mail/mailrc"          \
   PAGER='less'                                  \
   PATH="${HOME}/.local/bin${PATH:+:${PATH}}"    \
-  QT_STYLE_OVERRIDE='adwaita'                   \
-  READER='zathura'                              \
-  TERMINAL='xst'                                \
   XMONAD_CACHE_DIR="${HOME}/.cache/xmonad"      \
   XMONAD_CONFIG_DIR="${HOME}/.config/xmonad"    \
   XMONAD_DATA_DIR="${HOME}/.local/share/xmonad" \
