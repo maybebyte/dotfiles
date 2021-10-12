@@ -8,7 +8,7 @@ xrdb "${HOME}/.Xresources"
 # environment variables that either:
 #
 # a) don't make sense to put in ~/.profile
-# b) only make sense with a graphical environment and full color support
+# b) only make sense with a graphical environment
 #
 # some of these are overrides, and some are variables not specified in
 # ~/.profile.
