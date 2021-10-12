@@ -66,6 +66,7 @@ determine_preload_dir() {
     # these are organized alphabetically by mimetype
     application/epub*) readonly preload_dir="${HOME}/books"  ;;
     application/pdf*)  readonly preload_dir="${HOME}/books"  ;;
+    image/vnd.djvu)    readonly preload_dir="${HOME}/books"  ;;
     image/*)           readonly preload_dir="${HOME}/pics"   ;;
     video/*)           readonly preload_dir="${HOME}/videos" ;;
     *)                 readonly preload_dir="${HOME}"        ;;
