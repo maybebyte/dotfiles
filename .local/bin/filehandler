@@ -79,30 +79,43 @@ determine_preload_dir() {
 move_file() {
   determine_preload_dir
 
-  dest="$( {
-    find "${preload_dir}" -type d | sed -- "s|${HOME}|~|g"
+  # substitutes $HOME with a tilde so the list of directories in dmenu is
+  # more readable.
+  tilde_dest="$( {
+    find "${preload_dir}" -type d | sed -- "s|^${HOME}|~|g"
 
     echo 'exit'
   } | menu -l 10 -p "Move ${file##*/} where?")"
 
-  [ "${dest}" = 'exit' ] && exit 0
-  [ -z "${dest}" ] && err "${0##*/} needs a destination."
+  case "${tilde_dest}" in
+    'exit')
+      exit 0
 
-  # reverses tilde expansion. it's reinstated in certain lines below
-  # with parameter expansion in the form "~${dest##${HOME}}"
-  dest="$(echo "${dest}" | sed -- "s|~|${HOME}|g")"
+      ;;
 
-  if ! [ -e "${dest}" ]; then
-    mkdir -p -- "${dest}" || err "~${dest##${HOME}} could not be created with mkdir(1)."
-  fi
+    '')
+      err "${0##*/} needs a destination."
 
-  if mv -- "${file}" "${dest}/${file##*/}"; then
-    notify-send -- "${file##*/} moved to ~${dest##${HOME}}"
+      ;;
 
-  else
-    err "Failed to move ${file##*/}"
+    *)
+      no_tilde_dest="$(echo "${tilde_dest}" | sed -- "s|^~|${HOME}|g")"
 
-  fi
+      if ! [ -e "${no_tilde_dest}" ]; then
+        mkdir -p -- "${no_tilde_dest}" || err "${tilde_dest} could not be created with mkdir(1)."
+      fi
+
+      if mv -- "${file}" "${no_tilde_dest}/${file##*/}"; then
+        notify-send -- "${file##*/} moved to ${tilde_dest}"
+
+      else
+        err "Failed to move ${file##*/}"
+
+      fi
+
+    ;;
+
+  esac
 }
 
 # once the user chooses a filename with dmenu, rename the file
@@ -113,13 +126,21 @@ rename_file() {
   new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
   readonly new_filename
 
-  if [ "${new_filename}" = 'exit' ]; then
-    exit 0
+  case "${new_filename}" in
 
-  elif [ -z "${new_filename}" ]; then
-    err "${0##*/} needs a new name to rename ${file##*/} to."
+    'exit')
+      exit 0
 
-  elif mv -- "${file}" "${file%/*}/${new_filename}"; then
+      ;;
+
+    '')
+      err "${0##*/} needs a new name to rename ${file##*/} to."
+
+      ;;
+
+  esac
+
+  if mv -- "${file}" "${file%/*}/${new_filename}"; then
     notify-send -- "${file##*/} renamed to ${new_filename}"
 
   else
@@ -132,9 +153,7 @@ rename_file() {
 # ${operation} by getopts, the user chooses the operation with dmenu.
 choose_operation() {
   if [ -z "${operation}" ]; then
-    readonly options='move\nrename'
-
-    operation="$(echo "${options}" | menu -p "What to do with ${file}?")"
+    operation="$(printf '%s\n' 'move' 'rename' | menu -p "What to do with ${file}?")"
     readonly operation
 
     # a small delay needs to be here. without it, the subsequent menu
@@ -170,10 +189,9 @@ readonly args_needed=1
 while getopts hmn opt; do
 
   case "${opt}" in
-    'h') usage                                ;;
-    'm') readonly operation='move'; break     ;;
-    'n') readonly operation='rename'; break   ;;
-    *)   usage                                ;;
+    'm')     readonly operation='move'; break   ;;
+    'n')     readonly operation='rename'; break ;;
+    'h'|*)   usage                              ;;
   esac
 
 done

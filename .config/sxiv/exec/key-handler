@@ -37,7 +37,6 @@ while read -r -- file; do
       if [ "${really_delete}" = 'Yes' ]; then
         rm -- "${file}"
         notify-send -- "${file} deleted."
-
       fi
 
       ;;
