@@ -39,13 +39,10 @@ cht() { ftp -U 'curl' -VMo - -- "https://cht.sh/$1"; }
 #
 # $1 is a file.
 cpbak() {
-  if [ -z "${1##*.bak}" ]; then
-    cp -- "$1" "${1%.bak}"
-
-  else
-    cp -- "$1" "$1.bak"
-
-  fi
+  case "${1##*.bak}" in
+    '') cp -- "$1" "${1%.bak}" ;;
+    *)  cp -- "$1" "$1.bak"    ;;
+  esac
 }
 
 # choose files with fzf and edit them.
@@ -145,30 +142,35 @@ manmd() { lowdown -T 'man' "$1" | mandoc -a; }
 #
 # $1 is a file.
 mvbak() {
-  if [ -z "${1##*.bak}" ]; then
-    mv -- "$1" "${1%.bak}"
-  else
-    mv -- "$1" "$1.bak"
-  fi
+  case "${1##*.bak}" in
+    '') mv -- "$1" "${1%.bak}" ;;
+    *)  mv -- "$1" "$1.bak"    ;;
+  esac
 }
 
 # checks the headers of a website with tor(1).
 # nc_head [path] [domain] 80 for HTTP.
 # nc_head [path] -c [domain] 443 for HTTPS.
 nc_head() {
-  if [ -z "$1" ] || [ "$1" = '-h' ]; then
-    cat >&2 <<'EOF'
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
 checks the headers of a website with tor(1).
 `nc_head [path] [domain] 80` for HTTP.
 `nc_head [path] -c [domain] 443` for HTTPS.
 EOF
 
-  else
-    path="$1"
-    shift
-    printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
+      ;;
 
-  fi
+    *)
+      path="$1"
+      shift
+      printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
+
+      ;;
+
+    esac
 }
 
 # nc(1) + tor(1) = fun.
