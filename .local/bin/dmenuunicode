@@ -29,15 +29,18 @@ grab_emoji() {
   readonly emoji_file="${HOME}/.local/share/emoji"
   [ -r "${emoji_file}" ] || err "${emoji_file} is not readable."
 
-  chosen="$(cut -d ';' -f 1 -- "${emoji_file}" | menu -l 20 -fn 'Symbola-20')"
-  [ -n "${chosen}" ] || err 'Must choose an emoji.'
+  chosen_entry="$(cut -d ';' -f 1 -- "${emoji_file}" | menu -l 20 -fn 'Symbola-20')"
+  readonly chosen_entry
 
-  readonly chosen="${chosen%% *}"
-  grep -q -- "^${chosen}" "${emoji_file}" || err "Emoji not found in ${emoji_file}."
+  [ -n "${chosen_entry}" ] || err 'Must choose an emoji.'
 
-  # important to use printf %s here, as ${chosen} is user input
-  if printf '%s' "${chosen}" | yank; then
-    notify-send -- "${chosen} copied to clipboard."
+  readonly emoji="${chosen_entry%% *}"
+
+  grep -q -- "^${emoji}" "${emoji_file}" || err "Emoji not found in ${emoji_file}."
+
+  # important to use printf %s here, as ${emoji} is user input
+  if printf '%s' "${emoji}" | yank; then
+    notify-send -- "${emoji} copied to clipboard."
 
   else
     err 'Unable to grab emoji with xclip(1).'
