@@ -476,7 +476,7 @@ randpics() {
       cat >&2 <<'EOF'
 with rffd, open up random pics with sxiv(1).
 
-randpics [directory of pics]
+randpics [directory with pics]
 EOF
 
       return
@@ -499,7 +499,7 @@ randvids() {
       cat >&2 <<'EOF'
 with rffd, open up random videos with mpv(1).
 
-randvids [directory of videos]
+randvids [directory with videos]
 EOF
 
       return
