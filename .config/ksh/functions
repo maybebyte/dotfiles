@@ -8,7 +8,27 @@
 # display what aliases expand to within a function.
 
 # a wrapper around curl(1) that passes -x to use tor(1).
-anoncurl() { curl -x socks5://127.0.0.1:9050 "$@"; }
+anoncurl() {
+  case "$@" in
+
+    ''|'-h')
+      cat >&2 <<EOF
+curl(1) with tor(1).
+
+otherwise, use it the same way you would use nc(1).
+EOF
+
+      return
+
+      ;;
+
+    *)
+      curl -x socks5://127.0.0.1:9050 "$@"
+
+      ;;
+
+  esac
+}
 
 # using torsocks(1) and ftp(1) with no auto-login or user agent, send a
 # GET request to $1 and send the results to STDOUT. zathura(1) reads
@@ -16,20 +36,82 @@ anoncurl() { curl -x socks5://127.0.0.1:9050 "$@"; }
 #
 # $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
 # zathura(1) can open.
-anonread() { anonftp -o - -- "$1" | zathura -- -; }
+anonread() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<EOF
+read PDFs with tor(1).
+
+anonread [URL linking to an ebook]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      anonftp -o - -- "$1" | zathura -- -
+
+      ;;
+
+  esac
+}
 
 # invoke apropos(1) to match $1 against any available macro key of
 # manpages that match the current machine architecture.
 #
 # $1 is a word/phrase to search for (phrases must be quoted).
-aprv() { apropos -S "$(uname -m)" -- any="$1"; }
+aprv() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+invoke apropos(1) to match the given query against any available macro
+key of manpages that match the current machine architecture.
+
+aprv [query]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      apropos -S "$(uname -m)" -- any="$1"
+
+      ;;
+
+  esac
+}
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
 # the path and send the results to STDOUT.
 #
 # $1 is a program one wants to learn more about.
-cht() { ftp -U 'curl' -VMo - -- "https://cht.sh/$1"; }
+cht() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+retrieve command cheat sheets from cht.sh
+
+cht [command name]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
+
+      ;;
+
+  esac
+}
+
 
 # if $1 ends in '.bak', copy $1 to an identically named file except the
 # new file omits '.bak'.
@@ -39,9 +121,31 @@ cht() { ftp -U 'curl' -VMo - -- "https://cht.sh/$1"; }
 #
 # $1 is a file.
 cpbak() {
-  case "${1##*.bak}" in
-    '') cp -- "$1" "${1%.bak}" ;;
-    *)  cp -- "$1" "$1.bak"    ;;
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+if the given file ends in '.bak', copy to an identically named file
+except the new file omits '.bak'.
+
+otherwise, copy the given file to an identically named file except the
+new file ends in '.bak'.
+
+cpbak [file]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      case "${1##*.bak}" in
+        '') cp -- "$1" "${1%.bak}" ;;
+        *)  cp -- "$1" "$1.bak"    ;;
+      esac
+
+      ;;
+
   esac
 }
 
@@ -53,12 +157,52 @@ enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
 # perform an A record lookup on $1 and return the IP address.
 #
 # $1 is a domain.
-grabipv4() { dig A +short "$1"; }
+grabipv4() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+perform an A record lookup and return the IP address.
+
+grabipv4 [IP address]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      dig A +short "$1"
+
+      ;;
+
+  esac
+}
 
 # perform an AAAA record lookup on $1 and return the IPv6 address.
 #
 # $1 is a domain.
-grabipv6() { dig AAAA +short "$1"; }
+grabipv6() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+perform an AAAA record lookup and return the IPv6 address.
+
+grabipv6 [IPv6 address]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      dig AAAA +short "$1"
+
+      ;;
+
+  esac
+}
 
 # if $1 is less than 1024, print it and exit successfully.
 # if $1 is not an integer, exit with an error.
@@ -69,15 +213,33 @@ grabipv6() { dig AAAA +short "$1"; }
 #
 # bug: 1024000 returns 0MB. maybe fix it by checking modulus?
 hreadable() {
-  no_of_loops=0
-  size="$1"
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+return a human readable integer.
+
+hreadable [positive integer]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      no_of_loops=0
+      size="$1"
+
+      ;;
+
+  esac
 
   # sanity check so math below works. also alleviates the need to use
   # printf(1) below since we can at least know that ${size} is an
   # integer.
   case "${size}" in
-    ''|*[!0-9]*) err 'Only integers are accepted.'               ;;
-    *)           # size is an integer, so do nothing and proceed ;;
+    *[!0-9]*) echo 'Only integers are accepted.' >&2; return  ;;
+    *)        # size is an integer, so do nothing and proceed ;;
   esac
 
   # size < 1024 means the value printed should be in bytes.
@@ -91,11 +253,11 @@ hreadable() {
   done
 
   case ${no_of_loops} in
-    1) echo "${size}KB"                                    ;;
-    2) echo "${size}MB"                                    ;;
-    3) echo "${size}GB"                                    ;;
-    4) echo "${size}TB"                                    ;;
-    *) err 'hreadable() can only convert up to terabytes.' ;;
+    1) echo "${size}KB"                                                 ;;
+    2) echo "${size}MB"                                                 ;;
+    3) echo "${size}GB"                                                 ;;
+    4) echo "${size}TB"                                                 ;;
+    *) echo 'hreadable() can only convert up to terabytes.' >&2; return ;;
   esac
 }
 
@@ -105,10 +267,47 @@ hreadable() {
 #
 # $1 is an IP address. If left blank, ipinf will return results for our
 # public IP.
-ipinf() { ftp -VMo - -- "https://ipinfo.io/$1"; }
+ipinf() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+display IP address information from ipinfo.io
+
+ipinf [IP address]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      ftp -VMo - -- "https://ipinfo.io/$1"
+
+      ;;
+
+  esac
+}
 
 # journal
 jrnl() {
+  case "$@" in
+
+    '') # being used as intended
+
+      ;;
+
+    '-h'|*)
+      cat >&2 <<'EOF'
+jrnl (for journaling) takes no arguments.
+EOF
+
+      return
+
+      ;;
+
+  esac
+
   today="$(date '+%F')"
   jrnl_entry="${HOME}/notes/journal/${today}.txt"
 
@@ -135,16 +334,55 @@ jrnl() {
 }
 
 # read a markdown document with man(1).
-manmd() { lowdown -T 'man' "$1" | mandoc -a; }
+manmd() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+read a markdown document with man(1).
+
+manmd [markdown document]
+EOF
+
+      return
+
+    ;;
+
+    *)
+      lowdown -T 'man' "$1" | mandoc -a
+
+    ;;
+
+  esac
+}
 
 # if $1 ends in '.bak', remove '.bak' from the filename.
 # otherwise, append '.bak' to the filename.
 #
 # $1 is a file.
 mvbak() {
-  case "${1##*.bak}" in
-    '') mv -- "$1" "${1%.bak}" ;;
-    *)  mv -- "$1" "$1.bak"    ;;
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+if the given file ends in '.bak', remove '.bak' from the filename.
+otherwise, append '.bak' to the filename.
+
+mvbak [file]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      case "${1##*.bak}" in
+        '') mv -- "$1" "${1%.bak}" ;;
+        *)  mv -- "$1" "$1.bak"    ;;
+      esac
+
+      ;;
+
   esac
 }
 
@@ -157,9 +395,15 @@ nc_head() {
     ''|'-h')
       cat >&2 <<'EOF'
 checks the headers of a website with tor(1).
-`nc_head [path] [domain] 80` for HTTP.
-`nc_head [path] -c [domain] 443` for HTTPS.
+
+HTTP:
+nc_head [path] [domain] 80
+
+HTTPS:
+nc_head [path] -c [domain] 443
 EOF
+
+      return
 
       ;;
 
@@ -170,12 +414,30 @@ EOF
 
       ;;
 
-    esac
+  esac
 }
 
 # nc(1) + tor(1) = fun.
 nc_tor() {
-  nc -X 5 -x 127.0.0.1:9050 "$@"
+  case "$@" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+nc(1) + tor(1) = nc_tor()
+
+otherwise, use it the same way you would use nc(1).
+EOF
+
+      return
+
+      ;;
+
+    *)
+      nc -X 5 -x 127.0.0.1:9050 "$@"
+
+      ;;
+
+  esac
 }
 
 # obtains the estimated size of a package and returns it in a human
@@ -183,25 +445,100 @@ nc_tor() {
 #
 # $1 is the name of a valid package.
 pkgsize() {
-  size="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
-  hreadable "${size}"
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+obtains the estimated size of a package and returns it in a human
+readable format.
+
+pkgsize [package name]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      size="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
+      hreadable "${size}"
+
+      ;;
+
+  esac
 }
 
 # with rffd, open up random pics with sxiv(1).
 randpics() {
-  rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+with rffd, open up random pics with sxiv(1).
+
+randpics [directory of pics]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
+
+      ;;
+
+  esac
 }
 
 # with rffd, open up random videos with mpv(1).
 randvids() {
-  rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+with rffd, open up random videos with mpv(1).
+
+randvids [directory of videos]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
+
+      ;;
+
+  esac
 }
 
 # choose a book with fzf and read it.
 readabook() { fzf-open "${READER}" "${HOME}/books"; }
 
 # read a markdown document with less(1).
-readmd() { lowdown -T 'term' --term-no-colour "$1" | less; }
+readmd() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+read a markdown document with less(1).
+
+readmd [markdown document]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      lowdown -T 'term' --term-no-colour "$1" | less
+
+      ;;
+
+  esac
+}
 
 # usage:
 #
@@ -211,14 +548,16 @@ tarpv() {
 
     ''|'-h')
       cat >&2 <<'EOF'
-usage:
+archive something with tar(1) and watch progress with pv(1).
 
+without compression:
 tarpv [archive target] > filename
 
-optionally, include compression in the pipeline as so:
-
+with compression:
 tarpv [archive target] | gzip -c > filename
 EOF
+
+      return
 
       ;;
 
@@ -244,15 +583,53 @@ EOF
 #
 # $1 is a domain name associated with a Matrix homeserver.
 testfed() {
-  ftp -U '' -VMno - -- \
-    "https://federationtester.matrix.org/api/report?server_name=$1"
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+test Matrix federation and output the JSON.
+
+testfed [matrix homeserver domain]
+EOF
+
+    return
+
+    ;;
+
+  *)
+    ftp -U '' -VMno - -- \
+      "https://federationtester.matrix.org/api/report?server_name=$1"
+
+    ;;
+
+  esac
 }
 
 # use bioctl(8) to unlock an encrypted partition and attach it to
 # softraid0.
 #
-# $1 is a chunk device.
-unlockhdd() { priv bioctl -c C -l "$1" softraid0; }
+# $1 is an encrypted partition.
+unlockhdd() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+unlock a drive encrypted with bioctl(8).
+
+unlockhdd [encrypted partition]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      priv bioctl -c C -l "$1" softraid0
+
+      ;;
+
+  esac
+}
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to wttr.in with $1 as
@@ -261,4 +638,24 @@ unlockhdd() { priv bioctl -c C -l "$1" softraid0; }
 # $1 is a geographical location for weather forecasting purposes. If
 # left blank, wttr will return results for the geographical location
 # associated with our public IP.
-wttr() { ftp -U 'curl' -VMo - -- "https://wttr.in/$1"; }
+wttr() {
+  case "$1" in
+
+    ''|'-h')
+      cat >&2 <<'EOF'
+get weather information.
+
+wttr [location]
+EOF
+
+      return
+
+      ;;
+
+    *)
+      ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
+
+      ;;
+
+  esac
+}
