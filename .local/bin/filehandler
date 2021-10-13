@@ -89,6 +89,7 @@ move_file() {
   )"
 
   case "${tilde_dest}" in
+
     'exit')
       exit 0
 
@@ -102,9 +103,7 @@ move_file() {
     *)
       no_tilde_dest="$(echo "${tilde_dest}" | sed -- "s|^~|${HOME}|g")"
 
-      if ! [ -e "${no_tilde_dest}" ]; then
-        mkdir -p -- "${no_tilde_dest}" || err "${tilde_dest} could not be created with mkdir(1)."
-      fi
+      mkdir -p -- "${no_tilde_dest}" || err "${tilde_dest} could not be created with mkdir(1)."
 
       if mv -- "${file}" "${no_tilde_dest}/${file##*/}"; then
         notify-send -- "${file##*/} moved to ${tilde_dest}"
