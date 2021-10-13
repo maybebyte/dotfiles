@@ -635,9 +635,7 @@ EOF
 # verbose mode, use ftp(1) to send a GET request to wttr.in with $1 as
 # the path. Then, send the results to STDOUT.
 #
-# $1 is a geographical location for weather forecasting purposes. If
-# left blank, wttr will return results for the geographical location
-# associated with our public IP.
+# $1 is a geographical location for weather forecasting purposes.
 wttr() {
   case "$1" in
 
