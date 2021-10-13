@@ -28,7 +28,7 @@ unclutter -idle 3 &
 #
 # with either xcompmgr(1) or modesetting(4) disabled, horizontal screen
 # tearing is absent.
-xcompmgr -I 0.0125 -O 0.0125 -D 2 -cfC &
+xcompmgr &
 xidle &
 
 [ -x "$(command -v 'dbus-launch')" ] \
