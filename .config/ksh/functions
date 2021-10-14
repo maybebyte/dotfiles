@@ -564,11 +564,10 @@ EOF
     *)
       # command -v will match the alias
       DU="$(which 'du')"
-      tab="$(printf '\t')"
 
       size_of_dir="$(
         "${DU}" -sh "$1" \
-          | sed -Ee "s/( +|${tab}{2,})/${tab}/" -e "s/\.([[:digit:]])+//" \
+          | sed -E "s/\.([[:digit:]])+//" \
           | cut -f 1
       )"
 
