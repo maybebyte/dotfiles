@@ -33,6 +33,7 @@ EOF
 
 fi
 
+
 # if no arg is passed and STDIN is empty, exit with an error.
 check_opts() {
   if [ -n "$1" ]; then
@@ -46,6 +47,7 @@ check_opts() {
 
   fi
 }
+
 
 # given a URL and a choice, perform the associated action.
 #
@@ -156,6 +158,7 @@ linkhandler() {
   esac
 }
 
+
 prereqs() {
   check_grafix
 
@@ -173,6 +176,7 @@ EOF
 
   import_colors_sh
 }
+
 
 prereqs "$1"
 

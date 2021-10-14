@@ -33,6 +33,7 @@ EOF
 
 fi
 
+
 usage() {
   cat >&2 <<EOF
 ${0##*/} requires ${args_needed} argument(s).
@@ -44,6 +45,7 @@ EOF
   exit 1
 }
 
+
 viewimg() {
   filename="$(mktemp)"
   readonly filename
@@ -52,6 +54,7 @@ viewimg() {
 
   sxiv -- "${filename}"
 }
+
 
 prereqs() {
   check_grafix
@@ -64,6 +67,7 @@ EOF
   readonly args_needed=1
   [ "$#" = "${args_needed}" ] || usage
 }
+
 
 prereqs "$@"
 

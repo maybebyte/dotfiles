@@ -38,6 +38,7 @@ fi
 #-sb ## selected background color
 #-sf ## selected foreground color
 
+
 launch() {
   dmenu_run -i -fn 'mono-20' \
   -nb "${color0:=#040516}"   \
@@ -46,11 +47,13 @@ launch() {
   -sf "${color7:=#e0cef3}"
 }
 
+
 prereqs() {
   check_grafix
   echo 'dmenu_run' | check_deps
   import_colors_sh
 }
+
 
 prereqs
 launch

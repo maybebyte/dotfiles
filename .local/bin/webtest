@@ -33,7 +33,9 @@ EOF
 
 fi
 
+
 usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
+
 
 # TODO: index.md could be a variable instead of hard-coded
 gen_site() {
@@ -43,6 +45,7 @@ gen_site() {
   rssg "${markdowndir}/index.md" "Newsletter - ${site##*//}" \
     > "${htmldir}/rss.xml" 2>/dev/null
 }
+
 
 sync_site() {
   # can't call this in the form 'priv sync_site'. thus, a heredoc is needed.
@@ -54,9 +57,11 @@ rcctl reload httpd >/dev/null
 EOF
 }
 
+
 cleanup() {
   rm -rf -- "${htmldir:?}"
 }
+
 
 prereqs() {
   if ! [ "$(uname)" = 'OpenBSD' ]; then
@@ -66,6 +71,7 @@ prereqs() {
   readonly args_needed=3
   [ "$#" = "${args_needed}" ] || usage
 }
+
 
 umask 022
 prereqs "$@"

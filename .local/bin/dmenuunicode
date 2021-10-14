@@ -25,6 +25,7 @@ EOF
 
 fi
 
+
 grab_emoji() {
   readonly emoji_file="${HOME}/.local/share/emoji"
   if ! [ -f "${emoji_file}" ]; then

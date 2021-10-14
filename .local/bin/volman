@@ -32,6 +32,7 @@ EOF
 
 fi
 
+
 usage() {
   cat >&2 <<EOF
 ${0##*/} requires ${args_needed} argument(s).
@@ -42,6 +43,7 @@ EOF
 
   exit 1
 }
+
 
 # check prerequisites (Xorg instance + dependencies).
 prereqs() {
@@ -54,6 +56,7 @@ sndioctl
 EOF
 }
 
+
 # either increase, decrease, or mute the volume if the appropriate
 # argument is given. if not, error and display usage details.
 adjust_vol() {
@@ -64,6 +67,7 @@ adjust_vol() {
     *)      usage                                                     ;;
   esac
 }
+
 
 # based on the current output level, print an appropriate volume-related
 # emoji. if output.mute=0, all positional parameters as well.
@@ -86,6 +90,7 @@ print_vol() {
   fi
 }
 
+
 # if muted, succeed.
 # if not muted, fail.
 check_mute() {
@@ -95,6 +100,7 @@ check_mute() {
     *) err 'Unable to access sndio(7) device.'  ;;
   esac
 }
+
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
@@ -108,6 +114,7 @@ get_vol() {
     *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc ;;
   esac
 }
+
 
 # check prerequisites. perform the specified action with vol()
 # (inc|dec|mute), then display the appropriate notification if

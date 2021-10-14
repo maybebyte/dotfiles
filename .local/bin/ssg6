@@ -15,6 +15,7 @@ set -e
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+
 main() {
   for pos_par in "$1" "$2" "$3" "$4"; do
     [ -n "${pos_par}" ] || usage
@@ -149,6 +150,7 @@ no_dir() {
   exit 2
 }
 
+
 list_dirs() {
   cd "$1" && eval "find . -type d ! -name '.' ! -path '*/_*' ${IGNORE}"
 }
@@ -163,6 +165,7 @@ list_dependent_files() {
   e="\\( -name '*.html' -o -name '*.md' -o -name '*.css' -o -name '*.js' \\)"
   cd "$1" && eval "find . -type f ! -name '.' ! -path '*/_*' ${IGNORE} ${e}"
 }
+
 
 list_newer_files() {
   cd "$1" && eval "find . -type f ! -name '.' ${IGNORE} -newer $2"
@@ -275,5 +278,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 "${date}"'</lastmod><priority>1.0</priority></url>#'
   echo '</urlset>'
 }
+
 
 main "$@"

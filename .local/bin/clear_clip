@@ -33,12 +33,14 @@ EOF
 
 fi
 
+
 prereqs() {
   check_deps <<'EOF'
 xclip
 notify-send
 EOF
 }
+
 
 prereqs
 yank -i /dev/null || err 'Unable to clear the clipboard.'

@@ -33,6 +33,7 @@ EOF
 
 fi
 
+
 usage() {
   cat >&2 <<EOF
 ${0##*/} requires at least ${args_needed} argument(s).
@@ -44,10 +45,12 @@ EOF
   exit 1
 }
 
+
 nsc() {
   priv nmap -Av --osscan-limit --privileged \
   -oA "${tmpdir}/nmap-$(date '+%F')" "$@"
 }
+
 
 fix_perms() {
   readonly unpriv_user="${LOGNAME}"
@@ -59,12 +62,14 @@ fix_perms() {
   \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
 }
 
+
 prereqs() {
   echo 'nmap' | check_deps
 
   readonly args_needed=1
   [ "$#" -ge "${args_needed}" ] || usage
 }
+
 
 prereqs "$@"
 

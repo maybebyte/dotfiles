@@ -23,18 +23,22 @@ EOF
 
 fi
 
+
 cur_date() {
   date '+%Y%m%d-%H%M%S'
 }
+
 
 yankpic() {
   yank -t image/png || err 'Unable to copy image data to clipboard.'
 }
 
+
 # --hide-cursor, --quiet, --capturebackground, --delay
 maim_with_flags() {
   maim -uqBd 0.5 "$@"
 }
+
 
 present_options() {
   case "$(menu -l "${num_of_opts}" -p "Screenshot which area?")" in
@@ -95,6 +99,7 @@ present_options() {
   esac
 }
 
+
 prereqs() {
   check_grafix
 
@@ -107,6 +112,7 @@ EOF
 
   import_colors_sh
 }
+
 
 prereqs
 

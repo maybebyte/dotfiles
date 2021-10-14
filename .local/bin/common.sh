@@ -13,10 +13,12 @@ elif [ -x "$(command -v 'sudo')" ]; then
 
 fi
 
+
 # if Xorg isn't running, exit with an error.
 check_grafix() {
   [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 }
+
 
 # reads from STDIN and checks that all commands needed are executable
 # and available.
@@ -36,6 +38,7 @@ check_deps() {
   done
 }
 
+
 # err() is the generic way to print an error message and exit a script.
 # all of its output goes to STDERR.
 #
@@ -45,6 +48,7 @@ err() {
   printf '%s\n' "$*" >&2
   exit 1
 }
+
 
 # if colors.sh is readable, source it. otherwise print to STDERR.
 #
@@ -64,6 +68,7 @@ import_colors_sh() {
   fi
 }
 
+
 # generic dmenu function to handle customizations. uses colors that
 # import_colors_sh() gathers.
 menu() {
@@ -75,10 +80,12 @@ menu() {
   "$@"
 }
 
+
 # if the user isn't root, print an error message and exit.
 must_be_root() {
   [ "$(id -u)" = 0 ] || err "Execute ${0##*/} with root privileges."
 }
+
 
 # copy STDIN to the clipboard so it can be pasted elsewhere.
 yank() { xclip -selection clipboard "$@"; }

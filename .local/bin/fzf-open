@@ -32,6 +32,7 @@ EOF
 
 fi
 
+
 usage() {
   cat >&2 <<EOF
 ${0##*/} requires ${args_needed} argument(s).
@@ -42,6 +43,7 @@ EOF
 
   exit 1
 }
+
 
 prereqs() {
   readonly args_needed=2
@@ -60,6 +62,7 @@ EOF
 
   fi
 }
+
 
 prereqs "$@"
 

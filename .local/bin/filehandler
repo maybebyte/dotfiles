@@ -33,6 +33,7 @@ EOF
 
 fi
 
+
 usage() {
   cat >&2 <<EOF
 ${0##*/} requires ${args_needed} argument(s).
@@ -58,6 +59,7 @@ EOF
   exit 1
 }
 
+
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
   mimetype="$(file -ib -- "${file}")" && readonly mimetype
@@ -72,6 +74,7 @@ determine_preload_dir() {
     *)                 readonly preload_dir="${HOME}"        ;;
   esac
 }
+
 
 # uses ${preload_dir} to display a list of directories that a given file
 # can be moved to. once the user chooses a destination with dmenu, move
@@ -118,6 +121,7 @@ move_file() {
   esac
 }
 
+
 # once the user chooses a filename with dmenu, rename the file
 # accordingly and send a notification.
 #
@@ -149,6 +153,7 @@ rename_file() {
   fi
 }
 
+
 # determines how to operate on the file. if nothing was assigned to
 # ${operation} by getopts, the user chooses the operation with dmenu.
 choose_operation() {
@@ -169,6 +174,7 @@ choose_operation() {
   esac
 }
 
+
 prereqs1() {
   check_grafix
   check_deps <<'EOF'
@@ -177,11 +183,13 @@ notify-send
 EOF
 }
 
+
 prereqs2() {
   [ "$#" = "${args_needed}" ] || usage
   import_colors_sh
   [ -f "$1" ] || err 'Not a file or does not exist.'
 }
+
 
 prereqs1
 readonly args_needed=1

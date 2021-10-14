@@ -32,6 +32,7 @@ EOF
 
 fi
 
+
 # handle prerequisites. designed to exit if prerequisites aren't in
 # place so that the script behaves more predictably.
 prereqs() {
@@ -52,6 +53,7 @@ EOF
     255) err "Battery status is 'unknown.'" ;;
   esac
 }
+
 
 prereqs
 

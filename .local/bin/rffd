@@ -33,6 +33,7 @@ EOF
 
 fi
 
+
 # usage information for random file from directory (rffd)
 usage() {
   cat >&2 <<EOF
@@ -52,6 +53,7 @@ EOF
   exit 1
 }
 
+
 # the base find(1) command for find_* functions to use. will only return
 # files.
 #
@@ -64,6 +66,7 @@ base_find_cmd() {
   find "${search_path}" -type f "$@"
 }
 
+
 # given a directory, print all video files in it.
 find_videos() {
   base_find_cmd "$1" \
@@ -74,6 +77,7 @@ find_videos() {
   \)
 }
 
+
 # given a directory, print all photos in it.
 find_pics() {
   base_find_cmd "$1" \
@@ -83,6 +87,7 @@ find_pics() {
   -iname '*.png'     \
   \)
 }
+
 
 prereqs() {
   if [ -z "$1" ]; then
@@ -100,6 +105,7 @@ prereqs() {
 
   fi
 }
+
 
 while getopts c:h opt; do
 

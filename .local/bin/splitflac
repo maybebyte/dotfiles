@@ -33,6 +33,7 @@ EOF
 
 fi
 
+
 usage() {
   cat >&2 <<EOF
 ${0##*/} requires ${args_needed} argument(s).
@@ -47,6 +48,7 @@ EOF
   exit 1
 }
 
+
 # determines which executable name to use for cuetag.
 assign_cuetag() {
   if [ -x "$(command -v 'cuetag')" ]; then
@@ -60,6 +62,7 @@ assign_cuetag() {
 
   fi
 }
+
 
 # converts a 24-bit FLAC file to a 16-bit FLAC file with sox(1).
 #
@@ -80,6 +83,7 @@ conv16() {
   fi
 }
 
+
 splitflac() {
   [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
 
@@ -96,6 +100,7 @@ splitflac() {
 
   [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
 }
+
 
 # cuetag is checked in assign_cuetag() rather than check_deps() since
 # the executable's name isn't consistent among operating systems.
