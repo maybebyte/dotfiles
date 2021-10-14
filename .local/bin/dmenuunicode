@@ -55,6 +55,7 @@ grab_emoji() {
   fi
 }
 
+
 prereqs() {
   check_grafix
 
@@ -66,6 +67,7 @@ EOF
 
   import_colors_sh
 }
+
 
 prereqs
 grab_emoji

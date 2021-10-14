@@ -85,8 +85,7 @@ move_file() {
   # substitutes $HOME with a tilde so the list of directories in dmenu is
   # more readable.
   tilde_dest="$(
-    {
-      find "${preload_dir}" -type d | sed -- "s|^${HOME}|~|g"
+    { find "${preload_dir}" -type d | sed -- "s|^${HOME}|~|g"
       echo 'exit'
     } | menu -l 10 -p "Move ${file##*/} where?"
   )"
