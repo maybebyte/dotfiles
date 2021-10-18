@@ -54,13 +54,8 @@ fzf
 $1
 EOF
 
-  if ! [ -r "$2" ]; then
-    err "$2 is not readable."
-
-  elif ! [ -d "$2" ]; then
-    err "$2 is not a directory."
-
-  fi
+  [ -r "$2" ] || err "$2 is not readable."
+  [ -d "$2" ] || err "$2 is not a directory."
 }
 
 
