@@ -315,15 +315,13 @@ EOF
   mkdir -p "${jrnl_entry%/*}"
 
   if ! [ -e "${jrnl_entry}" ]; then
-    {
-      echo
+    { echo
       echo "${today}"
       date '+%H:%M'
     } > "${jrnl_entry}"
 
   else
-    {
-      echo
+    { echo
       echo '-'
       date '+%H:%M'
     } >> "${jrnl_entry}"
