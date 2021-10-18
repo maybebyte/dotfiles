@@ -62,10 +62,7 @@ linkhandler() {
 
       if [ -n "${duration}" ]; then
         printf '%s' "${duration}" | yank
-
         notify-send -- "Copied video duration (${duration})."
-        sleep 10
-        clear_clip notify
 
       else
         err 'Empty input, so no duration was yanked.'
@@ -80,10 +77,7 @@ linkhandler() {
 
       if [ -n "${title}" ]; then
         printf '%s' "${title}" | yank
-
         notify-send -- "${title} yanked."
-        sleep 10
-        clear_clip notify
 
       else
         err 'Empty input, so no title yanked.'

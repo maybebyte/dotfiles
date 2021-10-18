@@ -66,5 +66,3 @@ EOF
 
 prereqs
 grab_emoji
-sleep 10
-clear_clip notify

@@ -70,24 +70,15 @@ present_options() {
     'a selected area (copy)')
       maim_with_flags -s | yankpic
 
-      sleep 10
-      clear_clip notify
-
       ;;
 
     'current window (copy)')
       maim_with_flags -i "$(xdotool getactivewindow)" | yankpic
 
-      sleep 10
-      clear_clip notify
-
       ;;
 
     'full screen (copy)')
       maim_with_flags | yankpic
-
-      sleep 10
-      clear_clip notify
 
       ;;
 
