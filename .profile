@@ -51,10 +51,6 @@ mkdir -p -- "${dotfiles_log%/*}"
 case "$(uname)" in
 
   'OpenBSD')
-    export \
-      markdowndir="${HOME}/builds/website_md" \
-      srvdir='/var/www/htdocs/aml'
-
     gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')"
     export gateway
 
@@ -70,15 +66,20 @@ case "$(uname)" in
 
 esac
 
+# host-specific actions
 case "$(hostname -s)" in
 
   'aphrodite'|'lain')
     [ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
 
+    export \
+      markdowndir="${HOME}/builds/website_md" \
+      srvdir='/var/www/htdocs/aml'
+
     ;;
 
   *)
-    # only defined hosts should launch a gpg-agent
+    # if the hostname doesn't match, do nothing
 
     ;;
 
