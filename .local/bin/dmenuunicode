@@ -28,13 +28,8 @@ fi
 
 grab_emoji() {
   readonly emoji_file="${HOME}/.local/share/emoji"
-  if ! [ -f "${emoji_file}" ]; then
-    err "${emoji_file} is not a file."
-
-  elif ! [ -r "${emoji_file}" ]; then
-    err "${emoji_file} is not readable."
-
-  fi
+  [ -f "${emoji_file}" ] || err "${emoji_file} is not a file."
+  [ -r "${emoji_file}" ] || err "${emoji_file} is not readable."
 
   chosen_entry="$(cut -d ';' -f 1 -- "${emoji_file}" | menu -l 20 -fn 'Symbola-20')"
   readonly chosen_entry
