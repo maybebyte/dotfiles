@@ -12,8 +12,8 @@ case "$(id -u)" in
 
 esac
 
-_ps1_bracket='\[\033[1;36m\]'
-_ps1_hostname='\[\033[1;32m\]'
+_ps1_bracket='\[\033[36m\]'
+_ps1_hostname='\[\033[32m\]'
 _ps1_clear='\[\033[0m\]'
 
 case "${KSH_VERSION%%\ KSH*}" in
