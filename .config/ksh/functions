@@ -298,8 +298,12 @@ jrnl() {
       ;;
 
     '-h'|*)
-      cat >&2 <<'EOF'
+      cat >&2 <<EOF
 jrnl (for journaling) takes no arguments.
+
+It creates ${HOME}/notes/journal/$(date '+%F').txt (including the
+directory, if it doesn't exist) with appropriate formatting and then
+opens up the file in ${EDITOR:-EDITOR}.
 EOF
 
       return
