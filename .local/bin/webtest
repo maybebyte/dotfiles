@@ -64,9 +64,7 @@ cleanup() {
 
 
 prereqs() {
-  if ! [ "$(uname)" = 'OpenBSD' ]; then
-    err "${0##*/} only supports OpenBSD."
-  fi
+  [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
 
   readonly args_needed=3
   [ "$#" = "${args_needed}" ] || usage
