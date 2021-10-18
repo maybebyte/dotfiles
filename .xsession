@@ -14,9 +14,14 @@ xrdb "${HOME}/.Xresources"
 # ~/.profile.
 export                        \
   BROWSER='firefox'           \
+  CLICOLOR=1                  \
+  LC_CTYPE='en_US.UTF-8'      \
+  LESS='-iMR'                 \
   QT_STYLE_OVERRIDE='adwaita' \
   READER='zathura'            \
   TERMINAL='xst'
+
+[ -x "$(command -v colorls)" ] && export ls='colorls'
 
 # daemons
 dunst &
