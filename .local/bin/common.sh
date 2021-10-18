@@ -58,12 +58,19 @@ err() {
 import_colors_sh() {
   colors_sh="${HOME}/.cache/wal/colors.sh"
 
-  if [ -r "${colors_sh}" ]; then
-    . "${colors_sh}" # source the file
+  if ! [ -r "${colors_sh}" ]; then
+    : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+    echo "${colors_sh} not readable." 2>>"${dotfiles_log}" >&2
+
+  elif ! [ -f "${colors_sh}" ]; then
+    : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+    echo "${colors_sh} not a file." 2>>"${dotfiles_log}" >&2
+
+  elif [ -z "${DISPLAY}" ]; then
+    return # exit silently
 
   else
-    : "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
-    echo "${colors_sh} not readable/found." 2>>"${dotfiles_log}" >&2
+    . "${colors_sh}" # source the file
 
   fi
 }
