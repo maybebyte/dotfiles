@@ -74,7 +74,7 @@ autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
   \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
 
-" one ZQ fully exits out of Goyo when reading help files.
+" one ZQ fully exits when reading help files.
 " (ordinarily, one would need to ZQ twice).
 autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
   \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
