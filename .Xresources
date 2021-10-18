@@ -2,13 +2,14 @@
 #include ".cache/wal/colors.Xresources"
 
 ! eye candy for non-{GTK,QT} applications
-Xft.antialias: 1
-Xft.autohint:  0
-Xft.hinting:   1
-Xft.hintstyle: hintslight
-Xft.lcdfilter: lcddefault
-Xft.rgba:      rgb
-Xft.scalable:  0
+Xft.antialias:      1
+Xft.autohint:       0
+Xft.embeddedbitmap: 0
+Xft.hinting:        1
+Xft.hintstyle:      hintslight
+Xft.lcdfilter:      lcddefault
+Xft.rgba:           rgb
+Xft.scalable:       0
 
 ! 5 seconds after lock for DPMS standby
 XLock.dpmsstandby: 5
