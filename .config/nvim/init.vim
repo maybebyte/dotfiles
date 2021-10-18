@@ -63,24 +63,17 @@ autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $HOME/.config/ksh/kshrc !. %
 autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
-" Enable Goyo by default for mutt writing
-" Is buggy in Neomutt, nomodifiable bug
-"autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
-"autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=72
-"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZZ :Goyo!\|x!<CR>
-"autocmd BufRead,BufNewFile /tmp/neomutt* noremap ZQ :Goyo!\|q!<CR>
-
 " Enable Goyo for help files
-autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
+autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
   \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
 
 " one ZQ fully exits when reading help files.
 " (ordinarily, one would need to ZQ twice).
-autocmd BufRead /usr/local/share/nvim/runtime/doc/*,
+autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
   \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
 
 " shell script syntax for xsession and ksh files
-autocmd BufRead $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
+autocmd BufReadPost $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
 
 " no more automatic commenting on newline
 autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
