@@ -8,6 +8,7 @@ Xft.hinting:   1
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba:      rgb
+Xft.scalable:  0
 
 ! 5 seconds after lock for DPMS standby
 XLock.dpmsstandby: 5
