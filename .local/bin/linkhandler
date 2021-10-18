@@ -40,7 +40,7 @@ check_opts() {
     readonly URL="$1"
 
   elif [ ! -t 0 ]; then
-    read -r -- URL && readonly URL
+    read -r URL && readonly URL
 
   else
     err "${0##*/} needs a URL!"

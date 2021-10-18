@@ -34,7 +34,7 @@ main() {
       return
     fi
 
-    while read -r -- x; do
+    while read -r x; do
       [ -n "${x}" ] || continue
       printf ' ! -path "*/%s*"' "${x}"
     done < "${src}/.ssgignore"
@@ -191,7 +191,7 @@ list_affected_files() {
 
 
 render_html_files() {
-  while read -r -- f; do
+  while read -r f; do
     render_html_file "$3" < "$1/${f}" > "$2/${f}"
 
   done
@@ -199,7 +199,7 @@ render_html_files() {
 
 
 render_md_files_lowdown() {
-  while read -r -- f; do
+  while read -r f; do
 
     lowdown                   \
     --html-no-escapehtml      \
@@ -215,7 +215,7 @@ render_md_files_lowdown() {
 
 
 render_md_files_Markdown_pl() {
-  while read -r -- f; do
+  while read -r f; do
 
     Markdown.pl -- "$1/${f}"  \
       | render_html_file "$3" \

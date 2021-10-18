@@ -128,7 +128,7 @@ date_rfc_822() {
 
 
 render_items() {
-  while read -r -- i; do
+  while read -r i; do
     render_item "$1" "$2" "${i}"
   done
 }

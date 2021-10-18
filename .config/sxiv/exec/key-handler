@@ -21,7 +21,7 @@ fi
 
 import_colors_sh
 
-while read -r -- file; do
+while read -r file; do
 
   case "$1" in
 
