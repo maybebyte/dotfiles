@@ -1,18 +1,19 @@
-# on any host that ends with -onion:
-# 1) proxy traffic using nc(1) and tor(1).
-# 2) no sharing multiple sessions over a single network connection.
-Host *-onion
-  ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p
-  ControlMaster no
-
-# on host 'example':
 # 1) enables sharing of multiple sessions over a single network connection.
 # 2) specifies how long the master connection should wait in background
 #    for new clients after initial client connection has been closed.
-# 3) sets path for the files responsible for connection sharing.
+ControlMaster auto
+ControlPersist 1h
+
+# on any host that ends with -onion:
+# 1) proxy traffic using nc(1) and tor(1).
+# 2) ControlPath uses %C since %h won't work with v3 onions.
+Host *-onion
+  ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p
+  ControlPath ~/.ssh/sockets/%C
+
+# on host 'example':
+# 1) sets hostname to connect to
+# 2) ControlPath can use %r@%h:%p since it is more human readable output.
 Host example
   Hostname example.domain
-  ControlMaster auto
-  ControlPersist 1h
   ControlPath ~/.ssh/sockets/%r@%h:%p
-  #ControlPath ~/.ssh/sockets/%C
