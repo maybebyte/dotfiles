@@ -12,8 +12,12 @@ Host *-onion
   ControlPath ~/.ssh/sockets/%C
 
 # on host 'example':
-# 1) sets hostname to connect to
-# 2) ControlPath can use %r@%h:%p since it is more human readable output.
+# 1) sets hostname to example.domain
+# 2) username is hubert
+# 3) uses an alternate port of 2222
+# 4) ControlPath can use %r@%h:%p since it is more human readable output.
 Host example
   Hostname example.domain
+  User hubert
+  Port 2222
   ControlPath ~/.ssh/sockets/%r@%h:%p
