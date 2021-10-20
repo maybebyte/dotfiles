@@ -1,3 +1,4 @@
+include "/usr/local/share/themes/Adwaita-dark/gtk-2.0/gtkrc"
 gtk-font-name                    = "Sans 16"
 gtk-icon-theme-name              = "Adwaita-dark"
 gtk-theme-name                   = "Adwaita-dark"
