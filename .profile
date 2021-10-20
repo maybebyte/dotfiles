@@ -16,8 +16,6 @@ else
 
 fi
 
-GPG_TTY="$(tty)" && export GPG_TTY
-
 # PATH parameter expansion explanation:
 # https://unix.stackexchange.com/a/415028
 #

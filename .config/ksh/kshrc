@@ -20,6 +20,10 @@ case "${KSH_VERSION%%\ KSH*}" in
   *)        # do nothing for other ksh types ;;
 esac
 
+# needs to happen for each shell invocation
+GPG_TTY="$(tty)"
+export GPG_TTY
+
 for srcfile in 'aliases' 'functions' 'prompt'; do
   [ -r "${HOME}/.config/ksh/${srcfile}" ] \
     && . "${HOME}/.config/ksh/${srcfile}"
