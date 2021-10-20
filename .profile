@@ -7,7 +7,14 @@ else
 
 fi
 
-export ls='ls'
+# use colorls if it's installed, ls otherwise
+if [ -x "$(command -v 'colorls')" ]; then
+  export ls='colorls'
+
+else
+  export ls='ls'
+
+fi
 
 GPG_TTY="$(tty)" && export GPG_TTY
 
@@ -17,12 +24,14 @@ GPG_TTY="$(tty)" && export GPG_TTY
 # the extra colon is intentional, it's the delimiter for PATH.
 export                                          \
   BROWSER='lynx'                                \
+  CLICOLOR=1                                    \
   FCEDIT="${EDITOR}"                            \
   VISUAL="${EDITOR}"                            \
   GNUPGHOME="${HOME}/.config/gnupg"             \
   HISTFILE="${HOME}/.history"                   \
   HISTSIZE=10000                                \
-  LESS='-iM'                                    \
+  LC_CTYPE='en_US.UTF-8'                        \
+  LESS='-iMR'                                   \
   LESSSECURE=1                                  \
   MAILRC="${HOME}/.config/mail/mailrc"          \
   PAGER='less'                                  \
