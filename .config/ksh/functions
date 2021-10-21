@@ -22,12 +22,9 @@ EOF
 
       ;;
 
-    *)
-      curl -x socks5://127.0.0.1:9050 "$@"
-
-      ;;
-
   esac
+
+  curl -x socks5://127.0.0.1:9050 "$@"
 }
 
 # using torsocks(1) and ftp(1) with no auto-login or user agent, send a
@@ -50,12 +47,9 @@ EOF
 
       ;;
 
-    *)
-      anonftp -o - -- "$1" | zathura -- -
-
-      ;;
-
   esac
+
+  anonftp -o - -- "$1" | zathura -- -
 }
 
 # invoke apropos(1) to match $1 against any available macro key of
@@ -77,12 +71,9 @@ EOF
 
       ;;
 
-    *)
-      apropos -S "$(uname -m)" -- any="$1"
-
-      ;;
-
   esac
+
+  apropos -S "$(uname -m)" -- any="$1"
 }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
@@ -104,12 +95,9 @@ EOF
 
       ;;
 
-    *)
-      ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
-
-      ;;
-
   esac
+
+  ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
 }
 
 
@@ -138,14 +126,11 @@ EOF
 
       ;;
 
-    *)
-      case "${1##*.bak}" in
-        '') cp -- "$1" "${1%.bak}" ;;
-        *)  cp -- "$1" "$1.bak"    ;;
-      esac
+  esac
 
-      ;;
-
+  case "${1##*.bak}" in
+    '') cp -- "$1" "${1%.bak}" ;;
+    *)  cp -- "$1" "$1.bak"    ;;
   esac
 }
 
@@ -171,12 +156,9 @@ EOF
 
       ;;
 
-    *)
-      dig A +short "$1"
-
-      ;;
-
   esac
+
+  dig A +short "$1"
 }
 
 # perform an AAAA record lookup on $1 and return the IPv6 address.
@@ -196,12 +178,9 @@ EOF
 
       ;;
 
-    *)
-      dig AAAA +short "$1"
-
-      ;;
-
   esac
+
+  dig AAAA +short "$1"
 }
 
 # if $1 is less than 1024, print it and exit successfully.
@@ -226,13 +205,10 @@ EOF
 
       ;;
 
-    *)
-      no_of_loops=0
-      size="$1"
-
-      ;;
-
   esac
+
+  no_of_loops=0
+  size="$1"
 
   # sanity check so math below works. also alleviates the need to use
   # printf(1) below since we can at least know that ${size} is an
@@ -281,12 +257,9 @@ EOF
 
       ;;
 
-    *)
-      ftp -VMo - -- "https://ipinfo.io/$1"
-
-      ;;
-
   esac
+
+  ftp -VMo - -- "https://ipinfo.io/$1"
 }
 
 # journal
@@ -350,12 +323,9 @@ EOF
 
     ;;
 
-    *)
-      lowdown -T 'man' "$1" | mandoc -a
-
-    ;;
-
   esac
+
+  lowdown -T 'man' "$1" | mandoc -a
 }
 
 # if $1 ends in '.bak', remove '.bak' from the filename.
@@ -377,14 +347,11 @@ EOF
 
       ;;
 
-    *)
-      case "${1##*.bak}" in
-        '') mv -- "$1" "${1%.bak}" ;;
-        *)  mv -- "$1" "$1.bak"    ;;
-      esac
+  esac
 
-      ;;
-
+  case "${1##*.bak}" in
+    '') mv -- "$1" "${1%.bak}" ;;
+    *)  mv -- "$1" "$1.bak"    ;;
   esac
 }
 
@@ -409,14 +376,11 @@ EOF
 
       ;;
 
-    *)
-      path="$1"
-      shift
-      printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
-
-      ;;
-
   esac
+
+  path="$1"
+  shift
+  printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
 }
 
 # nc(1) + tor(1) = fun.
@@ -434,12 +398,9 @@ EOF
 
       ;;
 
-    *)
-      nc -X 5 -x 127.0.0.1:9050 "$@"
-
-      ;;
-
   esac
+
+  nc -X 5 -x 127.0.0.1:9050 "$@"
 }
 
 # obtains the estimated size of a package and returns it in a human
@@ -461,13 +422,10 @@ EOF
 
       ;;
 
-    *)
-      size="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
-      hreadable "${size}"
-
-      ;;
-
   esac
+
+  size="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
+  hreadable "${size}"
 }
 
 # with rffd, open up random pics with sxiv(1).
@@ -485,12 +443,9 @@ EOF
 
       ;;
 
-    *)
-      rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
-
-      ;;
-
   esac
+
+  rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
 }
 
 # with rffd, open up random videos with mpv(1).
@@ -508,12 +463,9 @@ EOF
 
       ;;
 
-    *)
-      rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
-
-      ;;
-
   esac
+
+  rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
 }
 
 # choose a book with fzf and read it.
@@ -534,12 +486,9 @@ EOF
 
       ;;
 
-    *)
-      lowdown -T 'term' --term-no-colour "$1" | less
-
-      ;;
-
   esac
+
+  lowdown -T 'term' --term-no-colour "$1" | less
 }
 
 # usage:
@@ -563,21 +512,18 @@ EOF
 
       ;;
 
-    *)
-      # command -v will match the alias
-      DU="$(which 'du')"
-
-      size_of_dir="$(
-        "${DU}" -sh "$1" \
-          | sed -E "s/\.([[:digit:]])+//" \
-          | cut -f 1
-      )"
-
-      tar -cf - "$1" | pv -s "${size_of_dir}"
-
-      ;;
-
   esac
+
+  # command -v will match the alias
+  DU="$(which 'du')"
+
+  size_of_dir="$(
+    "${DU}" -sh "$1" \
+      | sed -E "s/\.([[:digit:]])+//" \
+      | cut -f 1
+  )"
+
+  tar -cf - "$1" | pv -s "${size_of_dir}"
 }
 
 # test Matrix federation and output the JSON.
@@ -597,13 +543,10 @@ EOF
 
     ;;
 
-  *)
-    ftp -U '' -VMno - -- \
-      "https://federationtester.matrix.org/api/report?server_name=$1"
-
-    ;;
-
   esac
+
+  ftp -U '' -VMno - -- \
+    "https://federationtester.matrix.org/api/report?server_name=$1"
 }
 
 # use bioctl(8) to unlock an encrypted partition and attach it to
@@ -624,12 +567,9 @@ EOF
 
       ;;
 
-    *)
-      priv bioctl -c C -l "$1" softraid0
-
-      ;;
-
   esac
+
+  priv bioctl -c C -l "$1" softraid0
 }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
@@ -651,10 +591,7 @@ EOF
 
       ;;
 
-    *)
-      ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
-
-      ;;
-
   esac
+
+  ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
 }
