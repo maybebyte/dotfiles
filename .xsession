@@ -12,10 +12,10 @@ xrdb "${HOME}/.Xresources"
 #
 # some of these are overrides, and some are variables not specified in
 # ~/.profile.
-export                             \
-  BROWSER='firefox'                \
-  QT_STYLE_OVERRIDE='Adwaita-Dark' \
-  READER='zathura'                 \
+export                            \
+  BROWSER='firefox'               \
+  QT_STYLE_OVERRIDE='Breeze-Dark' \
+  READER='zathura'                \
   TERMINAL='xst'
 
 # daemons

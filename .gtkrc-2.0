@@ -1,8 +1,8 @@
-include "/usr/local/share/themes/Adwaita-dark/gtk-2.0/gtkrc"
+include "/usr/local/share/themes/Breeze-Dark/gtk-2.0/gtkrc"
 gtk-font-name                    = "Sans 16"
-gtk-icon-theme-name              = "Adwaita-dark"
+gtk-icon-theme-name              = "Breeze-Dark"
 gtk-key-theme-name               = "Default"
-gtk-theme-name                   = "Adwaita-dark"
+gtk-theme-name                   = "Breeze-Dark"
 gtk-xft-antialias                = 1
 gtk-xft-hinting                  = 1
 gtk-xft-hintstyle                = "hintslight"
