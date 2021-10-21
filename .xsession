@@ -15,7 +15,7 @@ xrdb "${HOME}/.Xresources"
 export                                              \
   BROWSER='firefox'                                 \
   GTK2_RC_FILES="${HOME}/.config/gtk-2.0/gtkrc-2.0" \
-  QT_STYLE_OVERRIDE='Breeze-Dark'                   \
+  QT_STYLE_OVERRIDE='Breeze'                        \
   READER='zathura'                                  \
   TERMINAL='xst'
 
