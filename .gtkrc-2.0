@@ -1,4 +1,5 @@
 include "/usr/local/share/themes/Breeze-Dark/gtk-2.0/gtkrc"
+gtk-cursor-name                  = "Breeze-Dark"
 gtk-font-name                    = "Sans 16"
 gtk-icon-theme-name              = "Breeze-Dark"
 gtk-key-theme-name               = "Default"
