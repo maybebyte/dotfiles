@@ -40,6 +40,9 @@ xidle &
 sct 3500
 xset b off
 
+# open FileChooser in current working directory instead of recents
+gsettings set org.gtk.Settings.FileChooser startup-mode cwd
+
 # laptop adjustments
 if [ "$(hostname -s)" = 'lain' ]; then
   xset m 3/1 0
