@@ -173,15 +173,16 @@ general_aliases() {
 
     case "${OS}" in
 
-      # FreeBSD netstat(1) has no -l
       'FreeBSD')
-      ;;
+        # FreeBSD netstat(1) has no -l
+
+        ;;
 
       *)
         alias                                                            \
           ntstl6='netstat -lf inet6'                                     \
           ntstl='netstat -lf inet'
-      ;;
+        ;;
 
     esac
 
