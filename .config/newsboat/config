@@ -21,7 +21,7 @@ bind-key x  delete-article
 
 browser "${BROWSER}"
 
-cache-file "~/.config/newsboat/cache.db"
+cache-file "~/.cache/newsboat/cache.db"
 
 cleanup-on-quit yes
 

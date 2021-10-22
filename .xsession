@@ -12,11 +12,11 @@ xrdb "${HOME}/.Xresources"
 #
 # some of these are overrides, and some are variables not specified in
 # ~/.profile.
-export                                              \
-  BROWSER='firefox'                                 \
-  GTK2_RC_FILES="${HOME}/.config/gtk-2.0/gtkrc-2.0" \
-  QT_STYLE_OVERRIDE='Breeze'                        \
-  READER='zathura'                                  \
+export                                                 \
+  BROWSER='firefox'                                    \
+  GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
+  QT_STYLE_OVERRIDE='Breeze'                           \
+  READER='zathura'                                     \
   TERMINAL='xst'
 
 # daemons

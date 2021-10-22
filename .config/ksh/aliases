@@ -70,7 +70,7 @@ general_aliases() {
     mkd='mkdir -p'                                                       \
     lsd="find . -maxdepth 1 -iname \".[^.]*\""                           \
     mkd="mkdir -p"                                                       \
-    shre=". \${HOME}/.config/ksh/kshrc"
+    shre=". \${XDG_CONFIG_HOME}/ksh/kshrc"
 
   # editing
   if [ -z "${EDITOR}" ]; then
@@ -83,26 +83,26 @@ general_aliases() {
   else
     alias                                                                \
       e="\${EDITOR}"                                                     \
-      efont="e \${HOME}/.config/fontconfig/fonts.conf"                   \
+      efont="e \${XDG_CONFIG_HOME}/fontconfig/fonts.conf"                \
       ehst='e /etc/hosts'                                                \
-      ek="e \${HOME}/.config/ksh/kshrc"                                  \
-      eka="e \${HOME}/.config/ksh/aliases"                               \
-      ekf="e \${HOME}/.config/ksh/functions"                             \
-      ekp="e \${HOME}/.config/ksh/prompt"                                \
-      ekv="e \${HOME}/.config/ksh/vars"                                  \
-      empv="e \${HOME}/.config/mpv/mpv.conf"                             \
-      emusb="e \${HOME}/.config/ncmpcpp/bindings"                        \
-      emusc="e \${HOME}/.config/ncmpcpp/config"                          \
-      enb="e \${HOME}/.config/newsboat/config"                           \
-      enbu="e \${HOME}/.config/newsboat/urls"                            \
-      enm="e \${HOME}/.config/neomutt/neomuttrc"                         \
+      ek="e \${XDG_CONFIG_HOME}/ksh/kshrc"                               \
+      eka="e \${XDG_CONFIG_HOME}/ksh/aliases"                            \
+      ekf="e \${XDG_CONFIG_HOME}/ksh/functions"                          \
+      ekp="e \${XDG_CONFIG_HOME}/ksh/prompt"                             \
+      ekv="e \${XDG_CONFIG_HOME}/ksh/vars"                               \
+      empv="e \${XDG_CONFIG_HOME}/mpv/mpv.conf"                          \
+      emusb="e \${XDG_CONFIG_HOME}/ncmpcpp/bindings"                     \
+      emusc="e \${XDG_CONFIG_HOME}/ncmpcpp/config"                       \
+      enb="e \${XDG_CONFIG_HOME}/newsboat/config"                        \
+      enbu="e \${XDG_CONFIG_HOME}/newsboat/urls"                         \
+      enm="e \${XDG_CONFIG_HOME}/neomutt/neomuttrc"                      \
       eres='e /etc/resolv.conf'                                          \
-      esxh="e \${HOME}/.config/sxhkd/sxhkdrc"                            \
+      esxh="e \${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"                         \
       esys='e /etc/sysctl.conf'                                          \
       etm="e \${HOME}/.tmux.conf"                                        \
-      ev="e \${HOME}/.config/nvim/init.vim"                              \
-      exm="e \${HOME}/.config/xmonad/xmonad.hs"                          \
-      exmb="e \${HOME}/.config/xmobar/xmobarrc"                          \
+      ev="e \${XDG_CONFIG_HOME}/nvim/init.vim"                           \
+      exm="e \${XDG_CONFIG_HOME}/xmonad/xmonad.hs"                       \
+      exmb="e \${XDG_CONFIG_HOME}/xmobar/xmobarrc"                       \
       exr="e \${HOME}/.Xresources"                                       \
       exs="e \${HOME}/.xsession"
   fi
@@ -366,7 +366,7 @@ openbsd_aliases() {
 }
 
 OS="$(uname)"
-: "${dotfiles_log:=${HOME}/.local/share/dotfiles.log}"
+: "${dotfiles_log:=${XDG_DATA_HOME}/dotfiles.log}"
 
 # if a *BSD, then pf aliases should be added
 case "${OS}" in

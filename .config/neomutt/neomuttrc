@@ -25,7 +25,7 @@ set folder                    = pops://mail.riseup.net/
 set forward_format            = "Fwd: %s"
 set forward_quote
 set from                      = eurydice@riseup.net
-set header_cache              = "${HOME}/.cache/neomutt"
+set header_cache              = "${XDG_CACHE_HOME}/neomutt"
 set hidden_host               = yes
 set ignore_list_reply_to      = yes
 set include
@@ -36,7 +36,7 @@ set mark_old                  = no
 set markers                   = no
 set mbox                      = "${HOME}/mail"
 set mbox_type                 = "Maildir"
-set message_cachedir          = "${HOME}/.cache/neomutt"
+set message_cachedir          = "${XDG_CACHE_HOME}/neomutt"
 set mime_forward              = yes
 set move                      = yes
 set pgp_auto_decode           = yes

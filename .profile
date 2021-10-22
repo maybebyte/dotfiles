@@ -25,26 +25,26 @@ export                                          \
   CLICOLOR=1                                    \
   FCEDIT="${EDITOR}"                            \
   VISUAL="${EDITOR}"                            \
-  GNUPGHOME="${HOME}/.config/gnupg"             \
+  GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"          \
   HISTFILE="${HOME}/.history"                   \
   HISTSIZE=10000                                \
   LC_CTYPE='en_US.UTF-8'                        \
   LESS='-iMR'                                   \
   LESSSECURE=1                                  \
-  MAILRC="${HOME}/.config/mail/mailrc"          \
+  MAILRC="${XDG_CONFIG_HOME}/mail/mailrc"       \
   PAGER='less'                                  \
   PATH="${HOME}/.local/bin${PATH:+:${PATH}}"    \
   XDG_CACHE_HOME="${HOME}/.cache"               \
   XDG_CONFIG_HOME="${HOME}/.config"             \
   XDG_DATA_HOME="${HOME}/.local/share"          \
   XDG_STATE_HOME="${HOME}/.local/state"         \
-  XMONAD_CACHE_DIR="${HOME}/.cache/xmonad"      \
-  XMONAD_CONFIG_DIR="${HOME}/.config/xmonad"    \
-  XMONAD_DATA_DIR="${HOME}/.local/share/xmonad" \
+  XMONAD_CACHE_DIR="${XDG_CACHE_HOME}/xmonad"   \
+  XMONAD_CONFIG_DIR="${XDG_CONFIG_HOME}/xmonad" \
+  XMONAD_DATA_DIR="${XDG_DATA_DIR}/xmonad"      \
   site='https://amissing.link'
 
 # logging
-export dotfiles_log="${HOME}/.local/share/dotfiles.log"
+export dotfiles_log="${XDG_DATA_HOME}/dotfiles.log"
 mkdir -p -- "${dotfiles_log%/*}"
 :>"${dotfiles_log}"
 
@@ -92,10 +92,10 @@ esac
 # this should come last in .profile so that one can assume
 # that any variables exported in .profile will carry over to
 # ksh(1).
-if [ -r "${HOME}/.config/ksh/kshrc" ]; then
-  export ENV="${HOME}/.config/ksh/kshrc"
+if [ -r "${XDG_CONFIG_HOME}/ksh/kshrc" ]; then
+  export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
 
 else
-  echo "${HOME}/.config/ksh/kshrc not readable." 2>>"${dotfiles_log}" >&2
+  echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable." 2>>"${dotfiles_log}" >&2
 
 fi

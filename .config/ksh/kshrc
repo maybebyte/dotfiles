@@ -25,6 +25,6 @@ GPG_TTY="$(tty)"
 export GPG_TTY
 
 for srcfile in 'aliases' 'functions' 'prompt'; do
-  [ -r "${HOME}/.config/ksh/${srcfile}" ] \
-    && . "${HOME}/.config/ksh/${srcfile}"
+  [ -r "${XDG_CONFIG_HOME}/ksh/${srcfile}" ] \
+    && . "${XDG_CONFIG_HOME}/ksh/${srcfile}"
 done

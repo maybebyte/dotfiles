@@ -27,7 +27,7 @@ fi
 
 
 grab_emoji() {
-  readonly emoji_file="${HOME}/.local/share/emoji"
+  readonly emoji_file="${XDG_DATA_HOME}/emoji"
   [ -f "${emoji_file}" ] || err "${emoji_file} is not a file."
   [ -r "${emoji_file}" ] || err "${emoji_file} is not readable."
 

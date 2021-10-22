@@ -1,6 +1,6 @@
 set autochdir
 set backup
-set backupdir     =$HOME/.local/share/nvim/backup
+set backupdir     =$XDG_DATA_HOME/nvim/backup
 set conceallevel  =2
 set diffexpr      =
 set diffopt      +=iwhiteall
@@ -60,39 +60,39 @@ autocmd BufWritePre * %s/\n\+\%$//e
 
 " automatically reload configs
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
-autocmd BufWritePost $HOME/.config/ksh/kshrc !. %
-autocmd BufWritePost $HOME/.config/sxhkd/sxhkdrc !pkill -USR1 sxhkd
+autocmd BufWritePost $XDG_CONFIG_HOME/ksh/kshrc !. %
+autocmd BufWritePost $XDG_CONFIG_HOME/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " Enable Goyo for help files
 autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
-  \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* :Goyo
+  \$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* :Goyo
 
 " one ZQ fully exits when reading help files.
 " (ordinarily, one would need to ZQ twice).
 autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
-  \$HOME/.local/share/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
+  \$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
 
 " shell script syntax for xsession and ksh files
-autocmd BufReadPost $HOME/.xsession,$HOME/.config/ksh/* set filetype=sh
+autocmd BufReadPost $HOME/.xsession,$XDG_CONFIG_HOME/ksh/* set filetype=sh
 
 " no more automatic commenting on newline
 autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " if vim-plug isn't installed, install it
-if empty(glob('$HOME/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs
+if empty(glob('$XDG_CONFIG_HOME/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo "$XDG_CONFIG_HOME/nvim/site/autoload/plug.vim" --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-  autocmd VimEnter * PlugInstall --sync | source "$HOME/.config/nvim/init.vim"
+  autocmd VimEnter * PlugInstall --sync | source "$XDG_CONFIG_HOME/nvim/init.vim"
 endif
 
 " creates backup directory
-if isdirectory(expand("$HOME/.local/share/nvim/backup")) != 1
-  silent !mkdir -p $HOME/.local/share/nvim/backup
+if isdirectory(expand("$XDG_DATA_HOME/nvim/backup")) != 1
+  silent !mkdir -p $XDG_DATA_HOME/nvim/backup
 endif
 
 " plugins
-call plug#begin("$HOME/.local/share/nvim/site/autoload/plugged")
+call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/goyo.vim'
