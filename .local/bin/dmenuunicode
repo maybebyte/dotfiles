@@ -27,18 +27,18 @@ fi
 
 
 grab_emoji() {
-  readonly emoji_file="${XDG_DATA_HOME}/emoji"
-  [ -f "${emoji_file}" ] || err "${emoji_file} is not a file."
-  [ -r "${emoji_file}" ] || err "${emoji_file} is not readable."
+  readonly EMOJI_FILE="${XDG_DATA_HOME}/emoji"
+  [ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
+  [ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
 
-  chosen_entry="$(cut -d ';' -f 1 -- "${emoji_file}" | menu -l 20 -fn 'Symbola-20')"
+  chosen_entry="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu -l 20 -fn 'Symbola-20')"
   readonly chosen_entry
 
   [ -n "${chosen_entry}" ] || err 'Must choose an emoji.'
 
   readonly emoji="${chosen_entry%% *}"
 
-  grep -q -- "^${emoji}" "${emoji_file}" || err "Emoji not found in ${emoji_file}."
+  grep -q -- "^${emoji}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
 
   # important to use printf %s here, as ${emoji} is user input
   if printf '%s' "${emoji}" | yank; then
