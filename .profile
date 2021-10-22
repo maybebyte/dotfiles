@@ -9,10 +9,10 @@ fi
 
 # use colorls if it's installed, ls otherwise
 if [ -x "$(command -v 'colorls')" ]; then
-  export ls='colorls'
+  export LS='colorls'
 
 else
-  export ls='ls'
+  export LS='ls'
 
 fi
 
@@ -41,23 +41,23 @@ export                                          \
   XMONAD_CACHE_DIR="${XDG_CACHE_HOME}/xmonad"   \
   XMONAD_CONFIG_DIR="${XDG_CONFIG_HOME}/xmonad" \
   XMONAD_DATA_DIR="${XDG_DATA_DIR}/xmonad"      \
-  site='https://amissing.link'
+  SITE='https://amissing.link'
 
 # logging
-export dotfiles_log="${XDG_DATA_HOME}/dotfiles.log"
-mkdir -p -- "${dotfiles_log%/*}"
-:>"${dotfiles_log}"
+export DOTFILES_LOG="${XDG_DATA_HOME}/dotfiles.log"
+mkdir -p -- "${DOTFILES_LOG%/*}"
+:>"${DOTFILES_LOG}"
 
 # OS specific actions
 # written so it can be expanded later if needed
 case "$(uname)" in
 
   'OpenBSD')
-    gateway="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')"
-    export gateway
+    GATEWAY="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')"
+    export GATEWAY
 
-    nic="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')"
-    export nic
+    NIC="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')"
+    export NIC
 
     ;;
 
@@ -75,8 +75,8 @@ case "$(hostname -s)" in
     [ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
 
     export \
-      markdowndir="${HOME}/builds/website_md" \
-      srvdir='/var/www/htdocs/aml'
+      MARKDOWNDIR="${HOME}/builds/website_md" \
+      SRVDIR='/var/www/htdocs/aml'
 
     ;;
 
@@ -96,6 +96,6 @@ if [ -r "${XDG_CONFIG_HOME}/ksh/kshrc" ]; then
   export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
 
 else
-  echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable." 2>>"${dotfiles_log}" >&2
+  echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable." 2>>"${DOTFILES_LOG}" >&2
 
 fi

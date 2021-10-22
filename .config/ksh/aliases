@@ -13,7 +13,7 @@ complain_undefined() {
 pf_aliases() {
   # pfctl(8)
   if ! [ -x "$(command -v 'pfctl')" ]; then
-    complain_noexec 'pfctl' 2>>"${dotfiles_log}"
+    complain_noexec 'pfctl' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -28,7 +28,7 @@ pf_aliases() {
 
   # tcpdump(8)
   if ! [ -x "$(command -v 'tcpdump')" ]; then
-    complain_noexec 'tcpdump' 2>>"${dotfiles_log}"
+    complain_noexec 'tcpdump' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -66,7 +66,7 @@ general_aliases() {
     ll='ls -lh'                                                          \
     llb='ll -Sr'                                                         \
     lln='ll -tr'                                                         \
-    ls="\${ls} -F"                                                       \
+    ls="\${LS} -F"                                                       \
     mkd='mkdir -p'                                                       \
     lsd="find . -maxdepth 1 -iname \".[^.]*\""                           \
     mkd="mkdir -p"                                                       \
@@ -75,10 +75,10 @@ general_aliases() {
   # editing
   if [ -z "${EDITOR}" ]; then
     # shellcheck disable=SC2016
-    complain_undefined '${EDITOR}' 2>>"${dotfiles_log}"
+    complain_undefined '${EDITOR}' 2>>"${DOTFILES_LOG}"
 
   elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
-    complain_noexec "${EDITOR}" 2>>"${dotfiles_log}"
+    complain_noexec "${EDITOR}" 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -109,7 +109,7 @@ general_aliases() {
 
   # git
   if ! [ -x "$(command -v 'git' )" ]; then
-    complain_noexec 'git' 2>>"${dotfiles_log}"
+    complain_noexec 'git' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -139,7 +139,7 @@ general_aliases() {
 
   # keepass
   if ! [ -x "$(command -v 'keepassxc-cli')" ]; then
-    complain_noexec 'keepassxc-cli' 2>>"${dotfiles_log}"
+    complain_noexec 'keepassxc-cli' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -162,7 +162,7 @@ general_aliases() {
 
   # netstat(1)
   if ! [ -x "$(command -v 'netstat')" ]; then
-    complain_noexec 'netstat' 2>>"${dotfiles_log}"
+    complain_noexec 'netstat' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -189,7 +189,7 @@ general_aliases() {
   fi
 
   # networking
-  alias tnet="ping \${site##*//}"
+  alias tnet="ping \${SITE##*//}"
 
   # sec
   alias                                                                  \
@@ -207,7 +207,7 @@ general_aliases() {
 
   # taskwarrior
   if ! [ -x "$(command -v 'task')" ]; then
-    complain_noexec 'task' 2>>"${dotfiles_log}"
+    complain_noexec 'task' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -239,7 +239,7 @@ general_aliases() {
 
   # tmux
   if ! [ -x "$(command -v 'tmux')" ]; then
-    complain_noexec 'tmux' 2>>"${dotfiles_log}"
+    complain_noexec 'tmux' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -272,7 +272,7 @@ general_aliases() {
 
   # youtube-dl
   if ! [ -x "$(command -v 'youtube-dl')" ]; then
-    complain_noexec 'youtube-dl' 2>>"${dotfiles_log}"
+    complain_noexec 'youtube-dl' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
@@ -291,32 +291,32 @@ openbsd_aliases() {
 
   # editing
   alias                                                                  \
-    ehn="e /etc/hostname.\${nic}"                                        \
+    ehn="e /etc/hostname.\${NIC}"                                        \
     eunw='e /etc/unwind.conf'
 
   # ifconfig(8)
-  if [ -z "${nic}" ]; then
+  if [ -z "${NIC}" ]; then
     # shellcheck disable=SC2016
-    complain_undefined '${nic}' 2>>"${dotfiles_log}"
+    complain_undefined '${NIC}' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
-      nicdel="ifconfig \${nic} delete"                                   \
-      nicoff="ifconfig \${nic} down"                                     \
-      nicon="ifconfig \${nic} up"                                        \
+      nicdel="ifconfig \${NIC} delete"                                   \
+      nicoff="ifconfig \${NIC} down"                                     \
+      nicon="ifconfig \${NIC} up"                                        \
       nicre='nicoff && nicon'                                            \
-      nicshow="ifconfig \${nic}"
+      nicshow="ifconfig \${NIC}"
 
   fi
 
   # networking
   alias                                                                  \
     exip="ftp -VMo - https://ifconfig.me && echo"                        \
-    nictail="tcpdump -pi \${nic}"                                        \
+    nictail="tcpdump -pi \${NIC}"                                        \
     renet='sh /etc/netstart'                                             \
-    renetnic="renet \${nic}"                                             \
+    renetnic="renet \${NIC}"                                             \
     sysnet='systat netstat'                                              \
-    tlan="ping \${gateway}"
+    tlan="ping \${GATEWAY}"
 
   # pkg
   alias                                                                  \
@@ -362,11 +362,11 @@ openbsd_aliases() {
     tailmail='tail -f /var/log/maillog'
 
   # website test
-  alias webtest="webtest \${site} \${markdowndir} \${srvdir}"
+  alias webtest="webtest \${SITE} \${MARKDOWNDIR} \${SRVDIR}"
 }
 
 OS="$(uname)"
-: "${dotfiles_log:=${XDG_DATA_HOME}/dotfiles.log}"
+: "${DOTFILES_LOG:=${XDG_DATA_HOME}/dotfiles.log}"
 
 # if a *BSD, then pf aliases should be added
 case "${OS}" in
@@ -384,8 +384,8 @@ case "$(hostname -s)" in
 
   'aphrodite'|'lain')
     alias                                                                \
-      cdmd="cd \${markdowndir}"                                          \
-      cdsrv="cd \${srvdir}"
+      cdmd="cd \${MARKDOWNDIR}"                                          \
+      cdsrv="cd \${SRVDIR}"
 
     ;;
 
