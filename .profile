@@ -16,10 +16,6 @@ else
 
 fi
 
-# PATH parameter expansion explanation:
-# https://unix.stackexchange.com/a/415028
-#
-# the extra colon is intentional, it's the delimiter for PATH.
 export                                          \
   BROWSER='lynx'                                \
   CLICOLOR=1                                    \
@@ -31,7 +27,6 @@ export                                          \
   LESS='-iMR'                                   \
   LESSSECURE=1                                  \
   PAGER='less'                                  \
-  PATH="${HOME}/.local/bin${PATH:+:${PATH}}"    \
   XDG_CACHE_HOME="${HOME}/.cache"               \
   XDG_CONFIG_HOME="${HOME}/.config"             \
   XDG_DATA_HOME="${HOME}/.local/share"          \
@@ -62,10 +57,21 @@ case "$(uname)" in
     NIC="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')"
     export NIC
 
+    # prepend /usr/games and ~/.local/bin to PATH
+    #
+    # PATH parameter expansion explanation:
+    # https://unix.stackexchange.com/a/415028
+    #
+    # the extra colon is intentional, it's the delimiter for PATH.
+    PATH="${HOME}/.local/bin:/usr/games${PATH:+:${PATH}}"
+    export PATH
+
     ;;
 
   *)
-    # if not a recognized OS, do nothing
+    # no /usr/games if not OpenBSD
+    PATH="${HOME}/.local/bin${PATH:+:${PATH}}"
+    export PATH
 
     ;;
 
