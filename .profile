@@ -25,24 +25,26 @@ export                                          \
   CLICOLOR=1                                    \
   FCEDIT="${EDITOR}"                            \
   VISUAL="${EDITOR}"                            \
-  GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"          \
   HISTFILE="${HOME}/.history"                   \
   HISTSIZE=10000                                \
   LC_CTYPE='en_US.UTF-8'                        \
   LESS='-iMR'                                   \
   LESSSECURE=1                                  \
-  MAILRC="${XDG_CONFIG_HOME}/mail/mailrc"       \
   PAGER='less'                                  \
   PATH="${HOME}/.local/bin${PATH:+:${PATH}}"    \
   XDG_CACHE_HOME="${HOME}/.cache"               \
   XDG_CONFIG_HOME="${HOME}/.config"             \
   XDG_DATA_HOME="${HOME}/.local/share"          \
   XDG_STATE_HOME="${HOME}/.local/state"         \
+  SITE='https://amissing.link'
+
+# these have to come after XDG_* are defined
+export
+  GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"          \
+  MAILRC="${XDG_CONFIG_HOME}/mail/mailrc"       \
   XMONAD_CACHE_DIR="${XDG_CACHE_HOME}/xmonad"   \
   XMONAD_CONFIG_DIR="${XDG_CONFIG_HOME}/xmonad" \
   XMONAD_DATA_DIR="${XDG_DATA_DIR}/xmonad"      \
-  SITE='https://amissing.link'
-
 # logging
 export DOTFILES_LOG="${XDG_DATA_HOME}/dotfiles.log"
 mkdir -p -- "${DOTFILES_LOG%/*}"
