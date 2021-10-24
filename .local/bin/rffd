@@ -111,9 +111,8 @@ prereqs() {
 while getopts c:h opt; do
 
   case "${opt}" in
-    c) readonly COUNT="${OPTARG}" ;;
-    h) usage                      ;;
-    *) usage                      ;;
+    c)   readonly COUNT="${OPTARG}" ;;
+    h|*) usage                      ;;
   esac
 
 done
