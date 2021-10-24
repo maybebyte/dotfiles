@@ -7,8 +7,8 @@ Xcursor.theme: Breeze
 Xft.antialias:      1
 Xft.autohint:       0
 Xft.embeddedbitmap: 0
-Xft.hinting:        1
-Xft.hintstyle:      hintslight
+Xft.hinting:        0
+Xft.hintstyle:      hintnone
 Xft.rgba:           rgb
 Xft.scalable:       0
 
