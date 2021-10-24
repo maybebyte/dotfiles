@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -e
 #
 # https://www.romanzolotarev.com/bin/rssg
 # Copyright 2018 Roman Zolotarev <hi@romanzolotarev.com>
@@ -16,6 +15,7 @@ set -e
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+set -e
 
 main() {
   [ -n "$1" ] || usage

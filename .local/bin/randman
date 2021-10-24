@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -e
 # Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
@@ -13,6 +12,8 @@ set -e
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+set -e
 
 # lists man page paths from listed sections, shuffles them, and returns
 # the first page (like drawing the top card from a shuffled deck).
