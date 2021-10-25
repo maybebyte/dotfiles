@@ -14,9 +14,6 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-# check that LIBRARY is readable. if it is, source it so its
-# functions are available. if not, exit due to potentially unpredictable
-# behavior.
 readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
 if [ -r "${LIBRARY}" ]; then
