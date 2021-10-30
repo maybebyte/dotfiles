@@ -127,9 +127,7 @@ shift $((OPTIND - 1))
 
 assign_cuetag
 
-# TODO: this should back up the original 24-bit FLAC file. maybe
-# splitflac() can pick up on it and not back it up if ${CONVERT} =
-# yes.
+# TODO: this should back up the original 24-bit FLAC file.
 if [ "${CONVERT}" = 'yes' ]; then
   # makes sense to check dependency only when it's really needed
   echo 'sox' | check_deps
