@@ -4,10 +4,10 @@
 ControlMaster auto
 ControlPersist 1h
 
-# on any host that ends with -onion:
+# on any host that ends with -tor:
 # 1) proxy traffic using nc(1) and tor(1).
 # 2) ControlPath uses %C since %h won't work with v3 onions.
-Host *-onion
+Host *-tor
   ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p
   ControlPath ~/.ssh/sockets/%C
 
