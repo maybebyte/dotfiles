@@ -5,6 +5,10 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
+# temporary Downloads directory for browser
+TMP_DL="$(mktemp -d)"
+ln -sf "${TMP_DL}" "${HOME}/Downloads"
+
 # environment variables that either:
 #
 # a) don't make sense to put in ~/.profile
