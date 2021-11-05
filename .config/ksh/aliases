@@ -260,7 +260,6 @@ general_aliases() {
     ftp="ftp -nU ''"                                                     \
     m='neomutt'                                                          \
     mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
-    mpva='mpv --no-video --speed=1'                                      \
     stcli='speedtest-cli'                                                \
     trem='transmission-remote'
 
