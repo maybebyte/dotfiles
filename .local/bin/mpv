@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 MPV="$(command -vp mpv)"
+OS="$(uname)"
 
 # disable core dumps
 #
@@ -9,6 +10,9 @@ MPV="$(command -vp mpv)"
 #
 # see https://marc.info/?t=162020293900011&r=1&w=2
 
+# also, disable xcompmgr(1) during playback since it seems to cause
+# screen tearing with modesetting(4)
+
 # since this is only an issue on OpenBSD, do an OS check and don't worry
 # that it's not POSIX compatible since sh(1) on OpenBSD is secretly
 # ksh(1). ironically this makes the script more portable since it will
@@ -16,6 +20,11 @@ MPV="$(command -vp mpv)"
 # it.
 #
 # shellcheck disable=SC3045
-[ "$(uname)" = 'OpenBSD' ] && ulimit -c 0
+if [ "${OS}" = 'OpenBSD' ]; then
+  ulimit -c 0
+  pkill xcompmgr
+fi
 
-exec "${MPV}" "$@"
+"${MPV}" "$@"
+
+[ "${OS}" = 'OpenBSD' ] && xcompmgr &
