@@ -99,7 +99,7 @@ case "${PROGRAM_NAME}" in
     ;;
 
   *)
-    err "${PROGRAM_NAME} is invalid, exiting."
+    err "${PROGRAM_NAME} is not an expected program name, exiting for safety."
 
     ;;
 
