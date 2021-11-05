@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+MPV="$(command -vp mpv)"
+
 # disable core dumps
 #
 # currently there is an issue where mpv(1) reliably dumps a core on
@@ -16,4 +18,4 @@
 # shellcheck disable=SC3045
 [ "$(uname)" = 'OpenBSD' ] && ulimit -c 0
 
-exec /usr/local/bin/mpv "$@"
+exec "${MPV}" "$@"
