@@ -50,7 +50,7 @@ general_aliases() {
     cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr'      \
     exifrm='exiftool -all= '                                             \
     irssi='proxychains4 irssi'                                           \
-    mus='ncmpcpp'                                                        \
+    mus='ncmpcpp 2>/dev/null'                                            \
     n='nnn'                                                              \
     nb='newsboat'                                                        \
     o='mimeopen'                                                         \
