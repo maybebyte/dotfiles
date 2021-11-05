@@ -19,19 +19,28 @@ PROGRAM_NAME="${0##*/}"
 # ksh(1).
 #
 # shellcheck disable=SC3045
-if [ "${OS}" = 'OpenBSD' ]; then
-  ulimit -c 0
-  [ "${PROGRAM_NAME}" = 'mpv' ] && pkill xcompmgr
-fi
-
+[ "${OS}" = 'OpenBSD' ] && ulimit -c 0
 
 case "${PROGRAM_NAME}" in
-  'mpv')  "${MPV}" "$@"                                           ;;
-  'mpva') "${MPV}" --no-video "$@"                                ;;
-  *)      echo "${PROGRAM_NAME} is invalid, exiting." >&2; exit 1 ;;
+
+  'mpv')
+    [ "${OS}" = 'OpenBSD' ] && pkill xcompmgr
+
+    "${MPV}" "$@"
+
+    [ "${OS}" = 'OpenBSD' ] && xcompmgr &
+
+    ;;
+
+  'mpva')
+    "${MPV}" --no-video "$@"
+
+    ;;
+
+  *)
+    echo "${PROGRAM_NAME} is invalid, exiting." >&2
+    exit 1
+
+    ;;
+
 esac
-
-
-if [ "${OS}" = 'OpenBSD' ] && [ "${PROGRAM_NAME}" = 'mpv' ]; then
-  xcompmgr &
-fi
