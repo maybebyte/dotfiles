@@ -26,8 +26,9 @@ fi
 
 
 case "${PROGRAM_NAME}" in
-  'mpv')  "${MPV}" "$@"            ;;
-  'mpva') "${MPV}" --no-video "$@" ;;
+  'mpv')  "${MPV}" "$@"                                       ;;
+  'mpva') "${MPV}" --no-video "$@"                            ;;
+  *)      echo "${PROGRAM_NAME} is invalid, exiting."; exit 1 ;;
 esac
 
 
