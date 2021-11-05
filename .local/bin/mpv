@@ -1,25 +1,80 @@
 #!/usr/bin/env sh
+# shellcheck disable=SC1090
+# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
 
-MPV="$(command -vp mpv)"
-OS="$(uname)"
-PROGRAM_NAME="${0##*/}"
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
 
-# disable core dumps
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+# wrapper script to disable core dumps
 #
 # currently there is an issue where mpv(1) reliably dumps a core on
 # exit.
 #
 # see https://marc.info/?t=162020293900011&r=1&w=2
-
+#
 # also, disable xcompmgr(1) during playback since it seems to cause
 # screen tearing with modesetting(4)
 
-# since this is only an issue on OpenBSD, do an OS check and don't worry
-# that it's not POSIX compatible since sh(1) on OpenBSD is secretly
-# ksh(1).
+PROGRAM_NAME="${0##*/}"
+
+
+readonly LIBRARY="${HOME}/.local/bin/common.sh"
+
+if [ -r "${LIBRARY}" ]; then
+  . "${LIBRARY}"
+
+else
+  cat >&2 <<EOF
+${LIBRARY} doesn't exist or isn't readable.
+${PROGRAM_NAME} may not function correctly without it; exiting for safety.
+EOF
+
+  exit 1
+
+fi
+
+
+usage() {
+  cat >&2 <<EOF
+${PROGRAM_NAME} [options] [media file]
+
+See mpv(1) for more details.
+EOF
+
+  exit 1
+}
+
+
+ARGS_NEEDED=1
+[ "$#" -ge "${ARGS_NEEDED}" ] || usage
+
+
+# TODO: maybe there is a way to do this so command -vp isn't issued
+# twice (once for the test, once for the assignment).
+[ -x "$(command -vp 'mpv')" ] || err 'mpv not found in PATH or not executable.'
+
+
+MPV="$(command -vp 'mpv')"
+OS="$(uname)"
+
+
+# since the issues mentioned before only occur on OpenBSD, do an OS
+# check and don't worry that it's not POSIX compatible since sh(1) on
+# OpenBSD is secretly ksh(1).
 #
 # shellcheck disable=SC3045
 [ "${OS}" = 'OpenBSD' ] && ulimit -c 0
+
 
 case "${PROGRAM_NAME}" in
 
@@ -38,8 +93,7 @@ case "${PROGRAM_NAME}" in
     ;;
 
   *)
-    echo "${PROGRAM_NAME} is invalid, exiting." >&2
-    exit 1
+    err "${PROGRAM_NAME} is invalid, exiting."
 
     ;;
 
