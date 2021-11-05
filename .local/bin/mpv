@@ -15,9 +15,7 @@ OS="$(uname)"
 
 # since this is only an issue on OpenBSD, do an OS check and don't worry
 # that it's not POSIX compatible since sh(1) on OpenBSD is secretly
-# ksh(1). ironically this makes the script more portable since it will
-# only use specific non-POSIX functionality on a system known to support
-# it.
+# ksh(1).
 #
 # shellcheck disable=SC3045
 if [ "${OS}" = 'OpenBSD' ]; then
