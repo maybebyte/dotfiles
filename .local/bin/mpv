@@ -61,6 +61,7 @@ EOF
 ARGS_NEEDED=1
 [ "$#" -ge "${ARGS_NEEDED}" ] || usage
 
+
 # TODO: maybe there is a way to do this so command -vp isn't issued
 # twice (once for the test, once for the assignment).
 [ -x "$(command -vp 'mpv')" ] || err 'mpv not found in PATH or not executable.'
