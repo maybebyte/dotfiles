@@ -82,7 +82,7 @@ OS="$(uname)"
 case "${PROGRAM_NAME}" in
 
   'mpv')
-    [ "${OS}" = 'OpenBSD' ] && pkill xcompmgr
+    [ "${OS}" = 'OpenBSD' ] && pkill xcompmgr >/dev/null 2>&1
 
     "${MPV}" "$@"
 
