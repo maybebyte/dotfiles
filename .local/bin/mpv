@@ -83,7 +83,9 @@ case "${PROGRAM_NAME}" in
 
     "${MPV}" "$@"
 
-    [ "${OS}" = 'OpenBSD' ] && xcompmgr &
+    [ "${OS}" = 'OpenBSD' ] \
+      && [ -x "$(command -vp 'xcompmgr')" ] \
+      && xcompmgr &
 
     ;;
 
