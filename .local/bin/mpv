@@ -44,6 +44,9 @@ EOF
 fi
 
 
+check_grafix
+
+
 usage() {
   cat >&2 <<EOF
 ${PROGRAM_NAME} [options] [media file]
@@ -57,7 +60,6 @@ EOF
 
 ARGS_NEEDED=1
 [ "$#" -ge "${ARGS_NEEDED}" ] || usage
-
 
 # TODO: maybe there is a way to do this so command -vp isn't issued
 # twice (once for the test, once for the assignment).
