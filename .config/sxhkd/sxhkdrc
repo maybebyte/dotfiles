@@ -30,7 +30,7 @@ super + M
 # TODO: unbind xmonad's default keybinding for 'super + p' (regular dmenu)
 # and change this to 'super + p' instead of 'super + P'. then, assign
 # 'super + P' such that it will pause/play MPD. then, assign tor browser
-# to 'super + T' instead of 'super + B'.
+# to 'super + T' instead of 'super + W'.
 super + P
   keepassxc
 
