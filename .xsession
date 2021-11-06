@@ -7,7 +7,7 @@ xrdb "${HOME}/.Xresources"
 
 # temporary Downloads directory for browser
 if TMP_DL="$(mktemp -d)"; then
-  [ -d "${HOME}/Downloads" ] && rm -rf "${HOME}/Downloads"
+  rm -rf "${HOME}/Downloads"
   ln -s "${TMP_DL}" "${HOME}/Downloads"
 
 else
