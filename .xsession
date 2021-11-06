@@ -7,7 +7,8 @@ xrdb "${HOME}/.Xresources"
 
 # temporary Downloads directory for browser
 if TMP_DL="$(mktemp -d)"; then
-  ln -sf "${TMP_DL}" "${HOME}/Downloads"
+  [ -d "${HOME}/Downloads" ] && rm -rf "${HOME}/Downloads"
+  ln -s "${TMP_DL}" "${HOME}/Downloads"
 
 else
   # shellcheck disable=SC2088
