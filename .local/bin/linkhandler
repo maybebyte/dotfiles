@@ -100,8 +100,7 @@ linkhandler() {
       ;;
 
     'listen')
-      tmux new-window "mpv \
-      --no-video           \
+      tmux new-window "mpva \
       --no-pause           \
       --no-resume-playback \
       --no-keep-open       \
