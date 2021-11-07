@@ -116,7 +116,7 @@ show_date() {
 
 
 sysinfo() {
-  # spaces bork ${stats}
+  # spaces at the beginning of a new line bork ${stats}
   stats="${bgfg} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_disk_space)\
 $(show_date)"
