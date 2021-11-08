@@ -65,20 +65,42 @@ determine_preload_dir() {
 
   case "${mimetype}" in
     # these are organized alphabetically by mimetype
-    application/epub*) readonly preload_dir="${HOME}/books"  ;;
-    application/pdf*)  readonly preload_dir="${HOME}/books"  ;;
-    image/vnd.djvu)    readonly preload_dir="${HOME}/books"  ;;
-    image/*)           readonly preload_dir="${HOME}/pics"   ;;
-    video/*)           readonly preload_dir="${HOME}/videos" ;;
-    *)                 readonly preload_dir="${HOME}"        ;;
+    application/epub*) readonly preload_dir="${HOME}/books"          ;;
+    application/pdf*)  readonly preload_dir="${HOME}/books"          ;;
+    image/vnd.djvu)    readonly preload_dir="${HOME}/books"          ;;
+    image/*)           readonly preload_dir="${HOME}/pics"           ;;
+    video/*)           readonly preload_dir="${HOME}/videos"         ;;
+    *)                 err "No preload directory for this filetype." ;;
   esac
+}
+
+
+move_file() {
+  if mv -- "${file}" "${no_tilde_dest}/${file##*/}"; then
+    notify-send -- "${file##*/} moved to ${tilde_dest}"
+
+  else
+    err "Failed to move ${file##*/}"
+
+  fi
+}
+
+
+copy_file() {
+  if cp -- "${file}" "${no_tilde_dest}/${file##*/}"; then
+    notify-send -- "${file##*/} copied to ${tilde_dest}"
+
+  else
+    err "Failed to copy ${file##*/}"
+
+  fi
 }
 
 
 # uses ${preload_dir} to display a list of directories that a given file
 # can be moved to. once the user chooses a destination with dmenu, move
 # the file there and send a notification.
-move_file() {
+handle_dest() {
   determine_preload_dir
 
   # substitutes $HOME with a tilde so the list of directories in dmenu is
@@ -86,8 +108,9 @@ move_file() {
   tilde_dest="$(
     { find "${preload_dir}" -type d | sed -- "s|^${HOME}|~|g"
       echo 'exit'
-    } | menu -l 10 -p "Move ${file##*/} where?"
+    } | menu -l 10 -p "Where should ${file##*/} be placed?"
   )"
+
 
   case "${tilde_dest}" in
 
@@ -103,18 +126,10 @@ move_file() {
 
   esac
 
+
   no_tilde_dest="$(echo "${tilde_dest}" | sed -- "s|^~|${HOME}|g")"
 
   mkdir -p -- "${no_tilde_dest}" || err "${tilde_dest} could not be created with mkdir(1)."
-
-  if mv -- "${file}" "${no_tilde_dest}/${file##*/}"; then
-    notify-send -- "${file##*/} moved to ${tilde_dest}"
-
-  else
-    err "Failed to move ${file##*/}"
-
-  fi
-
 }
 
 
@@ -149,28 +164,6 @@ rename_file() {
   fi
 }
 
-
-# determines how to operate on the file. if nothing was assigned to
-# ${operation} by getopts, the user chooses the operation with dmenu.
-choose_operation() {
-  if [ -z "${operation}" ]; then
-    operation="$(printf '%s\n' 'move' 'rename' | menu -p "What to do with ${file}?")"
-    readonly operation
-
-    # a small delay needs to be here. without it, the subsequent menu
-    # won't appear sometimes.
-    sleep 0.3
-
-  fi
-
-  case "${operation}" in
-    'move')   move_file   ;;
-    'rename') rename_file ;;
-    *)        usage       ;;
-  esac
-}
-
-
 prereqs1() {
   check_grafix
   check_deps <<'EOF'
@@ -190,9 +183,10 @@ prereqs2() {
 prereqs1
 readonly args_needed=1
 
-while getopts hmn opt; do
+while getopts chmn opt; do
 
   case "${opt}" in
+    'c')     readonly operation='copy'; break   ;;
     'm')     readonly operation='move'; break   ;;
     'n')     readonly operation='rename'; break ;;
     'h'|*)   usage                              ;;
@@ -207,4 +201,21 @@ prereqs2 "$@"
 file="$(readlink -f -- "$1")"
 readonly file
 
-choose_operation
+
+# if there is no operation, prompt the user to select one.
+if [ -z "${operation}" ]; then
+  operation="$(printf '%s\n' 'copy' 'move' 'rename' | menu -p "What to do with ${file}?")"
+  readonly operation
+
+  # a small delay needs to be here. without it, the subsequent menu
+  # won't appear sometimes.
+  sleep 0.25
+fi
+
+
+case "${operation}" in
+  'copy')   handle_dest && copy_file ;;
+  'move')   handle_dest && move_file ;;
+  'rename') rename_file              ;;
+  *)        usage                    ;;
+esac
