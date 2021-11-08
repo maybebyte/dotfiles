@@ -25,6 +25,12 @@ while read -r file; do
 
   case "$1" in
 
+    # copy file with filehandler
+    'c')
+      filehandler -c "${file}"
+
+      ;;
+
     # delete file
     'd')
       really_delete="$(
@@ -40,11 +46,13 @@ while read -r file; do
 
       ;;
 
+    # move file with filehandler
     'm')
       filehandler -m "${file}"
 
       ;;
 
+    # rename file with filehandler
     'n')
       filehandler -n "${file}"
 
