@@ -5,16 +5,9 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
-# temporary Downloads directory for browser
-if TMP_DL="$(mktemp -d)"; then
-  rm -rf "${HOME}/Downloads/tmpdir"
-  ln -sf "${TMP_DL}" "${HOME}/Downloads/tmpdir"
-
-else
-  # shellcheck disable=SC2088
-  echo 'Unable to create ~/Downloads symlink.' 2>>"${DOTFILES_LOG}" >&2
-
-fi
+# keep Downloads clean
+rm -rf "${HOME}/Downloads"
+mkdir -m 700 "${HOME}/Downloads"
 
 # environment variables that either:
 #
