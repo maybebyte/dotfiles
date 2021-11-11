@@ -196,7 +196,9 @@ EOF
 # $1 is a positive integer (supporting rational numbers would require
 # some additional code to handle exceptions).
 #
-# bug: 1024000 returns 0MB. maybe fix it by checking modulus?
+# bug: 1024000 returns 0MB.
+#
+# TODO: perhaps this can use bc(1)
 hreadable() {
   case "$1" in
 
