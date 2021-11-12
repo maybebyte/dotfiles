@@ -28,7 +28,7 @@ grab_emoji() {
   [ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
   [ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
 
-  chosen_entry="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu -l 20 -fn 'Symbola-20')"
+  chosen_entry="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu -l 20 -fn 'Symbola-12')"
   readonly chosen_entry
 
   [ -n "${chosen_entry}" ] || err 'Must choose an emoji.'

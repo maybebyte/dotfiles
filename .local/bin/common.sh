@@ -79,7 +79,7 @@ import_colors_sh() {
 # generic dmenu function to handle customizations. uses colors that
 # import_colors_sh() gathers.
 menu() {
-  dmenu -i -fn 'mono-20'       \
+  dmenu -i -fn 'mono-12'       \
   -nb "${background:=#040516}" \
   -nf "${color3:=#9974e7}"     \
   -sb "${background:=#040516}" \
