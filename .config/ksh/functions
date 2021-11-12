@@ -141,7 +141,7 @@ enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
 
 fzf_hist() {
   RES="$(fzf --tac --no-sort -e < "${HISTFILE}")"
-  [ -n "${RES}" ] || exit 0
+  [ -n "${RES}" ] || return 0
   eval "${RES}"
 }
 
