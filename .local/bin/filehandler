@@ -41,6 +41,7 @@ ${0##*/} [options] [file]
 
 options:
 -h: help
+-c: copy file (operation)
 -m: move file (operation)
 -n: rename file (operation)
 
