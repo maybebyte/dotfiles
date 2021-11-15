@@ -14,6 +14,41 @@ elif [ -x "$(command -v 'sudo')" ]; then
 fi
 
 
+args_needed() {
+  unset ATLEAST
+
+  if [ "$1" = 'atleast' ]; then
+    ATLEAST=1
+    shift
+  fi
+
+
+  case "$1" in
+
+    ''|*[!0-9]*)
+      echo "args_needed() needs a number." >&2
+      return 1
+
+      ;;
+
+    *)
+      if [ "${ATLEAST}" = 1 ]; then
+        echo "At least $1 argument(s) required." >&2
+        unset ATLEAST
+        return 1
+
+      else
+        echo "$1 argument(s) required." >&2
+        return 1
+
+      fi
+
+      ;;
+
+  esac
+}
+
+
 # if Xorg isn't running, exit with an error.
 check_grafix() {
   [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
