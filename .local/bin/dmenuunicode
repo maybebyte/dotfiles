@@ -38,6 +38,10 @@ grab_emoji() {
   grep -q -- "^${emoji}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
 
   # important to use printf %s here, as ${emoji} is user input
+  #
+  # also important to not send a newline to yank() aka xclip(1),
+  # otherwise pasting from the clipboard in certain messengers will send
+  # the message.
   if printf '%s' "${emoji}" | yank; then
     notify-send -- "${emoji} copied to clipboard."
 
