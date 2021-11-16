@@ -126,11 +126,9 @@ $(show_date)"
 
 
 prereqs() {
-  check_deps <<'EOF'
-apm
-mpc
-sndioctl
-EOF
+  [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
+
+  echo 'mpc' | check_deps
 
   import_colors_sh
 }
