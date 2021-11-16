@@ -36,7 +36,7 @@ if [ -r "${LIBRARY}" ]; then
 else
   cat >&2 <<EOF
 ${LIBRARY} doesn't exist or isn't readable.
-${PROGRAM_NAME} may not function correctly without it; exiting for safety.
+${PROGRAM_NAME} may not function correctly without it.
 EOF
 
   exit 1
