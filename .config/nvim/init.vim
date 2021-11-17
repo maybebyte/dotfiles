@@ -25,6 +25,9 @@ set undofile
 set wrap
 set wrapscan
 
+" allow Markdown folds
+let g:markdown_folding = 1
+
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
 nnoremap <C-p> "+P
