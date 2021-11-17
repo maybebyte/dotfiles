@@ -3,6 +3,7 @@
 --continue
 --embed-subs
 --embed-thumbnail
+--external-downloader axel
 --format "(bestvideo[height>=1080][width>=1920]/bestvideo)+bestaudio/best"
 --ignore-errors
 --output "${HOME}/Downloads/%(uploader)s/%(upload_date)s.%(title)s.%(id)s.%(ext)s"
