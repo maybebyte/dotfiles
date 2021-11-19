@@ -31,21 +31,19 @@ args_needed() {
 
       ;;
 
-    *)
-      if [ "${ATLEAST}" = 1 ]; then
-        echo "At least $1 argument(s) required." >&2
-        unset ATLEAST
-        return 1
-
-      else
-        echo "$1 argument(s) required." >&2
-        return 1
-
-      fi
-
-      ;;
-
   esac
+
+
+  if [ "${ATLEAST}" = 1 ]; then
+    echo "At least $1 argument(s) required." >&2
+    unset ATLEAST
+    return 1
+
+  else
+    echo "$1 argument(s) required." >&2
+    return 1
+
+  fi
 }
 
 
