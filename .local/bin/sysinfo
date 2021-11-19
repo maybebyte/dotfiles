@@ -77,7 +77,7 @@ show_battery() {
 
 
 show_temp() {
-  case "$(hostname -s)" in
+  case "${HOSTNAME}" in
     'lain')      temperature="$(sysctl -n hw.sensors.cpu0.temp0)"     ;;
     'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"    ;;
     *)           return 1 # if temp sensor is unknown, return nothing ;;
@@ -139,6 +139,9 @@ prereqs
 batt_status="$(apm -b)"
 delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
 bgfg="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
+
+[ -z "${HOSTNAME}" ] && HOSTNAME="$(hostname -s)"
+readonly HOSTNAME
 
 while true; do
   sysinfo
