@@ -7,24 +7,59 @@
 # his dotfiles can be accessed here:
 # https://github.com/LukeSmithxyz/voidrice
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
+}
 
-fi
+
+menu() {
+  dmenu -i -fn 'mono-12'       \
+  -nb "${background:=#040516}" \
+  -nf "${color3:=#9974e7}"     \
+  -sb "${background:=#040516}" \
+  -sf "${foreground:=#e0cef3}" \
+  "$@"
+}
+
+
+import_colors_sh() {
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+
+  if ! [ -r "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
+
+  elif ! [ -f "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
+
+  # passed sanity checks, so source the file
+  else
+    . "${COLORS_SH}"
+
+  fi
+}
+
+
+check_deps() {
+  while read -r dependency; do
+
+    if [ -x "$(command -v -- "${dependency}")" ]; then
+      continue
+
+    else
+      err "${dependency} not found in PATH or not executable."
+
+    fi
+
+  done
+}
 
 
 grab_emoji() {
-  readonly EMOJI_FILE="${XDG_DATA_HOME}/emoji"
+  readonly EMOJI_FILE="${XDG_DATA_HOME:=${HOME}/.local/share}/emoji"
   [ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
   [ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
 
@@ -42,7 +77,7 @@ grab_emoji() {
   # also important to not send a newline to yank() aka xclip(1),
   # otherwise pasting from the clipboard in certain messengers will send
   # the message.
-  if printf '%s' "${emoji}" | yank; then
+  if printf '%s' "${emoji}" | xclip -selection clipboard; then
     notify-send -- "${emoji} copied to clipboard."
 
   else
@@ -52,18 +87,14 @@ grab_emoji() {
 }
 
 
-prereqs() {
-  check_grafix
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-  check_deps <<'EOF'
+check_deps <<'EOF'
 dmenu
 notify-send
 xclip
 EOF
 
-  import_colors_sh
-}
+import_colors_sh
 
-
-prereqs
 grab_emoji

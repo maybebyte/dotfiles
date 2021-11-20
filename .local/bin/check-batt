@@ -14,51 +14,49 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
-
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
+}
 
-fi
+
+check_deps() {
+  while read -r dependency; do
+
+    if [ -x "$(command -v -- "${dependency}")" ]; then
+      continue
+
+    else
+      err "${dependency} not found in PATH or not executable."
+
+    fi
+
+  done
+}
 
 
-# handle prerequisites. designed to exit if prerequisites aren't in
-# place so that the script behaves more predictably.
-prereqs() {
-  # if needed dependencies aren't available, exit.
-  check_deps <<'EOF'
+# if needed dependencies aren't available, exit.
+check_deps <<'EOF'
 apm
 notify-send
 EOF
 
-  # if A/C is connected, exit.
-  [ "$(apm -a)" = 1 ] && exit
+# if A/C is connected, exit.
+[ "$(apm -a)" = 1 ] && exit 0
 
-  # if battery is missing, exit.
-  batt_status="$(apm -b)"
+# if battery is missing, exit.
+batt_status="$(apm -b)"
 
-  case "${batt_status}" in
-    4)   err "Battery status is 'absent.'"  ;;
-    255) err "Battery status is 'unknown.'" ;;
-  esac
-}
-
-
-prereqs
+case "${batt_status}" in
+  4)   err "Battery status is 'absent.'"  ;;
+  255) err "Battery status is 'unknown.'" ;;
+esac
 
 batt_percent="$(apm -l)"
 
 if [ "${batt_percent}" -lt 20 ]; then
   # exporting ${DISPLAY} is needed for cron(8) jobs.
-  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+  [ -z "${DISPLAY}" ] && : "${DISPLAY:=:0}" && export DISPLAY
 
   notify-send -- "🔋 Your device is at ${batt_percent}%!"
 

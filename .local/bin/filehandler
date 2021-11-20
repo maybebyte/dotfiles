@@ -16,26 +16,15 @@
 
 set -e
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
-
-fi
+}
 
 
 usage() {
   cat >&2 <<EOF
-${0##*/} requires ${args_needed} argument(s).
-
 usage:
 ${0##*/} [options] [file]
 
@@ -56,6 +45,64 @@ ${0##*/} only processes the first operation it sees.
 EOF
 
   exit 1
+}
+
+
+args_needed() {
+  case "$1" in
+
+    ''|*[!0-9]*)
+      err "args_needed() needs a number." >&2
+
+      ;;
+
+  esac
+
+  err "$1 argument(s) required by ${0##*/}."
+}
+
+
+menu() {
+  dmenu -i -fn 'mono-12'       \
+  -nb "${background:=#040516}" \
+  -nf "${color3:=#9974e7}"     \
+  -sb "${background:=#040516}" \
+  -sf "${foreground:=#e0cef3}" \
+  "$@"
+}
+
+
+check_deps() {
+  while read -r dependency; do
+
+    if [ -x "$(command -v -- "${dependency}")" ]; then
+      continue
+
+    else
+      err "${dependency} not found in PATH or not executable."
+
+    fi
+
+  done
+}
+
+
+import_colors_sh() {
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+
+  if ! [ -r "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
+
+  elif ! [ -f "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
+
+  # passed sanity checks, so source the file
+  else
+    . "${COLORS_SH}"
+
+  fi
 }
 
 
@@ -165,24 +212,13 @@ rename_file() {
   fi
 }
 
-prereqs1() {
-  check_grafix
-  check_deps <<'EOF'
+
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
+
+check_deps <<'EOF'
 dmenu
 notify-send
 EOF
-}
-
-
-prereqs2() {
-  [ "$#" = "${args_needed}" ] || usage
-  import_colors_sh
-  [ -f "$1" ] || err 'Not a file or does not exist.'
-}
-
-
-prereqs1
-readonly args_needed=1
 
 while getopts chmn opt; do
 
@@ -197,7 +233,9 @@ done
 
 shift $((OPTIND - 1))
 
-prereqs2 "$@"
+[ "$#" = 1 ] || args_needed 1
+import_colors_sh
+[ -f "$1" ] || err 'Not a file or does not exist.'
 
 file="$(readlink -f -- "$1")"
 readonly file
