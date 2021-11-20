@@ -605,7 +605,7 @@ EOF
 }
 
 
-# alias for downloading youtube-dl channels/playlists
+# for downloading youtube-dl channels/playlists
 ytpl() {
   youtube-dl \
     --download-archive 'archive.txt' \
