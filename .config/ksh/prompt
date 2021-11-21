@@ -9,7 +9,7 @@ case "${KSH_VERSION%%\ KSH*}" in
 
     PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\u\
 ${_ps1_clear}@${_ps1_hostname}\h${_ps1_clear} \
-${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\$ "
+${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
 
     ;;
 
