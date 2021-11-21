@@ -26,7 +26,6 @@ export                                                 \
 # daemons
 dunst &
 sxhkd &
-# don't use -grab. it doesn't play nice with slock(1).
 unclutter -idle 3 &
 # xcompmgr(1) seems to cause horizontal screen tearing on x1c7 with
 # mpv(1) and modesetting(4).

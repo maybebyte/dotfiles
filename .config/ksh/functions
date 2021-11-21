@@ -603,3 +603,13 @@ EOF
 
   ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
 }
+
+
+# for downloading youtube-dl channels/playlists
+ytpl() {
+  youtube-dl \
+    --download-archive 'archive.txt' \
+    --output './%(upload_date)s.%(title)s.%(id)s.%(ext)s' \
+    --match-filter "playlist_title != 'Liked videos' & playlist_title != 'Favorites'" \
+    "$@"
+}
