@@ -16,20 +16,55 @@
 
 set -e
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
+}
 
-fi
+
+check_deps() {
+  while read -r dependency; do
+
+    if [ -x "$(command -v -- "${dependency}")" ]; then
+      continue
+
+    else
+      err "${dependency} not found in PATH or not executable."
+
+    fi
+
+  done
+}
+
+
+import_colors_sh() {
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+
+  if ! [ -r "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
+
+  elif ! [ -f "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
+
+  # passed sanity checks, so source the file
+  else
+    . "${COLORS_SH}"
+
+  fi
+}
+
+
+menu() {
+  dmenu -i -fn 'mono-12'       \
+  -nb "${background:=#040516}" \
+  -nf "${color3:=#9974e7}"     \
+  -sb "${background:=#040516}" \
+  -sf "${foreground:=#e0cef3}" \
+  "$@"
+}
 
 
 # if no arg is passed and STDIN is empty, exit with an error.
@@ -59,7 +94,7 @@ linkhandler() {
       readonly duration
 
       if [ -n "${duration}" ]; then
-        printf '%s' "${duration}" | yank
+        printf '%s' "${duration}" | xclip -selection clipboard
         notify-send -- "Copied video duration (${duration})."
 
       else
@@ -74,7 +109,7 @@ linkhandler() {
       readonly title
 
       if [ -n "${title}" ]; then
-        printf '%s' "${title}" | yank
+        printf '%s' "${title}" | xclip -selection clipboard
         notify-send -- "${title} yanked."
 
       else
@@ -150,10 +185,9 @@ linkhandler() {
 }
 
 
-prereqs() {
-  check_grafix
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-  check_deps <<'EOF'
+check_deps <<'EOF'
 dmenu
 ftp
 mpv
@@ -163,13 +197,9 @@ xclip
 youtube-dl
 EOF
 
-  check_opts "$1"
+check_opts "$1"
 
-  import_colors_sh
-}
-
-
-prereqs "$1"
+import_colors_sh
 
 readonly options='copy duration
 copy title
