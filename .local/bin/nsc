@@ -82,9 +82,9 @@ fix_perms() {
 
   priv chown -R -- "${unpriv_user}:${unpriv_user}" "${tmpdir}"
 
-  find "${tmpdir}"                                      \
-    \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
-    \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
+  find "${tmpdir}"                                    \
+  \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
+  \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
 }
 
 
