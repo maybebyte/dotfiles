@@ -17,22 +17,14 @@
 # note that 'set -e' is not set in this script because the screen must
 # be locked even if the other steps fail.
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
+}
 
-fi
 
-echo 'xlock' | check_deps
+[ -x "$(command -vp -- 'xlock')" ] || err 'xlock not found in PATH or not executable.'
 
 clear_clip
 pkill -q 'keepass'
