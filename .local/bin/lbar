@@ -16,6 +16,13 @@
 
 set -e
 
+
+err() {
+  printf '%s\n' "$*" >&2
+  exit 1
+}
+
+
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 [ -x "$(command -vp -- 'lemonbar-xft')" ] || err 'lemonbar-xft not found in PATH or not executable.'
 
