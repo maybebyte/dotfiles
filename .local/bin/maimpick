@@ -5,29 +5,60 @@
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
+}
 
-fi
+
+check_deps() {
+  while read -r dependency; do
+
+    if [ -x "$(command -v -- "${dependency}")" ]; then
+      continue
+
+    else
+      err "${dependency} not found in PATH or not executable."
+
+    fi
+
+  done
+}
 
 
-cur_date() {
-  date '+%Y%m%d-%H%M%S'
+import_colors_sh() {
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+
+  if ! [ -r "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
+
+  elif ! [ -f "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
+
+  # passed sanity checks, so source the file
+  else
+    . "${COLORS_SH}"
+
+  fi
+}
+
+
+menu() {
+  dmenu -i -fn 'mono-12'       \
+  -nb "${background:=#040516}" \
+  -nf "${color3:=#9974e7}"     \
+  -sb "${background:=#040516}" \
+  -sf "${foreground:=#e0cef3}" \
+  "$@"
 }
 
 
 yankpic() {
-  yank -t image/png || err 'Unable to copy image data to clipboard.'
+  xclip -selection clipboard -t image/png \
+    || err 'Unable to copy image data to clipboard.'
 }
 
 
@@ -41,7 +72,7 @@ present_options() {
   case "$(menu -l "${num_of_opts}" -p "Screenshot which area?")" in
 
     'a selected area')
-      filename="selected-$(cur_date).png"
+      filename="selected-$(date '+%Y%m%d-%H%M%S').png"
       readonly filename
 
       maim_with_flags -s -- "${savedir}/${filename}"
@@ -49,7 +80,7 @@ present_options() {
       ;;
 
     'current window')
-      filename="window-$(cur_date).png"
+      filename="window-$(date '+%Y%m%d-%H%M%S').png"
       readonly filename
 
       maim_with_flags -i "$(xdotool getactivewindow)" -- "${savedir}/${filename}"
@@ -57,7 +88,7 @@ present_options() {
       ;;
 
     'full screen')
-      filename="full-$(cur_date).png"
+      filename="full-$(date '+%Y%m%d-%H%M%S').png"
       readonly filename
 
       maim_with_flags -- "${savedir}/${filename}"
@@ -88,21 +119,16 @@ present_options() {
 }
 
 
-prereqs() {
-  check_grafix
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-  check_deps <<'EOF'
+check_deps <<'EOF'
 dmenu
 maim
 xclip
 xdotool
 EOF
 
-  import_colors_sh
-}
-
-
-prereqs
+import_colors_sh
 
 readonly options='a selected area
 current window
