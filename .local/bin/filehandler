@@ -52,7 +52,7 @@ args_needed() {
   case "$1" in
 
     ''|*[!0-9]*)
-      err "args_needed() needs a number." >&2
+      err "args_needed() needs a number."
 
       ;;
 
