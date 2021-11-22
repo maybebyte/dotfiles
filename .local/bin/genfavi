@@ -16,32 +16,34 @@
 
 set -e
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
-
-fi
+}
 
 
 usage() {
   cat >&2 <<EOF
-${0##*/} requires ${args_needed} argument(s).
-
 usage:
 ${0##*/} [image]
 EOF
 
   exit 1
+}
+
+
+args_needed() {
+  case "$1" in
+
+    ''|*[!0-9]*)
+      err "args_needed() needs a number."
+
+      ;;
+
+  esac
+
+  err "$1 argument(s) required."
 }
 
 
@@ -55,20 +57,14 @@ genfavi() {
 }
 
 
-prereqs() {
-  echo 'convert' | check_deps
+[ -x "$(command -vp -- 'convert')" ] || err "convert not found in PATH or not executable."
 
-  readonly args_needed=1
-  [ "$#" = "${args_needed}" ] || usage
+[ "$#" = 1 ] || args_needed 1
 
-  case "$(file -ib -- "$1")" in
-    image/*) :                        ;; # images are OK to process
-    *)       err "$1 isn't an image." ;;
-  esac
-}
-
-
-prereqs "$@"
+case "$(file -ib -- "$1")" in
+  image/*) :                        ;; # images are OK to process
+  *)       err "$1 isn't an image." ;;
+esac
 
 if genfavi "$1"; then
   cp 'favicon.ico' 'favicon.png'
