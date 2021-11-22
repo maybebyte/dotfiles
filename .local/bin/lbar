@@ -16,22 +16,7 @@
 
 set -e
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
-
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
-  exit 1
-
-fi
-
-check_grafix
-echo 'lemonbar-xft' | check_deps
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
+[ -x "$(command -vp -- 'lemonbar-xft')" ] || err 'lemonbar-xft not found in PATH or not executable.'
 
 lemonbar-xft -f sans-11 -f 'Noto Sans CJK JP-11' -pd
