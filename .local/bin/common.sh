@@ -27,8 +27,7 @@ args_needed() {
   case "$1" in
 
     ''|*[!0-9]*)
-      echo "args_needed() needs a number." >&2
-      return 1
+      err "args_needed() needs a number."
 
       ;;
 
@@ -36,13 +35,10 @@ args_needed() {
 
 
   if [ "${ATLEAST}" = 1 ]; then
-    echo "At least $1 argument(s) required." >&2
-    unset ATLEAST
-    return 1
+    err "At least $1 argument(s) required."
 
   else
-    echo "$1 argument(s) required." >&2
-    return 1
+    err "$1 argument(s) required."
 
   fi
 }
