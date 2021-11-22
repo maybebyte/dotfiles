@@ -89,21 +89,19 @@ err() {
 # 1) interactive ksh(1) sessions won't terminate.
 # 2) dmenu scripts still work without colors.
 import_colors_sh() {
-  COLORS_SH="${XDG_CACHE_HOME}/wal/colors.sh"
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
   if ! [ -r "${COLORS_SH}" ]; then
-    : "${DOTFILES_LOG:=${XDG_DATA_HOME}/dotfiles.log}"
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
     echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
 
   elif ! [ -f "${COLORS_SH}" ]; then
-    : "${DOTFILES_LOG:=${XDG_DATA_HOME}/dotfiles.log}"
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
     echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
 
-  elif [ -z "${DISPLAY}" ]; then
-    return # exit silently
-
+  # passed sanity checks, so source the file
   else
-    . "${COLORS_SH}" # source the file
+    . "${COLORS_SH}"
 
   fi
 }
