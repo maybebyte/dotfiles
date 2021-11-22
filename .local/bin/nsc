@@ -16,26 +16,24 @@
 
 set -e
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
+if [ -x "$(command -v 'doas')" ]; then
+  alias priv='doas '
 
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
-  exit 1
+elif [ -x "$(command -v 'sudo')" ]; then
+  alias priv='sudo '
 
 fi
 
 
+err() {
+  printf '%s\n' "$*" >&2
+  exit 1
+}
+
+
 usage() {
   cat >&2 <<EOF
-${0##*/} requires at least ${args_needed} argument(s).
-
 usage:
 ${0##*/} [target] [options]
 EOF
@@ -44,9 +42,38 @@ EOF
 }
 
 
+args_needed() {
+  unset ATLEAST
+
+  if [ "$1" = 'atleast' ]; then
+    ATLEAST=1
+    shift
+  fi
+
+
+  case "$1" in
+
+    ''|*[!0-9]*)
+      err "args_needed() needs a number."
+
+      ;;
+
+  esac
+
+
+  if [ "${ATLEAST}" = 1 ]; then
+    err "At least $1 argument(s) required."
+
+  else
+    err "$1 argument(s) required."
+
+  fi
+}
+
+
 nsc() {
   priv nmap -Av --osscan-limit --privileged \
-  -oA "${tmpdir}/nmap-$(date '+%F')" "$@"
+    -oA "${tmpdir}/nmap-$(date '+%F')" "$@"
 }
 
 
@@ -55,21 +82,14 @@ fix_perms() {
 
   priv chown -R -- "${unpriv_user}:${unpriv_user}" "${tmpdir}"
 
-  find "${tmpdir}"                                    \
-  \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
-  \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
+  find "${tmpdir}"                                      \
+    \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
+    \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
 }
 
 
-prereqs() {
-  echo 'nmap' | check_deps
-
-  readonly args_needed=1
-  [ "$#" -ge "${args_needed}" ] || usage
-}
-
-
-prereqs "$@"
+[ -x "$(command -vp -- 'nmap')" ] || err 'nmap not found in PATH or not executable.'
+[ "$#" -ge 1 ] || args_needed atleast 1
 
 tmpdir="$(mktemp -d)"
 readonly tmpdir
