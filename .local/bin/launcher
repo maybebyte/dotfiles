@@ -14,43 +14,19 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
-
-fi
-
-#-fn ## font used
-#-nb ## normal background color
-#-nf ## normal foreground color
-#-sb ## selected background color
-#-sf ## selected foreground color
+}
 
 
-launch() {
-  dmenu_run -i -fn 'mono-12'   \
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
+
+[ -x "$(command -vp 'dmenu_run')" ] || err 'dmenu_run not found in PATH or not executable.'
+
+dmenu_run -i -fn 'mono-12'     \
   -nb "${background:=#040516}" \
   -nf "${color3:=#9974e7}"     \
   -sb "${background:=#040516}" \
   -sf "${foreground:=#e0cef3}"
-}
-
-
-prereqs() {
-  check_grafix
-  echo 'dmenu_run' | check_deps
-  import_colors_sh
-}
-
-
-prereqs
-launch
