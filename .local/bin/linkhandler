@@ -137,7 +137,7 @@ linkhandler() {
       ;;
 
     'watch (loop)')
-      tmux new-window "mpv --speed=1 --loop -- ${URL}"
+      tmux new-window "mpv --loop -- ${URL}"
 
       ;;
 
