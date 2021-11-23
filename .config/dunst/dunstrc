@@ -11,7 +11,7 @@
   geometry             = "350x5-20+55"
   hide_duplicate_count = true
   horizontal_padding   = 15
-  icon_path            = /usr/local/share/icons/gnome/scalable/status/:/usr/local/share/icons/gnome/scalable/devices/
+  icon_path            = /usr/local/share/icons/gnome/16x16/status/:/usr/local/share/icons/gnome/16x16/devices/
   icon_position        = left
   idle_threshold       = 120
   markup               = full
