@@ -22,6 +22,7 @@ case "${KSH_VERSION%%\ KSH*}" in
 
   '@(#)PD')
     set_user_and_path_colors
+
     _ps1_bracket='\[\033[36m\]'
     _ps1_hostname='\[\033[32m\]'
     _ps1_clear='\[\033[0m\]'
