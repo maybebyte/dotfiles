@@ -101,9 +101,9 @@ linkhandler() {
 
     'listen')
       tmux new-window "mpva \
-      --no-pause           \
-      --no-resume-playback \
-      --no-keep-open       \
+      --no-pause            \
+      --no-resume-playback  \
+      --no-keep-open        \
       -- ${URL}"
 
       ;;
