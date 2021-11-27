@@ -94,7 +94,11 @@ case "${PROGRAM_NAME}" in
 
   # workaround for screen tearing isn't needed if only playing audio
   'mpva')
-    "${MPV}" --no-video "$@"
+    "${MPV}"               \
+      --no-keep-open       \
+      --no-resume-playback \
+      --no-pause           \
+      --no-video "$@"
 
     ;;
 
