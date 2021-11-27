@@ -40,7 +40,7 @@ xidle &
   && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
 # look and feel
-"${HOME}/.local/bin/wal" -R
+"${XDG_BIN_HOME:-${HOME}/.local/bin}/wal" -R
 sct 3500
 xset b off
 
@@ -57,9 +57,10 @@ if [ "$(hostname -s)" = 'lain' ]; then
 fi
 
 # status bar.
-"${HOME}/.local/bin/sysinfo" | "${HOME}/.local/bin/lbar" &
+"${XDG_BIN_HOME:-${HOME}/.local/bin}/sysinfo" \
+  | "${XDG_BIN_HOME:-${HOME}/.local/bin}/lbar" &
 
 # random manual page for didactic purposes
-"${HOME}/.local/bin/randman" | xargs -- "${TERMINAL}" -e man &
+"${XDG_BIN_HOME:-${HOME}/.local/bin}/randman" | xargs -- "${TERMINAL}" -e man &
 
 exec xmonad
