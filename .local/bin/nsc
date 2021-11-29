@@ -33,41 +33,8 @@ err() {
 
 
 usage() {
-  cat >&2 <<EOF
-usage:
-${0##*/} [target] [options]
-EOF
-
-  exit 1
-}
-
-
-args_needed() {
-  unset ATLEAST
-
-  if [ "$1" = 'atleast' ]; then
-    ATLEAST=1
-    shift
-  fi
-
-
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-
-  if [ "${ATLEAST}" = 1 ]; then
-    err "At least $1 argument(s) required."
-
-  else
-    err "$1 argument(s) required."
-
-  fi
+  err "usage:
+${0##*/} [target] [options]"
 }
 
 
@@ -89,7 +56,7 @@ fix_perms() {
 
 
 [ -x "$(command -vp -- 'nmap')" ] || err 'nmap not found in PATH or not executable.'
-[ "$#" -ge 1 ] || args_needed atleast 1
+[ -z "$1" ] && usage
 
 tmpdir="$(mktemp -d)"
 readonly tmpdir
