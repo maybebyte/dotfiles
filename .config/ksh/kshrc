@@ -1,6 +1,6 @@
 # shellcheck disable=SC2034,SC1090,SC1091
-[ -r "${XDG_BIN_HOME:-${HOME}/.local/bin}/common.sh" ] \
-  && . "${XDG_BIN_HOME:-${HOME}/.local/bin}/common.sh"
+[ -r "${XDG_BIN_HOME}/common.sh" ] \
+  && . "${XDG_BIN_HOME}/common.sh"
 
 # source colors.sh from pywal
 import_colors_sh
@@ -25,6 +25,6 @@ GPG_TTY="$(tty)"
 export GPG_TTY
 
 for srcfile in 'aliases' 'functions' 'prompt'; do
-  [ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/ksh/${srcfile}" ] \
-    && . "${XDG_CONFIG_HOME:-${HOME}/.config}/ksh/${srcfile}"
+  [ -r "${XDG_CONFIG_HOME}/ksh/${srcfile}" ] \
+    && . "${XDG_CONFIG_HOME}/ksh/${srcfile}"
 done
