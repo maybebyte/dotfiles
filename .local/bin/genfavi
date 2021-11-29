@@ -24,26 +24,8 @@ err() {
 
 
 usage() {
-  cat >&2 <<EOF
-usage:
-${0##*/} [image]
-EOF
-
-  exit 1
-}
-
-
-args_needed() {
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-  err "$1 argument(s) required."
+  err "usage:
+${0##*/} [image]"
 }
 
 
@@ -59,7 +41,7 @@ genfavi() {
 
 [ -x "$(command -vp -- 'convert')" ] || err "convert not found in PATH or not executable."
 
-[ "$#" = 1 ] || args_needed 1
+[ -z "$1" ] && usage
 
 case "$(file -ib -- "$1")" in
   image/*) :                        ;; # images are OK to process
