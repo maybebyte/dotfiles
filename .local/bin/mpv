@@ -32,50 +32,16 @@ err() {
 }
 
 
-args_needed() {
-  unset ATLEAST
-
-  if [ "$1" = 'atleast' ]; then
-    ATLEAST=1
-    shift
-  fi
-
-
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-
-  if [ "${ATLEAST}" = 1 ]; then
-    err "At least $1 argument(s) required."
-
-  else
-    err "$1 argument(s) required."
-
-  fi
-}
-
-
 usage() {
-  cat >&2 <<EOF
-${0##*/} [options] [media file]
+  err "${0##*/} [options] [media file]
 
-See mpv(1) for more details.
-EOF
-
-  exit 1
+See mpv(1) for more details."
 }
 
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-[ "$#" -ge 1 ] || args_needed atleast 1
-
+[ -z "$1" ] && usage
 
 # TODO: maybe there is a way to do this so command -vp isn't issued
 # twice (once for the test, once for the assignment).
