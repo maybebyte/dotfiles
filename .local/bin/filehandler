@@ -24,8 +24,7 @@ err() {
 
 
 usage() {
-  cat >&2 <<EOF
-usage:
+  err "usage:
 ${0##*/} [options] [file]
 
 options:
@@ -41,24 +40,7 @@ If an operation is specified, ${0##*/} skips the operation query and
 moves on to the next prompt.
 
 Note that only one operation should be specified at a time. In fact,
-${0##*/} only processes the first operation it sees.
-EOF
-
-  exit 1
-}
-
-
-args_needed() {
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-  err "$1 argument(s) required by ${0##*/}."
+${0##*/} only processes the first operation it sees."
 }
 
 
@@ -233,7 +215,7 @@ done
 
 shift $((OPTIND - 1))
 
-[ "$#" = 1 ] || args_needed 1
+[ -z "$1" ] && usage
 import_colors_sh
 [ -f "$1" ] || err 'Not a file or does not exist.'
 
