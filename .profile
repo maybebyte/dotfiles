@@ -27,6 +27,7 @@ export                                          \
   LESS='-iMR'                                   \
   LESSSECURE=1                                  \
   PAGER='less'                                  \
+  XDG_BIN_HOME="${HOME}/.local/bin"             \
   XDG_CACHE_HOME="${HOME}/.cache"               \
   XDG_CONFIG_HOME="${HOME}/.config"             \
   XDG_DATA_HOME="${HOME}/.local/share"          \
@@ -63,14 +64,14 @@ case "$(uname)" in
     # https://unix.stackexchange.com/a/415028
     #
     # the extra colon is intentional, it's the delimiter for PATH.
-    PATH="${HOME}/.local/bin:/usr/games${PATH:+:${PATH}}"
+    PATH="${XDG_BIN_HOME}:/usr/games${PATH:+:${PATH}}"
     export PATH
 
     ;;
 
   *)
     # no /usr/games if not OpenBSD
-    PATH="${HOME}/.local/bin${PATH:+:${PATH}}"
+    PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
     export PATH
 
     ;;

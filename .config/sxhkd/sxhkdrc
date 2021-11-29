@@ -4,11 +4,11 @@ super + Return
 
 # launcher (dmenu_run script that adds wal colors)
 super + d
-  ${HOME}/.local/bin/launcher
+  ${XDG_BIN_HOME}/launcher
 
 # dmenuunicode (pick an emoji and copy it to clipboard)
 super + u
-  ${HOME}/.local/bin/dmenuunicode
+  ${XDG_BIN_HOME}/dmenuunicode
 
 # web browser
 super + B
@@ -40,7 +40,7 @@ super + s
 
 # clear the clipboard and notify the user about it
 super + X
-  ${HOME}/.local/bin/clear_clip notify
+  ${XDG_BIN_HOME}/clear_clip notify
 
 # full screenshot
 Print
@@ -48,7 +48,7 @@ Print
 
 # screenshot menu
 shift + Print
-  ${HOME}/.local/bin/maimpick
+  ${XDG_BIN_HOME}/maimpick
 
 # music {skip,play,pause}
 super + {greater,less,T}
@@ -60,7 +60,7 @@ shift + super + {0,Left,Right,Down,Up}
 
 # {mute,lower,raise} volume
 {F1,F2,F3}
-  ${HOME}/.local/bin/volman {mute,dec,inc}
+  ${XDG_BIN_HOME}/volman {mute,dec,inc}
 
 # {dim,brighten} display
 {F5,F6}
