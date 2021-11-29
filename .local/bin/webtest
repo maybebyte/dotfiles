@@ -16,23 +16,25 @@
 
 set -e
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
-
-fi
+}
 
 
 usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
+
+
+# instead of remembering/accounting for two different forms of privilege
+# elevation, one is assigned to the alias 'priv.'
+if [ -x "$(command -v 'doas')" ]; then
+  alias priv='doas '
+
+elif [ -x "$(command -v 'sudo')" ]; then
+  alias priv='sudo '
+
+fi
 
 
 # TODO: index.md could be a variable instead of hard-coded
@@ -61,16 +63,12 @@ cleanup() {
 }
 
 
-prereqs() {
-  [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
-
-  readonly ARGS_NEEDED=3
-  [ "$#" = "${ARGS_NEEDED}" ] || usage
-}
-
-
 umask 022
-prereqs "$@"
+[ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
+
+for pos_par in "$1" "$2" "$3"; do
+  [ -z "${pos_par}" ] && usage
+done
 
 readonly SITE="$1"
 readonly MARKDOWNDIR="$2"
