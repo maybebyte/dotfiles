@@ -25,8 +25,7 @@ err() {
 
 # usage information for random file from directory (rffd)
 usage() {
-  cat >&2 <<EOF
-${0##*/} [flags] [filetype] [directory]
+  err "${0##*/} [flags] [filetype] [directory]
 
 flags can be:
 -c: number of files to return, aka (c)ount. specify 0 for no
@@ -36,10 +35,7 @@ flags can be:
 filetype can be:
 video - webm, mp4, mkv
 pic   - jpg, jpeg, png
-any   - matches all files
-EOF
-
-  exit 1
+any   - matches all files"
 }
 
 
@@ -77,25 +73,6 @@ find_pics() {
   \)
 }
 
-
-prereqs() {
-  if [ -z "$1" ]; then
-    echo "${0##*/} needs a filetype." >&2
-    echo >&2
-    usage
-
-  elif [ -z "$2" ]; then
-    echo "${0##*/} needs a directory to search." >&2
-    echo >&2
-    usage
-
-  elif ! [ -d "$2" ]; then
-    err "$2 is not a directory"
-
-  fi
-}
-
-
 while getopts c:h opt; do
 
   case "${opt}" in
@@ -107,7 +84,20 @@ done
 
 shift $((OPTIND - 1))
 
-prereqs "$@"
+if [ -z "$1" ]; then
+  echo "${0##*/} needs a filetype." >&2
+  echo >&2
+  usage
+
+elif [ -z "$2" ]; then
+  echo "${0##*/} needs a directory to search." >&2
+  echo >&2
+  usage
+
+elif ! [ -d "$2" ]; then
+  err "$2 is not a directory"
+
+fi
 
 # if ${COUNT} is unset, 1 result is returned by default
 : "${COUNT:=1}"
