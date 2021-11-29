@@ -47,22 +47,8 @@ check_deps() {
   done
 }
 
-
-args_needed() {
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-  err "$1 argument(s) required."
-}
-
-
-[ "$#" -eq 2 ] || args_needed 2
+[ -z "$1" ] && usage
+[ -z "$2" ] && usage
 
 check_deps <<EOF
 fzf
