@@ -14,43 +14,31 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
-  exit 1
-
-fi
-
-
-usage() {
-  cat >&2 <<EOF
-${0##*/} requires ${args_needed} argument(s).
-
-usage:
-${0##*/} [inc|dec|mute]
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
 }
 
 
-# check prerequisites (Xorg instance + dependencies).
-prereqs() {
-  check_grafix
+usage() {
+  err "usage:
+${0##*/} [inc|dec|mute]"
+}
 
-  check_deps <<'EOF'
-bc
-dunstify
-sndioctl
-EOF
+
+check_deps() {
+  while read -r dependency; do
+
+    if [ -x "$(command -v -- "${dependency}")" ]; then
+      continue
+
+    else
+      err "${dependency} not found in PATH or not executable."
+
+    fi
+
+  done
 }
 
 
@@ -113,13 +101,14 @@ get_vol() {
 }
 
 
-# check prerequisites. perform the specified action with vol()
-# (inc|dec|mute), then display the appropriate notification if
-# successful.
+[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-prereqs
+check_deps <<'EOF'
+bc
+dunstify
+sndioctl
+EOF
 
-readonly args_needed=1
 adjust_vol "$1"
 
 vol="$(get_vol)"
