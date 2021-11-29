@@ -20,20 +20,30 @@
 
 set -eh
 
-readonly LIBRARY="${HOME}/.local/bin/common.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
-
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
-
+err() {
+  printf '%s\n' "$*" >&2
   exit 1
+}
 
-fi
+
+import_colors_sh() {
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+
+  if ! [ -r "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
+
+  elif ! [ -f "${COLORS_SH}" ]; then
+    : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
+    echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
+
+  # passed sanity checks, so source the file
+  else
+    . "${COLORS_SH}"
+
+  fi
+}
 
 
 show_battery() {
@@ -125,16 +135,10 @@ $(show_date)"
 }
 
 
-prereqs() {
-  [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
+[ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
+[ -x "$(command -v -- 'mpc')" ] || err 'mpc not found in PATH or not executable.'
+import_colors_sh
 
-  echo 'mpc' | check_deps
-
-  import_colors_sh
-}
-
-
-prereqs
 
 batt_status="$(apm -b)"
 delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
