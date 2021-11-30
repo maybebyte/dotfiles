@@ -24,12 +24,8 @@ err() {
 
 
 usage() {
-  cat >&2 <<EOF
-usage:
-${0##*/} [command] [dir for fzf]
-EOF
-
-  exit 1
+  err "usage:
+${0##*/} [command] [dir for fzf]"
 }
 
 
