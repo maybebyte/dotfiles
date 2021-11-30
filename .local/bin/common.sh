@@ -55,11 +55,11 @@ import_colors_sh() {
 
   if ! [ -r "${COLORS_SH}" ]; then
     : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
-    echo "${COLORS_SH} not readable." 2>>"${DOTFILES_LOG}" >&2
+    echo "${COLORS_SH} is not readable." 2>>"${DOTFILES_LOG}" >&2
 
   elif ! [ -f "${COLORS_SH}" ]; then
     : "${DOTFILES_LOG:=${XDG_DATA_HOME:=${HOME}/.local/share}/dotfiles.log}"
-    echo "${COLORS_SH} not a file." 2>>"${DOTFILES_LOG}" >&2
+    echo "${COLORS_SH} is not a file." 2>>"${DOTFILES_LOG}" >&2
 
   # passed sanity checks, so source the file
   else
