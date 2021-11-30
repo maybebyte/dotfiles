@@ -15,41 +15,6 @@ elif [ -x "$(command -v 'sudo')" ]; then
 fi
 
 
-args_needed() {
-  unset ATLEAST
-
-  if [ "$1" = 'atleast' ]; then
-    ATLEAST=1
-    shift
-  fi
-
-
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-
-  if [ "${ATLEAST}" = 1 ]; then
-    err "At least $1 argument(s) required."
-
-  else
-    err "$1 argument(s) required."
-
-  fi
-}
-
-
-# if Xorg isn't running, exit with an error.
-check_grafix() {
-  [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-}
-
-
 # reads from STDIN and checks that all commands needed are executable
 # and available.
 #
@@ -114,13 +79,3 @@ menu() {
   -sf "${foreground:=#e0cef3}" \
   "$@"
 }
-
-
-# if the user isn't root, print an error message and exit.
-must_be_root() {
-  [ "$(id -u)" = 0 ] || err "Execute ${0##*/} with root privileges."
-}
-
-
-# copy STDIN to the clipboard so it can be pasted elsewhere.
-yank() { xclip -selection clipboard "$@"; }
