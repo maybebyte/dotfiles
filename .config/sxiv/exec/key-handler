@@ -1,23 +1,34 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC1090
 
-# check that LIBRARY is readable. if it is, source it so its
-# functions are available. if not, exit due to potentially unpredictable
-# behavior.
-LIBRARY="${HOME}/.local/bin/common.sh"
+import_colors_sh() {
+  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
-if [ -r "${LIBRARY}" ]; then
-  . "${LIBRARY}"
+  if ! [ -r "${COLORS_SH}" ]; then
+    echo "${COLORS_SH} is not readable." >&2
 
-else
-  cat >&2 <<EOF
-${LIBRARY} doesn't exist or isn't readable.
-${0##*/} may not function correctly without it.
-EOF
+  elif ! [ -f "${COLORS_SH}" ]; then
+    echo "${COLORS_SH} is not a file." >&2
 
-  exit 1
+  # passed sanity checks, so source the file
+  else
+    . "${COLORS_SH}"
 
-fi
+  fi
+}
+
+
+# generic dmenu function to handle customizations. uses colors that
+# import_colors_sh() gathers.
+menu() {
+  dmenu -i -fn 'mono-12'       \
+  -nb "${background:=#040516}" \
+  -nf "${color3:=#9974e7}"     \
+  -sb "${background:=#040516}" \
+  -sf "${foreground:=#e0cef3}" \
+  "$@"
+}
+
 
 import_colors_sh
 
@@ -78,7 +89,7 @@ while read -r file; do
 
     # yank the relative file path
     'y')
-      printf '%s' "${file}" | yank
+      printf '%s' "${file}" | xclip -selection clipboard
       notify-send -- "📋 ${file} copied to clipboard."
 
       ;;
@@ -87,7 +98,7 @@ while read -r file; do
     'Y')
       abs_path_of_file="$(readlink -f -- "${file}")"
 
-      printf '%s' "${abs_path_of_file}" | yank
+      printf '%s' "${abs_path_of_file}" | xclip -selection clipboard
       notify-send -- "📋 ${abs_path_of_file} copied to clipboard."
 
       ;;
