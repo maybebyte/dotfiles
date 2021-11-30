@@ -24,15 +24,11 @@ err() {
 
 
 usage() {
-  cat >&2 <<EOF
-usage:
+  err "usage:
 ${0##*/} [cue file] [FLAC file]
 
 -c : convert 24bit flac to 16bit before splitting (sox needed)
--d : delete the original FLAC file.
-EOF
-
-  exit 1
+-d : delete the original FLAC file."
 }
 
 
@@ -48,20 +44,6 @@ check_deps() {
     fi
 
   done
-}
-
-
-args_needed() {
-  case "$1" in
-
-    ''|*[!0-9]*)
-      err "args_needed() needs a number."
-
-      ;;
-
-  esac
-
-  err "$1 argument(s) required."
 }
 
 
@@ -139,7 +121,8 @@ done
 
 shift $((OPTIND - 1))
 
-[ "$#" = 2 ] || args_needed 2
+[ -z "$1" ] && usage
+[ -z "$2" ] && usage
 
 assign_cuetag
 
