@@ -1,4 +1,5 @@
-# swaps user and path colors if root
+# Swaps user and path colors if uid is 0 (if the user is root) to draw
+# more attention to root shells.
 set_user_and_path_colors() {
   case "$(id -u)" in
 
