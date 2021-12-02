@@ -56,35 +56,6 @@ check_deps() {
 }
 
 
-grab_emoji() {
-  readonly EMOJI_FILE="${XDG_DATA_HOME:=${HOME}/.local/share}/emoji"
-  [ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
-  [ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
-
-  chosen_entry="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu -l 20 -fn 'Symbola-12')"
-  readonly chosen_entry
-
-  [ -n "${chosen_entry}" ] || err 'Must choose an emoji.'
-
-  readonly emoji="${chosen_entry%% *}"
-
-  grep -q -- "^${emoji}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
-
-  # important to use printf %s here, as ${emoji} is user input
-  #
-  # also important to not send a newline to yank() aka xclip(1),
-  # otherwise pasting from the clipboard in certain messengers will send
-  # the message.
-  if printf '%s' "${emoji}" | xclip -selection clipboard; then
-    notify-send -- "${emoji} copied to clipboard."
-
-  else
-    err 'Unable to grab emoji with xclip(1).'
-
-  fi
-}
-
-
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
 check_deps <<'EOF'
@@ -95,4 +66,28 @@ EOF
 
 import_colors_sh
 
-grab_emoji
+readonly EMOJI_FILE="${XDG_DATA_HOME:=${HOME}/.local/share}/emoji"
+[ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
+[ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
+
+chosen_entry="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu -l 20 -fn 'Symbola-12')"
+readonly chosen_entry
+
+[ -n "${chosen_entry}" ] || err 'Must choose an emoji.'
+
+readonly emoji="${chosen_entry%% *}"
+
+grep -q -- "^${emoji}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
+
+# important to use printf %s here, as ${emoji} is user input
+#
+# also important to not send a newline to yank() aka xclip(1),
+# otherwise pasting from the clipboard in certain messengers will send
+# the message.
+if printf '%s' "${emoji}" | xclip -selection clipboard; then
+  notify-send -- "${emoji} copied to clipboard."
+
+else
+  err 'Unable to grab emoji with xclip(1).'
+
+fi
