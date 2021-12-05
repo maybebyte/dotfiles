@@ -45,20 +45,20 @@ EOF
 [ "$(apm -a)" = 1 ] && exit 0
 
 # if battery is missing, exit.
-batt_status="$(apm -b)"
+BATT_STATUS="$(apm -b)"
 
-case "${batt_status}" in
+case "${BATT_STATUS}" in
   4)   err "Battery status is 'absent.'"  ;;
   255) err "Battery status is 'unknown.'" ;;
 esac
 
-batt_percent="$(apm -l)"
+BATT_PERCENT="$(apm -l)"
 
-if [ "${batt_percent}" -lt 20 ]; then
+if [ "${BATT_PERCENT}" -lt 20 ]; then
   # exporting ${DISPLAY} is needed for cron(8) jobs.
   [ -z "${DISPLAY}" ] && export DISPLAY=:0
 
-  notify-send -- "🔋 Your device is at ${batt_percent}%!"
+  notify-send -- "🔋 Your device is at ${BATT_PERCENT}%!"
 
 else
   exit 0
