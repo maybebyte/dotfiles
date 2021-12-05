@@ -46,6 +46,7 @@ EOF
 
 # if battery is missing, exit.
 BATT_STATUS="$(apm -b)"
+readonly BATT_STATUS
 
 case "${BATT_STATUS}" in
   4)   err "Battery status is 'absent.'"  ;;
@@ -53,6 +54,7 @@ case "${BATT_STATUS}" in
 esac
 
 BATT_PERCENT="$(apm -l)"
+readonly BATT_PERCENT
 
 if [ "${BATT_PERCENT}" -lt 20 ]; then
   # exporting ${DISPLAY} is needed for cron(8) jobs.
