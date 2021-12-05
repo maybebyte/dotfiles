@@ -88,38 +88,38 @@ import_colors_sh() {
 
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
-  mimetype="$(file -ib -- "${file}")"
-  readonly mimetype
+  MIMETYPE="$(file -ib -- "${FILE}")"
+  readonly MIMETYPE
 
-  case "${mimetype}" in
+  case "${MIMETYPE}" in
     # these are organized alphabetically by mimetype
-    application/epub*) readonly preload_dir="${HOME}/books"          ;;
-    application/pdf*)  readonly preload_dir="${HOME}/books"          ;;
-    image/vnd.djvu)    readonly preload_dir="${HOME}/books"          ;;
-    image/*)           readonly preload_dir="${HOME}/pics"           ;;
-    video/*)           readonly preload_dir="${HOME}/videos"         ;;
+    application/epub*) readonly PRELOAD_DIR="${HOME}/books"          ;;
+    application/pdf*)  readonly PRELOAD_DIR="${HOME}/books"          ;;
+    image/vnd.djvu)    readonly PRELOAD_DIR="${HOME}/books"          ;;
+    image/*)           readonly PRELOAD_DIR="${HOME}/pics"           ;;
+    video/*)           readonly PRELOAD_DIR="${HOME}/videos"         ;;
     *)                 err "No preload directory for this filetype." ;;
   esac
 }
 
 
 move_file() {
-  if mv -- "${file}" "${no_tilde_dest}/${file##*/}"; then
-    notify-send -- "${file##*/} moved to ${tilde_dest}"
+  if mv -- "${FILE}" "${NO_TILDE_DEST}/${FILE##*/}"; then
+    notify-send -- "${FILE##*/} moved to ${TILDE_DEST}"
 
   else
-    err "Failed to move ${file##*/}"
+    err "Failed to move ${FILE##*/}"
 
   fi
 }
 
 
 copy_file() {
-  if cp -- "${file}" "${no_tilde_dest}/${file##*/}"; then
-    notify-send -- "${file##*/} copied to ${tilde_dest}"
+  if cp -- "${FILE}" "${NO_TILDE_DEST}/${FILE##*/}"; then
+    notify-send -- "${FILE##*/} copied to ${TILDE_DEST}"
 
   else
-    err "Failed to copy ${file##*/}"
+    err "Failed to copy ${FILE##*/}"
 
   fi
 }
@@ -133,14 +133,16 @@ handle_dest() {
 
   # substitutes $HOME with a tilde so the list of directories in dmenu is
   # more readable.
-  tilde_dest="$(
-    { find "${preload_dir}" -type d | sed -- "s|^${HOME}|~|g"
+  TILDE_DEST="$(
+    { find "${PRELOAD_DIR}" -type d | sed -- "s|^${HOME}|~|g"
       echo 'exit'
-    } | menu -l 10 -p "Where should ${file##*/} be placed?"
+    } | menu -l 10 -p "Where should ${FILE##*/} be placed?"
   )"
 
+  readonly TILDE_DEST
 
-  case "${tilde_dest}" in
+
+  case "${TILDE_DEST}" in
 
     'exit')
       exit 0
@@ -155,9 +157,10 @@ handle_dest() {
   esac
 
 
-  no_tilde_dest="$(echo "${tilde_dest}" | sed -- "s|^~|${HOME}|g")"
+  NO_TILDE_DEST="$(echo "${TILDE_DEST}" | sed -- "s|^~|${HOME}|g")"
+  readonly NO_TILDE_DEST
 
-  mkdir -p -- "${no_tilde_dest}" || err "${tilde_dest} could not be created with mkdir(1)."
+  mkdir -p -- "${NO_TILDE_DEST}" || err "${TILDE_DEST} could not be created with mkdir(1)."
 }
 
 
@@ -166,10 +169,10 @@ handle_dest() {
 #
 # dmenu seems to need at least one item from STDIN to behave properly.
 rename_file() {
-  new_filename="$(echo 'exit' | menu -p "Rename ${file##*/} to what?")"
-  readonly new_filename
+  NEW_FILENAME="$(echo 'exit' | menu -p "Rename ${FILE##*/} to what?")"
+  readonly NEW_FILENAME
 
-  case "${new_filename}" in
+  case "${NEW_FILENAME}" in
 
     'exit')
       exit 0
@@ -177,17 +180,17 @@ rename_file() {
       ;;
 
     '')
-      err "${0##*/} needs a new name to rename ${file##*/} to."
+      err "${0##*/} needs a new name to rename ${FILE##*/} to."
 
       ;;
 
   esac
 
-  if mv -- "${file}" "${file%/*}/${new_filename}"; then
-    notify-send -- "${file##*/} renamed to ${new_filename}"
+  if mv -- "${FILE}" "${FILE%/*}/${NEW_FILENAME}"; then
+    notify-send -- "${FILE##*/} renamed to ${NEW_FILENAME}"
 
   else
-    err "Failed to rename ${file}."
+    err "Failed to rename ${FILE}."
 
   fi
 }
@@ -203,9 +206,9 @@ EOF
 while getopts chmn opt; do
 
   case "${opt}" in
-    'c')     readonly operation='copy'; break   ;;
-    'm')     readonly operation='move'; break   ;;
-    'n')     readonly operation='rename'; break ;;
+    'c')     readonly OPERATION='copy'; break   ;;
+    'm')     readonly OPERATION='move'; break   ;;
+    'n')     readonly OPERATION='rename'; break ;;
     'h'|*)   usage                              ;;
   esac
 
@@ -217,14 +220,14 @@ shift $((OPTIND - 1))
 import_colors_sh
 [ -f "$1" ] || err 'Not a file or does not exist.'
 
-file="$(readlink -f -- "$1")"
-readonly file
+FILE="$(readlink -f -- "$1")"
+readonly FILE
 
 
 # if there is no operation, prompt the user to select one.
-if [ -z "${operation}" ]; then
-  operation="$(printf '%s\n' 'copy' 'move' 'rename' | menu -p "What to do with ${file}?")"
-  readonly operation
+if [ -z "${OPERATION}" ]; then
+  OPERATION="$(printf '%s\n' 'copy' 'move' 'rename' | menu -p "What to do with ${FILE}?")"
+  readonly OPERATION
 
   # a small delay needs to be here. without it, the subsequent menu
   # won't appear sometimes.
@@ -232,7 +235,7 @@ if [ -z "${operation}" ]; then
 fi
 
 
-case "${operation}" in
+case "${OPERATION}" in
   'copy')   handle_dest && copy_file ;;
   'move')   handle_dest && move_file ;;
   'rename') rename_file              ;;
