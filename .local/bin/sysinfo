@@ -45,7 +45,7 @@ import_colors_sh() {
 
 
 show_battery() {
-  case "${batt_status}" in
+  case "${BATT_STATUS}" in
     4|255) return 1 ;;
   esac
 
@@ -91,9 +91,9 @@ show_temp() {
     *)           return 1 # if temp sensor is unknown, return nothing ;;
   esac
 
-  case "${batt_status}" in
+  case "${BATT_STATUS}" in
     4|255) echo "temp: ${temperature%%.*} °C"             ;;
-    *)     echo "${delimiter}temp: ${temperature%%.*} °C" ;;
+    *)     echo "${DELIMITER}temp: ${temperature%%.*} °C" ;;
   esac
 }
 
@@ -114,7 +114,7 @@ show_track() {
 
 show_disk_space() {
   diskspace="$(df -h '/home' | awk -- '/^\/dev/{print $4}')"
-  echo "/home: ${diskspace}${delimiter}"
+  echo "/home: ${diskspace}${DELIMITER}"
 }
 
 
@@ -125,7 +125,7 @@ show_date() {
 
 sysinfo() {
   # spaces at the beginning of a new line bork ${stats}
-  stats="${bgfg} %{l}$(show_battery)$(show_temp)\
+  stats="${BGFG} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_disk_space)\
 $(show_date)"
 
@@ -138,9 +138,9 @@ $(show_date)"
 import_colors_sh
 
 
-batt_status="$(apm -b)"
-delimiter="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
-bgfg="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
+BATT_STATUS="$(apm -b)"
+DELIMITER="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
+BGFG="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
 
 [ -z "${HOSTNAME}" ] && HOSTNAME="$(hostname -s)"
 readonly HOSTNAME
