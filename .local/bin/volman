@@ -60,13 +60,13 @@ print_vol() {
   if [ "${MUTED}" = 'true' ]; then
     echo '🔇 MUTED'
 
-  elif [ "${vol}" = 0 ]; then
+  elif [ "${VOL}" = 0 ]; then
     echo '🔇 ' "$@"
 
-  elif [ "${vol}" -ge 50 ]; then
+  elif [ "${VOL}" -ge 50 ]; then
     echo '🔊 ' "$@"
 
-  elif [ "${vol}" -ge 25 ]; then
+  elif [ "${VOL}" -ge 25 ]; then
     echo '🔉 ' "$@"
 
   else
@@ -89,14 +89,14 @@ check_mute() {
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
-  raw_vol="$(sndioctl -n output.level 2>/dev/null)"
-  readonly raw_vol
+  RAW_VOL="$(sndioctl -n output.level 2>/dev/null)"
+  readonly RAW_VOL
 
-  case "${raw_vol}" in
+  case "${RAW_VOL}" in
     1.000) echo 100                                                  ;;
     0.000) echo 0                                                    ;;
            # division is here to truncate the floating point number.
-    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${raw_vol}" 100 | bc ;;
+    *)     printf 'scale=0; (%.2g * %s) / 1\n' "${RAW_VOL}" 100 | bc ;;
   esac
 }
 
@@ -111,11 +111,11 @@ EOF
 
 adjust_vol "$1"
 
-vol="$(get_vol)"
-readonly vol
+VOL="$(get_vol)"
+readonly VOL
 
 check_mute && readonly MUTED='true'
 
-readonly msg_id="25231"
+readonly MSG_ID="25231"
 
-dunstify -u low -r "${msg_id}" -- "$(print_vol "${vol}%")"
+dunstify -u low -r "${MSG_ID}" -- "$(print_vol "${VOL}%")"
