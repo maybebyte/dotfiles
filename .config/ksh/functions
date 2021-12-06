@@ -135,7 +135,7 @@ EOF
 }
 
 # choose files with fzf and edit them.
-ebin() { fzf-open "${EDITOR}" "${HOME}/.local/bin"; }
+ebin() { fzf-open "${EDITOR}" "${XDG_BIN_HOME}"; }
 econf() { fzf-open "${EDITOR}" "${XDG_CONFIG_HOME}"; }
 enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
 
