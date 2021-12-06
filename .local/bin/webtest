@@ -23,7 +23,12 @@ err() {
 }
 
 
-usage() { err "usage: ${0##*/} [domain] [md dir] [srv dir]"; }
+usage() {
+  err "usage: ${0##*/} [domain] [md dir] [srv dir]
+
+-i: Specify the name of an alternate index file (by default, INDEX is
+    set to index.md). Provide the name only, not the path."
+}
 
 
 # instead of remembering/accounting for two different forms of privilege
@@ -37,19 +42,22 @@ elif [ -x "$(command -v 'sudo')" ]; then
 fi
 
 
-# TODO: index.md could be a variable instead of hard-coded
 gen_site() {
+  : "${INDEX:=index.md}"
+  [ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${INDEX} is not readable."
+  [ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${INDEX} is not a file."
+
   ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
   "${SITE}" >/dev/null 2>&1
 
-  rssg "${MARKDOWNDIR}/index.md" "Newsletter - ${SITE##*//}" \
+  rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
     > "${HTMLDIR}/rss.xml" 2>/dev/null
 }
 
 
 sync_site() {
   # can't call this in the form 'priv sync_site'. thus, a heredoc is needed.
-  priv /usr/bin/env sh -- <<EOF
+  priv /usr/bin/env sh <<EOF
 rm -rf -- ${SRVDIR:?}
 mkdir -p -- ${SRVDIR}
 mv -- ${HTMLDIR}/* ${SRVDIR}/
@@ -62,6 +70,16 @@ cleanup() {
   rm -rf -- "${HTMLDIR:?}"
 }
 
+while getopts i:h opt; do
+
+  case "${opt}" in
+    i)     readonly INDEX="${OPTARG}" ;;
+    'h'|*) usage                      ;;
+  esac
+
+done
+
+shift $((OPTIND - 1))
 
 umask 022
 [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."

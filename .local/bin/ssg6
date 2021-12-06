@@ -50,8 +50,13 @@ main() {
 
   readonly H_FILE="${SRC}/_header.html"
   readonly F_FILE="${SRC}/_footer.html"
-  [ -f "${F_FILE}" ] && FOOTER="$(cat -- "${F_FILE}")" && export FOOTER
-  [ -f "${H_FILE}" ] && HEADER="$(cat -- "${H_FILE}")" && export HEADER
+  if [ -f "${F_FILE}" ]; then
+    FOOTER="$(cat -- "${F_FILE}")" && readonly FOOTER && export FOOTER
+  fi
+
+  if [ -f "${H_FILE}" ]; then
+    HEADER="$(cat -- "${H_FILE}")" && readonly HEADER && export HEADER
+  fi
 
   list_dirs "${SRC}" | (cd "${SRC}" && cpio -pdu -- "${DST}")
 
