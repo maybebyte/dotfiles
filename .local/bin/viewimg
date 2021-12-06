@@ -45,12 +45,12 @@ check_deps() {
 
 
 viewimg() {
-  filename="$(mktemp)"
-  readonly filename
+  FILENAME="$(mktemp)"
+  readonly FILENAME
 
-  ftp -nU '' -o "${filename}" -- "$1"
+  ftp -nU '' -o "${FILENAME}" -- "$1"
 
-  sxiv -- "${filename}"
+  sxiv -- "${FILENAME}"
 }
 
 
@@ -66,4 +66,4 @@ EOF
 
 viewimg "$1" >/dev/null 2>&1
 
-rm -- "${filename}"
+rm -- "${FILENAME}"
