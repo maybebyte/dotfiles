@@ -50,10 +50,10 @@ check_deps() {
 # determines which executable name to use for cuetag.
 assign_cuetag() {
   if [ -x "$(command -v 'cuetag')" ]; then
-    readonly cuetag='cuetag'
+    readonly CUETAG='cuetag'
 
   elif [ -x "$(command -v 'cuetag.sh')" ]; then
-    readonly cuetag='cuetag.sh'
+    readonly CUETAG='cuetag.sh'
 
   else
     err 'Neither cuetag nor cuetag.sh found.'
@@ -66,14 +66,15 @@ assign_cuetag() {
 #
 # $1 is a FLAC file to be converted.
 conv16() {
-  staging_file="${1%.flac}-staging.flac"
+  STAGING_FILE="${1%.flac}-staging.flac"
+  readonly STAGING_FILE
 
   # http://sox.sourceforge.net/Docs/FAQ
   #
   # according to sox(1), most noise shaping filters are only available
   # at 44.1kHz, so that is the chosen sample rate.
-  if sox "$1" -SGb 16 "${staging_file}" rate -v 44100 dither -s; then
-    mv -- "${staging_file}" "$1"
+  if sox "$1" -SGb 16 "${STAGING_FILE}" rate -v 44100 dither -s; then
+    mv -- "${STAGING_FILE}" "$1"
 
   else
     err 'Failed to convert 24-bit FLAC file to 16-bit.'
@@ -94,7 +95,7 @@ splitflac() {
 
   mv -- "$2" "$2.bak"
 
-  "${cuetag}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
+  "${CUETAG}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
 
   [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
 }
@@ -140,12 +141,11 @@ if shnfix -c -- "$2"; then
   mv -- "${2%.flac}-fixed.flac" "$2"
 fi
 
-crless_cuesheet="$(mktemp)"
+CRLESS_CUESHEET="$(mktemp)"
+readonly CRLESS_CUESHEET
 
 # removes carriage returns from cuesheet
-tr -d '\r' <"$1" >"${crless_cuesheet}"
-mv "${crless_cuesheet}" "$1"
-
-unset crless_cuesheet
+tr -d '\r' <"$1" >"${CRLESS_CUESHEET}"
+mv "${CRLESS_CUESHEET}" "$1"
 
 splitflac "$1" "$2"
