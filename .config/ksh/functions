@@ -293,27 +293,27 @@ EOF
 
   esac
 
-  today="$(date '+%F')"
-  jrnl_entry="${HOME}/notes/journal/${today}.txt"
+  TODAY="$(date '+%F')"
+  JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.txt"
 
   # easier to just create the directory than error
-  mkdir -p "${jrnl_entry%/*}"
+  mkdir -p "${JRNL_ENTRY%/*}"
 
-  if ! [ -e "${jrnl_entry}" ]; then
+  if ! [ -e "${JRNL_ENTRY}" ]; then
     { echo
-      echo "${today}"
+      echo "${TODAY}"
       date '+%H:%M'
-    } > "${jrnl_entry}"
+    } > "${JRNL_ENTRY}"
 
   else
     { echo
       echo '-'
       date '+%H:%M'
-    } >> "${jrnl_entry}"
+    } >> "${JRNL_ENTRY}"
 
   fi
 
-  "${EDITOR}" "${jrnl_entry}"
+  "${EDITOR}" "${JRNL_ENTRY}"
 }
 
 # read a markdown document with man(1).
@@ -432,8 +432,8 @@ EOF
 
   esac
 
-  size="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
-  hreadable "${size}"
+  SIZE="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
+  hreadable "${SIZE}"
 }
 
 # with rffd, open up random pics with sxiv(1).
@@ -525,13 +525,13 @@ EOF
   # command -v will match the alias
   DU="$(which 'du')"
 
-  size_of_dir="$(
+  SIZE_OF_DIR="$(
     "${DU}" -sh "$1" \
       | sed -E "s/\.([[:digit:]])+//" \
       | cut -f 1
   )"
 
-  tar -cf - "$1" | pv -s "${size_of_dir}"
+  tar -cf - "$1" | pv -s "${SIZE_OF_DIR}"
 }
 
 # test Matrix federation and output the JSON.
