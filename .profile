@@ -64,15 +64,13 @@ case "$(uname)" in
     # https://unix.stackexchange.com/a/415028
     #
     # the extra colon is intentional, it's the delimiter for PATH.
-    PATH="${XDG_BIN_HOME}:/usr/games${PATH:+:${PATH}}"
-    export PATH
+    export PATH="${XDG_BIN_HOME}:/usr/games${PATH:+:${PATH}}"
 
     ;;
 
   *)
     # no /usr/games if not OpenBSD
-    PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
-    export PATH
+    export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
 
     ;;
 
