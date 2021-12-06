@@ -12,11 +12,9 @@ anoncurl() {
   case "$@" in
 
     ''|'-h')
-      cat >&2 <<EOF
-curl(1) with tor(1).
+      echo 'curl(1) with tor(1).
 
-otherwise, use it the same way you would use curl(1).
-EOF
+otherwise, use it the same way you would use curl(1).' >&2
 
       return
 
@@ -37,11 +35,9 @@ anonread() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<EOF
-read PDFs with tor(1).
+      echo 'read PDFs with tor(1).
 
-anonread [URL linking to an ebook]
-EOF
+anonread [URL linking to an ebook]' >&2
 
       return
 
@@ -60,12 +56,10 @@ aprv() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-invoke apropos(1) to match the given query against any available macro
+      echo 'invoke apropos(1) to match the given query against any available macro
 key of manpages that match the current machine architecture.
 
-aprv [query]
-EOF
+aprv [query]' >&2
 
       return
 
@@ -85,11 +79,9 @@ cht() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-retrieve command cheat sheets from cht.sh
+      echo 'retrieve command cheat sheets from cht.sh
 
-cht [command name]
-EOF
+cht [command name]' >&2
 
       return
 
@@ -112,15 +104,13 @@ cpbak() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-if the given file ends in '.bak', copy to an identically named file
-except the new file omits '.bak'.
+      echo 'if the given file ends in ".bak", copy to an identically named file
+except the new file omits ".bak".
 
 otherwise, copy the given file to an identically named file except the
-new file ends in '.bak'.
+new file ends in ".bak".
 
-cpbak [file]
-EOF
+cpbak [file]' >&2
 
       return
 
@@ -152,11 +142,9 @@ grabipv4() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-perform an A record lookup and return the IP address.
+      echo 'perform an A record lookup and return the IP address.
 
-grabipv4 [IP address]
-EOF
+grabipv4 [IP address]' >&2
 
       return
 
@@ -174,11 +162,9 @@ grabipv6() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-perform an AAAA record lookup and return the IPv6 address.
+      echo 'perform an AAAA record lookup and return the IPv6 address.
 
-grabipv6 [IPv6 address]
-EOF
+grabipv6 [IPv6 address]' >&2
 
       return
 
@@ -203,11 +189,9 @@ hreadable() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-return a human readable integer.
+      echo 'return a human readable integer.
 
-hreadable [positive integer]
-EOF
+hreadable [positive integer]' >&2
 
       return
 
@@ -255,11 +239,9 @@ ipinf() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-display IP address information from ipinfo.io
+      echo 'display IP address information from ipinfo.io
 
-ipinf [IP address]
-EOF
+ipinf [IP address]' >&2
 
       return
 
@@ -279,13 +261,11 @@ jrnl() {
       ;;
 
     '-h'|*)
-      cat >&2 <<EOF
-jrnl (for journaling) takes no arguments.
+      echo "jrnl (for journaling) takes no arguments.
 
 It creates ${HOME}/notes/journal/$(date '+%F').txt (including the
 directory tree, if it doesn't exist) with appropriate formatting and
-then opens up the file in ${EDITOR:-EDITOR}.
-EOF
+then opens up the file in ${EDITOR:-EDITOR}." >&2
 
       return
 
@@ -321,11 +301,9 @@ manmd() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-read a markdown document with man(1).
+      echo 'read a markdown document with man(1).
 
-manmd [markdown document]
-EOF
+manmd [markdown document]' >&2
 
       return
 
@@ -344,12 +322,10 @@ mvbak() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-if the given file ends in '.bak', remove '.bak' from the filename.
-otherwise, append '.bak' to the filename.
+      echo 'if the given file ends in ".bak", remove ".bak" from the filename.
+otherwise, append ".bak" to the filename.
 
-mvbak [file]
-EOF
+mvbak [file]' >&2
 
       return
 
@@ -370,15 +346,13 @@ nc_head() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-checks the headers of a website with tor(1).
+      echo 'checks the headers of a website with tor(1).
 
 HTTP:
 nc_head [path] [domain] 80
 
 HTTPS:
-nc_head [path] -c [domain] 443
-EOF
+nc_head [path] -c [domain] 443' >&2
 
       return
 
@@ -396,11 +370,9 @@ nc_tor() {
   case "$@" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-nc(1) + tor(1) = nc_tor()
+      echo 'nc(1) + tor(1) = nc_tor()
 
-otherwise, use it the same way you would use nc(1).
-EOF
+otherwise, use it the same way you would use nc(1).' >&2
 
       return
 
@@ -419,12 +391,10 @@ pkgsize() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-obtains the estimated size of a package and returns it in a human
+      echo 'obtains the estimated size of a package and returns it in a human
 readable format.
 
-pkgsize [package name]
-EOF
+pkgsize [package name]' >&2
 
       return
 
@@ -441,11 +411,9 @@ randpics() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-with rffd, open up random pics with sxiv(1).
+      echo 'with rffd, open up random pics with sxiv(1).
 
-randpics [directory with pics]
-EOF
+randpics [directory with pics]' >&2
 
       return
 
@@ -461,11 +429,9 @@ randvids() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-with rffd, open up random videos with mpv(1).
+      echo 'with rffd, open up random videos with mpv(1).
 
-randvids [directory with videos]
-EOF
+randvids [directory with videos]' >&2
 
       return
 
@@ -484,11 +450,9 @@ readmd() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-read a markdown document with less(1).
+      echo 'read a markdown document with less(1).
 
-readmd [markdown document]
-EOF
+readmd [markdown document]' >&2
 
       return
 
@@ -506,15 +470,13 @@ tarpv() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-archive something with tar(1) and watch progress with pv(1).
+      echo 'archive something with tar(1) and watch progress with pv(1).
 
 without compression:
 tarpv [archive target] > filename
 
 with compression:
-tarpv [archive target] | gzip -c > filename
-EOF
+tarpv [archive target] | gzip -c > filename' >&2
 
       return
 
@@ -541,11 +503,9 @@ testfed() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-test Matrix federation and output the JSON.
+      echo 'test Matrix federation and output the JSON.
 
-testfed [matrix homeserver domain]
-EOF
+testfed [matrix homeserver domain]' >&2
 
     return
 
@@ -565,11 +525,9 @@ unlockhdd() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-unlock a drive encrypted with bioctl(8).
+      echo 'unlock a drive encrypted with bioctl(8).
 
-unlockhdd [encrypted partition]
-EOF
+unlockhdd [encrypted partition]' >&2
 
       return
 
@@ -589,11 +547,9 @@ wttr() {
   case "$1" in
 
     ''|'-h')
-      cat >&2 <<'EOF'
-get weather information.
+      echo 'get weather information.
 
-wttr [location]
-EOF
+wttr [location]' >&2
 
       return
 
