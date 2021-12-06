@@ -51,7 +51,7 @@ err() {
 # 1) interactive ksh(1) sessions won't terminate.
 # 2) dmenu scripts still work without colors.
 import_colors_sh() {
-  COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+  readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
   if ! [ -r "${COLORS_SH}" ]; then
     echo "${COLORS_SH} is not readable." >&2
