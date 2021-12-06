@@ -27,7 +27,7 @@ usage() {
   err "usage: ${0##*/} [domain] [md dir] [srv dir]
 
 -i: Specify the name of an alternate index file (by default, INDEX is
-    set to index.md). Provide the name only, not the path."
+    set to index.md)."
 }
 
 
@@ -44,8 +44,8 @@ fi
 
 gen_site() {
   : "${INDEX:=index.md}"
-  [ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${INDEX} is not readable."
-  [ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${INDEX} is not a file."
+  [ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not readable."
+  [ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not a file."
 
   ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
   "${SITE}" >/dev/null 2>&1
@@ -73,8 +73,8 @@ cleanup() {
 while getopts i:h opt; do
 
   case "${opt}" in
-    i)     readonly INDEX="${OPTARG}" ;;
-    'h'|*) usage                      ;;
+    i)     readonly INDEX="${OPTARG##*/}" ;;
+    'h'|*) usage                          ;;
   esac
 
 done
