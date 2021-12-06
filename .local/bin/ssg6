@@ -25,11 +25,14 @@ main() {
     [ -d "${pos_par}" ] || no_dir "${pos_par}"
   done
 
-  src="$(readlink_f "$1")"
-  dst="$(readlink_f "$2")"
+  SRC="$(readlink_f "$1")"
+  readonly SRC
+
+  DST="$(readlink_f "$2")"
+  readonly DST
 
   IGNORE="$(
-    if [ ! -f "${src}/.ssgignore" ]; then
+    if [ ! -f "${SRC}/.ssgignore" ]; then
       printf ' ! -path "*/.*"'
       return
     fi
@@ -37,23 +40,24 @@ main() {
     while read -r x; do
       [ -n "${x}" ] || continue
       printf ' ! -path "*/%s*"' "${x}"
-    done < "${src}/.ssgignore"
+    done < "${SRC}/.ssgignore"
   )"
+  readonly IGNORE
 
   # files
 
   title="$3"
 
-  h_file="${src}/_header.html"
-  f_file="${src}/_footer.html"
-  [ -f "${f_file}" ] && FOOTER="$(cat -- "${f_file}")" && export FOOTER
-  [ -f "${h_file}" ] && HEADER="$(cat -- "${h_file}")" && export HEADER
+  readonly H_FILE="${SRC}/_header.html"
+  readonly F_FILE="${SRC}/_footer.html"
+  [ -f "${F_FILE}" ] && FOOTER="$(cat -- "${F_FILE}")" && export FOOTER
+  [ -f "${H_FILE}" ] && HEADER="$(cat -- "${H_FILE}")" && export HEADER
 
-  list_dirs "${src}" | (cd "${src}" && cpio -pdu -- "${dst}")
+  list_dirs "${SRC}" | (cd "${SRC}" && cpio -pdu -- "${DST}")
 
   fs="$(
-    if [ -f "${dst}/.files" ]; then
-      list_affected_files "${src}" "${dst}/.files"
+    if [ -f "${DST}/.files" ]; then
+      list_affected_files "${SRC}" "${DST}/.files"
 
     else
       list_files "$1"
@@ -62,19 +66,19 @@ main() {
   )"
 
   if [ -n "${fs}" ]; then
-    echo "${fs}" | tee -- "${dst}/.files"
+    echo "${fs}" | tee -- "${DST}/.files"
 
     if echo "${fs}" | grep -q '\.md$'; then
 
       if [ -x "$(command -v 'lowdown')" ]; then
         echo "${fs}" \
           | grep '\.md$' \
-          | render_md_files_lowdown "${src}" "${dst}" "${title}"
+          | render_md_files_lowdown "${SRC}" "${DST}" "${title}"
 
       elif [ -x "$(command -v 'Markdown.pl')" ]; then
         echo "${fs}" \
           | grep '\.md$' \
-          | render_md_files_Markdown_pl "${src}" "${dst}" "${title}"
+          | render_md_files_Markdown_pl "${SRC}" "${DST}" "${title}"
 
       else
         echo "couldn't find lowdown nor Markdown.pl"
@@ -86,11 +90,11 @@ main() {
 
     echo "${fs}" \
       | grep '\.html$' \
-      | render_html_files "${src}" "${dst}" "${title}"
+      | render_html_files "${SRC}" "${DST}" "${title}"
 
     echo "${fs}" \
       | grep -Ev '\.md$|\.html$' \
-      | (cd "${src}" && cpio -pu -- "${dst}")
+      | (cd "${SRC}" && cpio -pu -- "${DST}")
 
   fi
 
@@ -102,10 +106,10 @@ main() {
 
   base_url="$4"
   date="$(date '+%F')"
-  urls="$(list_pages "${src}")"
+  urls="$(list_pages "${SRC}")"
 
   [ -n "${urls}" ] \
-    && render_sitemap "${urls}" "${base_url}" "${date}" > "${dst}/sitemap.xml"
+    && render_sitemap "${urls}" "${base_url}" "${date}" > "${DST}/sitemap.xml"
 
   print_status 'url' 'urls' "${urls}" >&2
   echo >&2
