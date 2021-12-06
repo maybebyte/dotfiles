@@ -45,10 +45,11 @@ any   - matches all files"
 # $1 is a path for find(1) to search. base_find_cmd() then accepts all
 # positional parameters after that.
 base_find_cmd() {
-  search_path="$1"
+  SEARCH_PATH="$1"
+  readonly SEARCH_PATH
   shift
 
-  find "${search_path}" -type f "$@"
+  find "${SEARCH_PATH}" -type f "$@"
 }
 
 
