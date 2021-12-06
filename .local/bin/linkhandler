@@ -85,15 +85,15 @@ check_opts() {
 # output is squelched for most options since I primarily use this with
 # newsboat.
 linkhandler() {
-  case "$(menu -l "${num_of_opts}" -p 'What to do with this URL?')" in
+  case "$(menu -l "${NUM_OF_OPTS}" -p 'What to do with this URL?')" in
 
     'copy duration')
-      duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
-      readonly duration
+      DURATION="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      readonly DURATION
 
-      if [ -n "${duration}" ]; then
-        printf '%s' "${duration}" | xclip -selection clipboard
-        notify-send -- "Copied video duration (${duration})."
+      if [ -n "${DURATION}" ]; then
+        printf '%s' "${DURATION}" | xclip -selection clipboard
+        notify-send -- "Copied video duration (${DURATION})."
 
       else
         err 'Empty input, so no duration was yanked.'
@@ -103,12 +103,12 @@ linkhandler() {
       ;;
 
     'copy title')
-      title="$(youtube-dl -e -- "${URL}" 2>/dev/null)"
-      readonly title
+      TITLE="$(youtube-dl -e -- "${URL}" 2>/dev/null)"
+      readonly TITLE
 
-      if [ -n "${title}" ]; then
-        printf '%s' "${title}" | xclip -selection clipboard
-        notify-send -- "${title} yanked."
+      if [ -n "${TITLE}" ]; then
+        printf '%s' "${TITLE}" | xclip -selection clipboard
+        notify-send -- "${TITLE} yanked."
 
       else
         err 'Empty input, so no title yanked.'
@@ -138,10 +138,10 @@ linkhandler() {
       ;;
 
     'print duration')
-      duration="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      DURATION="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
 
-      if [ -n "${duration}" ]; then
-        notify-send -- "${duration}"
+      if [ -n "${DURATION}" ]; then
+        notify-send -- "${DURATION}"
 
       else
         err 'Empty input, so no duration printed.'
@@ -195,7 +195,7 @@ check_opts "$1"
 
 import_colors_sh
 
-readonly options='copy duration
+readonly OPTIONS='copy duration
 copy title
 download audio
 download file
@@ -207,7 +207,7 @@ view image
 watch
 watch (loop)'
 
-num_of_opts="$(echo "${options}" | wc -l)"
-readonly num_of_opts
+NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
+readonly NUM_OF_OPTS
 
-echo "${options}" | linkhandler
+echo "${OPTIONS}" | linkhandler
