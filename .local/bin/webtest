@@ -24,10 +24,11 @@ err() {
 
 
 usage() {
-  err "usage: ${0##*/} [domain] [md dir] [srv dir]
+  err "usage: ${0##*/} [domain] [markdown directory] [server directory]
 
 -i: Specify the name of an alternate index file (by default, INDEX is
-    set to index.md)."
+    set to index.md). It must be present in the provided markdown
+    directory, otherwise ${0##*/} will fail."
 }
 
 
