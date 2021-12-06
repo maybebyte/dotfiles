@@ -54,13 +54,13 @@ EOF
 [ -r "$2" ] || err "$2 is not readable."
 [ -d "$2" ] || err "$2 is not a directory."
 
-chosen_file="$( (cd "$2" && fzf) )"
-readonly chosen_file
+CHOSEN_FILE="$( (cd "$2" && fzf) )"
+readonly CHOSEN_FILE
 
-full_path_of_file="$(readlink -f -- "$2/${chosen_file}")"
-readonly full_path_of_file
+FULL_PATH_OF_FILE="$(readlink -f -- "$2/${CHOSEN_FILE}")"
+readonly FULL_PATH_OF_FILE
 
-[ -n "${full_path_of_file}" ] || err 'A file must be chosen.'
-[ -r "${full_path_of_file}" ] || err 'File not readable.'
+[ -n "${FULL_PATH_OF_FILE}" ] || err 'A file must be chosen.'
+[ -r "${FULL_PATH_OF_FILE}" ] || err 'File not readable.'
 
-"$1" "${full_path_of_file}"
+"$1" "${FULL_PATH_OF_FILE}"
