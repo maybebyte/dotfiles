@@ -32,17 +32,6 @@ usage() {
 }
 
 
-# instead of remembering/accounting for two different forms of privilege
-# elevation, one is assigned to the alias 'priv.'
-if [ -x "$(command -v 'doas')" ]; then
-  alias priv='doas '
-
-elif [ -x "$(command -v 'sudo')" ]; then
-  alias priv='sudo '
-
-fi
-
-
 gen_site() {
   : "${INDEX:=index.md}"
   [ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not readable."
@@ -57,8 +46,7 @@ gen_site() {
 
 
 sync_site() {
-  # can't call this in the form 'priv sync_site'. thus, a heredoc is needed.
-  priv /usr/bin/env sh <<EOF
+  doas /usr/bin/env sh <<EOF
 rm -rf -- ${SRVDIR:?}
 mkdir -p -- ${SRVDIR}
 mv -- ${HTMLDIR}/* ${SRVDIR}/
