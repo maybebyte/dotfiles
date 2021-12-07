@@ -55,11 +55,6 @@ EOF
 }
 
 
-cleanup() {
-  rm -rf -- "${HTMLDIR:?}"
-}
-
-
 while getopts i:h opt; do
 
   case "${opt}" in
@@ -88,15 +83,15 @@ readonly HTMLDIR
 readonly UNPRIV_USER="${LOGNAME}"
 
 if ! gen_site; then
-  cleanup
+  rm -rf -- "${HTMLDIR:?}"
   err 'Unable to generate site.'
 
 elif ! sync_site; then
-  cleanup
+  rm -rf -- "${HTMLDIR:?}"
   err 'Unable to sync web server.'
 
 else
-  cleanup
+  rm -rf -- "${HTMLDIR:?}"
   echo 'Web server synced.'
 
 fi
