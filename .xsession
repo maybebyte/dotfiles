@@ -49,7 +49,7 @@ gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 
 # laptop adjustments
 if [ "$(hostname -s)" = 'lain' ]; then
-  xset m 3/1 0
+  xset m 3/2 0
   # trackpad scrolling with middle button
   xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
   xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Button' 2
