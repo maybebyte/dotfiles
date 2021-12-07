@@ -38,7 +38,7 @@ gen_site() {
   [ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not a file."
 
   ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
-  "${SITE}" >/dev/null 2>&1
+    "${SITE}" >/dev/null 2>&1
 
   rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
     > "${HTMLDIR}/rss.xml" 2>/dev/null
