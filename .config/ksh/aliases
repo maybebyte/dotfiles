@@ -269,13 +269,13 @@ general_aliases() {
     readx='less /var/log/Xorg.0.log'                                     \
     tailmsg='tail -f /var/log/messages'
 
-  # youtube-dl
-  if ! [ -x "$(command -v 'youtube-dl')" ]; then
-    complain_noexec 'youtube-dl' 2>>"${DOTFILES_LOG}"
+  # yt-dlp
+  if ! [ -x "$(command -v 'yt-dlp')" ]; then
+    complain_noexec 'yt-dlp' 2>>"${DOTFILES_LOG}"
 
   else
     alias                                                                \
-      yt='youtube-dl'                                                    \
+      yt='yt-dlp'                                                        \
       yta='yt -xf bestaudio/best'                                        \
       ytdesc='yt --get-description'                                      \
       ytlen='yt --get-duration'                                          \

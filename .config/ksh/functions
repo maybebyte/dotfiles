@@ -561,9 +561,9 @@ wttr [location]' >&2
 }
 
 
-# for downloading youtube-dl channels/playlists
+# for downloading YouTube channels/playlists
 ytpl() {
-  youtube-dl \
+  yt-dlp \
     --download-archive './archive.txt' \
     --output './%(upload_date)s.%(title)s.%(id)s.%(ext)s' \
     --match-filter "playlist_title != 'Liked videos' & playlist_title != 'Favorites'" \

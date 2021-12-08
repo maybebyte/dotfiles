@@ -88,7 +88,7 @@ linkhandler() {
   case "$(menu -l "${NUM_OF_OPTS}" -p 'What to do with this URL?')" in
 
     'copy duration')
-      DURATION="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
       readonly DURATION
 
       if [ -n "${DURATION}" ]; then
@@ -103,7 +103,7 @@ linkhandler() {
       ;;
 
     'copy title')
-      TITLE="$(youtube-dl -e -- "${URL}" 2>/dev/null)"
+      TITLE="$(yt-dlp -e -- "${URL}" 2>/dev/null)"
       readonly TITLE
 
       if [ -n "${TITLE}" ]; then
@@ -118,7 +118,7 @@ linkhandler() {
       ;;
 
     'download audio')
-      tmux new-window "youtube-dl -xf bestaudio/best -- ${URL}; read"
+      tmux new-window "yt-dlp -xf bestaudio/best -- ${URL}; read"
 
       ;;
 
@@ -128,7 +128,7 @@ linkhandler() {
       ;;
 
     'download video')
-      tmux new-window "youtube-dl -- ${URL}; read"
+      tmux new-window "yt-dlp -- ${URL}; read"
 
       ;;
 
@@ -138,7 +138,7 @@ linkhandler() {
       ;;
 
     'print duration')
-      DURATION="$(youtube-dl --get-duration -- "${URL}" 2>/dev/null)"
+      DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
 
       if [ -n "${DURATION}" ]; then
         notify-send -- "${DURATION}"
@@ -188,7 +188,7 @@ mpv
 notify-send
 sxiv
 xclip
-youtube-dl
+yt-dlp
 EOF
 
 check_opts "$1"
