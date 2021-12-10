@@ -45,3 +45,5 @@ ${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
     ;;
 
 esac
+
+unset -f set_user_and_path_colors
