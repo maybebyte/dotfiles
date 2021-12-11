@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 # sourced files
 # shellcheck disable=SC1090,SC1091

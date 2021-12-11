@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 #
 # https://www.romanzolotarev.com/bin/rssg
 # Copyright 2018 Roman Zolotarev <hi@romanzolotarev.com>

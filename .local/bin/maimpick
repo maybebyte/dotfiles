@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 # shellcheck disable=SC1090
 
 # rewrite of Luke Smith's maimpick
