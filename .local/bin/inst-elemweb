@@ -1,0 +1,67 @@
+#!/bin/sh
+# Written in 2020 by Lucas
+# Modified in 2021 by Ashlen
+# CC0 1.0 Universal/Public domain - No rights reserved
+#
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any
+# warranty. You should have received a copy of the CC0 Public Domain
+# Dedication along with this software. If not, see
+# <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+set -e
+
+err() {
+  printf '%s\n' "$*" >&2
+  exit 1
+}
+
+
+usage() {
+  printf 'Usage: %s version\n' "${0##*/}" >&2
+  exit 1
+}
+
+
+isversion() {
+  case "$*" in
+    # this pattern must remain unquoted for [0-9] to work
+    v[0-9].[0-9].[0-9]) return 0 ;;
+    *)                  return 1 ;;
+  esac
+}
+
+
+[ -n "${ELEMENT_WEB_UI_DIR}" ] \
+  || err "Environment variable ELEMENT_WEB_UI_DIR unset."
+
+[ $# -eq 1 ] || usage
+isversion "$1" || usage
+
+
+VER="$1"
+GH_BASE_URL='https://github.com/vector-im/element-web/releases/download'
+TMPDIR_FOR_VERIFICATION="$(mktemp -d)"
+
+readonly VER GH_BASE_URL TMPDIR_FOR_VERIFICATION
+
+trap 'rm -rf -- ${TMPDIR_FOR_VERIFICATION}' EXIT INT QUIT TERM
+
+
+cd "${TMPDIR_FOR_VERIFICATION}" || err "Unable to change directory to ${TMPDIR_FOR_VERIFICATION}"
+ftp -V "${GH_BASE_URL}/${VER}/element-${VER}.tar.gz" "${GH_BASE_URL}/${VER}/element-${VER}.tar.gz.asc"
+
+gpg2 --verify --quiet ./"element-${VER}.tar.gz.asc" ./"element-${VER}.tar.gz" \
+  || err "GPG verification failed. Ensure you have imported the public key
+mentioned in https://github.com/vector-im/element-web#getting-started
+into your keyring."
+
+
+cd "${ELEMENT_WEB_UI_DIR}" || err "Unable to change directory to ${ELEMENT_WEB_UI_DIR}"
+
+pax -rzf "${TMPDIR_FOR_VERIFICATION}/element-${VER}.tar.gz" \
+  || err "Unable to extract element-${VER}.tar.gz in ${ELEMENT_WEB_UI_DIR}"
+
+ln -sf ./"element-${VER}" ./'element' \
+  || err "Unable to link ${ELEMENT_WEB_UI_DIR}/${VER} to ${ELEMENT_WEB_UI_DIR}/element"
