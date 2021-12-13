@@ -63,5 +63,7 @@ cd "${ELEMENT_WEB_UI_DIR}" || err "Unable to change directory to ${ELEMENT_WEB_U
 pax -rzf "${TMPDIR_FOR_VERIFICATION}/element-${VER}.tar.gz" \
   || err "Unable to extract element-${VER}.tar.gz in ${ELEMENT_WEB_UI_DIR}"
 
+rm -f ./'element'
+
 ln -sf ./"element-${VER}" ./'element' \
   || err "Unable to link ${ELEMENT_WEB_UI_DIR}/${VER} to ${ELEMENT_WEB_UI_DIR}/element"
