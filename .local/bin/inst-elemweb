@@ -65,5 +65,5 @@ pax -rzf "${TMPDIR_FOR_VERIFICATION}/element-${VER}.tar.gz" \
 
 rm -f ./'element'
 
-ln -sf ./"element-${VER}" ./'element' \
+ln -s ./"element-${VER}" ./'element' \
   || err "Unable to link ${ELEMENT_WEB_UI_DIR}/${VER} to ${ELEMENT_WEB_UI_DIR}/element"
