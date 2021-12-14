@@ -335,19 +335,18 @@ openbsd_aliases() {
 
   # rcctl(8)
   alias                                                                  \
-    rc='rcctl'                                                           \
-    rcoff='rc disable'                                                   \
-    rcon='rc enable'                                                     \
-    rcg='rc get'                                                         \
-    rclfail='rc ls failed'                                               \
-    rclon='rc ls on'                                                     \
-    rclstr='rc ls started'                                               \
-    rcre='rc restart'                                                    \
-    rcrel='rc reload'                                                    \
-    rcset='rc set'                                                       \
-    rcst='rc stop'                                                       \
-    rcstr='rc start'                                                     \
-    rcstrf='rc -f start'
+    rcoff='rcctl disable'                                                   \
+    rcon='rcctl enable'                                                     \
+    rcg='rcctl get'                                                         \
+    rclfail='rcctl ls failed'                                               \
+    rclon='rcctl ls on'                                                     \
+    rclstr='rcctl ls started'                                               \
+    rcre='rcctl restart'                                                    \
+    rcrel='rcctl reload'                                                    \
+    rcset='rcctl set'                                                       \
+    rcst='rcctl stop'                                                       \
+    rcstr='rcctl start'                                                     \
+    rcstrf='rcctl -f start'
 
   # system
   alias dsklab='disklabel -p g'
