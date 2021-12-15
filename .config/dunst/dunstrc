@@ -1,44 +1,30 @@
 [global]
-  alignment            = left
-  browser              = /usr/local/bin/firefox -new-tab
-  corner_radius        = 7
-  dmenu                = /usr/local/bin/dmenu -p dunst:
-  follow               = mouse
-  font                 = mono-10, Symbola-10
-  format               = "<b>%s</b>\n%b"
-  frame_color          = "#e0cef3"
-  frame_width          = 2
-  geometry             = "350x5-20+55"
-  hide_duplicate_count = true
-  horizontal_padding   = 15
-  icon_path            = /usr/local/share/icons/gnome/16x16/status/:/usr/local/share/icons/gnome/16x16/devices/
-  icon_position        = off
-  idle_threshold       = 120
-  markup               = full
-  padding              = 15
-  separator_color      = frame
-  show_age_threshold   = 120
-  shrink               = true
-  stack_duplicates     = true
-  word_wrap            = true
-
-[shortcuts]
-  close     = ctrl+space
-  close_all = ctrl+shift+space
-  history   = ctrl+grave
-  context   = ctrl+shift+period
+  corner_radius                = 7
+  enable_recursive_icon_lookup = true
+  font                         = mono-10, Symbola-10
+  format                       = "<b>%s</b>\n%b"
+  frame_color                  = "#e0cef3"
+  frame_width                  = 2
+  height                       = 300
+  width                        = (0, 300)
+  hide_duplicate_count         = true
+  icon_position                = off
+  idle_threshold               = 120
+  markup                       = full
+  separator_color              = frame
+  show_age_threshold           = 120
 
 [urgency_low]
-    background = "#698CEC"
-    foreground = "#ffffff"
-    timeout    = 5
+    background                 = "#698CEC"
+    foreground                 = "#ffffff"
+    timeout                    = 5
 
 [urgency_normal]
-    background = "#5B6BDB"
-    foreground = "#ffffff"
-    timeout    = 5
+    background                 = "#5B6BDB"
+    foreground                 = "#ffffff"
+    timeout                    = 5
 
 [urgency_critical]
-    background = "#9974E7"
-    foreground = "#ffffff"
-    timeout    = 0
+    background                 = "#9974E7"
+    foreground                 = "#ffffff"
+    timeout                    = 0
