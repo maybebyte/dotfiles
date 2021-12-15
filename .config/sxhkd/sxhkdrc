@@ -65,3 +65,10 @@ shift + super + {0,Left,Right,Down,Up}
 # {dim,brighten} display
 {F5,F6}
   xbacklight {-dec,-inc} 10 -steps 1
+
+# these are to replace old functionality of dunst(1)
+ctrl + space
+	dunstctl close
+
+ctrl + shift + space
+	dunstctl close-all
