@@ -15,12 +15,13 @@ err() {
 
 
 menu() {
-  dmenu -i -fn 'mono-12'       \
+  dmenu -i -l 20               \
+  -fn 'mono-12'                \
+  -fn 'Symbola-12'             \
   -nb "${background:=#040516}" \
   -nf "${color3:=#9974e7}"     \
   -sb "${background:=#040516}" \
-  -sf "${foreground:=#e0cef3}" \
-  "$@"
+  -sf "${foreground:=#e0cef3}"
 }
 
 
@@ -70,7 +71,7 @@ readonly EMOJI_FILE="${XDG_DATA_HOME:=${HOME}/.local/share}/emoji"
 [ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
 [ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
 
-CHOSEN_ENTRY="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu -l 20 -fn 'Symbola-12')"
+CHOSEN_ENTRY="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu)"
 readonly CHOSEN_ENTRY
 
 [ -n "${CHOSEN_ENTRY}" ] || err 'Must choose an emoji.'
