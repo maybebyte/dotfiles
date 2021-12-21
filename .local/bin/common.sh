@@ -71,9 +71,9 @@ import_colors_sh() {
 # import_colors_sh() gathers.
 menu() {
   dmenu -i -fn 'mono-12'       \
-  -nb "${background:=#040516}" \
-  -nf "${color3:=#9974e7}"     \
-  -sb "${background:=#040516}" \
-  -sf "${foreground:=#e0cef3}" \
+  -nb "${background:-#040516}" \
+  -nf "${color3:-#9974e7}"     \
+  -sb "${background:-#040516}" \
+  -sf "${foreground:-#e0cef3}" \
   "$@"
 }

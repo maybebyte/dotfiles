@@ -18,10 +18,10 @@ menu() {
   dmenu -i -l 20               \
   -fn 'mono-12'                \
   -fn 'Symbola-12'             \
-  -nb "${background:=#040516}" \
-  -nf "${color3:=#9974e7}"     \
-  -sb "${background:=#040516}" \
-  -sf "${foreground:=#e0cef3}"
+  -nb "${background:-#040516}" \
+  -nf "${color3:-#9974e7}"     \
+  -sb "${background:-#040516}" \
+  -sf "${foreground:-#e0cef3}"
 }
 
 
