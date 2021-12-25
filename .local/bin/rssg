@@ -70,7 +70,7 @@ no_file() {
 
 
 md_to_html() {
-  [ -x "$(command -v 'lowdown')" ] || exit 3
+  [ -x "$(command -vp -- 'lowdown')" ] || exit 3
 
   lowdown              \
   --html-no-escapehtml \

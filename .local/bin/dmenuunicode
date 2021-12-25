@@ -45,7 +45,7 @@ import_colors_sh() {
 check_deps() {
   while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
+    [ -x "$(command -vp -- "${dependency}")" ] \
       || err "${dependency} not found in PATH or not executable."
 
   done
