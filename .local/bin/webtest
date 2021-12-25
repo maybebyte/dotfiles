@@ -58,7 +58,7 @@ EOF
 while getopts i:h opt; do
 
   case "${opt}" in
-    i)     readonly INDEX="${OPTARG##*/}" ;;
+    'i')   readonly INDEX="${OPTARG##*/}" ;;
     'h'|*) usage                          ;;
   esac
 
@@ -80,18 +80,11 @@ readonly SRVDIR="$3"
 HTMLDIR="$(mktemp -d)"
 readonly HTMLDIR
 
+trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
+
 readonly UNPRIV_USER="${LOGNAME}"
 
-if ! gen_site; then
-  rm -rf -- "${HTMLDIR:?}"
-  err 'Unable to generate site.'
+gen_site || err 'Unable to generate site.'
+sync_site || err 'Unable to sync web server.'
 
-elif ! sync_site; then
-  rm -rf -- "${HTMLDIR:?}"
-  err 'Unable to sync web server.'
-
-else
-  rm -rf -- "${HTMLDIR:?}"
-  echo 'Web server synced.'
-
-fi
+echo 'Web server synced.'
