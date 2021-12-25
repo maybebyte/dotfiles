@@ -84,7 +84,7 @@ trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
 
 readonly UNPRIV_USER="${LOGNAME}"
 
-gen_site || err 'Unable to generate site.'
+gen_site  || err 'Unable to generate site.'
 sync_site || err 'Unable to sync web server.'
 
 echo 'Web server synced.'
