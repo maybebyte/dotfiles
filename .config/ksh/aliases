@@ -12,7 +12,7 @@ complain_undefined() {
 
 pf_aliases() {
   # pfctl(8)
-  if ! [ -x "$(command -v 'pfctl')" ]; then
+  if ! [ -x "$(command -vp -- 'pfctl')" ]; then
     complain_noexec 'pfctl' 2>>"${DOTFILES_LOG}"
 
   else
@@ -27,7 +27,7 @@ pf_aliases() {
   fi
 
   # tcpdump(8)
-  if ! [ -x "$(command -v 'tcpdump')" ]; then
+  if ! [ -x "$(command -vp -- 'tcpdump')" ]; then
     complain_noexec 'tcpdump' 2>>"${DOTFILES_LOG}"
 
   else
@@ -77,7 +77,7 @@ general_aliases() {
     # shellcheck disable=SC2016
     complain_undefined '${EDITOR}' 2>>"${DOTFILES_LOG}"
 
-  elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
+  elif ! [ -x "$(command -vp -- "${EDITOR}")" ]; then
     complain_noexec "${EDITOR}" 2>>"${DOTFILES_LOG}"
 
   else
@@ -108,7 +108,7 @@ general_aliases() {
   fi
 
   # git
-  if ! [ -x "$(command -v 'git' )" ]; then
+  if ! [ -x "$(command -vp -- 'git' )" ]; then
     complain_noexec 'git' 2>>"${DOTFILES_LOG}"
 
   else
@@ -138,7 +138,7 @@ general_aliases() {
   fi
 
   # keepass
-  if ! [ -x "$(command -v 'keepassxc-cli')" ]; then
+  if ! [ -x "$(command -vp -- 'keepassxc-cli')" ]; then
     complain_noexec 'keepassxc-cli' 2>>"${DOTFILES_LOG}"
 
   else
@@ -161,7 +161,7 @@ general_aliases() {
     .....='cd ../../../..'                                               \
 
   # netstat(1)
-  if ! [ -x "$(command -v 'netstat')" ]; then
+  if ! [ -x "$(command -vp -- 'netstat')" ]; then
     complain_noexec 'netstat' 2>>"${DOTFILES_LOG}"
 
   else
@@ -206,7 +206,7 @@ general_aliases() {
     up='uptime'
 
   # taskwarrior
-  if ! [ -x "$(command -v 'task')" ]; then
+  if ! [ -x "$(command -vp -- 'task')" ]; then
     complain_noexec 'task' 2>>"${DOTFILES_LOG}"
 
   else
@@ -238,7 +238,7 @@ general_aliases() {
   fi
 
   # tmux
-  if ! [ -x "$(command -v 'tmux')" ]; then
+  if ! [ -x "$(command -vp -- 'tmux')" ]; then
     complain_noexec 'tmux' 2>>"${DOTFILES_LOG}"
 
   else
@@ -270,7 +270,7 @@ general_aliases() {
     tailmsg='tail -f /var/log/messages'
 
   # yt-dlp
-  if ! [ -x "$(command -v 'yt-dlp')" ]; then
+  if ! [ -x "$(command -vp -- 'yt-dlp')" ]; then
     complain_noexec 'yt-dlp' 2>>"${DOTFILES_LOG}"
 
   else
