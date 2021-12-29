@@ -9,6 +9,10 @@ xrdb "${HOME}/.Xresources"
 rm -rf "${HOME}/Downloads"
 mkdir -m 700 "${HOME}/Downloads"
 
+# automatically check for a new version of element-web and update if a
+# new version is found
+"${XDG_BIN_HOME}/check-elemweb"
+
 # environment variables that either:
 #
 # a) don't make sense to put in ~/.profile
