@@ -35,7 +35,7 @@ ${0##*/} [cue file] [FLAC file]
 check_deps() {
   while read -r dependency; do
 
-    [ -x "$(command -vp -- "${dependency}")" ] \
+    [ -x "$(command -v -- "${dependency}")" ] \
       || err "${dependency} not found in PATH or not executable."
 
   done
@@ -44,10 +44,10 @@ check_deps() {
 
 # determines which executable name to use for cuetag.
 assign_cuetag() {
-  if [ -x "$(command -vp -- 'cuetag')" ]; then
+  if [ -x "$(command -v -- 'cuetag')" ]; then
     readonly CUETAG='cuetag'
 
-  elif [ -x "$(command -vp -- 'cuetag.sh')" ]; then
+  elif [ -x "$(command -v -- 'cuetag.sh')" ]; then
     readonly CUETAG='cuetag.sh'
 
   else

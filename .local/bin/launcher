@@ -40,7 +40,7 @@ import_colors_sh() {
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-[ -x "$(command -vp -- 'dmenu_run')" ] || err 'dmenu_run not found in PATH or not executable.'
+[ -x "$(command -v -- 'dmenu_run')" ] || err 'dmenu_run not found in PATH or not executable.'
 
 import_colors_sh
 

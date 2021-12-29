@@ -35,7 +35,7 @@ unclutter -idle 3 &
 xcompmgr &
 xidle &
 
-[ -x "$(command -vp -- 'dbus-launch')" ] \
+[ -x "$(command -v -- 'dbus-launch')" ] \
   && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
   && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 

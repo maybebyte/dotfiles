@@ -30,7 +30,7 @@ ${0##*/} [inc|dec|mute]"
 check_deps() {
   while read -r dependency; do
 
-    [ -x "$(command -vp -- "${dependency}")" ] \
+    [ -x "$(command -v -- "${dependency}")" ] \
       || err "${dependency} not found in PATH or not executable."
 
   done

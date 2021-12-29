@@ -24,7 +24,7 @@ err() {
 }
 
 
-[ -x "$(command -vp -- 'xlock')" ] || err 'xlock not found in PATH or not executable.'
+[ -x "$(command -v -- 'xlock')" ] || err 'xlock not found in PATH or not executable.'
 
 clear_clip
 pkill -q 'keepass'

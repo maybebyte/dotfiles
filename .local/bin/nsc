@@ -17,10 +17,10 @@
 set -e
 
 
-if [ -x "$(command -vp -- 'doas')" ]; then
+if [ -x "$(command -v -- 'doas')" ]; then
   alias priv='doas '
 
-elif [ -x "$(command -vp -- 'sudo')" ]; then
+elif [ -x "$(command -v -- 'sudo')" ]; then
   alias priv='sudo '
 
 fi
@@ -55,7 +55,7 @@ fix_perms() {
 }
 
 
-[ -x "$(command -vp -- 'nmap')" ] || err 'nmap not found in PATH or not executable.'
+[ -x "$(command -v -- 'nmap')" ] || err 'nmap not found in PATH or not executable.'
 [ -z "$1" ] && usage
 
 tmpdir="$(mktemp -d)"
