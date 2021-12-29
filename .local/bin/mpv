@@ -44,7 +44,7 @@ See mpv(1) for more details."
 [ -z "$1" ] && usage
 
 
-MPV="$(command -v -- 'mpv')" || err 'mpv not found in PATH or not executable.'
+MPV="$(command -vp -- 'mpv')" || err 'mpv not found in PATH or not executable.'
 OS="$(uname)"
 
 
