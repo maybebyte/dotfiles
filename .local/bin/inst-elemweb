@@ -29,11 +29,26 @@ isversion() {
 }
 
 
+check_deps() {
+  while read -r dependency; do
+
+    [ -x "$(command -v -- "${dependency}")" ] \
+      || err "${dependency} not found in PATH or not executable."
+
+  done
+}
+
+
 [ -n "${ELEMENT_WEB_UI_DIR}" ] \
   || err "Environment variable ELEMENT_WEB_UI_DIR unset."
 
 [ $# -eq 1 ] || usage
 isversion "$1" || usage
+
+check_deps <<'EOF'
+ftp
+gpg2
+EOF
 
 
 VER="$1"
