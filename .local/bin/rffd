@@ -118,7 +118,7 @@ case "$1" in
 
 esac |
 
-  if [ "${COUNT}" = 0 ]; then
+  if [ "${COUNT}" -eq 0 ]; then
     sort -R
 
   else

@@ -55,7 +55,7 @@ print_vol() {
   if [ "${MUTED}" = 'true' ]; then
     echo '🔇 MUTED'
 
-  elif [ "${VOL}" = 0 ]; then
+  elif [ "${VOL}" -eq 0 ]; then
     echo '🔇 ' "$@"
 
   elif [ "${VOL}" -ge 50 ]; then
