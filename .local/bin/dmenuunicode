@@ -63,8 +63,8 @@ EOF
 import_colors_sh
 
 readonly EMOJI_FILE="${XDG_DATA_HOME:=${HOME}/.local/share}/emoji"
-[ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
 [ -r "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not readable."
+[ -f "${EMOJI_FILE}" ] || err "${EMOJI_FILE} is not a file."
 
 CHOSEN_ENTRY="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu)"
 readonly CHOSEN_ENTRY
