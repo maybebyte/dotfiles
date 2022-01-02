@@ -36,6 +36,7 @@ apm
 notify-send
 EOF
 
+
 # if A/C is connected, exit.
 [ "$(apm -a)" -eq 1 ] && exit 0
 
@@ -45,6 +46,7 @@ case "$(apm -b)" in
   4)   err "Battery status is 'absent.'"  ;;
   255) err "Battery status is 'unknown.'" ;;
 esac
+
 
 BATT_PERCENT="$(apm -l)"
 readonly BATT_PERCENT
