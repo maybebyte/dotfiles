@@ -63,7 +63,8 @@ import_colors_sh() {
 
 
 # generic dmenu function to handle customizations. uses colors that
-# import_colors_sh() gathers.
+# import_colors_sh() gathers, or falls back to predefined colors failing
+# that.
 menu() {
   dmenu -i -fn 'mono-12'       \
   -nb "${background:-#040516}" \
