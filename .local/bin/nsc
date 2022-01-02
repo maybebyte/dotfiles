@@ -39,7 +39,7 @@ ${0##*/} [target] [options]"
 
 
 nsc() {
-  priv nmap -Av --osscan-limit --privileged \
+  priv nmap -Av --osscan-limit \
     -oA "${TMPDIR}/nmap-$(date '+%F')" "$@"
 }
 
