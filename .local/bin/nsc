@@ -40,16 +40,16 @@ ${0##*/} [target] [options]"
 
 nsc() {
   priv nmap -Av --osscan-limit --privileged \
-    -oA "${tmpdir}/nmap-$(date '+%F')" "$@"
+    -oA "${TMPDIR}/nmap-$(date '+%F')" "$@"
 }
 
 
 fix_perms() {
   readonly unpriv_user="${LOGNAME}"
 
-  priv chown -R -- "${unpriv_user}:${unpriv_user}" "${tmpdir}"
+  priv chown -R -- "${unpriv_user}:${unpriv_user}" "${TMPDIR}"
 
-  find "${tmpdir}"                                    \
+  find "${TMPDIR}"                                    \
   \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
   \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
 }
@@ -58,10 +58,10 @@ fix_perms() {
 [ -x "$(command -v -- 'nmap')" ] || err 'nmap not found in PATH or not executable.'
 [ -z "$1" ] && usage
 
-tmpdir="$(mktemp -d)"
-readonly tmpdir
+TMPDIR="$(mktemp -d)"
+readonly TMPDIR
 
 nsc "$@" || err 'Unable to scan target.'
 fix_perms || err 'Unable to fix permissions.'
 
-echo "Scan finished, results available in ${tmpdir}."
+echo "Scan finished, results available in ${TMPDIR}."

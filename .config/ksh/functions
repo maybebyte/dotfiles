@@ -360,9 +360,9 @@ nc_head [path] -c [domain] 443' >&2
 
   esac
 
-  path="$1"
+  URI="$1"
   shift
-  printf "%s\r\n\r\n" "HEAD ${path} HTTP/1.0" | nc_tor "$@"
+  printf "%s\r\n\r\n" "HEAD ${URI} HTTP/1.0" | nc_tor "$@"
 }
 
 # nc(1) + tor(1) = fun.
