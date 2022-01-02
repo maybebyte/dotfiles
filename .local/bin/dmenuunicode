@@ -79,11 +79,10 @@ readonly EMOJI="${CHOSEN_ENTRY%% *}"
 grep -q -- "^${EMOJI}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
 
 
-# important to use printf %s here, as ${emoji} is user input
+# important to use 'printf %s' here, as ${EMOJI} is user input
 #
-# also important to not send a newline to yank() aka xclip(1),
-# otherwise pasting from the clipboard in certain messengers will send
-# the message.
+# also important to not send a newline to xclip(1), otherwise pasting
+# from the clipboard in certain messengers will send the message.
 if printf '%s' "${EMOJI}" | xclip -selection clipboard; then
   notify-send -- "${EMOJI} copied to clipboard."
 
