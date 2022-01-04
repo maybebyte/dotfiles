@@ -463,6 +463,30 @@ readmd [markdown document]' >&2
   lowdown -T 'term' --term-no-colour "$1" | less
 }
 
+# sorts playlists and removes unique entries.
+# note that sortm3u modifies (replaces) the original copy.
+sortm3u() {
+  [ -n "$*" ] || {
+    echo 'sortm3u /path/to/m3ufile ...
+note that sortm3u modifies (replaces) the original copy.' >&2
+    return 1
+  }
+
+  for m3ufile in "$@"; do
+
+    tmpfile="$(mktemp)"
+
+    [ -f "${m3ufile}" ] || {
+      echo "${m3ufile} is not a file." >&2
+      continue
+    }
+
+    sort -u "${m3ufile}" > "${tmpfile}"
+    mv "${tmpfile}" "${m3ufile}"
+
+  done
+}
+
 # usage:
 #
 # tarpv [archive target] > filename
