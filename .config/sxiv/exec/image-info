@@ -8,12 +8,12 @@
 #   $2: image width
 #   $3: image height
 
-s=" | " # field separator
+S=" | " # field separator
 
 exec 2>/dev/null
 
-filename="${1##*/}"
-filesize="$(du -Hh -- "$1" | cut -f 1)"
-geometry="${2}x${3}"
+FILENAME="${1##*/}"
+FILESIZE="$(du -Hh -- "$1" | cut -f 1)"
+GEOMETRY="$2x$3"
 
-printf '%s' "${filesize}${s}${geometry}${s}${filename}"
+printf '%s' "${FILESIZE}${S}${GEOMETRY}${S}${FILENAME}"

@@ -1,6 +1,6 @@
 #!/bin/sh
 # shellcheck disable=SC1090
-# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+# Copyright (c) 2020-2022 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -39,17 +39,17 @@ ${0##*/} [target] [options]"
 
 
 nsc() {
-  priv nmap -Av --osscan-limit --privileged \
-    -oA "${tmpdir}/nmap-$(date '+%F')" "$@"
+  priv nmap -Av --osscan-limit \
+    -oA "${TMPDIR}/nmap-$(date '+%F')" "$@"
 }
 
 
 fix_perms() {
-  readonly unpriv_user="${LOGNAME}"
+  readonly UNPRIV_USER="${LOGNAME}"
 
-  priv chown -R -- "${unpriv_user}:${unpriv_user}" "${tmpdir}"
+  priv chown -R -- "${UNPRIV_USER}:${UNPRIV_USER}" "${TMPDIR}"
 
-  find "${tmpdir}"                                    \
+  find "${TMPDIR}"                                    \
   \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
   \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
 }
@@ -58,10 +58,10 @@ fix_perms() {
 [ -x "$(command -v -- 'nmap')" ] || err 'nmap not found in PATH or not executable.'
 [ -z "$1" ] && usage
 
-tmpdir="$(mktemp -d)"
-readonly tmpdir
+TMPDIR="$(mktemp -d)"
+readonly TMPDIR
 
 nsc "$@" || err 'Unable to scan target.'
 fix_perms || err 'Unable to fix permissions.'
 
-echo "Scan finished, results available in ${tmpdir}."
+echo "Scan finished, results available in ${TMPDIR}."

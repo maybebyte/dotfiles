@@ -1,6 +1,6 @@
 #!/bin/sh
 # shellcheck disable=SC1090,SC2154
-# Copyright (c) 2020-2021 Ashlen <eurydice@riseup.net>
+# Copyright (c) 2020-2022 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -36,17 +36,17 @@ apm
 notify-send
 EOF
 
+
 # if A/C is connected, exit.
-[ "$(apm -a)" = 1 ] && exit 0
+[ "$(apm -a)" -eq 1 ] && exit 0
+
 
 # if battery is missing, exit.
-BATT_STATUS="$(apm -b)"
-readonly BATT_STATUS
-
-case "${BATT_STATUS}" in
+case "$(apm -b)" in
   4)   err "Battery status is 'absent.'"  ;;
   255) err "Battery status is 'unknown.'" ;;
 esac
+
 
 BATT_PERCENT="$(apm -l)"
 readonly BATT_PERCENT

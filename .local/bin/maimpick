@@ -62,29 +62,29 @@ maim_with_flags() {
 
 
 present_options() {
-  case "$(menu -l "${num_of_opts}" -p "Screenshot which area?")" in
+  case "$(menu -l "${NUM_OF_OPTS}" -p "Screenshot which area?")" in
 
     'a selected area')
-      filename="selected-$(date '+%Y%m%d-%H%M%S').png"
-      readonly filename
+      FILENAME="selected-$(date '+%Y%m%d-%H%M%S').png"
+      readonly FILENAME
 
-      maim_with_flags -s -- "${savedir}/${filename}"
+      maim_with_flags -s -- "${SAVEDIR}/${FILENAME}"
 
       ;;
 
     'current window')
-      filename="window-$(date '+%Y%m%d-%H%M%S').png"
-      readonly filename
+      FILENAME="window-$(date '+%Y%m%d-%H%M%S').png"
+      readonly FILENAME
 
-      maim_with_flags -i "$(xdotool getactivewindow)" -- "${savedir}/${filename}"
+      maim_with_flags -i "$(xdotool getactivewindow)" -- "${SAVEDIR}/${FILENAME}"
 
       ;;
 
     'full screen')
-      filename="full-$(date '+%Y%m%d-%H%M%S').png"
-      readonly filename
+      FILENAME="full-$(date '+%Y%m%d-%H%M%S').png"
+      readonly FILENAME
 
-      maim_with_flags -- "${savedir}/${filename}"
+      maim_with_flags -- "${SAVEDIR}/${FILENAME}"
 
       ;;
 
@@ -123,16 +123,16 @@ EOF
 
 import_colors_sh
 
-readonly options='a selected area
+readonly OPTIONS='a selected area
 current window
 full screen
 a selected area (copy)
 current window (copy)
 full screen (copy)'
 
-readonly savedir="${HOME}/screenshots"
+readonly SAVEDIR="${HOME}/screenshots"
 
-num_of_opts="$(echo "${options}" | wc -l)"
-readonly num_of_opts
+NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
+readonly NUM_OF_OPTS
 
-echo "${options}" | present_options
+echo "${OPTIONS}" | present_options
