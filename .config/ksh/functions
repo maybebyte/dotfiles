@@ -474,12 +474,12 @@ note that sortm3u modifies (replaces) the original copy.' >&2
 
   for m3ufile in "$@"; do
 
-    tmpfile="$(mktemp)"
-
     [ -f "${m3ufile}" ] || {
       echo "${m3ufile} is not a file." >&2
       continue
     }
+
+    tmpfile="$(mktemp)"
 
     sort -u "${m3ufile}" > "${tmpfile}"
     mv "${tmpfile}" "${m3ufile}"
