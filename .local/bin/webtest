@@ -24,7 +24,7 @@ err() {
 
 
 usage() {
-  err "usage: ${0##*/} [domain] [markdown directory] [server directory]
+  err "usage: ${0##*/} [-i indexfile] [domain] [markdown directory] [server directory]
 
 -i: Specify the name of an alternate index file (by default, INDEX is
     set to index.md). It must be present in the provided markdown
