@@ -3,6 +3,6 @@
 --continue
 --embed-subs
 --embed-thumbnail
---output "${HOME}/Downloads/%(uploader)s/%(upload_date)s.%(title)s.%(id)s.%(ext)s"
+--output "${HOME}/Downloads/%(uploader)s/%(title)s.%(ext)s"
 --write-description
 --write-info-json
