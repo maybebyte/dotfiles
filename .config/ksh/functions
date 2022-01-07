@@ -479,10 +479,25 @@ note that sortfile modifies (replaces) the original copy.' >&2
       continue
     }
 
-    tmpfile="$(mktemp)"
+    [ -w "${file_to_be_sorted}" ] || {
+      echo "${file_to_be_sorted} is not writable." >&2
+      continue
+    }
 
-    sort -u "${file_to_be_sorted}" > "${tmpfile}"
-    mv "${tmpfile}" "${file_to_be_sorted}"
+    tmpfile="$(mktemp)" || {
+      echo "${tmpfile} could not be created, exiting." >&2
+      return 1
+    }
+
+    sort -u "${file_to_be_sorted}" > "${tmpfile}" || {
+      echo "${file_to_be_sorted} could not be sorted and written to ${tmpfile}." >&2
+      continue
+    }
+
+    mv "${tmpfile}" "${file_to_be_sorted}" || {
+      echo "${tmpfile} could not be moved to ${file_to_be_sorted}." >&2
+      continue
+    }
 
   done
 }
