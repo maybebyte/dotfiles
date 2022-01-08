@@ -69,7 +69,9 @@ conv16() {
   # according to sox(1), most noise shaping filters are only available
   # at 44.1kHz, so that is the chosen sample rate.
   if sox "$1" -SGb 16 "${STAGING_FILE}" rate -v 44100 dither -s; then
-    mv -- "$1" "$1.bak"
+    [ "${DELETE}" = 'yes' ] && rm -- "$1"
+    [ -e "$1" ] && mv -- "$1" "$1-24bit.bak"
+
     mv -- "${STAGING_FILE}" "$1"
 
   else
@@ -89,11 +91,10 @@ splitflac() {
     err 'Unable to split the FLAC file.'
   fi
 
-  mv -- "$2" "$2.bak"
+  [ "${DELETE}" = 'yes' ] && rm -- "$2"
+  [ -e "$2" ] && mv -- "$2" "$2.bak"
 
   "${CUETAG}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
-
-  [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
 }
 
 
