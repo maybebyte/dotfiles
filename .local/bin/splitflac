@@ -124,18 +124,18 @@ shift $((OPTIND - 1))
 
 assign_cuetag
 
-if [ "${CONVERT}" = 'yes' ]; then
+[ "${CONVERT}" = 'yes' ] && {
   # makes sense to check dependency only when it's really needed
   echo 'sox' | check_deps
   conv16 "$2"
-fi
+}
 
 # checks for sector boundary errors and fixes them if they are present
 # before splitting the FLAC file.
-if shnfix -c -- "$2"; then
+shnfix -c -- "$2" && {
   shnfix -o flac -- "$2"
   mv -- "${2%.flac}-fixed.flac" "$2"
-fi
+}
 
 CRLESS_CUESHEET="$(mktemp)"
 readonly CRLESS_CUESHEET
