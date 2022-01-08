@@ -69,6 +69,9 @@ conv16() {
   # according to sox(1), most noise shaping filters are only available
   # at 44.1kHz, so that is the chosen sample rate.
   if sox "$1" -SGb 16 "${STAGING_FILE}" rate -v 44100 dither -s; then
+    [ "${DELETE}" = 'yes' ] && rm -- "$1"
+    [ -e "$1" ] && mv -- "$1" "$1-24bit.bak"
+
     mv -- "${STAGING_FILE}" "$1"
 
   else
@@ -88,11 +91,10 @@ splitflac() {
     err 'Unable to split the FLAC file.'
   fi
 
-  mv -- "$2" "$2.bak"
+  [ "${DELETE}" = 'yes' ] && rm -- "$2"
+  [ -e "$2" ] && mv -- "$2" "$2.bak"
 
   "${CUETAG}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
-
-  [ "${DELETE}" = 'yes' ] && rm -- "$2.bak"
 }
 
 
@@ -122,19 +124,18 @@ shift $((OPTIND - 1))
 
 assign_cuetag
 
-# TODO: this should back up the original 24-bit FLAC file.
-if [ "${CONVERT}" = 'yes' ]; then
+[ "${CONVERT}" = 'yes' ] && {
   # makes sense to check dependency only when it's really needed
   echo 'sox' | check_deps
   conv16 "$2"
-fi
+}
 
 # checks for sector boundary errors and fixes them if they are present
 # before splitting the FLAC file.
-if shnfix -c -- "$2"; then
+shnfix -c -- "$2" && {
   shnfix -o flac -- "$2"
   mv -- "${2%.flac}-fixed.flac" "$2"
-fi
+}
 
 CRLESS_CUESHEET="$(mktemp)"
 readonly CRLESS_CUESHEET
