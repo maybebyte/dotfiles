@@ -93,46 +93,49 @@ alias                                                                  \
 
 
 alias                                                                  \
-  anonftp="torsocks ftp -nU ''"                                        \
-  anonsh='torsocks --shell'                                            \
   apr='apropos'                                                        \
   c='clear'                                                            \
   cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr'      \
   df='df -h'                                                           \
   dtsu='shutdown now'                                                  \
   du='du -h'                                                           \
-  exifrm='exiftool -all= '                                             \
-  ftp="ftp -nU ''"                                                     \
-  irssi='proxychains4 irssi'                                           \
   la='ll -A'                                                           \
   ll='ls -lh'                                                          \
   llb='ll -Sr'                                                         \
   lln='ll -tr'                                                         \
   ls="\${LS} -F"                                                       \
   lsd="find . -maxdepth 1 -iname '.[^.]*'"                             \
+  mkd='mkdir -p'                                                       \
+  off='shutdown -p now'                                                \
+  re='shutdown -r now'                                                 \
+  readmsg='less /var/log/messages'                                     \
+  readx='less /var/log/Xorg.0.log'                                     \
+  shre=". \${XDG_CONFIG_HOME}/ksh/kshrc"                               \
+  tailmsg='tail -f /var/log/messages'                                  \
+  today='date +%F'                                                     \
+  up='uptime'
+
+
+alias                                                                  \
+  anonftp="torsocks ftp -nU ''"                                        \
+  anonsh='torsocks --shell'                                            \
+  exifrm='exiftool -all= '                                             \
+  ftp="ftp -nU ''"                                                     \
+  irssi='proxychains4 irssi'                                           \
   m='neomutt'                                                          \
   mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
-  mkd='mkdir -p'                                                       \
   mntsafe='mount -o noexec,nosuid,nodev'                               \
   mus='ncmpcpp 2>/dev/null'                                            \
   n='nnn'                                                              \
   nb='newsboat'                                                        \
   nk="nikto -output nikto-\$(date '+%F').txt -host"                    \
   o='mimeopen'                                                         \
-  off='shutdown -p now'                                                \
   pdfman='MANPAGER=zathura man -T pdf'                                 \
-  re='shutdown -r now'                                                 \
-  readmsg='less /var/log/messages'                                     \
-  readx='less /var/log/Xorg.0.log'                                     \
   scan='nmap -sn'                                                      \
-  shre=". \${XDG_CONFIG_HOME}/ksh/kshrc"                               \
   sspl='searchsploit'                                                  \
   stcli='speedtest-cli'                                                \
-  tailmsg='tail -f /var/log/messages'                                  \
-  today='date +%F'                                                     \
   trem='transmission-remote'                                           \
   tuir='torsocks tuir'                                                 \
-  up='uptime'
 
 
 if [ -z "${EDITOR}" ]; then
