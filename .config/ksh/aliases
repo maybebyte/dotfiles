@@ -14,7 +14,7 @@ complain_undefined() {
 
 pf_aliases() {
   alias                                                                \
-    epf='e /etc/pf.conf'                                               \
+    epf="\${EDITOR} /etc/pf.conf"                                      \
     pfdump='tcpdump -er /var/log/pflog'                                \
     pfdumpb='pfdump action block'                                      \
     pfdumpp='pfdump action pass'                                       \
