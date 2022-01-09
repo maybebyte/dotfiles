@@ -604,7 +604,7 @@ wttr [location]' >&2
 ytpl() {
   yt-dlp \
     --download-archive './archive.txt' \
-    --output './.%(title)s.%(ext)s' \
+    --output './%(title)s.%(ext)s' \
     --match-filter "playlist_title != 'Liked videos' & playlist_title != 'Favorites'" \
     "$@"
 }
