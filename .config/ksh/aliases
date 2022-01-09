@@ -106,6 +106,7 @@ alias                                                                  \
   ls="\${LS} -F"                                                       \
   lsd="find . -maxdepth 1 -iname '.[^.]*'"                             \
   mkd='mkdir -p'                                                       \
+  mntsafe='mount -o noexec,nosuid,nodev'                               \
   off='shutdown -p now'                                                \
   re='shutdown -r now'                                                 \
   readmsg='less /var/log/messages'                                     \
@@ -116,26 +117,32 @@ alias                                                                  \
   up='uptime'
 
 
-alias                                                                  \
-  anonftp="torsocks ftp -nU ''"                                        \
-  anonsh='torsocks --shell'                                            \
-  exifrm='exiftool -all= '                                             \
-  ftp="ftp -nU ''"                                                     \
-  irssi='proxychains4 irssi'                                           \
-  m='neomutt'                                                          \
-  mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
-  mntsafe='mount -o noexec,nosuid,nodev'                               \
-  mus='ncmpcpp 2>/dev/null'                                            \
-  n='nnn'                                                              \
-  nb='newsboat'                                                        \
-  nk="nikto -output nikto-\$(date '+%F').txt -host"                    \
-  o='mimeopen'                                                         \
-  pdfman='MANPAGER=zathura man -T pdf'                                 \
-  scan='nmap -sn'                                                      \
-  sspl='searchsploit'                                                  \
-  stcli='speedtest-cli'                                                \
-  trem='transmission-remote'                                           \
-  tuir='torsocks tuir'                                                 \
+[ -x "$(command -v -- 'exiftool')" ]            && alias exifrm='exiftool -all= '
+[ -x "$(command -v -- 'ftp')" ]                 && alias ftp="ftp -nU ''"
+[ -x "$(command -v -- 'mimeopen')" ]            && alias o='mimeopen'
+[ -x "$(command -v -- 'ncmpcpp')" ]             && alias mus='ncmpcpp 2>/dev/null'
+[ -x "$(command -v -- 'neomutt')" ]             && alias m='neomutt'
+[ -x "$(command -v -- 'newsboat')" ]            && alias nb='newsboat'
+[ -x "$(command -v -- 'nikto')" ]               && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
+[ -x "$(command -v -- 'nmap')" ]                && alias scan='nmap -sn'
+[ -x "$(command -v -- 'nnn')" ]                 && alias n='nnn'
+[ -x "$(command -v -- 'searchsploit')" ]        && alias sspl='searchsploit'
+[ -x "$(command -v -- 'speedtest-cli')" ]       && alias stcli='speedtest-cli'
+[ -x "$(command -v -- 'transmission-remote')" ] && alias trem='transmission-remote'
+[ -x "$(command -v -- 'wget')" ]                && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
+[ -x "$(command -v -- 'zathura')" ]             && alias pdfman='MANPAGER=zathura man -T pdf'
+
+
+[ -x "$(command -v -- 'torsocks')" ] && {
+  alias anonsh='torsocks --shell'
+  [ -x "$(command -v -- 'ftp')" ]  && alias anonftp="torsocks ftp -nU ''"
+  [ -x "$(command -v -- 'tuir')" ] && alias tuir='torsocks tuir'
+}
+
+
+[ -x "$(command -v -- 'proxychains4')" ] \
+  && [ -x "$(command -v -- 'irssi')" ] \
+  && alias irssi='proxychains4 irssi'
 
 
 if [ -z "${EDITOR}" ]; then
