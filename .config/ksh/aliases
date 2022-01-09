@@ -15,7 +15,7 @@ complain_undefined() {
 pf_aliases() {
   alias                                                                \
     epf="\${EDITOR} /etc/pf.conf"                                      \
-    pfdump='tcpdump -er /var/log/pflog'                                \
+    pfdump='tcpdump -ler /var/log/pflog'                               \
     pfdumpb='pfdump action block'                                      \
     pfdumpp='pfdump action pass'                                       \
     pfload='pfctl -f /etc/pf.conf'                                     \
@@ -23,7 +23,7 @@ pf_aliases() {
     pfon='pfctl -e'                                                    \
     pfrules='pfshow rules'                                             \
     pfshow='pfctl -s'                                                  \
-    pftail='tcpdump -ei pflog0'                                        \
+    pftail='tcpdump -lei pflog0'                                       \
     pftailb='pftail action block'                                      \
     pftailp='pftail action pass'                                       \
     pftest='pfload -nv'
@@ -79,7 +79,7 @@ openbsd_aliases() {
       renetnic="renet \${NIC}"                                         \
       nicre='nicoff && nicon'                                          \
       nicshow="ifconfig \${NIC}"                                       \
-      nictail="tcpdump -pi \${NIC}"
+      nictail="tcpdump -lpi \${NIC}"
 
   [ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
