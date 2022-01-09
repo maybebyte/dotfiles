@@ -1,20 +1,12 @@
 # use nvim if it's installed, vi otherwise
-if [ -x "$(command -v -- 'nvim')" ]; then
-  export EDITOR='nvim'
+[ -x "$(command -v -- 'nvim')" ]    && export EDITOR='nvim'
+[ -z "${EDITOR}" ]                  && export EDITOR='vi'
 
-else
-  export EDITOR='vi'
-
-fi
 
 # use colorls if it's installed, ls otherwise
-if [ -x "$(command -v -- 'colorls')" ]; then
-  export LS='colorls'
+[ -x "$(command -v -- 'colorls')" ] && export LS='colorls'
+[ -z "${LS}" ]                      && export LS='ls'
 
-else
-  export LS='ls'
-
-fi
 
 export                                          \
   BROWSER='lynx'                                \
@@ -34,6 +26,7 @@ export                                          \
   XDG_STATE_HOME="${HOME}/.local/state"         \
   SITE='https://amissing.link'
 
+
 # these have to come after XDG_* are defined
 export                                          \
   GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"          \
@@ -42,10 +35,6 @@ export                                          \
   XMONAD_CONFIG_DIR="${XDG_CONFIG_HOME}/xmonad" \
   XMONAD_DATA_DIR="${XDG_DATA_HOME}/xmonad"
 
-# logging
-export DOTFILES_LOG="${XDG_DATA_HOME}/dotfiles.log"
-mkdir -p -- "${DOTFILES_LOG%/*}"
-:>"${DOTFILES_LOG}"
 
 # OS specific actions
 # written so it can be expanded later if needed
@@ -76,6 +65,7 @@ case "$(uname)" in
 
 esac
 
+
 # host-specific actions
 case "$(hostname -s)" in
 
@@ -95,6 +85,7 @@ case "$(hostname -s)" in
 
 esac
 
+
 # sh/ksh initialization
 #
 # this should come last in .profile so that one can assume
@@ -104,6 +95,6 @@ if [ -r "${XDG_CONFIG_HOME}/ksh/kshrc" ]; then
   export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
 
 else
-  echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable." 2>>"${DOTFILES_LOG}" >&2
+  echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable."
 
 fi
