@@ -5,391 +5,275 @@ complain_noexec() {
   return 1
 }
 
+
 complain_undefined() {
   echo "[$(date '+%F %H:%M:%S')]: $1 undefined, so related aliases disabled." >&2
   return 1
 }
 
+
 pf_aliases() {
-  # pfctl(8)
-  if ! [ -x "$(command -v -- 'pfctl')" ]; then
-    complain_noexec 'pfctl' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      pfload='pfctl -f /etc/pf.conf'                                     \
-      pfoff='pfctl -d'                                                   \
-      pfon='pfctl -e'                                                    \
-      pfrules='pfshow rules'                                             \
-      pfshow='pfctl -s'                                                  \
-      pftest='pfload -nv'
-
-  fi
-
-  # tcpdump(8)
-  if ! [ -x "$(command -v -- 'tcpdump')" ]; then
-    complain_noexec 'tcpdump' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      pfdump='tcpdump -er /var/log/pflog'                                \
-      pfdumpb='pfdump action block'                                      \
-      pfdumpp='pfdump action pass'                                       \
-      pftail='tcpdump -ei pflog0'                                        \
-      pftailb='pftail action block'                                      \
-      pftailp='pftail action pass'
-
-  fi
-
-  alias epf='e /etc/pf.conf'
+  alias                                                                \
+    epf='e /etc/pf.conf'                                               \
+    pfdump='tcpdump -er /var/log/pflog'                                \
+    pfdumpb='pfdump action block'                                      \
+    pfdumpp='pfdump action pass'                                       \
+    pfload='pfctl -f /etc/pf.conf'                                     \
+    pfoff='pfctl -d'                                                   \
+    pfon='pfctl -e'                                                    \
+    pfrules='pfshow rules'                                             \
+    pfshow='pfctl -s'                                                  \
+    pftail='tcpdump -ei pflog0'                                        \
+    pftailb='pftail action block'                                      \
+    pftailp='pftail action pass'                                       \
+    pftest='pfload -nv'
 }
 
-general_aliases() {
-  # assorted
-  alias                                                                  \
-    cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr'      \
-    exifrm='exiftool -all= '                                             \
-    irssi='proxychains4 irssi'                                           \
-    mus='ncmpcpp 2>/dev/null'                                            \
-    n='nnn'                                                              \
-    nb='newsboat'                                                        \
-    o='mimeopen'                                                         \
-    today='date +%F'                                                     \
-    tuir='torsocks tuir'
-
-  # basic utilities
-  alias                                                                  \
-    c='clear'                                                            \
-    df='df -h'                                                           \
-    du='du -h'                                                           \
-    la='ll -A'                                                           \
-    ll='ls -lh'                                                          \
-    llb='ll -Sr'                                                         \
-    lln='ll -tr'                                                         \
-    ls="\${LS} -F"                                                       \
-    mkd='mkdir -p'                                                       \
-    lsd="find . -maxdepth 1 -iname \".[^.]*\""                           \
-    mkd="mkdir -p"                                                       \
-    shre=". \${XDG_CONFIG_HOME}/ksh/kshrc"
-
-  # editing
-  if [ -z "${EDITOR}" ]; then
-    # shellcheck disable=SC2016
-    complain_undefined '${EDITOR}' 2>>"${DOTFILES_LOG}"
-
-  elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
-    complain_noexec "${EDITOR}" 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      e="\${EDITOR}"                                                     \
-      efont="e \${XDG_CONFIG_HOME}/fontconfig/fonts.conf"                \
-      ehst='e /etc/hosts'                                                \
-      ek="e \${XDG_CONFIG_HOME}/ksh/kshrc"                               \
-      eka="e \${XDG_CONFIG_HOME}/ksh/aliases"                            \
-      ekf="e \${XDG_CONFIG_HOME}/ksh/functions"                          \
-      ekp="e \${XDG_CONFIG_HOME}/ksh/prompt"                             \
-      ekv="e \${XDG_CONFIG_HOME}/ksh/vars"                               \
-      empv="e \${XDG_CONFIG_HOME}/mpv/mpv.conf"                          \
-      emusb="e \${XDG_CONFIG_HOME}/ncmpcpp/bindings"                     \
-      emusc="e \${XDG_CONFIG_HOME}/ncmpcpp/config"                       \
-      enb="e \${XDG_CONFIG_HOME}/newsboat/config"                        \
-      enbu="e \${XDG_CONFIG_HOME}/newsboat/urls"                         \
-      enm="e \${XDG_CONFIG_HOME}/neomutt/neomuttrc"                      \
-      eres='e /etc/resolv.conf'                                          \
-      esxh="e \${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"                         \
-      esys='e /etc/sysctl.conf'                                          \
-      etm="e \${HOME}/.tmux.conf"                                        \
-      ev="e \${XDG_CONFIG_HOME}/nvim/init.vim"                           \
-      exm="e \${XDG_CONFIG_HOME}/xmonad/xmonad.hs"                       \
-      exmb="e \${XDG_CONFIG_HOME}/xmobar/xmobarrc"                       \
-      exr="e \${HOME}/.Xresources"                                       \
-      exs="e \${HOME}/.xsession"
-  fi
-
-  # git
-  if ! [ -x "$(command -v -- 'git' )" ]; then
-    complain_noexec 'git' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"        \
-      da='d add'                                                         \
-      dcmt='d commit -a'                                                 \
-      ddiff='d diff'                                                     \
-      dgr='d grep'                                                       \
-      dlg='d log'                                                        \
-      dls="d ls-files \${HOME}"                                          \
-      dpsh='d push'                                                      \
-      dre='d restore'                                                    \
-      ds='d status'                                                      \
-      g='git'                                                            \
-      ga='g add'                                                         \
-      gcl='g clone'                                                      \
-      gcmt='g commit -a'                                                 \
-      gdiff='g diff'                                                     \
-      ggr='g grep'                                                       \
-      glg='g log'                                                        \
-      gls='g ls-files'                                                   \
-      gpsh='g push'                                                      \
-      gre='g restore'                                                    \
-      gs='g status'
-
-  fi
-
-  # keepass
-  if ! [ -x "$(command -v -- 'keepassxc-cli')" ]; then
-    complain_noexec 'keepassxc-cli' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      kp='keepassxc-cli'                                                 \
-      kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
-
-  fi
-
-  # man
-  alias                                                                  \
-    apr='apropos'                                                        \
-    pdfman='MANPAGER=zathura man -T pdf'
-
-  # navigation
-  alias                                                                  \
-    ..='cd ..'                                                           \
-    ...='cd ../..'                                                       \
-    ....='cd ../../..'                                                   \
-    .....='cd ../../../..'                                               \
-
-  # netstat(1)
-  if ! [ -x "$(command -v -- 'netstat')" ]; then
-    complain_noexec 'netstat' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      ntstr6='netstat -rf inet6'                                         \
-      ntstr='netstat -rf inet'                                           \
-      ntst6='netstat -f inet6'                                           \
-      ntst='netstat -f inet'                                             \
-
-    case "${OS}" in
-
-      'FreeBSD')
-        # FreeBSD netstat(1) has no -l
-
-        ;;
-
-      *)
-        alias                                                            \
-          ntstl6='netstat -lf inet6'                                     \
-          ntstl='netstat -lf inet'
-        ;;
-
-    esac
-
-  fi
-
-  # networking
-  alias tnet="ping \${SITE##*//}"
-
-  # sec
-  alias                                                                  \
-    nk="nikto -output nikto-\$(date '+%F').txt -host"                    \
-    scan='nmap -sn'                                                      \
-    sspl='searchsploit'
-
-  # system
-  alias                                                                  \
-    dtsu='shutdown now'                                                  \
-    mntsafe='mount -o noexec,nosuid,nodev'                               \
-    off='shutdown -p now'                                                \
-    re='shutdown -r now'                                                 \
-    up='uptime'
-
-  # taskwarrior
-  if ! [ -x "$(command -v -- 'task')" ]; then
-    complain_noexec 'task' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      t='task'                                                           \
-      ta='t add'                                                         \
-      tafin='ta project:finances'                                        \
-      tagroc='ta project:groceries'                                      \
-      taedu='ta project:education'                                       \
-      taself='ta project:selfcare'                                       \
-      tashop='ta project:shopping'                                       \
-      tatech='ta project:tech'                                           \
-      tconf='t config'                                                   \
-      td='t done'                                                        \
-      tdel='t delete'                                                    \
-      tdue='task due.before:today ids'                                   \
-      tedu='tls project:education'                                       \
-      tfin='tls project:finances'                                        \
-      tgroc='tls project:groceries'                                      \
-      tid='t ids'                                                        \
-      tls='t list'                                                       \
-      tmod='t modify'                                                    \
-      tself='tls project:selfcare'                                       \
-      tshop='tls project:shopping'                                       \
-      tt='tls due:today'                                                 \
-      ttech='tls project:tech'                                           \
-      tup="td \$(tdue)"
-
-  fi
-
-  # tmux
-  if ! [ -x "$(command -v -- 'tmux')" ]; then
-    complain_noexec 'tmux' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      tm='tmux'                                                          \
-      tma='tm attach'                                                    \
-      tmk='tm kill-server'                                               \
-      tml='tm list-sessions'
-
-  fi
-
-  # web
-  # for whatever reason, anonftp requires the options from ftp to be
-  # specified again in the anonftp alias for them to work, i.e. for an
-  # empty user agent and auto-login suppression.
-  alias                                                                  \
-    anonftp="torsocks ftp -nU ''"                                        \
-    anonsh='torsocks --shell'                                            \
-    ftp="ftp -nU ''"                                                     \
-    m='neomutt'                                                          \
-    mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
-    stcli='speedtest-cli'                                                \
-    trem='transmission-remote'
-
-  # viewing log files
-  alias                                                                  \
-    readmsg='less /var/log/messages'                                     \
-    readx='less /var/log/Xorg.0.log'                                     \
-    tailmsg='tail -f /var/log/messages'
-
-  # yt-dlp
-  if ! [ -x "$(command -v -- 'yt-dlp')" ]; then
-    complain_noexec 'yt-dlp' 2>>"${DOTFILES_LOG}"
-
-  else
-    alias                                                                \
-      yt='yt-dlp'                                                        \
-      yta='yt -xf bestaudio/best'                                        \
-      ytdesc='yt --get-description'                                      \
-      ytlen='yt --get-duration'                                          \
-      ytrm='yt --rm-cache-dir'
-
-  fi
-}
 
 openbsd_aliases() {
-  # check the date of the latest snapshot
-  alias chksn="w3m \$(head -1 /etc/installurl)/snapshots/amd64"
+  alias                                                                \
+    dsklab='disklabel -p g'                                            \
+    eunw="\${EDITOR} /etc/unwind.conf"                                 \
+    exip="ftp -VMo - https://ifconfig.me && echo"                      \
+    pkgL='pkgq -L'                                                     \
+    pkga='pkg_add'                                                     \
+    pkgas='pkga -D snap'                                               \
+    pkgd='pkg_delete'                                                  \
+    pkgda='pkgd -a'                                                    \
+    pkgl='pkgq -mz'                                                    \
+    pkgq='pkg_info'                                                    \
+    pkgqo='pkgq -E'                                                    \
+    pkgqs='pkg_info -D snap'                                           \
+    pkgs='pkgq -Q'                                                     \
+    pkgss='pkgqs -Q'                                                   \
+    pkgup='pkga -u'                                                    \
+    pkgups='pkgup -D snap'                                             \
+    rcg='rcctl get'                                                    \
+    rclfail='rcctl ls failed'                                          \
+    rclon='rcctl ls on'                                                \
+    rclstr='rcctl ls started'                                          \
+    rcoff='rcctl disable'                                              \
+    rcon='rcctl enable'                                                \
+    rcre='rcctl restart'                                               \
+    rcrel='rcctl reload'                                               \
+    rcset='rcctl set'                                                  \
+    rcst='rcctl stop'                                                  \
+    rcstr='rcctl start'                                                \
+    rcstrf='rcctl -f start'                                            \
+    readhttp='less /var/www/logs/access.log'                           \
+    readmail='less /var/log/maillog'                                   \
+    readsec='less /var/log/secure'                                     \
+    renet='sh /etc/netstart'                                           \
+    sysnet='systat netstat'                                            \
+    tailhttp='tail -f /var/www/logs/access.log'                        \
+    tailmail='tail -f /var/log/maillog'                                \
+    webtest="webtest \${SITE} \${MARKDOWNDIR} \${SRVDIR}"
 
-  # editing
-  alias                                                                  \
-    ehn="e /etc/hostname.\${NIC}"                                        \
-    eunw='e /etc/unwind.conf'
 
-  # ifconfig(8)
-  if [ -z "${NIC}" ]; then
-    # shellcheck disable=SC2016
-    complain_undefined '${NIC}' 2>>"${DOTFILES_LOG}"
+  [ -n "${NIC}" ] &&
+    alias                                                              \
+      ehn="e /etc/hostname.\${NIC}"                                    \
+      nicdel="ifconfig \${NIC} delete"                                 \
+      nicoff="ifconfig \${NIC} down"                                   \
+      nicon="ifconfig \${NIC} up"                                      \
+      renetnic="renet \${NIC}"                                         \
+      nicre='nicoff && nicon'                                          \
+      nicshow="ifconfig \${NIC}"                                       \
+      nictail="tcpdump -pi \${NIC}"
 
-  else
-    alias                                                                \
-      nicdel="ifconfig \${NIC} delete"                                   \
-      nicoff="ifconfig \${NIC} down"                                     \
-      nicon="ifconfig \${NIC} up"                                        \
-      nicre='nicoff && nicon'                                            \
-      nicshow="ifconfig \${NIC}"
-
-  fi
-
-  # networking
-  alias                                                                  \
-    exip="ftp -VMo - https://ifconfig.me && echo"                        \
-    nictail="tcpdump -pi \${NIC}"                                        \
-    renet='sh /etc/netstart'                                             \
-    renetnic="renet \${NIC}"                                             \
-    sysnet='systat netstat'                                              \
-    tlan="ping \${GATEWAY}"
-
-  # pkg
-  alias                                                                  \
-    pkgL='pkgq -L'                                                       \
-    pkga='pkg_add'                                                       \
-    pkgas='pkga -D snap'                                                 \
-    pkgd='pkg_delete'                                                    \
-    pkgda='pkgd -a'                                                      \
-    pkgl='pkgq -mz'                                                      \
-    pkgq='pkg_info'                                                      \
-    pkgqs='pkg_info -D snap'                                             \
-    pkgqo='pkgq -E'                                                      \
-    pkgs='pkgq -Q'                                                       \
-    pkgss='pkgqs -Q'                                                     \
-    pkgup='pkga -u'                                                      \
-    pkgups='pkgup -D snap'
-
-  # rcctl(8)
-  alias                                                                  \
-    rcoff='rcctl disable'                                                   \
-    rcon='rcctl enable'                                                     \
-    rcg='rcctl get'                                                         \
-    rclfail='rcctl ls failed'                                               \
-    rclon='rcctl ls on'                                                     \
-    rclstr='rcctl ls started'                                               \
-    rcre='rcctl restart'                                                    \
-    rcrel='rcctl reload'                                                    \
-    rcset='rcctl set'                                                       \
-    rcst='rcctl stop'                                                       \
-    rcstr='rcctl start'                                                     \
-    rcstrf='rcctl -f start'
-
-  # system
-  alias dsklab='disklabel -p g'
-
-  # viewing log files
-  alias                                                                  \
-    readhttp='less /var/www/logs/access.log'                             \
-    readmail='less /var/log/maillog'                                     \
-    readsec='less /var/log/secure'                                       \
-    tailhttp='tail -f /var/www/logs/access.log'                          \
-    tailmail='tail -f /var/log/maillog'
-
-  # website test
-  alias webtest="webtest \${SITE} \${MARKDOWNDIR} \${SRVDIR}"
+  [ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
 
+
+alias                                                                  \
+  ..='cd ..'                                                           \
+  ...='cd ../..'                                                       \
+  ....='cd ../../..'                                                   \
+  .....='cd ../../../..'
+
+
+alias                                                                  \
+  anonftp="torsocks ftp -nU ''"                                        \
+  anonsh='torsocks --shell'                                            \
+  apr='apropos'                                                        \
+  c='clear'                                                            \
+  cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr'      \
+  df='df -h'                                                           \
+  dtsu='shutdown now'                                                  \
+  du='du -h'                                                           \
+  exifrm='exiftool -all= '                                             \
+  ftp="ftp -nU ''"                                                     \
+  irssi='proxychains4 irssi'                                           \
+  la='ll -A'                                                           \
+  ll='ls -lh'                                                          \
+  llb='ll -Sr'                                                         \
+  lln='ll -tr'                                                         \
+  ls="\${LS} -F"                                                       \
+  lsd="find . -maxdepth 1 -iname '.[^.]*'"                             \
+  m='neomutt'                                                          \
+  mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'" \
+  mkd='mkdir -p'                                                       \
+  mntsafe='mount -o noexec,nosuid,nodev'                               \
+  mus='ncmpcpp 2>/dev/null'                                            \
+  n='nnn'                                                              \
+  nb='newsboat'                                                        \
+  nk="nikto -output nikto-\$(date '+%F').txt -host"                    \
+  o='mimeopen'                                                         \
+  off='shutdown -p now'                                                \
+  pdfman='MANPAGER=zathura man -T pdf'                                 \
+  re='shutdown -r now'                                                 \
+  readmsg='less /var/log/messages'                                     \
+  readx='less /var/log/Xorg.0.log'                                     \
+  scan='nmap -sn'                                                      \
+  shre=". \${XDG_CONFIG_HOME}/ksh/kshrc"                               \
+  sspl='searchsploit'                                                  \
+  stcli='speedtest-cli'                                                \
+  tailmsg='tail -f /var/log/messages'                                  \
+  today='date +%F'                                                     \
+  trem='transmission-remote'                                           \
+  tuir='torsocks tuir'                                                 \
+  up='uptime'
+
+
+if [ -z "${EDITOR}" ]; then
+  # shellcheck disable=SC2016
+  complain_undefined '${EDITOR}'
+
+elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
+  complain_noexec "${EDITOR}"
+
+else
+  alias                                                                \
+    e="\${EDITOR}"                                                     \
+    efont="\${EDITOR} \${XDG_CONFIG_HOME}/fontconfig/fonts.conf"       \
+    ehst="\${EDITOR} /etc/hosts"                                       \
+    ek="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/kshrc"                      \
+    eka="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/aliases"                   \
+    ekf="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/functions"                 \
+    ekp="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/prompt"                    \
+    ekv="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/vars"                      \
+    empv="\${EDITOR} \${XDG_CONFIG_HOME}/mpv/mpv.conf"                 \
+    emusb="\${EDITOR} \${XDG_CONFIG_HOME}/ncmpcpp/bindings"            \
+    emusc="\${EDITOR} \${XDG_CONFIG_HOME}/ncmpcpp/config"              \
+    enb="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/config"               \
+    enbu="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/urls"                \
+    enm="\${EDITOR} \${XDG_CONFIG_HOME}/neomutt/neomuttrc"             \
+    eres="\${EDITOR} /etc/resolv.conf"                                 \
+    esxh="\${EDITOR} \${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"                \
+    esys="\${EDITOR} /etc/sysctl.conf"                                 \
+    etm="\${EDITOR} \${HOME}/.tmux.conf"                               \
+    ev="\${EDITOR} \${XDG_CONFIG_HOME}/nvim/init.vim"                  \
+    exm="\${EDITOR} \${XDG_CONFIG_HOME}/xmonad/xmonad.hs"              \
+    exmb="\${EDITOR} \${XDG_CONFIG_HOME}/xmobar/xmobarrc"              \
+    exr="\${EDITOR} \${HOME}/.Xresources"                              \
+    exs="\${EDITOR} \${HOME}/.xsession"
+fi
+
+
+[ -x "$(command -v -- 'git' )" ] &&
+  alias                                                                \
+    d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"        \
+    da='d add'                                                         \
+    dcmt='d commit -a'                                                 \
+    ddiff='d diff'                                                     \
+    dgr='d grep'                                                       \
+    dlg='d log'                                                        \
+    dls="d ls-files \${HOME}"                                          \
+    dpsh='d push'                                                      \
+    dre='d restore'                                                    \
+    ds='d status'                                                      \
+    g='git'                                                            \
+    ga='g add'                                                         \
+    gcl='g clone'                                                      \
+    gcmt='g commit -a'                                                 \
+    gdiff='g diff'                                                     \
+    ggr='g grep'                                                       \
+    glg='g log'                                                        \
+    gls='g ls-files'                                                   \
+    gpsh='g push'                                                      \
+    gre='g restore'                                                    \
+    gs='g status'
+
+
+[ -x "$(command -v -- 'keepassxc-cli')" ] &&
+  alias                                                                \
+    kp='keepassxc-cli'                                                 \
+    kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
+
+
+if [ -x "$(command -v -- 'netstat')" ]; then
+  alias                                                                \
+    ntstr6='netstat -rf inet6'                                         \
+    ntstr='netstat -rf inet'                                           \
+    ntst6='netstat -f inet6'                                           \
+    ntst='netstat -f inet'
+
+  # FreeBSD netstat(1) has no -l
+  [ "${OS}" != 'FreeBSD' ] &&
+    alias                                                              \
+      ntstl6='netstat -lf inet6'                                       \
+      ntstl='netstat -lf inet'
+
+else
+  complain_noexec 'netstat'
+
+fi
+
+
+[ -x "$(command -v -- 'task')" ] &&
+  alias                                                                \
+    t='task'                                                           \
+    ta='t add'                                                         \
+    tafin='ta project:finances'                                        \
+    tagroc='ta project:groceries'                                      \
+    taedu='ta project:education'                                       \
+    taself='ta project:selfcare'                                       \
+    tashop='ta project:shopping'                                       \
+    tatech='ta project:tech'                                           \
+    tconf='t config'                                                   \
+    td='t done'                                                        \
+    tdel='t delete'                                                    \
+    tdue='task due.before:today ids'                                   \
+    tedu='tls project:education'                                       \
+    tfin='tls project:finances'                                        \
+    tgroc='tls project:groceries'                                      \
+    tid='t ids'                                                        \
+    tls='t list'                                                       \
+    tmod='t modify'                                                    \
+    tself='tls project:selfcare'                                       \
+    tshop='tls project:shopping'                                       \
+    tt='tls due:today'                                                 \
+    ttech='tls project:tech'                                           \
+    tup="td \$(tdue)"
+
+
+if [ -x "$(command -v -- 'tmux')" ]; then
+  alias                                                                \
+    tm='tmux'                                                          \
+    tma='tm attach'                                                    \
+    tmk='tm kill-server'                                               \
+    tml='tm list-sessions'
+
+else
+  complain_noexec 'tmux'
+
+fi
+
+
+[ -x "$(command -v -- 'yt-dlp')" ] &&
+  alias                                                                \
+    yt='yt-dlp'                                                        \
+    yta='yt -xf bestaudio/best'                                        \
+    ytdesc='yt --get-description'                                      \
+    ytlen='yt --get-duration'                                          \
+    ytrm='yt --rm-cache-dir'
+
+
+[ -n "${MARKDOWNDIR}" ] && alias cdmd="cd \${MARKDOWNDIR}"
+[ -n "${SRVDIR}" ]      && alias cdsrv="cd \${MARKDOWNDIR}"
+[ -n "${SITE}" ]        && alias tnet="ping \${SITE##*//}"
+
+
 OS="$(uname)"
-: "${DOTFILES_LOG:=${XDG_DATA_HOME}/dotfiles.log}"
-
-# if a *BSD, then pf aliases should be added
-case "${OS}" in
-  *'BSD') pf_aliases                                          ;;
-  *)      # do nothing, this is just here to complete the set ;;
-esac
-
-case "${OS}" in
-  'OpenBSD') openbsd_aliases; general_aliases ;;
-  *)         general_aliases                  ;;
-esac
-
-# host-specific aliases
-case "$(hostname -s)" in
-
-  'aphrodite'|'lain')
-    alias                                                                \
-      cdmd="cd \${MARKDOWNDIR}"                                          \
-      cdsrv="cd \${SRVDIR}"
-
-    ;;
-
-  *)
-    # if the hostname doesn't match, do nothing
-
-    ;;
-
-esac
+[ -z "${OS##*BSD}" ] && pf_aliases
+[ "${OS}" = 'OpenBSD' ] && openbsd_aliases
