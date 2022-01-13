@@ -26,7 +26,7 @@ pf_aliases() {
     pftail='tcpdump -lei pflog0'                                       \
     pftailb='pftail action block'                                      \
     pftailp='pftail action pass'                                       \
-    pftest='pfload -nv'
+    pftest='pfload -n'
 }
 
 
