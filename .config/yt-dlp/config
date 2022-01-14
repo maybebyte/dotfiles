@@ -3,6 +3,5 @@
 --embed-subs
 --embed-thumbnail
 --output "${HOME}/Downloads/%(uploader)s/%(title)s.%(ext)s"
---write-comments
 --write-description
 --write-info-json
