@@ -73,7 +73,7 @@ case "$(hostname -s)" in
     [ -x "$(command -v -- 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
 
     export \
-      MARKDOWNDIR="${HOME}/builds/website_md" \
+      MARKDOWNDIR="${HOME}/src/website_md" \
       SRVDIR='/var/www/htdocs/aml'
 
     ;;
