@@ -287,3 +287,6 @@ fi
 OS="$(uname)"
 [ -z "${OS##*BSD}" ] && pf_aliases
 [ "${OS}" = 'OpenBSD' ] && openbsd_aliases
+
+# shellcheck disable=SC3009
+unset -f complain_{noexec,undefined} {pf,openbsd}_aliases
