@@ -49,6 +49,7 @@ VERSION="$(ftp -VMno - "$(make_release_url vector-im element-web)" \
 
 
 readonly ELEMENT_WEB_UI_DIR='/var/www/htdocs/element-web'
+export ELEMENT_WEB_UI_DIR
 
 read -r CURRENT_VERSION <"${ELEMENT_WEB_UI_DIR}/element/version"
 readonly CURRENT_VERSION="v${CURRENT_VERSION}"
