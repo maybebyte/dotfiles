@@ -3,7 +3,6 @@ set ask
 set autoinc
 set crt
 set dot
-set from="eurydice@riseup.net"
 set ignore
 set nosave
 set skipempty
