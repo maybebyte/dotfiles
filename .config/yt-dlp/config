@@ -3,5 +3,7 @@
 --embed-subs
 --embed-thumbnail
 --output "${HOME}/Downloads/%(uploader)s/%(title)s.%(ext)s"
+--sponsorblock-mark default
+--sponsorblock-remove default
 --write-description
 --write-info-json
