@@ -22,11 +22,16 @@ err() {
 }
 
 
+warn() {
+  printf '%s\n' "$*" >&2
+}
+
+
 usage() {
 	err "${0##*/} is for losslessly compressing images. It compresses given
 files in place with the appropriate tool.
 
-${0##*/} [inpic]"
+${0##*/} [inpic] ..."
 }
 
 
@@ -40,7 +45,7 @@ check_deps() {
 }
 
 
-[ -z "$1" ] && usage
+[ -z "$*" ] && usage
 
 
 check_deps <<'EOF'
@@ -48,9 +53,12 @@ jpegoptim
 optipng
 EOF
 
+while [ -n "$*" ]; do
+  case "$(file -ib -- "$1")" in
+    image/jpeg) jpegoptim -s -- "$1"              ;;
+    image/png)  optipng -strip all -- "$1"        ;;
+    *)          warn "Unsupported image format."  ;;
+  esac
 
-case "$(file -ib -- "$1")" in
-	image/jpeg) jpegoptim -s -- "$1"              ;;
-	image/png)  optipng -strip all -- "$1"        ;;
-	*)          err "Unsupported image format."   ;;
-esac
+  shift
+done
