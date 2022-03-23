@@ -58,7 +58,7 @@ while [ -n "$*" ]; do
 
   case "$(file -ib -- "$1")" in
     image/jpeg) jpegoptim -s -- "$1"                             ;;
-    image/png)  optipng -strip all -- "$1"                       ;;
+    image/png)  optipng -strip all -fix -- "$1"                  ;;
     *)          warn "$1 does not use a supported image format." ;;
   esac
 
