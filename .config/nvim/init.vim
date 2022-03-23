@@ -28,6 +28,10 @@ set wrapscan
 " allow Markdown folds
 let g:markdown_folding = 1
 
+" run linters/syntax checks on open, but not on close
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
 nnoremap <C-p> "+P
