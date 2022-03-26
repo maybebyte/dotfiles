@@ -18,40 +18,40 @@ set -e
 
 
 if [ -x "$(command -v -- 'doas')" ]; then
-  alias priv='doas '
+    alias priv='doas '
 
 elif [ -x "$(command -v -- 'sudo')" ]; then
-  alias priv='sudo '
+    alias priv='sudo '
 
 fi
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 usage() {
-  err "usage:
+    err "usage:
 ${0##*/} [target] [options]"
 }
 
 
 nsc() {
-  priv nmap -Av --osscan-limit \
-    -oA "${TMPDIR}/nmap-$(date '+%F')" "$@"
+    priv nmap -Av --osscan-limit \
+        -oA "${TMPDIR}/nmap-$(date '+%F')" "$@"
 }
 
 
 fix_perms() {
-  readonly UNPRIV_USER="${LOGNAME}"
+    readonly UNPRIV_USER="${LOGNAME}"
 
-  priv chown -R -- "${UNPRIV_USER}:${UNPRIV_USER}" "${TMPDIR}"
+    priv chown -R -- "${UNPRIV_USER}:${UNPRIV_USER}" "${TMPDIR}"
 
-  find "${TMPDIR}"                                    \
-  \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
-  \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
+    find "${TMPDIR}"                                        \
+        \( -type f ! -perm 600 -exec chmod 600 '{}' + \) -o \
+        \( -type d ! -perm 700 -exec chmod 700 '{}' + \)
 }
 
 

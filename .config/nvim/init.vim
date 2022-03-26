@@ -14,12 +14,12 @@ set modelines     =0
 set nomodeline
 set number
 set relativenumber
-set shiftwidth    =2
+set shiftwidth    =4
 set smartcase
 set smartindent
 set splitbelow
 set splitright
-set tabstop       =2
+set tabstop       =4
 set textwidth     =72
 set undofile
 set wrap

@@ -18,24 +18,24 @@ set -e
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 usage() {
-  err "usage:
+    err "usage:
 ${0##*/} [command] [dir for fzf]"
 }
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 [ -z "$1" ] && usage

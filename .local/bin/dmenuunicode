@@ -9,46 +9,46 @@
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 menu() {
-  dmenu -i -l 20               \
-  -fn 'mono-12'                \
-  -fn 'Symbola-12'             \
-  -nb "${background:-#040516}" \
-  -nf "${color3:-#9974e7}"     \
-  -sb "${background:-#040516}" \
-  -sf "${foreground:-#e0cef3}"
+    dmenu -i -l 20                   \
+        -fn 'mono-12'                \
+        -fn 'Symbola-12'             \
+        -nb "${background:-#040516}" \
+        -nf "${color3:-#9974e7}"     \
+        -sb "${background:-#040516}" \
+        -sf "${foreground:-#e0cef3}"
 }
 
 
 import_colors_sh() {
-  readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+    readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
-  if ! [ -r "${COLORS_SH}" ]; then
-    echo "${COLORS_SH} is not readable." >&2
+    if ! [ -r "${COLORS_SH}" ]; then
+        echo "${COLORS_SH} is not readable." >&2
 
-  elif ! [ -f "${COLORS_SH}" ]; then
-    echo "${COLORS_SH} is not a file." >&2
+    elif ! [ -f "${COLORS_SH}" ]; then
+        echo "${COLORS_SH} is not a file." >&2
 
-  # passed sanity checks, so source the file
-  else
-    . "${COLORS_SH}"
+    # passed sanity checks, so source the file
+    else
+        . "${COLORS_SH}"
 
-  fi
+    fi
 }
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 
@@ -84,9 +84,9 @@ grep -q -- "^${EMOJI}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}.
 # also important to not send a newline to xclip(1), otherwise pasting
 # from the clipboard in certain messengers will send the message.
 if printf '%s' "${EMOJI}" | xclip -selection clipboard; then
-  notify-send -- "${EMOJI} copied to clipboard."
+    notify-send -- "${EMOJI} copied to clipboard."
 
 else
-  err 'Unable to grab emoji with xclip(1).'
+    err 'Unable to grab emoji with xclip(1).'
 
 fi

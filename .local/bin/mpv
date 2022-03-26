@@ -27,13 +27,13 @@
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 usage() {
-  err "${0##*/} [options] [media file]
+    err "${0##*/} [options] [media file]
 
 See mpv(1) for more details."
 }
@@ -58,30 +58,30 @@ OS="$(uname)"
 
 case "${0##*/}" in
 
-  'mpv')
-    [ "${OS}" = 'OpenBSD' ] && pkill xcompmgr >/dev/null 2>&1
+    'mpv')
+        [ "${OS}" = 'OpenBSD' ] && pkill xcompmgr >/dev/null 2>&1
 
-    "${MPV}" "$@"
+        "${MPV}" "$@"
 
-    [ "${OS}" = 'OpenBSD' ] \
-      && [ -x "$(command -v -- 'xcompmgr')" ] \
-      && xcompmgr >/dev/null 2>&1 &
+        [ "${OS}" = 'OpenBSD' ] \
+            && [ -x "$(command -v -- 'xcompmgr')" ] \
+            && xcompmgr >/dev/null 2>&1 &
 
-    ;;
+        ;;
 
-  # workaround for screen tearing isn't needed if only playing audio
-  'mpva')
-    "${MPV}"               \
-      --no-keep-open       \
-      --no-resume-playback \
-      --no-pause           \
-      --no-video "$@"
+    # workaround for screen tearing isn't needed if only playing audio
+    'mpva')
+        "${MPV}"                 \
+            --no-keep-open       \
+            --no-resume-playback \
+            --no-pause           \
+            --no-video "$@"
 
-    ;;
+        ;;
 
-  *)
-    err "${0##*/} is not an expected program name."
+    *)
+        err "${0##*/} is not an expected program name."
 
-    ;;
+        ;;
 
 esac

@@ -22,114 +22,114 @@ set -eh
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 import_colors_sh() {
-  readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+    readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
-  if ! [ -r "${COLORS_SH}" ]; then
-    echo "${COLORS_SH} is not readable." >&2
+    if ! [ -r "${COLORS_SH}" ]; then
+        echo "${COLORS_SH} is not readable." >&2
 
-  elif ! [ -f "${COLORS_SH}" ]; then
-    echo "${COLORS_SH} is not a file." >&2
+    elif ! [ -f "${COLORS_SH}" ]; then
+        echo "${COLORS_SH} is not a file." >&2
 
-  # passed sanity checks, so source the file
-  else
-    . "${COLORS_SH}"
+    # passed sanity checks, so source the file
+    else
+        . "${COLORS_SH}"
 
-  fi
+    fi
 }
 
 
 show_battery() {
-  case "${BATT_STATUS}" in
-    4|255) return 1 ;;
-  esac
+    case "${BATT_STATUS}" in
+        4|255) return 1 ;;
+    esac
 
-  adapter_status="$(apm -a)"
-  percentage="$(apm -l)"
+    adapter_status="$(apm -a)"
+    percentage="$(apm -l)"
 
-  case "${adapter_status}" in
+    case "${adapter_status}" in
 
-    0) # disconnected (on battery)
-      estimated_battery_life="$(apm -m)"
+        0) # disconnected (on battery)
+            estimated_battery_life="$(apm -m)"
 
-      case "${estimated_battery_life}" in
-        ''|*[!0-9]*) err 'show_battery() only accepts integers.' ;;
-        *)           # integers are OK, so continue              ;;
-      esac
+            case "${estimated_battery_life}" in
+                ''|*[!0-9]*) err 'show_battery() only accepts integers.' ;;
+                *)           # integers are OK, so continue              ;;
+            esac
 
-      ebl_minutes=$((estimated_battery_life % 60))
-      ebl_hours=$((estimated_battery_life / 60))
-      remaining="~${ebl_hours}h & ${ebl_minutes}m"
+            ebl_minutes=$((estimated_battery_life % 60))
+            ebl_hours=$((estimated_battery_life / 60))
+            remaining="~${ebl_hours}h & ${ebl_minutes}m"
 
-      echo "bat: ${remaining}, at ${percentage}%"
+            echo "bat: ${remaining}, at ${percentage}%"
 
-      ;;
+            ;;
 
-    1) # charging
-      echo "chr: at ${percentage}%"
+        1) # charging
+            echo "chr: at ${percentage}%"
 
-      ;;
+            ;;
 
-    *) # there's no battery information to display
-      return 1
+        *) # there's no battery information to display
+            return 1
 
-      ;;
+          ;;
 
-  esac
+    esac
 }
 
 
 show_temp() {
-  case "${HOSTNAME}" in
-    'lain')      temperature="$(sysctl -n hw.sensors.cpu0.temp0)"     ;;
-    'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"    ;;
-    *)           return 1 # if temp sensor is unknown, return nothing ;;
-  esac
+    case "${HOSTNAME}" in
+        'lain')      temperature="$(sysctl -n hw.sensors.cpu0.temp0)"     ;;
+        'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"    ;;
+        *)           return 1 # if temp sensor is unknown, return nothing ;;
+    esac
 
-  case "${BATT_STATUS}" in
-    4|255) echo "temp: ${temperature%%.*} °C"             ;;
-    *)     echo "${DELIMITER}temp: ${temperature%%.*} °C" ;;
-  esac
+    case "${BATT_STATUS}" in
+        4|255) echo "temp: ${temperature%%.*} °C"             ;;
+        *)     echo "${DELIMITER}temp: ${temperature%%.*} °C" ;;
+    esac
 }
 
 
 show_track() {
-  if ! pgrep -q 'mpd'; then
-    return 1
+    if ! pgrep -q 'mpd'; then
+        return 1
 
-  elif mpc | grep -qi 'paused'; then
-    return 1
+    elif mpc | grep -qi 'paused'; then
+        return 1
 
-  else
-    mpc current
+    else
+        mpc current
 
-  fi
+    fi
 }
 
 
 show_disk_space() {
-  diskspace="$(df -h '/home' | awk -- '/^\/dev/{print $4}')"
-  echo "/home: ${diskspace}${DELIMITER}"
+    diskspace="$(df -h '/home' | awk -- '/^\/dev/{print $4}')"
+    echo "/home: ${diskspace}${DELIMITER}"
 }
 
 
 show_date() {
-  date '+%a %m-%d %H:%M'
+    date '+%a %m-%d %H:%M'
 }
 
 
 sysinfo() {
-  # spaces at the beginning of a new line bork ${stats}
-  stats="${BGFG} %{l}$(show_battery)$(show_temp)\
+    # spaces at the beginning of a new line bork ${stats}
+    stats="${BGFG} %{l}$(show_battery)$(show_temp)\
 %{c}$(show_track) %{r}$(show_disk_space)\
 $(show_date)"
 
-  echo "${stats}"
+    echo "${stats}"
 }
 
 
@@ -146,6 +146,6 @@ BGFG="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
 readonly HOSTNAME
 
 while true; do
-  sysinfo
-  sleep 30
+    sysinfo
+    sleep 30
 done

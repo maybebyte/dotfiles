@@ -18,18 +18,18 @@ set -e
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 
@@ -39,5 +39,5 @@ parallel
 EOF
 
 if ! parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac; then
-  err 'Unable to convert from FLAC to opus.'
+    err 'Unable to convert from FLAC to opus.'
 fi

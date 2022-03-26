@@ -18,24 +18,24 @@ set -e
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 usage() {
-  err "usage:
+    err "usage:
 ${0##*/} [image]"
 }
 
 
 genfavi() {
-  convert "$1" -background white             \
-  \( -clone 0 -resize 16x16 -extent 16x16 \) \
-  \( -clone 0 -resize 32x32 -extent 32x32 \) \
-  \( -clone 0 -resize 48x48 -extent 48x48 \) \
-  \( -clone 0 -resize 64x64 -extent 64x64 \) \
-  -delete 0 -alpha off -colors 256 favicon.ico
+    convert "$1" -background white                 \
+        \( -clone 0 -resize 16x16 -extent 16x16 \) \
+        \( -clone 0 -resize 32x32 -extent 32x32 \) \
+        \( -clone 0 -resize 48x48 -extent 48x48 \) \
+        \( -clone 0 -resize 64x64 -extent 64x64 \) \
+        -delete 0 -alpha off -colors 256 favicon.ico
 }
 
 
@@ -44,14 +44,14 @@ genfavi() {
 [ -z "$1" ] && usage
 
 case "$(file -ib -- "$1")" in
-  image/*) :                        ;; # images are OK to process
-  *)       err "$1 isn't an image." ;;
+    image/*) :                        ;; # images are OK to process
+    *)       err "$1 isn't an image." ;;
 esac
 
 if genfavi "$1"; then
-  cp 'favicon.ico' 'favicon.png'
+    cp 'favicon.ico' 'favicon.png'
 
 else
-  err 'Unable to generate favicon.'
+    err 'Unable to generate favicon.'
 
 fi

@@ -18,13 +18,13 @@ set -e
 
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 usage() {
-  err "usage:
+    err "usage:
 ${0##*/} [cue file] [FLAC file]
 
 -c : convert 24bit flac to 16bit before splitting (sox needed)
@@ -33,27 +33,27 @@ ${0##*/} [cue file] [FLAC file]
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 
 # determines which executable name to use for cuetag.
 assign_cuetag() {
-  if [ -x "$(command -v -- 'cuetag')" ]; then
-    readonly CUETAG='cuetag'
+    if [ -x "$(command -v -- 'cuetag')" ]; then
+        readonly CUETAG='cuetag'
 
-  elif [ -x "$(command -v -- 'cuetag.sh')" ]; then
-    readonly CUETAG='cuetag.sh'
+    elif [ -x "$(command -v -- 'cuetag.sh')" ]; then
+        readonly CUETAG='cuetag.sh'
 
-  else
-    err 'Neither cuetag nor cuetag.sh found.'
+    else
+        err 'Neither cuetag nor cuetag.sh found.'
 
-  fi
+    fi
 }
 
 
@@ -61,40 +61,40 @@ assign_cuetag() {
 #
 # $1 is a FLAC file to be converted.
 conv16() {
-  STAGING_FILE="${1%.flac}-staging.flac"
-  readonly STAGING_FILE
+    STAGING_FILE="${1%.flac}-staging.flac"
+    readonly STAGING_FILE
 
-  # http://sox.sourceforge.net/Docs/FAQ
-  #
-  # according to sox(1), most noise shaping filters are only available
-  # at 44.1kHz, so that is the chosen sample rate.
-  if sox -SG "$1" -b 16 "${STAGING_FILE}" rate -v 44100 dither -s; then
-    [ "${DELETE}" = 'yes' ] && rm -- "$1"
-    [ -e "$1" ] && mv -- "$1" "$1-24bit.bak"
+    # http://sox.sourceforge.net/Docs/FAQ
+    #
+    # according to sox(1), most noise shaping filters are only available
+    # at 44.1kHz, so that is the chosen sample rate.
+    if sox -SG "$1" -b 16 "${STAGING_FILE}" rate -v 44100 dither -s; then
+        [ "${DELETE}" = 'yes' ] && rm -- "$1"
+        [ -e "$1" ] && mv -- "$1" "$1-24bit.bak"
 
-    mv -- "${STAGING_FILE}" "$1"
+        mv -- "${STAGING_FILE}" "$1"
 
-  else
-    err 'Failed to convert 24-bit FLAC file to 16-bit.'
+    else
+        err 'Failed to convert 24-bit FLAC file to 16-bit.'
 
-  fi
+    fi
 }
 
 
 splitflac() {
-  [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
+    [ -e "$2.bak" ] && err "$2.bak exists, exiting to prevent clobbering."
 
-  # spaces in shnsplit filename messes up cue tagging, so just leave
-  # the default in place. it's the only way to be sure that we won't run
-  # into that issue, because %t will often add spaces too.
-  if ! cuebreakpoints -- "$1" | shnsplit -o flac -- "$2"; then
-    err 'Unable to split the FLAC file.'
-  fi
+    # spaces in shnsplit filename messes up cue tagging, so just leave
+    # the default in place. it's the only way to be sure that we won't run
+    # into that issue, because %t will often add spaces too.
+    if ! cuebreakpoints -- "$1" | shnsplit -o flac -- "$2"; then
+        err 'Unable to split the FLAC file.'
+    fi
 
-  [ "${DELETE}" = 'yes' ] && rm -- "$2"
-  [ -e "$2" ] && mv -- "$2" "$2.bak"
+    [ "${DELETE}" = 'yes' ] && rm -- "$2"
+    [ -e "$2" ] && mv -- "$2" "$2.bak"
 
-  "${CUETAG}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
+    "${CUETAG}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
 }
 
 
@@ -109,11 +109,11 @@ EOF
 
 while getopts cd opt; do
 
-  case "${opt}" in
-    c) readonly CONVERT='yes' ;;
-    d) readonly DELETE='yes'  ;;
-    *) usage                  ;;
-  esac
+    case "${opt}" in
+        c) readonly CONVERT='yes' ;;
+        d) readonly DELETE='yes'  ;;
+        *) usage                  ;;
+    esac
 
 done
 
@@ -125,16 +125,16 @@ shift $((OPTIND - 1))
 assign_cuetag
 
 [ "${CONVERT}" = 'yes' ] && {
-  # makes sense to check dependency only when it's really needed
-  echo 'sox' | check_deps
-  conv16 "$2"
+    # makes sense to check dependency only when it's really needed
+    echo 'sox' | check_deps
+    conv16 "$2"
 }
 
 # checks for sector boundary errors and fixes them if they are present
 # before splitting the FLAC file.
 shnfix -c -- "$2" && {
-  shnfix -o flac -- "$2"
-  mv -- "${2%.flac}-fixed.flac" "$2"
+    shnfix -o flac -- "$2"
+    mv -- "${2%.flac}-fixed.flac" "$2"
 }
 
 CRLESS_CUESHEET="$(mktemp)"

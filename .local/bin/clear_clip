@@ -17,18 +17,18 @@
 set -e
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 
@@ -40,6 +40,6 @@ EOF
 xclip -selection clipboard -i /dev/null || err 'Unable to clear the clipboard.'
 
 case "$1" in
-  'notify') notify-send '📋 Cleared the clipboard.'             ;;
-  *)        # undefined positional parameters should do nothing ;;
+    'notify') notify-send '📋 Cleared the clipboard.'             ;;
+    *)        # undefined positional parameters should do nothing ;;
 esac

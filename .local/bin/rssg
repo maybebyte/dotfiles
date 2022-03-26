@@ -18,149 +18,149 @@
 set -e
 
 main() {
-  [ -n "$1" ] || usage
-  [ -n "$2" ] || usage
-  [ -f "$1" ] || no_file "$1"
+    [ -n "$1" ] || usage
+    [ -n "$2" ] || usage
+    [ -f "$1" ] || no_file "$1"
 
-  INDEX_FILE="$(readlink -f -- "$1")"
-  readonly INDEX_FILE
-  [ -z "${INDEX_FILE##*html}" ] && html="$(cat "${INDEX_FILE}")"
-  [ -z "${INDEX_FILE##*md}" ] && html="$(md_to_html "${INDEX_FILE}")"
-  [ -n "${html}" ] || usage
+    INDEX_FILE="$(readlink -f -- "$1")"
+    readonly INDEX_FILE
+    [ -z "${INDEX_FILE##*html}" ] && html="$(cat "${INDEX_FILE}")"
+    [ -z "${INDEX_FILE##*md}" ] && html="$(md_to_html "${INDEX_FILE}")"
+    [ -n "${html}" ] || usage
 
-  base="${INDEX_FILE%/*}"
-  base_url="$(echo "${html}" | get_url | sed -- 's#\(.*\)/[^/]*#\1#')"
+    base="${INDEX_FILE%/*}"
+    base_url="$(echo "${html}" | get_url | sed -- 's#\(.*\)/[^/]*#\1#')"
 
-  url="$(echo "${html}" | get_url)"
+    url="$(echo "${html}" | get_url)"
 
-  title="$2"
+    title="$2"
 
-  description="$(
-    echo "${html}"      \
-      | get_description \
-      | remove_tags     \
-      | remove_nbsp
-  )"
+    description="$(
+        echo "${html}"        \
+            | get_description \
+            | remove_tags     \
+            | remove_nbsp
+    )"
 
-  ITEMS="$(echo "${html}" | get_items)"
-  readonly ITEMS
+    ITEMS="$(echo "${html}" | get_items)"
+    readonly ITEMS
 
-  RSS="$(
-    echo "${ITEMS}" \
-      | render_items "${base}" "${base_url}" \
-      | render_feed "${url}" "${title}" "${description}"
-  )"
-  readonly RSS
+    RSS="$(
+        echo "${ITEMS}" \
+            | render_items "${base}" "${base_url}" \
+            | render_feed "${url}" "${title}" "${description}"
+    )"
+    readonly RSS
 
-  >&2 echo "[rssg] ${INDEX_FILE##$(pwd)/} $(echo "${RSS}" | grep -c '<item>') items"
-  echo "${RSS}"
+    >&2 echo "[rssg] ${INDEX_FILE##$(pwd)/} $(echo "${RSS}" | grep -c '<item>') items"
+    echo "${RSS}"
 }
 
 
 usage() {
-  echo "usage: ${0##*/} index.{html,md} title > rss.xml" >&2
-  exit 1
+    echo "usage: ${0##*/} index.{html,md} title > rss.xml" >&2
+    exit 1
 }
 
 
 no_file() {
-  echo "${0##*/}: $1: No such file" >&2
-  exit 2
+    echo "${0##*/}: $1: No such file" >&2
+    exit 2
 }
 
 
 md_to_html() {
-  [ -x "$(command -v -- 'lowdown')" ] || exit 3
+    [ -x "$(command -v -- 'lowdown')" ] || exit 3
 
-  lowdown              \
-  --html-no-escapehtml \
-  --html-no-skiphtml   \
-  --parse-no-metadata  \
-  --parse-no-autolink  \
-  -- "$1"
+    lowdown                  \
+        --html-no-escapehtml \
+        --html-no-skiphtml   \
+        --parse-no-metadata  \
+        --parse-no-autolink  \
+        -- "$1"
 }
 
 
 get_title() {
-  awk -- 'tolower($0)~/^<h1/{gsub(/<[^>]*>/,"",$0);print;exit}'
+    awk -- 'tolower($0)~/^<h1/{gsub(/<[^>]*>/,"",$0);print;exit}'
 }
 
 
 get_url() {
-  grep -i -- '<a .*rss.xml"' | head -1 | sed -- 's#.*href="\(.*\)".*#\1#'
+    grep -i -- '<a .*rss.xml"' | head -1 | sed -- 's#.*href="\(.*\)".*#\1#'
 }
 
 
 get_items() {
-  grep -i -- 'href=".*" title="' \
-    | sed -- 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
+    grep -i -- 'href=".*" title="' \
+        | sed -- 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
 }
 
 
 get_description() {
-  readonly START='sub("^.*<"s"*"t"("s"[^>]*)?>","")'
-  readonly STOP='sub("</"s"*"t""s"*>.*","")&&x=1'
-  awk -v 's=[[:space:]]' -v 't=[Pp]' -- "${START},${STOP};x{exit}"
+    readonly START='sub("^.*<"s"*"t"("s"[^>]*)?>","")'
+    readonly STOP='sub("</"s"*"t""s"*>.*","")&&x=1'
+    awk -v 's=[[:space:]]' -v 't=[Pp]' -- "${START},${STOP};x{exit}"
 }
 
 
 remove_tags() {
-  sed -- 's#<[^>]*>##g;s#</[^>]*>##g'
+    sed -- 's#<[^>]*>##g;s#</[^>]*>##g'
 }
 
 
 remove_nbsp() {
-  sed -- 's#\&nbsp;# #g'
+    sed -- 's#\&nbsp;# #g'
 }
 
 
 rel_to_abs_urls() {
-  site_url="$1"
-  base_url="$2"
+    site_url="$1"
+    base_url="$2"
 
-  abs='s#(src|href)="/([^"]*)"#\1="'"${site_url}"/'\2"#g'
-  rel='s#(src|href)="([^:/"]*)"#\1="'"${base_url}"/'\2"#g'
-  sed -E -- "${abs};${rel}"
+    abs='s#(src|href)="/([^"]*)"#\1="'"${site_url}"/'\2"#g'
+    rel='s#(src|href)="([^:/"]*)"#\1="'"${base_url}"/'\2"#g'
+    sed -E -- "${abs};${rel}"
 }
 
 
 date_rfc_822() {
   date -j '+%a, %d %b %Y %H:%M:%S %z' \
-  "$(echo "$1"| tr -cd '[:digit:]')0000"
+    "$(echo "$1"| tr -cd '[:digit:]')0000"
 }
 
 
 render_items() {
-  while read -r i; do
-    render_item "$1" "$2" "${i}"
-  done
+    while read -r i; do
+        render_item "$1" "$2" "${i}"
+    done
 }
 
 
 render_item() {
-  base="$1"
-  base_url="$2"
-  item="$3"
+    base="$1"
+    base_url="$2"
+    item="$3"
 
-  site_url="$(echo "${base_url}"| sed -- 's#\(.*//.*\)/.*#\1#')"
+    site_url="$(echo "${base_url}"| sed -- 's#\(.*//.*\)/.*#\1#')"
 
-  date="$(echo "${item}" | awk -- '{print $2}')"
-  url="$(echo "${item}" | awk -- '{print $1}')"
+    date="$(echo "${item}" | awk -- '{print $2}')"
+    url="$(echo "${item}" | awk -- '{print $1}')"
 
-  f="${base}/${url}"
-  [ -f "${f}" ] && html="$(cat -- "${f}")"
-  [ -f "${f%\.html}.md" ] && html="$(md_to_html "${f%\.html}.md")"
+    f="${base}/${url}"
+    [ -f "${f}" ] && html="$(cat -- "${f}")"
+    [ -f "${f%\.html}.md" ] && html="$(md_to_html "${f%\.html}.md")"
 
-  description="$(
-    echo "${html}"                                  \
-      | rel_to_abs_urls "${site_url}" "${base_url}" \
-      | remove_nbsp
-  )"
+    description="$(
+        echo "${html}"                                    \
+            | rel_to_abs_urls "${site_url}" "${base_url}" \
+            | remove_nbsp
+    )"
 
-  title="$(echo "${description}" | get_title)"
-  guid="${base_url}/$(echo "${url}" | sed -- 's#^/##')"
+    title="$(echo "${description}" | get_title)"
+    guid="${base_url}/$(echo "${url}" | sed -- 's#^/##')"
 
-  echo '
+    echo '
 <item>
 <guid>'"${guid}"'</guid>
 <link>'"${guid}"'</link>
@@ -176,13 +176,13 @@ render_item() {
 
 
 render_feed() {
-  url="$1"
-  title="$(echo "$2" | remove_nbsp)"
-  description="$3"
+    url="$1"
+    title="$(echo "$2" | remove_nbsp)"
+    description="$3"
 
-  base_url="$(echo "${url}" | cut -d '/' -f 1-3)"
+    base_url="$(echo "${url}" | cut -d '/' -f 1-3)"
 
-  echo '<?xml version="1.0" encoding="UTF-8"?>
+    echo '<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <atom:link href="'"${url}"'" rel="self" type="application/rss+xml" />

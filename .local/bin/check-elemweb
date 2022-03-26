@@ -17,17 +17,17 @@
 
 
 make_release_url() {
-  printf "https://${GH_API}/repos/%s/%s/releases/latest\n" "$1" "$2"
+    printf "https://${GH_API}/repos/%s/%s/releases/latest\n" "$1" "$2"
 }
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 
@@ -44,8 +44,8 @@ EOF
 
 
 VERSION="$(ftp -VMno - "$(make_release_url vector-im element-web)" \
-  | jq -er '.name | select(test("^v[0-9]+\\.[0-9]+\\.[0-9]+-rc") | not)')" \
-  || exit 1
+    | jq -er '.name | select(test("^v[0-9]+\\.[0-9]+\\.[0-9]+-rc") | not)')" \
+    || exit 1
 
 
 readonly ELEMENT_WEB_UI_DIR='/var/www/htdocs/element-web'
@@ -57,9 +57,9 @@ perl -e "exit !(${VERSION} gt ${CURRENT_VERSION})" || exit 1
 
 
 if "${INSTALL_SCRIPT}" "${VERSION}"; then
-  printf '%s: element-web updated to %s\n' "${0##*/}" "${VERSION}" >&2
+    printf '%s: element-web updated to %s\n' "${0##*/}" "${VERSION}" >&2
 
 else
-  printf '%s: failed to update element-web to %s\n' "${0##*/}" "${VERSION}" >&2
+    printf '%s: failed to update element-web to %s\n' "${0##*/}" "${VERSION}" >&2
 
 fi

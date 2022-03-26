@@ -15,18 +15,18 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 err() {
-  printf '%s\n' "$*" >&2
-  exit 1
+    printf '%s\n' "$*" >&2
+    exit 1
 }
 
 
 check_deps() {
-  while read -r dependency; do
+    while read -r dependency; do
 
-    [ -x "$(command -v -- "${dependency}")" ] \
-      || err "${dependency} not found in PATH or not executable."
+        [ -x "$(command -v -- "${dependency}")" ] \
+            || err "${dependency} not found in PATH or not executable."
 
-  done
+    done
 }
 
 
@@ -43,8 +43,8 @@ EOF
 
 # if battery is missing, exit.
 case "$(apm -b)" in
-  4)   err "Battery status is 'absent.'"  ;;
-  255) err "Battery status is 'unknown.'" ;;
+    4)   err "Battery status is 'absent.'"  ;;
+    255) err "Battery status is 'unknown.'" ;;
 esac
 
 
@@ -52,12 +52,12 @@ BATT_PERCENT="$(apm -l)"
 readonly BATT_PERCENT
 
 if [ "${BATT_PERCENT}" -lt 20 ]; then
-  # exporting ${DISPLAY} is needed for cron(8) jobs.
-  [ -z "${DISPLAY}" ] && export DISPLAY=:0
+    # exporting ${DISPLAY} is needed for cron(8) jobs.
+    [ -z "${DISPLAY}" ] && export DISPLAY=:0
 
-  notify-send -- "🔋 Your device is at ${BATT_PERCENT}%!"
+    notify-send -- "🔋 Your device is at ${BATT_PERCENT}%!"
 
 else
-  exit 0
+    exit 0
 
 fi
