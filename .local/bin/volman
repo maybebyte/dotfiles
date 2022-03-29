@@ -40,12 +40,12 @@ check_deps() {
 # either increase, decrease, or mute the volume if the appropriate
 # argument is given. if not, error and display usage details.
 adjust_vol() {
-  case "$1" in
-    'inc')  check_mute || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-    'dec')  check_mute || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
-    'mute') sndioctl output.mute=! >/dev/null 2>&1                    ;;
-    *)      usage                                                     ;;
-  esac
+    case "$1" in
+        'inc')  check_mute || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
+        'dec')  check_mute || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
+        'mute') sndioctl output.mute=! >/dev/null 2>&1                    ;;
+        *)      usage                                                     ;;
+    esac
 }
 
 
