@@ -1,8 +1,6 @@
 ! pywal
 #include ".cache/wal/colors.Xresources"
 
-Xcursor.theme: Breeze
-
 ! eye candy for non-{GTK,QT} applications
 Xft.antialias:      1
 Xft.autohint:       0
