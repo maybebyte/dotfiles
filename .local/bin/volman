@@ -64,9 +64,9 @@ print_vol() {
 # if not muted, fail.
 check_mute() {
     case "$(sndioctl -n output.mute 2>/dev/null)" in
-        1) return 0                                 ;;
-        0) return 1                                 ;;
-        *) err 'Unable to access sndio(7) device.'  ;;
+        1) return 0                                            ;;
+        0) return 1                                            ;;
+        *) err 'Failed to check output.mute with sndioctl(1).' ;;
     esac
 }
 
