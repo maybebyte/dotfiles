@@ -25,7 +25,7 @@ export                                                 \
   GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
   QT_STYLE_OVERRIDE='Adwaita-dark'                     \
   READER='zathura'                                     \
-  TERMINAL='xst'
+  TERMINAL='urxvt'
 
 # daemons
 dunst &
@@ -44,7 +44,7 @@ xidle &
   && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
 # look and feel
-"${XDG_BIN_HOME}/wal" -R
+"${XDG_BIN_HOME}/wal" -R -a '85'
 sct 3500
 xset b off
 
