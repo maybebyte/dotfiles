@@ -18,13 +18,13 @@ set -e
 
 
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
 usage() {
-    err "usage:
+	err "usage:
 ${0##*/} [options] [file]
 
 options:
@@ -45,78 +45,78 @@ ${0##*/} only processes the first operation it sees."
 
 
 menu() {
-    dmenu -i -fn 'mono-12'           \
-        -nb "${background:-#040516}" \
-        -nf "${color3:-#9974e7}"     \
-        -sb "${background:-#040516}" \
-        -sf "${foreground:-#e0cef3}" \
-        "$@"
+	dmenu -i -fn 'mono-12' \
+		-nb "${background:-#040516}" \
+		-nf "${color3:-#9974e7}" \
+		-sb "${background:-#040516}" \
+		-sf "${foreground:-#e0cef3}" \
+		"$@"
 }
 
 
 check_deps() {
-    while read -r dependency; do
+	while read -r dependency; do
 
-        [ -x "$(command -v -- "${dependency}")" ] \
-            || err "${dependency} not found in PATH or not executable."
+		[ -x "$(command -v -- "${dependency}")" ] \
+			|| err "${dependency} not found in PATH or not executable."
 
-    done
+	done
 }
 
 
 import_colors_sh() {
-    readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
-    if ! [ -r "${COLORS_SH}" ]; then
-        echo "${COLORS_SH} is not readable." >&2
+	if ! [ -r "${COLORS_SH}" ]; then
+		echo "${COLORS_SH} is not readable." >&2
 
-    elif ! [ -f "${COLORS_SH}" ]; then
-        echo "${COLORS_SH} is not a file." >&2
+	elif ! [ -f "${COLORS_SH}" ]; then
+		echo "${COLORS_SH} is not a file." >&2
 
-  # passed sanity checks, so source the file
-    else
-        . "${COLORS_SH}"
+	# passed sanity checks, so source the file
+	else
+		. "${COLORS_SH}"
 
-    fi
+	fi
 }
 
 
 # assigns a value to ${preload_dir} based on the file's mimetype.
 determine_preload_dir() {
-    MIMETYPE="$(file -ib -- "${FILE}")"
-    readonly MIMETYPE
+	MIMETYPE="$(file -ib -- "${FILE}")"
+	readonly MIMETYPE
 
-    case "${MIMETYPE}" in
-        # these are organized alphabetically by mimetype
-        application/epub*) readonly PRELOAD_DIR="${HOME}/books"          ;;
-        application/pdf*)  readonly PRELOAD_DIR="${HOME}/books"          ;;
-        image/vnd.djvu)    readonly PRELOAD_DIR="${HOME}/books"          ;;
-        image/*)           readonly PRELOAD_DIR="${HOME}/pics"           ;;
-        video/*)           readonly PRELOAD_DIR="${HOME}/videos"         ;;
-        *)                 err "No preload directory for this filetype." ;;
-    esac
+	case "${MIMETYPE}" in
+		# these are organized alphabetically by mimetype
+		application/epub*) readonly PRELOAD_DIR="${HOME}/books" ;;
+		application/pdf*) readonly PRELOAD_DIR="${HOME}/books" ;;
+		image/vnd.djvu) readonly PRELOAD_DIR="${HOME}/books" ;;
+		image/*) readonly PRELOAD_DIR="${HOME}/pics" ;;
+		video/*) readonly PRELOAD_DIR="${HOME}/videos" ;;
+		*) err "No preload directory for this filetype." ;;
+	esac
 }
 
 
 move_file() {
-    if mv -- "${FILE}" "${NO_TILDE_DEST}/${FILE##*/}"; then
-        notify-send -- "${FILE##*/} moved to ${TILDE_DEST}"
+	if mv -- "${FILE}" "${NO_TILDE_DEST}/${FILE##*/}"; then
+		notify-send -- "${FILE##*/} moved to ${TILDE_DEST}"
 
-    else
-        err "Failed to move ${FILE##*/}"
+	else
+		err "Failed to move ${FILE##*/}"
 
-    fi
+	fi
 }
 
 
 copy_file() {
-    if cp -- "${FILE}" "${NO_TILDE_DEST}/${FILE##*/}"; then
-        notify-send -- "${FILE##*/} copied to ${TILDE_DEST}"
+	if cp -- "${FILE}" "${NO_TILDE_DEST}/${FILE##*/}"; then
+		notify-send -- "${FILE##*/} copied to ${TILDE_DEST}"
 
-    else
-        err "Failed to copy ${FILE##*/}"
+	else
+		err "Failed to copy ${FILE##*/}"
 
-    fi
+	fi
 }
 
 
@@ -124,38 +124,38 @@ copy_file() {
 # can be moved to. once the user chooses a destination with dmenu, move
 # the file there and send a notification.
 handle_dest() {
-    determine_preload_dir
+	determine_preload_dir
 
-    # substitutes $HOME with a tilde so the list of directories in dmenu is
-    # more readable.
-    TILDE_DEST="$(
-        { find "${PRELOAD_DIR}" -type d | sed -- "s|^${HOME}|~|g"
-            echo 'exit'
-        } | menu -l 10 -p "Where should ${FILE##*/} be placed?"
-    )"
+	# substitutes $HOME with a tilde so the list of directories in dmenu is
+	# more readable.
+	TILDE_DEST="$(
+		{ find "${PRELOAD_DIR}" -type d | sed -- "s|^${HOME}|~|g"
+			echo 'exit'
+		} | menu -l 10 -p "Where should ${FILE##*/} be placed?"
+	)"
 
-    readonly TILDE_DEST
-
-
-    case "${TILDE_DEST}" in
-
-        'exit')
-            exit 0
-
-            ;;
-
-        '')
-            err "${0##*/} needs a destination."
-
-            ;;
-
-    esac
+	readonly TILDE_DEST
 
 
-    NO_TILDE_DEST="$(echo "${TILDE_DEST}" | sed -- "s|^~|${HOME}|g")"
-    readonly NO_TILDE_DEST
+	case "${TILDE_DEST}" in
 
-    mkdir -p -- "${NO_TILDE_DEST}" || err "${TILDE_DEST} could not be created with mkdir(1)."
+		'exit')
+			exit 0
+
+			;;
+
+		'')
+			err "${0##*/} needs a destination."
+
+			;;
+
+	esac
+
+
+	NO_TILDE_DEST="$(echo "${TILDE_DEST}" | sed -- "s|^~|${HOME}|g")"
+	readonly NO_TILDE_DEST
+
+	mkdir -p -- "${NO_TILDE_DEST}" || err "${TILDE_DEST} could not be created with mkdir(1)."
 }
 
 
@@ -164,30 +164,30 @@ handle_dest() {
 #
 # dmenu seems to need at least one item from STDIN to behave properly.
 rename_file() {
-    NEW_FILENAME="$(echo 'exit' | menu -p "Rename ${FILE##*/} to what?")"
-    readonly NEW_FILENAME
+	NEW_FILENAME="$(echo 'exit' | menu -p "Rename ${FILE##*/} to what?")"
+	readonly NEW_FILENAME
 
-    case "${NEW_FILENAME}" in
+	case "${NEW_FILENAME}" in
 
-        'exit')
-            exit 0
+		'exit')
+			exit 0
 
-            ;;
+			;;
 
-        '')
-            err "${0##*/} needs a new name to rename ${FILE##*/} to."
+		'')
+			err "${0##*/} needs a new name to rename ${FILE##*/} to."
 
-            ;;
+			;;
 
-    esac
+	esac
 
-    if mv -- "${FILE}" "${FILE%/*}/${NEW_FILENAME}"; then
-        notify-send -- "${FILE##*/} renamed to ${NEW_FILENAME}"
+	if mv -- "${FILE}" "${FILE%/*}/${NEW_FILENAME}"; then
+		notify-send -- "${FILE##*/} renamed to ${NEW_FILENAME}"
 
-    else
-        err "Failed to rename ${FILE}."
+	else
+		err "Failed to rename ${FILE}."
 
-    fi
+	fi
 }
 
 
@@ -200,12 +200,12 @@ EOF
 
 while getopts chmn opt; do
 
-    case "${opt}" in
-        'c')     readonly OPERATION='copy'; break   ;;
-        'm')     readonly OPERATION='move'; break   ;;
-        'n')     readonly OPERATION='rename'; break ;;
-        'h'|*)   usage                              ;;
-    esac
+	case "${opt}" in
+		'c') readonly OPERATION='copy'; break ;;
+		'm') readonly OPERATION='move'; break ;;
+		'n') readonly OPERATION='rename'; break ;;
+		'h'|*) usage ;;
+	esac
 
 done
 
@@ -221,18 +221,18 @@ readonly FILE
 
 # if there is no operation, prompt the user to select one.
 if [ -z "${OPERATION}" ]; then
-    OPERATION="$(printf '%s\n' 'copy' 'move' 'rename' | menu -p "What to do with ${FILE}?")"
-    readonly OPERATION
+	OPERATION="$(printf '%s\n' 'copy' 'move' 'rename' | menu -p "What to do with ${FILE}?")"
+	readonly OPERATION
 
-    # a small delay needs to be here. without it, the subsequent menu
-    # won't appear sometimes.
-    sleep 0.25
+	# a small delay needs to be here. without it, the subsequent menu
+	# won't appear sometimes.
+	sleep 0.25
 fi
 
 
 case "${OPERATION}" in
-    'copy')   handle_dest && copy_file ;;
-    'move')   handle_dest && move_file ;;
-    'rename') rename_file              ;;
-    *)        usage                    ;;
+	'copy') handle_dest && copy_file ;;
+	'move') handle_dest && move_file ;;
+	'rename') rename_file ;;
+	*) usage ;;
 esac

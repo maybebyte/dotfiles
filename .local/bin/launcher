@@ -16,25 +16,25 @@
 
 
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
 import_colors_sh() {
-    readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
-    if ! [ -r "${COLORS_SH}" ]; then
-        echo "${COLORS_SH} is not readable." >&2
+	if ! [ -r "${COLORS_SH}" ]; then
+		echo "${COLORS_SH} is not readable." >&2
 
-    elif ! [ -f "${COLORS_SH}" ]; then
-        echo "${COLORS_SH} is not a file." >&2
+	elif ! [ -f "${COLORS_SH}" ]; then
+		echo "${COLORS_SH} is not a file." >&2
 
-    # passed sanity checks, so source the file
-    else
-        . "${COLORS_SH}"
+	# passed sanity checks, so source the file
+	else
+		. "${COLORS_SH}"
 
-    fi
+	fi
 }
 
 
@@ -44,8 +44,8 @@ import_colors_sh() {
 
 import_colors_sh
 
-dmenu_run -i -fn 'mono-12'       \
-    -nb "${background:-#040516}" \
-    -nf "${color3:-#9974e7}"     \
-    -sb "${background:-#040516}" \
-    -sf "${foreground:-#e0cef3}"
+dmenu_run -i -fn 'mono-12' \
+	-nb "${background:-#040516}" \
+	-nf "${color3:-#9974e7}" \
+	-sb "${background:-#040516}" \
+	-sf "${foreground:-#e0cef3}"

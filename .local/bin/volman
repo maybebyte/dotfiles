@@ -16,72 +16,72 @@
 
 
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
 usage() {
-    err "usage:
+	err "usage:
 ${0##*/} [inc|dec|mute]"
 }
 
 
 check_deps() {
-    while read -r dependency; do
+	while read -r dependency; do
 
-        [ -x "$(command -v -- "${dependency}")" ] \
-            || err "${dependency} not found in PATH or not executable."
+		[ -x "$(command -v -- "${dependency}")" ] \
+			|| err "${dependency} not found in PATH or not executable."
 
-    done
+	done
 }
 
 
 # either increase, decrease, or mute the volume if the appropriate
 # argument is given. if not, error and display usage details.
 adjust_vol() {
-    case "$1" in
-        'inc')  check_mute || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-        'dec')  check_mute || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
-        'mute') sndioctl output.mute=! >/dev/null 2>&1                    ;;
-        *)      usage                                                     ;;
-    esac
+	case "$1" in
+		'inc') check_mute || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
+		'dec') check_mute || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
+		'mute') sndioctl output.mute=! >/dev/null 2>&1 ;;
+		*) usage ;;
+	esac
 }
 
 
 print_vol() {
-    if [ "${MUTED}" = 'true' ]; then
-        echo 'MUTED'
+	if [ "${MUTED}" = 'true' ]; then
+		echo 'MUTED'
 
-    else
-        echo "$@"
+	else
+		echo "$@"
 
-    fi
+	fi
 }
 
 
 # if muted, succeed.
 # if not muted, fail.
 check_mute() {
-    case "$(sndioctl -n output.mute 2>/dev/null)" in
-        1) return 0                                            ;;
-        0) return 1                                            ;;
-        *) err 'Failed to check output.mute with sndioctl(1).' ;;
-    esac
+	case "$(sndioctl -n output.mute 2>/dev/null)" in
+		1) return 0 ;;
+		0) return 1 ;;
+		*) err 'Failed to check output.mute with sndioctl(1).' ;;
+	esac
 }
 
 
 # get raw output level and convert it to something more parsable.
 get_vol() {
-    RAW_VOL="$(sndioctl -n output.level 2>/dev/null)"
-    readonly RAW_VOL
+	RAW_VOL="$(sndioctl -n output.level 2>/dev/null)"
+	readonly RAW_VOL
 
-    case "${RAW_VOL}" in
-        1.000) echo 100                                                  ;;
-        0.000) echo 0                                                    ;;
-               # division is here to truncate the floating point number.
-        *)     printf 'scale=0; (%.2g * %s) / 1\n' "${RAW_VOL}" 100 | bc ;;
-    esac
+	case "${RAW_VOL}" in
+		1.000) echo 100 ;;
+		0.000) echo 0 ;;
+		# division is here to truncate the floating point number.
+		*) printf 'scale=0; (%.2g * %s) / 1\n' "${RAW_VOL}" 100 | bc ;;
+	esac
 }
 
 
