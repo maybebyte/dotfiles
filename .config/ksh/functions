@@ -9,20 +9,20 @@
 
 # a wrapper around curl(1) that passes -x to use tor(1).
 anoncurl() {
-  case "$@" in
+	case "$@" in
 
-    ''|'-h')
-      echo 'curl(1) with tor(1).
+		''|'-h')
+			echo 'curl(1) with tor(1).
 
 otherwise, use it the same way you would use curl(1).' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  curl -x socks5://127.0.0.1:9050 "$@"
+	curl -x socks5://127.0.0.1:9050 "$@"
 }
 
 # using torsocks(1) and ftp(1) with no auto-login or user agent, send a
@@ -32,20 +32,20 @@ otherwise, use it the same way you would use curl(1).' >&2
 # $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
 # zathura(1) can open.
 anonread() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'read PDFs with tor(1).
+		''|'-h')
+			echo 'read PDFs with tor(1).
 
 anonread [URL linking to an ebook]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  anonftp -o - -- "$1" | zathura -- -
+	anonftp -o - -- "$1" | zathura -- -
 }
 
 # invoke apropos(1) to match $1 against any available macro key of
@@ -53,21 +53,21 @@ anonread [URL linking to an ebook]' >&2
 #
 # $1 is a word/phrase to search for (phrases must be quoted).
 aprv() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'invoke apropos(1) to match the given query against any available macro
+		''|'-h')
+			echo 'invoke apropos(1) to match the given query against any available macro
 key of manpages that match the current machine architecture.
 
 aprv [query]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  apropos -S "$(uname -m)" -- any="$1"
+	apropos -S "$(uname -m)" -- any="$1"
 }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
@@ -76,20 +76,20 @@ aprv [query]' >&2
 #
 # $1 is a program one wants to learn more about.
 cht() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'retrieve command cheat sheets from cht.sh
+		''|'-h')
+			echo 'retrieve command cheat sheets from cht.sh
 
 cht [command name]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
+	ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
 }
 
 
@@ -101,10 +101,10 @@ cht [command name]' >&2
 #
 # $1 is a file.
 cpbak() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'if the given file ends in ".bak", copy to an identically named file
+		''|'-h')
+			echo 'if the given file ends in ".bak", copy to an identically named file
 except the new file omits ".bak".
 
 otherwise, copy the given file to an identically named file except the
@@ -112,16 +112,16 @@ new file ends in ".bak".
 
 cpbak [file]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  case "${1##*.bak}" in
-    '') cp -- "$1" "${1%.bak}" ;;
-    *)  cp -- "$1" "$1.bak"    ;;
-  esac
+	case "${1##*.bak}" in
+		'') cp -- "$1" "${1%.bak}" ;;
+		*)	cp -- "$1" "$1.bak" ;;
+	esac
 }
 
 # choose files with fzf and edit them.
@@ -130,49 +130,49 @@ econf() { fzf-open "${EDITOR}" "${XDG_CONFIG_HOME}"; }
 enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
 
 fzf_hist() {
-  RES="$(fzf --tac --no-sort -e < "${HISTFILE}")"
-  [ -n "${RES}" ] || return 0
-  eval "${RES}"
+	RES="$(fzf --tac --no-sort -e < "${HISTFILE}")"
+	[ -n "${RES}" ] || return 0
+	eval "${RES}"
 }
 
 # perform an A record lookup on $1 and return the IP address.
 #
 # $1 is a domain.
 grabipv4() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'perform an A record lookup and return the IP address.
+		''|'-h')
+			echo 'perform an A record lookup and return the IP address.
 
 grabipv4 [IP address]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  dig A +short "$1"
+	dig A +short "$1"
 }
 
 # perform an AAAA record lookup on $1 and return the IPv6 address.
 #
 # $1 is a domain.
 grabipv6() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'perform an AAAA record lookup and return the IPv6 address.
+		''|'-h')
+			echo 'perform an AAAA record lookup and return the IPv6 address.
 
 grabipv6 [IPv6 address]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  dig AAAA +short "$1"
+	dig AAAA +short "$1"
 }
 
 # if $1 is less than 1024, print it and exit successfully.
@@ -186,47 +186,48 @@ grabipv6 [IPv6 address]' >&2
 #
 # TODO: perhaps this can use bc(1)
 hreadable() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'return a human readable integer.
+		''|'-h')
+			echo 'return a human readable integer.
 
 hreadable [positive integer]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  no_of_loops=0
-  size="$1"
+	no_of_loops=0
+	size="$1"
 
-  # sanity check so math below works. also alleviates the need to use
-  # printf(1) below since we can at least know that ${size} is an
-  # integer.
-  case "${size}" in
-    *[!0-9]*) echo 'Only integers are accepted.' >&2; return  ;;
-    *)        # size is an integer, so do nothing and proceed ;;
-  esac
+	# sanity check so math below works. also alleviates the need to use
+	# printf(1) below since we can at least know that ${size} is an
+	# integer.
+	case "${size}" in
+		*[!0-9]*) echo 'Only integers are accepted.' >&2; return ;;
+		# size is an integer, so do nothing and proceed
+		*) ;;
+	esac
 
-  # size < 1024 means the value printed should be in bytes.
-  [ "${size}" -lt 1024 ] \
-    && echo "${size}B" \
-    && return 0
+	# size < 1024 means the value printed should be in bytes.
+	[ "${size}" -lt 1024 ] \
+		&& echo "${size}B" \
+		&& return 0
 
-  until [ "${#size}" -le 3 ]; do
-    : $((no_of_loops += 1))
-    : $((size /= 1024))
-  done
+	until [ "${#size}" -le 3 ]; do
+		: $((no_of_loops += 1))
+		: $((size /= 1024))
+	done
 
-  case ${no_of_loops} in
-    1) echo "${size}KB"                                                 ;;
-    2) echo "${size}MB"                                                 ;;
-    3) echo "${size}GB"                                                 ;;
-    4) echo "${size}TB"                                                 ;;
-    *) echo 'hreadable() can only convert up to terabytes.' >&2; return ;;
-  esac
+	case ${no_of_loops} in
+		1) echo "${size}KB" ;;
+		2) echo "${size}MB" ;;
+		3) echo "${size}GB" ;;
+		4) echo "${size}TB" ;;
+		*) echo 'hreadable() can only convert up to terabytes.' >&2; return ;;
+	esac
 }
 
 # with no auto-login, no progress meter and no verbose mode, use ftp(1)
@@ -236,82 +237,82 @@ hreadable [positive integer]' >&2
 # $1 is an IP address. If left blank, ipinf will return results for our
 # public IP.
 ipinf() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'display IP address information from ipinfo.io
+		''|'-h')
+			echo 'display IP address information from ipinfo.io
 
 ipinf [IP address]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  ftp -VMo - -- "https://ipinfo.io/$1"
+	ftp -VMo - -- "https://ipinfo.io/$1"
 }
 
 # journal
 jrnl() {
-  case "$@" in
+	case "$@" in
 
-    '') # being used as intended
+		'') # being used as intended
 
-      ;;
+			;;
 
-    '-h'|*)
-      echo "jrnl (for journaling) takes no arguments.
+		'-h'|*)
+			echo "jrnl (for journaling) takes no arguments.
 
 It creates ${HOME}/notes/journal/$(date '+%F').txt (including the
 directory tree, if it doesn't exist) with appropriate formatting and
 then opens up the file in ${EDITOR:-EDITOR}." >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  TODAY="$(date '+%F')"
-  JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.txt"
+	TODAY="$(date '+%F')"
+	JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.txt"
 
-  # easier to just create the directory than error
-  mkdir -p "${JRNL_ENTRY%/*}"
+	# easier to just create the directory than error
+	mkdir -p "${JRNL_ENTRY%/*}"
 
-  if ! [ -e "${JRNL_ENTRY}" ]; then
-    { echo
-      echo "${TODAY}"
-      date '+%H:%M'
-    } > "${JRNL_ENTRY}"
+	if ! [ -e "${JRNL_ENTRY}" ]; then {
+		echo
+		echo "${TODAY}"
+		date '+%H:%M'
+		} > "${JRNL_ENTRY}"
 
-  else
-    { echo
-      echo '-'
-      date '+%H:%M'
-    } >> "${JRNL_ENTRY}"
+	else {
+		echo
+		echo '-'
+		date '+%H:%M'
+		} >> "${JRNL_ENTRY}"
 
-  fi
+	fi
 
-  "${EDITOR}" "${JRNL_ENTRY}"
+	"${EDITOR}" "${JRNL_ENTRY}"
 }
 
 # read a markdown document with man(1).
 manmd() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'read a markdown document with man(1).
+		''|'-h')
+			echo 'read a markdown document with man(1).
 
 manmd [markdown document]' >&2
 
-      return
+			return
 
-    ;;
+		;;
 
-  esac
+	esac
 
-  lowdown -T 'man' "$1" | mandoc -a
+	lowdown -T 'man' "$1" | mandoc -a
 }
 
 # if $1 ends in '.bak', remove '.bak' from the filename.
@@ -319,34 +320,34 @@ manmd [markdown document]' >&2
 #
 # $1 is a file.
 mvbak() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'if the given file ends in ".bak", remove ".bak" from the filename.
+		''|'-h')
+			echo 'if the given file ends in ".bak", remove ".bak" from the filename.
 otherwise, append ".bak" to the filename.
 
 mvbak [file]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  case "${1##*.bak}" in
-    '') mv -- "$1" "${1%.bak}" ;;
-    *)  mv -- "$1" "$1.bak"    ;;
-  esac
+	case "${1##*.bak}" in
+		'') mv -- "$1" "${1%.bak}" ;;
+		*)	mv -- "$1" "$1.bak" ;;
+	esac
 }
 
 # checks the headers of a website with tor(1).
 # nc_head [path] [domain] 80 for HTTP.
 # nc_head [path] -c [domain] 443 for HTTPS.
 nc_head() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'checks the headers of a website with tor(1).
+		''|'-h')
+			echo 'checks the headers of a website with tor(1).
 
 HTTP:
 nc_head [path] [domain] 80
@@ -354,33 +355,33 @@ nc_head [path] [domain] 80
 HTTPS:
 nc_head [path] -c [domain] 443' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  URI="$1"
-  shift
-  printf "%s\r\n\r\n" "HEAD ${URI} HTTP/1.0" | nc_tor "$@"
+	URI="$1"
+	shift
+	printf "%s\r\n\r\n" "HEAD ${URI} HTTP/1.0" | nc_tor "$@"
 }
 
 # nc(1) + tor(1) = fun.
 nc_tor() {
-  case "$@" in
+	case "$@" in
 
-    ''|'-h')
-      echo 'nc(1) + tor(1) = nc_tor()
+		''|'-h')
+			echo 'nc(1) + tor(1) = nc_tor()
 
 otherwise, use it the same way you would use nc(1).' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  nc -X 5 -x 127.0.0.1:9050 "$@"
+	nc -X 5 -x 127.0.0.1:9050 "$@"
 }
 
 # obtains the estimated size of a package and returns it in a human
@@ -388,58 +389,58 @@ otherwise, use it the same way you would use nc(1).' >&2
 #
 # $1 is the name of a valid package.
 pkgsize() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'obtains the estimated size of a package and returns it in a human
+		''|'-h')
+			echo 'obtains the estimated size of a package and returns it in a human
 readable format.
 
 pkgsize [package name]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  SIZE="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
-  hreadable "${SIZE}"
+	SIZE="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
+	hreadable "${SIZE}"
 }
 
 # with rffd, open up random pics with sxiv(1).
 randpics() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'with rffd, open up random pics with sxiv(1).
+		''|'-h')
+			echo 'with rffd, open up random pics with sxiv(1).
 
 randpics [directory with pics]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
+	rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
 }
 
 # with rffd, open up random videos with mpv(1).
 randvids() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'with rffd, open up random videos with mpv(1).
+		''|'-h')
+			echo 'with rffd, open up random videos with mpv(1).
 
 randvids [directory with videos]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
+	rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
 }
 
 # choose a book with fzf and read it.
@@ -447,69 +448,69 @@ readabook() { fzf-open "${READER}" "${HOME}/books"; }
 
 # read a markdown document with less(1).
 readmd() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'read a markdown document with less(1).
+		''|'-h')
+			echo 'read a markdown document with less(1).
 
 readmd [markdown document]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  lowdown -T 'term' --term-no-colour "$1" | less
+	lowdown -T 'term' --term-no-colour "$1" | less
 }
 
 # sorts a file and removes unique entries.
 # note that sortfile modifies (replaces) the original copy.
 sortfile() {
-  [ -n "$*" ] || {
-    echo 'sortfile /path/to/file ...
+	[ -n "$*" ] || {
+		echo 'sortfile /path/to/file ...
 note that sortfile modifies (replaces) the original copy.' >&2
-    return 1
-  }
+		return 1
+	}
 
-  for file_to_be_sorted in "$@"; do
+	for file_to_be_sorted in "$@"; do
 
-    [ -f "${file_to_be_sorted}" ] || {
-      echo "${file_to_be_sorted} is not a file." >&2
-      continue
-    }
+		[ -f "${file_to_be_sorted}" ] || {
+			echo "${file_to_be_sorted} is not a file." >&2
+			continue
+		}
 
-    [ -w "${file_to_be_sorted}" ] || {
-      echo "${file_to_be_sorted} is not writable." >&2
-      continue
-    }
+		[ -w "${file_to_be_sorted}" ] || {
+			echo "${file_to_be_sorted} is not writable." >&2
+			continue
+		}
 
-    tmpfile="$(mktemp)" || {
-      echo "${tmpfile} could not be created, exiting." >&2
-      return 1
-    }
+		tmpfile="$(mktemp)" || {
+			echo "${tmpfile} could not be created, exiting." >&2
+			return 1
+		}
 
-    sort -u "${file_to_be_sorted}" > "${tmpfile}" || {
-      echo "${file_to_be_sorted} could not be sorted and written to ${tmpfile}." >&2
-      continue
-    }
+		sort -u "${file_to_be_sorted}" > "${tmpfile}" || {
+			echo "${file_to_be_sorted} could not be sorted and written to ${tmpfile}." >&2
+			continue
+		}
 
-    mv "${tmpfile}" "${file_to_be_sorted}" || {
-      echo "${tmpfile} could not be moved to ${file_to_be_sorted}." >&2
-      continue
-    }
+		mv "${tmpfile}" "${file_to_be_sorted}" || {
+			echo "${tmpfile} could not be moved to ${file_to_be_sorted}." >&2
+			continue
+		}
 
-  done
+	done
 }
 
 # usage:
 #
 # tarpv [archive target] > filename
 tarpv() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'archive something with tar(1) and watch progress with pv(1).
+		''|'-h')
+			echo 'archive something with tar(1) and watch progress with pv(1).
 
 without compression:
 tarpv [archive target] > filename
@@ -517,43 +518,43 @@ tarpv [archive target] > filename
 with compression:
 tarpv [archive target] | gzip -c > filename' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  # command -v will match the alias
-  DU="$(which 'du')"
+	# command -v will match the alias
+	DU="$(which 'du')"
 
-  SIZE_OF_DIR="$(
-    "${DU}" -sh "$1" \
-      | sed -E "s/\.([[:digit:]])+//" \
-      | cut -f 1
-  )"
+	SIZE_OF_DIR="$(
+		"${DU}" -sh "$1" \
+			| sed -E "s/\.([[:digit:]])+//" \
+			| cut -f 1
+	)"
 
-  tar -cf - "$1" | pv -s "${SIZE_OF_DIR}"
+	tar -cf - "$1" | pv -s "${SIZE_OF_DIR}"
 }
 
 # test Matrix federation and output the JSON.
 #
 # $1 is a domain name associated with a Matrix homeserver.
 testfed() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'test Matrix federation and output the JSON.
+		''|'-h')
+			echo 'test Matrix federation and output the JSON.
 
 testfed [matrix homeserver domain]' >&2
 
-    return
+		return
 
-    ;;
+		;;
 
-  esac
+	esac
 
-  ftp -U '' -VMno - -- \
-    "https://federationtester.matrix.org/api/report?server_name=$1"
+	ftp -U '' -VMno - -- \
+		"https://federationtester.matrix.org/api/report?server_name=$1"
 }
 
 # use bioctl(8) to unlock an encrypted partition and attach it to
@@ -561,20 +562,20 @@ testfed [matrix homeserver domain]' >&2
 #
 # $1 is an encrypted partition.
 unlockhdd() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'unlock a drive encrypted with bioctl(8).
+		''|'-h')
+			echo 'unlock a drive encrypted with bioctl(8).
 
 unlockhdd [encrypted partition]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  priv bioctl -c C -l "$1" softraid0
+	priv bioctl -c C -l "$1" softraid0
 }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
@@ -583,28 +584,28 @@ unlockhdd [encrypted partition]' >&2
 #
 # $1 is a geographical location for weather forecasting purposes.
 wttr() {
-  case "$1" in
+	case "$1" in
 
-    ''|'-h')
-      echo 'get weather information.
+		''|'-h')
+			echo 'get weather information.
 
 wttr [location]' >&2
 
-      return
+			return
 
-      ;;
+			;;
 
-  esac
+	esac
 
-  ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
+	ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
 }
 
 
 # for downloading YouTube channels/playlists
 ytpl() {
-  yt-dlp \
-    --download-archive './archive.txt' \
-    --output './%(title)s.%(ext)s' \
-    --match-filter "playlist_title != 'Liked videos' & playlist_title != 'Favorites'" \
-    "$@"
+	yt-dlp \
+		--download-archive './archive.txt' \
+		--output './%(title)s.%(ext)s' \
+		--match-filter "playlist_title != 'Liked videos' & playlist_title != 'Favorites'" \
+		"$@"
 }

@@ -1,287 +1,287 @@
 # shellcheck disable=SC2154
 
 complain_noexec() {
-  echo "[$(date '+%F %H:%M:%S')]: $1 not found or not executable, so related aliases disabled." >&2
-  return 1
+	echo "[$(date '+%F %H:%M:%S')]: $1 not found or not executable, so related aliases disabled." >&2
+	return 1
 }
 
 
 complain_undefined() {
-  echo "[$(date '+%F %H:%M:%S')]: $1 undefined, so related aliases disabled." >&2
-  return 1
+	echo "[$(date '+%F %H:%M:%S')]: $1 undefined, so related aliases disabled." >&2
+	return 1
 }
 
 
 pf_aliases() {
-  alias                                                                \
-    epf="\${EDITOR} /etc/pf.conf"                                      \
-    pfdump='tcpdump -ler /var/log/pflog'                               \
-    pfdumpb='pfdump action block'                                      \
-    pfdumpp='pfdump action pass'                                       \
-    pfload='pfctl -f /etc/pf.conf'                                     \
-    pfoff='pfctl -d'                                                   \
-    pfon='pfctl -e'                                                    \
-    pfrules='pfshow rules'                                             \
-    pfshow='pfctl -s'                                                  \
-    pftail='tcpdump -lei pflog0'                                       \
-    pftailb='pftail action block'                                      \
-    pftailp='pftail action pass'                                       \
-    pftest='pfload -n'
+	alias \
+		epf="\${EDITOR} /etc/pf.conf" \
+		pfdump='tcpdump -ler /var/log/pflog' \
+		pfdumpb='pfdump action block' \
+		pfdumpp='pfdump action pass' \
+		pfload='pfctl -f /etc/pf.conf' \
+		pfoff='pfctl -d' \
+		pfon='pfctl -e' \
+		pfrules='pfshow rules' \
+		pfshow='pfctl -s' \
+		pftail='tcpdump -lei pflog0' \
+		pftailb='pftail action block' \
+		pftailp='pftail action pass' \
+		pftest='pfload -n'
 }
 
 
 openbsd_aliases() {
-  alias                                                                \
-    dsklab='disklabel -p g'                                            \
-    eunw="\${EDITOR} /etc/unwind.conf"                                 \
-    exip="ftp -VMo - https://ifconfig.me && echo"                      \
-    pkgL='pkgq -L'                                                     \
-    pkga='pkg_add'                                                     \
-    pkgas='pkga -D snap'                                               \
-    pkgd='pkg_delete'                                                  \
-    pkgda='pkgd -a'                                                    \
-    pkgl='pkgq -mz'                                                    \
-    pkgq='pkg_info'                                                    \
-    pkgqo='pkgq -E'                                                    \
-    pkgqs='pkg_info -D snap'                                           \
-    pkgs='pkgq -Q'                                                     \
-    pkgss='pkgqs -Q'                                                   \
-    pkgup='pkga -u'                                                    \
-    pkgups='pkgup -D snap'                                             \
-    rcg='rcctl get'                                                    \
-    rclfail='rcctl ls failed'                                          \
-    rclon='rcctl ls on'                                                \
-    rclstr='rcctl ls started'                                          \
-    rcoff='rcctl disable'                                              \
-    rcon='rcctl enable'                                                \
-    rcre='rcctl restart'                                               \
-    rcrel='rcctl reload'                                               \
-    rcset='rcctl set'                                                  \
-    rcst='rcctl stop'                                                  \
-    rcstr='rcctl start'                                                \
-    rcstrf='rcctl -f start'                                            \
-    readhttp='less /var/www/logs/access.log'                           \
-    readmail='less /var/log/maillog'                                   \
-    readsec='less /var/log/secure'                                     \
-    renet='sh /etc/netstart'                                           \
-    sysnet='systat netstat'                                            \
-    tailhttp='tail -f /var/www/logs/access.log'                        \
-    tailmail='tail -f /var/log/maillog'                                \
-    webtest="webtest \${SITE} \${MARKDOWNDIR} \${SRVDIR}"
+	alias \
+		dsklab='disklabel -p g' \
+		eunw="\${EDITOR} /etc/unwind.conf" \
+		exip="ftp -VMo - https://ifconfig.me && echo" \
+		pkgL='pkgq -L' \
+		pkga='pkg_add' \
+		pkgas='pkga -D snap' \
+		pkgd='pkg_delete' \
+		pkgda='pkgd -a' \
+		pkgl='pkgq -mz' \
+		pkgq='pkg_info' \
+		pkgqo='pkgq -E' \
+		pkgqs='pkg_info -D snap' \
+		pkgs='pkgq -Q' \
+		pkgss='pkgqs -Q' \
+		pkgup='pkga -u' \
+		pkgups='pkgup -D snap' \
+		rcg='rcctl get' \
+		rclfail='rcctl ls failed' \
+		rclon='rcctl ls on' \
+		rclstr='rcctl ls started' \
+		rcoff='rcctl disable' \
+		rcon='rcctl enable' \
+		rcre='rcctl restart' \
+		rcrel='rcctl reload' \
+		rcset='rcctl set' \
+		rcst='rcctl stop' \
+		rcstr='rcctl start' \
+		rcstrf='rcctl -f start' \
+		readhttp='less /var/www/logs/access.log' \
+		readmail='less /var/log/maillog' \
+		readsec='less /var/log/secure' \
+		renet='sh /etc/netstart' \
+		sysnet='systat netstat' \
+		tailhttp='tail -f /var/www/logs/access.log' \
+		tailmail='tail -f /var/log/maillog' \
+		webtest="webtest \${SITE} \${MARKDOWNDIR} \${SRVDIR}"
 
 
-  [ -n "${NIC}" ] &&
-    alias                                                              \
-      ehn="e /etc/hostname.\${NIC}"                                    \
-      nicdel="ifconfig \${NIC} delete"                                 \
-      nicoff="ifconfig \${NIC} down"                                   \
-      nicon="ifconfig \${NIC} up"                                      \
-      renetnic="renet \${NIC}"                                         \
-      nicre='nicoff && nicon'                                          \
-      nicshow="ifconfig \${NIC}"                                       \
-      nictail="tcpdump -lpi \${NIC}"
+	[ -n "${NIC}" ] &&
+		alias \
+			ehn="e /etc/hostname.\${NIC}" \
+			nicdel="ifconfig \${NIC} delete" \
+			nicoff="ifconfig \${NIC} down" \
+			nicon="ifconfig \${NIC} up" \
+			renetnic="renet \${NIC}" \
+			nicre='nicoff && nicon' \
+			nicshow="ifconfig \${NIC}" \
+			nictail="tcpdump -lpi \${NIC}"
 
-  [ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
+	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
 
 
-alias                                                                  \
-  ..='cd ..'                                                           \
-  ...='cd ../..'                                                       \
-  ....='cd ../../..'                                                   \
-  .....='cd ../../../..'
+alias \
+	..='cd ..' \
+	...='cd ../..' \
+	....='cd ../../..' \
+	.....='cd ../../../..'
 
 
-alias                                                                  \
-  apr='apropos'                                                        \
-  c='clear'                                                            \
-  cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr'      \
-  df='df -h'                                                           \
-  dtsu='shutdown now'                                                  \
-  du='du -h'                                                           \
-  la='ll -A'                                                           \
-  ll='ls -lh'                                                          \
-  llb='ll -Sr'                                                         \
-  lln='ll -tr'                                                         \
-  ls="\${LS} -F"                                                       \
-  lsd="find . -maxdepth 1 -iname '.[^.]*'"                             \
-  mkd='mkdir -p'                                                       \
-  mntsafe='mount -o noexec,nosuid,nodev'                               \
-  off='shutdown -p now'                                                \
-  re='shutdown -r now'                                                 \
-  readmsg='less /var/log/messages'                                     \
-  readx='less /var/log/Xorg.0.log'                                     \
-  shre=". \${XDG_CONFIG_HOME}/ksh/kshrc"                               \
-  tailmsg='tail -f /var/log/messages'                                  \
-  today='date +%F'                                                     \
-  up='uptime'
+alias \
+	apr='apropos' \
+	c='clear' \
+	cmdstat='fc -nl 0 | sort | uniq -c | sort -n | tail | sort -nr' \
+	df='df -h' \
+	dtsu='shutdown now' \
+	du='du -h' \
+	la='ll -A' \
+	ll='ls -lh' \
+	llb='ll -Sr' \
+	lln='ll -tr' \
+	ls="\${LS} -F" \
+	lsd="find . -maxdepth 1 -iname '.[^.]*'" \
+	mkd='mkdir -p' \
+	mntsafe='mount -o noexec,nosuid,nodev' \
+	off='shutdown -p now' \
+	re='shutdown -r now' \
+	readmsg='less /var/log/messages' \
+	readx='less /var/log/Xorg.0.log' \
+	shre=". \${XDG_CONFIG_HOME}/ksh/kshrc" \
+	tailmsg='tail -f /var/log/messages' \
+	today='date +%F' \
+	up='uptime'
 
 
-[ -x "$(command -v -- 'exiftool')" ]            && alias exifrm='exiftool -all= '
-[ -x "$(command -v -- 'ftp')" ]                 && alias ftp="ftp -nU ''"
-[ -x "$(command -v -- 'mimeopen')" ]            && alias o='mimeopen'
-[ -x "$(command -v -- 'ncmpcpp')" ]             && alias mus='ncmpcpp 2>/dev/null'
-[ -x "$(command -v -- 'neomutt')" ]             && alias m='neomutt'
-[ -x "$(command -v -- 'newsboat')" ]            && alias nb='newsboat'
-[ -x "$(command -v -- 'nikto')" ]               && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
-[ -x "$(command -v -- 'nmap')" ]                && alias scan='nmap -sn'
-[ -x "$(command -v -- 'nnn')" ]                 && alias n='nnn'
-[ -x "$(command -v -- 'searchsploit')" ]        && alias sspl='searchsploit'
-[ -x "$(command -v -- 'speedtest-cli')" ]       && alias stcli='speedtest-cli'
+[ -x "$(command -v -- 'exiftool')" ] && alias exifrm='exiftool -all= '
+[ -x "$(command -v -- 'ftp')" ] && alias ftp="ftp -nU ''"
+[ -x "$(command -v -- 'mimeopen')" ] && alias o='mimeopen'
+[ -x "$(command -v -- 'ncmpcpp')" ] && alias mus='ncmpcpp 2>/dev/null'
+[ -x "$(command -v -- 'neomutt')" ] && alias m='neomutt'
+[ -x "$(command -v -- 'newsboat')" ] && alias nb='newsboat'
+[ -x "$(command -v -- 'nikto')" ] && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
+[ -x "$(command -v -- 'nmap')" ] && alias scan='nmap -sn'
+[ -x "$(command -v -- 'nnn')" ] && alias n='nnn'
+[ -x "$(command -v -- 'searchsploit')" ] && alias sspl='searchsploit'
+[ -x "$(command -v -- 'speedtest-cli')" ] && alias stcli='speedtest-cli'
 [ -x "$(command -v -- 'transmission-remote')" ] && alias trem='transmission-remote'
-[ -x "$(command -v -- 'wget')" ]                && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
-[ -x "$(command -v -- 'zathura')" ]             && alias pdfman='MANPAGER=zathura man -T pdf'
+[ -x "$(command -v -- 'wget')" ] && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
+[ -x "$(command -v -- 'zathura')" ] && alias pdfman='MANPAGER=zathura man -T pdf'
 
 
 [ -x "$(command -v -- 'torsocks')" ] && {
-  alias anonsh='torsocks --shell'
-  [ -x "$(which -- 'ftp')" ]  && alias anonftp="torsocks ftp -nU ''"
-  [ -x "$(command -v -- 'tuir')" ] && alias tuir='torsocks tuir'
+	alias anonsh='torsocks --shell'
+	[ -x "$(which -- 'ftp')" ] && alias anonftp="torsocks ftp -nU ''"
+	[ -x "$(command -v -- 'tuir')" ] && alias tuir='torsocks tuir'
 }
 
 
 [ -x "$(command -v -- 'proxychains4')" ] \
-  && [ -x "$(command -v -- 'irssi')" ] \
-  && alias irssi='proxychains4 irssi'
+	&& [ -x "$(command -v -- 'irssi')" ] \
+	&& alias irssi='proxychains4 irssi'
 
 
 if [ -z "${EDITOR}" ]; then
-  # shellcheck disable=SC2016
-  complain_undefined '${EDITOR}'
+	# shellcheck disable=SC2016
+	complain_undefined '${EDITOR}'
 
 elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
-  complain_noexec "${EDITOR}"
+	complain_noexec "${EDITOR}"
 
 else
-  alias                                                                \
-    e="\${EDITOR}"                                                     \
-    efont="\${EDITOR} \${XDG_CONFIG_HOME}/fontconfig/fonts.conf"       \
-    ehst="\${EDITOR} /etc/hosts"                                       \
-    ek="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/kshrc"                      \
-    eka="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/aliases"                   \
-    ekf="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/functions"                 \
-    ekp="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/prompt"                    \
-    ekv="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/vars"                      \
-    empv="\${EDITOR} \${XDG_CONFIG_HOME}/mpv/mpv.conf"                 \
-    emusb="\${EDITOR} \${XDG_CONFIG_HOME}/ncmpcpp/bindings"            \
-    emusc="\${EDITOR} \${XDG_CONFIG_HOME}/ncmpcpp/config"              \
-    enb="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/config"               \
-    enbu="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/urls"                \
-    enm="\${EDITOR} \${XDG_CONFIG_HOME}/neomutt/neomuttrc"             \
-    eres="\${EDITOR} /etc/resolv.conf"                                 \
-    esxh="\${EDITOR} \${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"                \
-    esys="\${EDITOR} /etc/sysctl.conf"                                 \
-    etm="\${EDITOR} \${HOME}/.tmux.conf"                               \
-    ev="\${EDITOR} \${XDG_CONFIG_HOME}/nvim/init.vim"                  \
-    exm="\${EDITOR} \${XDG_CONFIG_HOME}/xmonad/xmonad.hs"              \
-    exmb="\${EDITOR} \${XDG_CONFIG_HOME}/xmobar/xmobarrc"              \
-    exr="\${EDITOR} \${HOME}/.Xresources"                              \
-    exs="\${EDITOR} \${HOME}/.xsession"
+	alias \
+		e="\${EDITOR}" \
+		efont="\${EDITOR} \${XDG_CONFIG_HOME}/fontconfig/fonts.conf" \
+		ehst="\${EDITOR} /etc/hosts" \
+		ek="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/kshrc" \
+		eka="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/aliases" \
+		ekf="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/functions" \
+		ekp="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/prompt" \
+		ekv="\${EDITOR} \${XDG_CONFIG_HOME}/ksh/vars" \
+		empv="\${EDITOR} \${XDG_CONFIG_HOME}/mpv/mpv.conf" \
+		emusb="\${EDITOR} \${XDG_CONFIG_HOME}/ncmpcpp/bindings" \
+		emusc="\${EDITOR} \${XDG_CONFIG_HOME}/ncmpcpp/config" \
+		enb="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/config" \
+		enbu="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/urls" \
+		enm="\${EDITOR} \${XDG_CONFIG_HOME}/neomutt/neomuttrc" \
+		eres="\${EDITOR} /etc/resolv.conf" \
+		esxh="\${EDITOR} \${XDG_CONFIG_HOME}/sxhkd/sxhkdrc" \
+		esys="\${EDITOR} /etc/sysctl.conf" \
+		etm="\${EDITOR} \${HOME}/.tmux.conf" \
+		ev="\${EDITOR} \${XDG_CONFIG_HOME}/nvim/init.vim" \
+		exm="\${EDITOR} \${XDG_CONFIG_HOME}/xmonad/xmonad.hs" \
+		exmb="\${EDITOR} \${XDG_CONFIG_HOME}/xmobar/xmobarrc" \
+		exr="\${EDITOR} \${HOME}/.Xresources" \
+		exs="\${EDITOR} \${HOME}/.xsession"
 fi
 
 
 [ -x "$(command -v -- 'git' )" ] &&
-  alias                                                                \
-    d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"        \
-    da='d add'                                                         \
-    dcmt='d commit -a'                                                 \
-    ddiff='d diff'                                                     \
-    dgr='d grep'                                                       \
-    dlg='d log'                                                        \
-    dls="d ls-files \${HOME}"                                          \
-    dpsh='d push'                                                      \
-    dre='d restore'                                                    \
-    ds='d status'                                                      \
-    g='git'                                                            \
-    ga='g add'                                                         \
-    gcl='g clone'                                                      \
-    gcmt='g commit -a'                                                 \
-    gdiff='g diff'                                                     \
-    ggr='g grep'                                                       \
-    glg='g log'                                                        \
-    gls='g ls-files'                                                   \
-    gpsh='g push'                                                      \
-    gre='g restore'                                                    \
-    gs='g status'
+	alias \
+		d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
+		da='d add' \
+		dcmt='d commit -a' \
+		ddiff='d diff' \
+		dgr='d grep' \
+		dlg='d log' \
+		dls="d ls-files \${HOME}" \
+		dpsh='d push' \
+		dre='d restore' \
+		ds='d status' \
+		g='git' \
+		ga='g add' \
+		gcl='g clone' \
+		gcmt='g commit -a' \
+		gdiff='g diff' \
+		ggr='g grep' \
+		glg='g log' \
+		gls='g ls-files' \
+		gpsh='g push' \
+		gre='g restore' \
+		gs='g status'
 
 
 [ -x "$(command -v -- 'keepassxc-cli')" ] &&
-  alias                                                                \
-    kp='keepassxc-cli'                                                 \
-    kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
+	alias \
+		kp='keepassxc-cli' \
+		kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
 
 
 if [ -x "$(command -v -- 'netstat')" ]; then
-  alias                                                                \
-    ntstr6='netstat -rf inet6'                                         \
-    ntstr='netstat -rf inet'                                           \
-    ntst6='netstat -f inet6'                                           \
-    ntst='netstat -f inet'
+	alias \
+		ntstr6='netstat -rf inet6' \
+		ntstr='netstat -rf inet' \
+		ntst6='netstat -f inet6' \
+		ntst='netstat -f inet'
 
-  # FreeBSD netstat(1) has no -l
-  [ "${OS}" != 'FreeBSD' ] &&
-    alias                                                              \
-      ntstl6='netstat -lf inet6'                                       \
-      ntstl='netstat -lf inet'
+	# FreeBSD netstat(1) has no -l
+	[ "${OS}" != 'FreeBSD' ] &&
+		alias \
+			ntstl6='netstat -lf inet6' \
+			ntstl='netstat -lf inet'
 
 else
-  complain_noexec 'netstat'
+	complain_noexec 'netstat'
 
 fi
 
 
 [ -x "$(command -v -- 'task')" ] &&
-  alias                                                                \
-    t='task'                                                           \
-    ta='t add'                                                         \
-    tafin='ta project:finances'                                        \
-    tagroc='ta project:groceries'                                      \
-    taedu='ta project:education'                                       \
-    taself='ta project:selfcare'                                       \
-    tashop='ta project:shopping'                                       \
-    tatech='ta project:tech'                                           \
-    tconf='t config'                                                   \
-    td='t done'                                                        \
-    tdel='t delete'                                                    \
-    tdue='task due.before:today ids'                                   \
-    tedu='tls project:education'                                       \
-    tfin='tls project:finances'                                        \
-    tgroc='tls project:groceries'                                      \
-    tid='t ids'                                                        \
-    tls='t list'                                                       \
-    tmod='t modify'                                                    \
-    tself='tls project:selfcare'                                       \
-    tshop='tls project:shopping'                                       \
-    tt='tls due:today'                                                 \
-    ttech='tls project:tech'                                           \
-    tup="td \$(tdue)"
+	alias \
+		t='task' \
+		ta='t add' \
+		tafin='ta project:finances' \
+		tagroc='ta project:groceries' \
+		taedu='ta project:education' \
+		taself='ta project:selfcare' \
+		tashop='ta project:shopping' \
+		tatech='ta project:tech' \
+		tconf='t config' \
+		td='t done' \
+		tdel='t delete' \
+		tdue='task due.before:today ids' \
+		tedu='tls project:education' \
+		tfin='tls project:finances' \
+		tgroc='tls project:groceries' \
+		tid='t ids' \
+		tls='t list' \
+		tmod='t modify' \
+		tself='tls project:selfcare' \
+		tshop='tls project:shopping' \
+		tt='tls due:today' \
+		ttech='tls project:tech' \
+		tup="td \$(tdue)"
 
 
 if [ -x "$(command -v -- 'tmux')" ]; then
-  alias                                                                \
-    tm='tmux'                                                          \
-    tma='tm attach'                                                    \
-    tmk='tm kill-server'                                               \
-    tml='tm list-sessions'
+	alias \
+		tm='tmux' \
+		tma='tm attach' \
+		tmk='tm kill-server' \
+		tml='tm list-sessions'
 
 else
-  complain_noexec 'tmux'
+	complain_noexec 'tmux'
 
 fi
 
 
 [ -x "$(command -v -- 'yt-dlp')" ] &&
-  alias                                                                \
-    yt='yt-dlp'                                                        \
-    yta='yt -xf bestaudio/best'                                        \
-    ytdesc='yt --get-description'                                      \
-    ytlen='yt --get-duration'                                          \
-    ytrm='yt --rm-cache-dir'
+	alias \
+		yt='yt-dlp' \
+		yta='yt -xf bestaudio/best' \
+		ytdesc='yt --get-description' \
+		ytlen='yt --get-duration' \
+		ytrm='yt --rm-cache-dir'
 
 
 [ -n "${MARKDOWNDIR}" ] && alias cdmd="cd \${MARKDOWNDIR}"
-[ -n "${SRVDIR}" ]      && alias cdsrv="cd \${MARKDOWNDIR}"
-[ -n "${SITE}" ]        && alias tnet="ping \${SITE##*//}"
+[ -n "${SRVDIR}" ] && alias cdsrv="cd \${MARKDOWNDIR}"
+[ -n "${SITE}" ] && alias tnet="ping \${SITE##*//}"
 
 
 OS="$(uname)"

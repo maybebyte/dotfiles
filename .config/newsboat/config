@@ -1,23 +1,23 @@
 unbind-key p
 
-bind-key G  end
-bind-key J  next-feed articlelist
-bind-key K  prev-feed articlelist
-bind-key N  prev-unread
-bind-key U  show-urls
+bind-key G end
+bind-key J next-feed articlelist
+bind-key K prev-feed articlelist
+bind-key N prev-unread
+bind-key U show-urls
 bind-key ^B bookmark
-bind-key a  toggle-article-read
-bind-key d  pagedown
-bind-key g  home
-bind-key h  quit
-bind-key j  down
-bind-key j  next articlelist
-bind-key k  prev articlelist
-bind-key k  up
-bind-key l  open
-bind-key n  next-unread
-bind-key u  pageup
-bind-key x  delete-article
+bind-key a toggle-article-read
+bind-key d pagedown
+bind-key g home
+bind-key h quit
+bind-key j down
+bind-key j next articlelist
+bind-key k prev articlelist
+bind-key k up
+bind-key l open
+bind-key n next-unread
+bind-key u pageup
+bind-key x delete-article
 
 browser "${BROWSER}"
 
@@ -25,12 +25,12 @@ cache-file "~/.cache/newsboat/cache.db"
 
 cleanup-on-quit yes
 
-color article           default default
-color info              magenta default
-color listfocus         yellow  default
-color listfocus_unread  yellow  default
-color listnormal        green   default
-color listnormal_unread cyan    default
+color article default default
+color info magenta default
+color listfocus yellow default
+color listfocus_unread yellow default
+color listnormal green default
+color listnormal_unread cyan default
 
 highlight feedlist "===.*===" green default bold
 highlight feedlist ".*0/0.." green default invis

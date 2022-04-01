@@ -1,26 +1,26 @@
 set autochdir
 set backup
-set backupdir     =$XDG_DATA_HOME/nvim/backup
-set conceallevel  =2
-set diffexpr      =
-set diffopt      +=iwhiteall
+set backupdir =$XDG_DATA_HOME/nvim/backup
+set conceallevel =2
+set diffexpr =
+set diffopt +=iwhiteall
 set noexpandtab
 set ignorecase
-set laststatus    =0
+set laststatus =0
 set lazyredraw
 set linebreak
 " https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
-set modelines     =0
+set modelines =0
 set nomodeline
 set number
 set relativenumber
-set shiftwidth    =4
+set shiftwidth =4
 set smartcase
 set smartindent
 set splitbelow
 set splitright
-set tabstop       =4
-set textwidth     =72
+set tabstop =4
+set textwidth =72
 set undofile
 set wrap
 set wrapscan
@@ -41,7 +41,7 @@ noremap ; :
 noremap : ;
 
 " plugin bindings
-let mapleader=","
+let mapleader = ","
 
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>f :FZF $HOME<CR>
@@ -72,12 +72,12 @@ autocmd BufWritePost $XDG_CONFIG_HOME/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
 " Enable Goyo for help files
 autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
-  \$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* :Goyo
+	\$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* :Goyo
 
 " one ZQ fully exits when reading help files.
 " (ordinarily, one would need to ZQ twice).
 autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
-  \$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
+	\$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
 
 " shell script syntax for xsession and ksh files
 autocmd BufReadPost $HOME/.xsession,$XDG_CONFIG_HOME/ksh/* set filetype=sh
@@ -87,38 +87,38 @@ autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " if vim-plug isn't installed, install it
 if empty(glob('$XDG_CONFIG_HOME/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo "$XDG_CONFIG_HOME/nvim/site/autoload/plug.vim" --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	silent !curl -fLo "$XDG_CONFIG_HOME/nvim/site/autoload/plug.vim" --create-dirs
+		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-  autocmd VimEnter * PlugInstall --sync | source "$XDG_CONFIG_HOME/nvim/init.vim"
+	autocmd VimEnter * PlugInstall --sync | source "$XDG_CONFIG_HOME/nvim/init.vim"
 endif
 
 " creates backup directory
 if isdirectory(expand("$XDG_DATA_HOME/nvim/backup")) != 1
-  silent !mkdir -p $XDG_DATA_HOME/nvim/backup
+	silent !mkdir -p $XDG_DATA_HOME/nvim/backup
 endif
 
 " plugins
 call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
-  Plug 'junegunn/fzf'
-  Plug 'junegunn/fzf.vim'
-  Plug 'junegunn/goyo.vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'scrooloose/nerdtree'
-  Plug 'scrooloose/syntastic'
-  Plug 'tpope/vim-surround'
+	Plug 'junegunn/fzf'
+	Plug 'junegunn/fzf.vim'
+	Plug 'junegunn/goyo.vim'
+	Plug 'junegunn/vim-easy-align'
+	Plug 'scrooloose/nerdcommenter'
+	Plug 'scrooloose/nerdtree'
+	Plug 'scrooloose/syntastic'
+	Plug 'tpope/vim-surround'
 
-  if $DISPLAY != ''
-    Plug 'ap/vim-css-color'
-    Plug 'dylanaraps/wal.vim'
-    Plug 'kovetskiy/sxhkd-vim'
-    Plug 'plasticboy/vim-markdown'
-  endif
+	if $DISPLAY != ''
+		Plug 'ap/vim-css-color'
+		Plug 'dylanaraps/wal.vim'
+		Plug 'kovetskiy/sxhkd-vim'
+		Plug 'plasticboy/vim-markdown'
+	endif
 
 call plug#end()
 
 " https://github.com/dylanaraps/pywal
 if $DISPLAY != ''
-  colorscheme wal
+	colorscheme wal
 endif

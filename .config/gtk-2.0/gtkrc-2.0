@@ -1,12 +1,12 @@
 include "/usr/local/share/themes/Adwaita-dark/gtk-2.0/gtkrc"
-gtk-cursor-name                  = "Adwaita-dark"
-gtk-font-name                    = "Sans 16"
-gtk-icon-theme-name              = "Adwaita-dark"
-gtk-key-theme-name               = "Default"
-gtk-recent-files-limit           = 0
-gtk-recent-files-max-age         = 0
-gtk-theme-name                   = "Adwaita-dark"
-gtk-xft-antialias                = 1
-gtk-xft-hinting                  = 0
-gtk-xft-hintstyle                = "hintnone"
-gtk-xft-rgba                     = "rgb"
+gtk-cursor-name = "Adwaita-dark"
+gtk-font-name = "Sans 16"
+gtk-icon-theme-name = "Adwaita-dark"
+gtk-key-theme-name = "Default"
+gtk-recent-files-limit = 0
+gtk-recent-files-max-age = 0
+gtk-theme-name = "Adwaita-dark"
+gtk-xft-antialias = 1
+gtk-xft-hinting = 0
+gtk-xft-hintstyle = "hintnone"
+gtk-xft-rgba = "rgb"

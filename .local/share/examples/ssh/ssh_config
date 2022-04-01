@@ -9,16 +9,16 @@ ControlPath ~/.ssh/sockets/%r@%h:%p
 # 1) proxy traffic using nc(1) and tor(1).
 # 2) disable session multiplexing.
 Host *-tor
-  ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p
-  ControlMaster no
-  ControlPersist no
-  ControlPath no
+	ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p
+	ControlMaster no
+	ControlPersist no
+	ControlPath no
 
 # on host 'example':
 # 1) sets hostname to example.domain
 # 2) username is hubert
 # 3) uses an alternate port of 2222
 Host example
-  Hostname example.domain
-  User hubert
-  Port 2222
+	Hostname example.domain
+	User hubert
+	Port 2222

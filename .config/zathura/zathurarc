@@ -1,23 +1,23 @@
 map <A-d> toggle_page_mode
 map <A-f> toggle_fullscreen
-map R     rotate
-map d     scroll half-down
-map i     recolor
-map p     print
-map r     reload
-map u     scroll half-up
+map R rotate
+map d scroll half-down
+map i recolor
+map p print
+map r reload
+map u scroll half-up
 
 map [fullscreen] <A-d> toggle_page_mode
 map [fullscreen] <A-f> toggle_fullscreen
-map [fullscreen] R     rotate
-map [fullscreen] d     scroll half-down
-map [fullscreen] i     recolor
-map [fullscreen] p     print
-map [fullscreen] r     reload
-map [fullscreen] u     scroll half-up
+map [fullscreen] R rotate
+map [fullscreen] d scroll half-down
+map [fullscreen] i recolor
+map [fullscreen] p print
+map [fullscreen] r reload
+map [fullscreen] u scroll half-up
 
-set page-padding        1
-set sandbox             strict
+set page-padding 1
+set sandbox strict
 set selection-clipboard clipboard
 set statusbar-h-padding 0
 set statusbar-v-padding 0

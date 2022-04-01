@@ -20,12 +20,12 @@ mkdir -m 700 "${HOME}/Downloads"
 #
 # some of these are overrides, and some are variables not specified in
 # ~/.profile.
-export                                                 \
-  BROWSER='firefox'                                    \
-  GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
-  QT_STYLE_OVERRIDE='Adwaita-dark'                     \
-  READER='zathura'                                     \
-  TERMINAL='urxvt'
+export \
+	BROWSER='firefox' \
+	GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
+	QT_STYLE_OVERRIDE='Adwaita-dark' \
+	READER='zathura' \
+	TERMINAL='urxvt'
 
 # daemons
 dunst &
@@ -40,8 +40,8 @@ xcompmgr &
 xidle &
 
 [ -x "$(command -v -- 'dbus-launch')" ] \
-  && [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
-  && eval "$(dbus-launch --sh-syntax --exit-with-x11)"
+	&& [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
+	&& eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
 # look and feel
 "${XDG_BIN_HOME}/wal" -R -a '85'
@@ -53,11 +53,11 @@ gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 
 # laptop adjustments
 if [ "$(hostname -s)" = 'lain' ]; then
-  xset m 3/2 0
-  # trackpad scrolling with middle button
-  xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
-  xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Button' 2
-  xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Axes' 6 7 4 5
+	xset m 3/2 0
+	# trackpad scrolling with middle button
+	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
+	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Button' 2
+	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Axes' 6 7 4 5
 fi
 
 # status bar.

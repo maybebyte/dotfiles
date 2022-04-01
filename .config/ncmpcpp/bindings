@@ -1,99 +1,99 @@
 def_key "j"
-  scroll_down
+	scroll_down
 
 def_key "k"
-  scroll_up
+	scroll_up
 
 def_key "ctrl-u"
-  page_up
+	page_up
 
 def_key "ctrl-d"
-  page_down
+	page_down
 
 def_key "u"
-  page_up
+	page_up
 
 def_key "d"
-  page_down
+	page_down
 
 def_key "h"
-  previous_column
+	previous_column
 
 def_key "l"
-  next_column
+	next_column
 
 def_key "."
-  show_lyrics
+	show_lyrics
 
 def_key "n"
-  next_found_item
+	next_found_item
 
 def_key "N"
-  previous_found_item
+	previous_found_item
 
 def_key "J"
-  move_sort_order_down
+	move_sort_order_down
 
 def_key "J"
-  move_sort_order_down
+	move_sort_order_down
 
 def_key "J"
-  move_selected_items_down
+	move_selected_items_down
 
 def_key "K"
-  move_sort_order_up
+	move_sort_order_up
 
 def_key "K"
-  move_sort_order_up
+	move_sort_order_up
 
 def_key "K"
-  move_selected_items_up
+	move_selected_items_up
 
 def_key "h"
-  jump_to_parent_directory
+	jump_to_parent_directory
 
 def_key "l"
-  enter_directory
+	enter_directory
 
 def_key "l"
-  run_action
+	run_action
 
 def_key "m"
-  show_media_library
+	show_media_library
 
 def_key "m"
-  toggle_media_library_columns_mode
+	toggle_media_library_columns_mode
 
 def_key "t"
-  show_tag_editor
+	show_tag_editor
 
 def_key "v"
-  reverse_selection
+	reverse_selection
 
 def_key "G"
-  move_end
+	move_end
 
 def_key "g"
-  move_home
+	move_home
 
 def_key "U"
-  update_database
+	update_database
 
 def_key "s"
-  reset_search_engine
+	reset_search_engine
 
 def_key "s"
-  show_search_engine
+	show_search_engine
 
 def_key "x"
-  delete_playlist_items
+	delete_playlist_items
 
 def_key "P"
-  show_playlist
+	show_playlist
 
 def_key "?"
-  show_help
+	show_help
 
 def_key "space"
-  select_item
-  scroll_down
+	select_item
+	scroll_down
