@@ -104,7 +104,8 @@ fi
 # sanity check
 case "${COUNT}" in
 	*[!0-9]*) err 'The -c option only accepts integers.' ;;
-	*) # COUNT is an integer, so do nothing and proceed ;;
+	# COUNT is an integer, so do nothing and proceed
+	*) ;;
 esac
 
 case "$1" in

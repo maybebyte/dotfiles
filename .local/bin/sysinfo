@@ -59,7 +59,8 @@ show_battery() {
 
 			case "${estimated_battery_life}" in
 				''|*[!0-9]*) err 'show_battery() only accepts integers.' ;;
-				*) # integers are OK, so continue ;;
+				# integers are OK, so continue
+				*) ;;
 			esac
 
 			ebl_minutes=$((estimated_battery_life % 60))
@@ -88,7 +89,8 @@ show_temp() {
 	case "${HOSTNAME}" in
 		'lain') temperature="$(sysctl -n hw.sensors.cpu0.temp0)" ;;
 		'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)" ;;
-		*) return 1 # if temp sensor is unknown, return nothing ;;
+		# if temp sensor is unknown, return nothing
+		*) return 1 ;;
 	esac
 
 	case "${BATT_STATUS}" in
