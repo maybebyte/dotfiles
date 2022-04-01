@@ -18,24 +18,24 @@ set -e
 
 
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
 # usage information for random file from directory (rffd)
 usage() {
-    err "${0##*/} [flags] [filetype] [directory]
+	err "${0##*/} [flags] [filetype] [directory]
 
 flags can be:
 -c: number of files to return, aka (c)ount. specify 0 for no
-    limit/count, i.e., return all results.
+	limit/count, i.e., return all results.
 -h: usage information
 
 filetype can be:
 video - webm, mp4, mkv
-pic   - jpg, jpeg, png
-any   - matches all files"
+pic - jpg, jpeg, png
+any - matches all files"
 }
 
 
@@ -45,56 +45,56 @@ any   - matches all files"
 # $1 is a path for find(1) to search. base_find_cmd() then accepts all
 # positional parameters after that.
 base_find_cmd() {
-    SEARCH_PATH="$1"
-    readonly SEARCH_PATH
-    shift
+	SEARCH_PATH="$1"
+	readonly SEARCH_PATH
+	shift
 
-    find "${SEARCH_PATH}" -type f "$@"
+	find "${SEARCH_PATH}" -type f "$@"
 }
 
 
 # given a directory, print all video files in it.
 find_videos() {
-    base_find_cmd "$1" \(  \
-        -iname '*.webm' -o \
-        -iname '*.mp4'  -o \
-        -iname '*.mkv'     \
-    \)
+	base_find_cmd "$1" \( \
+		-iname '*.webm' -o \
+		-iname '*.mp4' -o \
+		-iname '*.mkv' \
+	\)
 }
 
 
 # given a directory, print all photos in it.
 find_pics() {
-    base_find_cmd "$1" \(  \
-        -iname '*.jpg'  -o \
-        -iname '*.jpeg' -o \
-        -iname '*.png'     \
-    \)
+	base_find_cmd "$1" \( \
+		-iname '*.jpg' -o \
+		-iname '*.jpeg' -o \
+		-iname '*.png' \
+	\)
 }
 
 while getopts c:h opt; do
 
-    case "${opt}" in
-        c)   readonly COUNT="${OPTARG}" ;;
-        h|*) usage                      ;;
-    esac
+	case "${opt}" in
+		c) readonly COUNT="${OPTARG}" ;;
+		h|*) usage ;;
+	esac
 
 done
 
 shift $((OPTIND - 1))
 
 if [ -z "$1" ]; then
-    echo "${0##*/} needs a filetype." >&2
-    echo >&2
-    usage
+	echo "${0##*/} needs a filetype." >&2
+	echo >&2
+	usage
 
 elif [ -z "$2" ]; then
-    echo "${0##*/} needs a directory to search." >&2
-    echo >&2
-    usage
+	echo "${0##*/} needs a directory to search." >&2
+	echo >&2
+	usage
 
 elif ! [ -d "$2" ]; then
-    err "$2 is not a directory"
+	err "$2 is not a directory"
 
 fi
 
@@ -103,23 +103,23 @@ fi
 
 # sanity check
 case "${COUNT}" in
-    *[!0-9]*) err 'The -c option only accepts integers.'          ;;
-    *)           # COUNT is an integer, so do nothing and proceed ;;
+	*[!0-9]*) err 'The -c option only accepts integers.' ;;
+	*) # COUNT is an integer, so do nothing and proceed ;;
 esac
 
 case "$1" in
 
-    'video') find_videos "$2"        ;;
-    'pic')   find_pics "$2"          ;;
-    'any')   base_find_cmd "$2"      ;;
-    *)       err 'Invalid filetype.' ;;
+	'video') find_videos "$2" ;;
+	'pic') find_pics "$2" ;;
+	'any') base_find_cmd "$2" ;;
+	*) err 'Invalid filetype.' ;;
 
 esac |
 
-    if [ "${COUNT}" -eq 0 ]; then
-        sort -R
+	if [ "${COUNT}" -eq 0 ]; then
+		sort -R
 
-    else
-        sort -R | head -"${COUNT}"
+	else
+		sort -R | head -"${COUNT}"
 
-    fi
+	fi

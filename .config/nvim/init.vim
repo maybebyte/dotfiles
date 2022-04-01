@@ -4,7 +4,7 @@ set backupdir     =$XDG_DATA_HOME/nvim/backup
 set conceallevel  =2
 set diffexpr      =
 set diffopt      +=iwhiteall
-set expandtab
+set noexpandtab
 set ignorecase
 set laststatus    =0
 set lazyredraw

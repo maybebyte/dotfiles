@@ -18,13 +18,13 @@ set -e
 
 
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
 usage() {
-    err "usage: ${0##*/} [-i indexfile] [domain] [markdown directory] [server directory]
+	err "usage: ${0##*/} [-i indexfile] [domain] [markdown directory] [server directory]
 
 -i: Specify the name of an alternate index file (by default, INDEX is
     set to index.md). It must be present in the provided markdown
@@ -33,20 +33,20 @@ usage() {
 
 
 gen_site() {
-    : "${INDEX:=index.md}"
-    [ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not readable."
-    [ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not a file."
+	: "${INDEX:=index.md}"
+	[ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not readable."
+	[ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not a file."
 
-    ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
-        "${SITE}" >/dev/null 2>&1
+	ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
+		"${SITE}" >/dev/null 2>&1
 
-    rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
-        > "${HTMLDIR}/rss.xml" 2>/dev/null
+	rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
+		> "${HTMLDIR}/rss.xml" 2>/dev/null
 }
 
 
 sync_site() {
-    doas /bin/sh <<EOF
+	doas /bin/sh <<EOF
 rm -rf -- ${SRVDIR:?}
 mkdir -p -- ${SRVDIR}
 mv -- ${HTMLDIR}/* ${SRVDIR}/
@@ -57,10 +57,10 @@ EOF
 
 while getopts i:h opt; do
 
-    case "${opt}" in
-        'i')   readonly INDEX="${OPTARG##*/}" ;;
-        'h'|*) usage                          ;;
-    esac
+	case "${opt}" in
+		'i') readonly INDEX="${OPTARG##*/}" ;;
+		'h'|*) usage ;;
+	esac
 
 done
 
@@ -70,7 +70,7 @@ umask 022
 [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
 
 for pos_par in "$1" "$2" "$3"; do
-    [ -z "${pos_par}" ] && usage
+	[ -z "${pos_par}" ] && usage
 done
 
 readonly SITE="$1"
@@ -84,7 +84,7 @@ trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
 
 readonly UNPRIV_USER="${LOGNAME}"
 
-gen_site  || err 'Unable to generate site.'
+gen_site || err 'Unable to generate site.'
 sync_site || err 'Unable to sync web server.'
 
 echo 'Web server synced.'

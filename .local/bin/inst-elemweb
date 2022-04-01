@@ -13,34 +13,34 @@
 set -e
 
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
 usage() {
-    printf 'Usage: %s version\n' "${0##*/}" >&2
-    exit 1
+	printf 'Usage: %s version\n' "${0##*/}" >&2
+	exit 1
 }
 
 
 isversion() {
-    printf '%s\n' "$*" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'
+	printf '%s\n' "$*" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'
 }
 
 
 check_deps() {
-    while read -r dependency; do
+	while read -r dependency; do
 
-        [ -x "$(command -v -- "${dependency}")" ] \
-            || err "${dependency} not found in PATH or not executable."
+		[ -x "$(command -v -- "${dependency}")" ] \
+			|| err "${dependency} not found in PATH or not executable."
 
-    done
+	done
 }
 
 
 [ -n "${ELEMENT_WEB_UI_DIR}" ] \
-    || err "Environment variable ELEMENT_WEB_UI_DIR unset."
+	|| err "Environment variable ELEMENT_WEB_UI_DIR unset."
 
 [ $# -eq 1 ] || usage
 isversion "$1" || usage
@@ -64,7 +64,7 @@ cd "${TMPDIR_FOR_VERIFICATION}" || err "Unable to change directory to ${TMPDIR_F
 ftp -V "${GH_BASE_URL}/${VER}/element-${VER}.tar.gz" "${GH_BASE_URL}/${VER}/element-${VER}.tar.gz.asc"
 
 gpg2 --verify --quiet ./"element-${VER}.tar.gz.asc" ./"element-${VER}.tar.gz" \
-    || err "GPG verification failed. Ensure you have imported the public key
+	|| err "GPG verification failed. Ensure you have imported the public key
 mentioned in https://github.com/vector-im/element-web#getting-started
 into your keyring."
 
@@ -72,9 +72,9 @@ into your keyring."
 cd "${ELEMENT_WEB_UI_DIR}" || err "Unable to change directory to ${ELEMENT_WEB_UI_DIR}"
 
 pax -rzf "${TMPDIR_FOR_VERIFICATION}/element-${VER}.tar.gz" \
-    || err "Unable to extract element-${VER}.tar.gz in ${ELEMENT_WEB_UI_DIR}"
+	|| err "Unable to extract element-${VER}.tar.gz in ${ELEMENT_WEB_UI_DIR}"
 
 rm -f ./'element'
 
 ln -s ./"element-${VER}" ./'element' \
-    || err "Unable to link ${ELEMENT_WEB_UI_DIR}/${VER} to ${ELEMENT_WEB_UI_DIR}/element"
+	|| err "Unable to link ${ELEMENT_WEB_UI_DIR}/${VER} to ${ELEMENT_WEB_UI_DIR}/element"

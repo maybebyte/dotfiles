@@ -7,10 +7,10 @@
 # instead of remembering/accounting for two different forms of privilege
 # elevation, one is assigned to the alias 'priv.'
 if [ -x "$(command -v -- 'doas')" ]; then
-    alias priv='doas '
+	alias priv='doas '
 
 elif [ -x "$(command -v -- 'sudo')" ]; then
-    alias priv='sudo '
+	alias priv='sudo '
 
 fi
 
@@ -20,12 +20,12 @@ fi
 #
 # note that I only check executables that aren't accounted for in dotfiles.
 check_deps() {
-    while read -r dependency; do
+	while read -r dependency; do
 
-        [ -x "$(command -v -- "${dependency}")" ] \
-            || err "${dependency} not found in PATH or not executable."
+		[ -x "$(command -v -- "${dependency}")" ] \
+			|| err "${dependency} not found in PATH or not executable."
 
-    done
+	done
 }
 
 
@@ -35,8 +35,8 @@ check_deps() {
 # print everything passed as an argument.
 # exit with a return code of 1.
 err() {
-    printf '%s\n' "$*" >&2
-    exit 1
+	printf '%s\n' "$*" >&2
+	exit 1
 }
 
 
@@ -46,19 +46,19 @@ err() {
 # 1) interactive ksh(1) sessions won't terminate.
 # 2) dmenu scripts still work without colors.
 import_colors_sh() {
-    readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 
-    if ! [ -r "${COLORS_SH}" ]; then
-        echo "${COLORS_SH} is not readable." >&2
+	if ! [ -r "${COLORS_SH}" ]; then
+		echo "${COLORS_SH} is not readable." >&2
 
-    elif ! [ -f "${COLORS_SH}" ]; then
-        echo "${COLORS_SH} is not a file." >&2
+	elif ! [ -f "${COLORS_SH}" ]; then
+		echo "${COLORS_SH} is not a file." >&2
 
-  # passed sanity checks, so source the file
-    else
-        . "${COLORS_SH}"
+	# passed sanity checks, so source the file
+	else
+		. "${COLORS_SH}"
 
-    fi
+	fi
 }
 
 
@@ -66,10 +66,10 @@ import_colors_sh() {
 # import_colors_sh() gathers, or falls back to predefined colors failing
 # that.
 menu() {
-  dmenu -i -fn 'mono-12'           \
-      -nb "${background:-#040516}" \
-      -nf "${color3:-#9974e7}"     \
-      -sb "${background:-#040516}" \
-      -sf "${foreground:-#e0cef3}" \
-      "$@"
+	dmenu -i -fn 'mono-12' \
+		-nb "${background:-#040516}" \
+		-nf "${color3:-#9974e7}" \
+		-sb "${background:-#040516}" \
+		-sf "${foreground:-#e0cef3}" \
+		"$@"
 }
