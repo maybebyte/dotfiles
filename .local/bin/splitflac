@@ -100,11 +100,11 @@ splitflac() {
 
 # cuetag is checked in assign_cuetag() rather than check_deps() since
 # the executable's name isn't consistent among operating systems.
-check_deps <<'EOF'
-cuebreakpoints
-flac
-shnfix
-shnsplit
+check_deps <<-'EOF'
+	cuebreakpoints
+	flac
+	shnfix
+	shnsplit
 EOF
 
 while getopts cd opt; do

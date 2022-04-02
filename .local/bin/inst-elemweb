@@ -45,9 +45,9 @@ check_deps() {
 [ $# -eq 1 ] || usage
 isversion "$1" || usage
 
-check_deps <<'EOF'
-ftp
-gpg2
+check_deps <<-'EOF'
+	ftp
+	gpg2
 EOF
 
 

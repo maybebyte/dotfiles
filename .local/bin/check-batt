@@ -31,9 +31,9 @@ check_deps() {
 
 
 # if needed dependencies aren't available, exit.
-check_deps <<'EOF'
-apm
-notify-send
+check_deps <<-'EOF'
+	apm
+	notify-send
 EOF
 
 

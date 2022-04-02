@@ -32,9 +32,9 @@ check_deps() {
 }
 
 
-check_deps <<'EOF'
-xclip
-notify-send
+check_deps <<-'EOF'
+	xclip
+	notify-send
 EOF
 
 xclip -selection clipboard -i /dev/null || err 'Unable to clear the clipboard.'

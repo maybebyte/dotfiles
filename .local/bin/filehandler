@@ -193,9 +193,9 @@ rename_file() {
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-check_deps <<'EOF'
-dmenu
-notify-send
+check_deps <<-'EOF'
+	dmenu
+	notify-send
 EOF
 
 while getopts chmn opt; do

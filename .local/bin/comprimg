@@ -48,9 +48,9 @@ check_deps() {
 [ -z "$*" ] && usage
 
 
-check_deps <<'EOF'
-jpegoptim
-optipng
+check_deps <<-'EOF'
+	jpegoptim
+	optipng
 EOF
 
 

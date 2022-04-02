@@ -31,10 +31,10 @@ check_deps() {
 }
 
 
-check_deps <<'EOF'
-ftp
-jq
-perl
+check_deps <<-'EOF'
+	ftp
+	jq
+	perl
 EOF
 
 

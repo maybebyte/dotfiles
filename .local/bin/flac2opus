@@ -33,9 +33,9 @@ check_deps() {
 }
 
 
-check_deps <<'EOF'
-opusenc
-parallel
+check_deps <<-'EOF'
+	opusenc
+	parallel
 EOF
 
 if ! parallel opusenc --bitrate 192 '{}' '{.}.opus' ::: ./*.flac; then

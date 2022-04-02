@@ -87,10 +87,10 @@ get_vol() {
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-check_deps <<'EOF'
-bc
-dunstify
-sndioctl
+check_deps <<-'EOF'
+	bc
+	dunstify
+	sndioctl
 EOF
 
 adjust_vol "$1"

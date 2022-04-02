@@ -41,9 +41,9 @@ check_deps() {
 [ -z "$1" ] && usage
 [ -z "$2" ] && usage
 
-check_deps <<EOF
-fzf
-$1
+check_deps <<-EOF
+	fzf
+	$1
 EOF
 
 [ -r "$2" ] || err "$2 is not readable."

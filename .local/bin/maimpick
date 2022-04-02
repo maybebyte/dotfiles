@@ -114,11 +114,11 @@ present_options() {
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-check_deps <<'EOF'
-dmenu
-maim
-xclip
-xdotool
+check_deps <<-'EOF'
+	dmenu
+	maim
+	xclip
+	xdotool
 EOF
 
 import_colors_sh

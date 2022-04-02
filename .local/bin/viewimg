@@ -51,9 +51,9 @@ viewimg() {
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
-check_deps <<'EOF'
-ftp
-sxiv
+check_deps <<-'EOF'
+	ftp
+	sxiv
 EOF
 
 [ -z "$1" ] && usage

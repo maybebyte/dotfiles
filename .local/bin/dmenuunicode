@@ -55,10 +55,10 @@ check_deps() {
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
 
 
-check_deps <<'EOF'
-dmenu
-notify-send
-xclip
+check_deps <<-'EOF'
+	dmenu
+	notify-send
+	xclip
 EOF
 
 
