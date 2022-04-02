@@ -31,11 +31,6 @@ export \
 dunst &
 sxhkd &
 unclutter -idle 3 &
-# xcompmgr(1) seems to cause horizontal screen tearing on x1c7 with
-# mpv(1) and modesetting(4).
-#
-# with either xcompmgr(1) or modesetting(4) disabled, horizontal screen
-# tearing is absent.
 xcompmgr &
 xidle &
 
