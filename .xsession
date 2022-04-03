@@ -17,9 +17,7 @@ mkdir -m 700 "${HOME}/Downloads"
 #
 # a) don't make sense to put in ~/.profile
 # b) only make sense with a graphical environment
-#
-# some of these are overrides, and some are variables not specified in
-# ~/.profile.
+# c) should be overridden in a graphical environment
 export \
 	BROWSER='firefox' \
 	GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
