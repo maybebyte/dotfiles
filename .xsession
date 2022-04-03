@@ -39,7 +39,7 @@ xidle &
 	&& eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
 # look and feel
-"${XDG_BIN_HOME}/wal" -R -a '85'
+"${XDG_BIN_HOME}/wal" -R -a 85
 sct 3500
 xset b off
 
