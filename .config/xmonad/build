@@ -3,11 +3,6 @@ set -eu
 
 output_file="$1"
 
-if [ "${output_file}" -nt 'xmonad.hs' ]; then
-	echo "[$(date '+%Y-%m-%d|%H:%M:%S')]: ${output_file} is newer than xmonad.hs."
-	exit 0
-fi
-
 cabal v2-install exe:xmonad-config --overwrite-policy=always --install-method=copy
 
 [ -f "${output_file}" ] && mv -f -- "${output_file}" "${output_file}.old"
