@@ -3,6 +3,11 @@ set -eu
 
 output_file="$1"
 
+if [ "${output_file}" -nt xmonad.hs ] && [ "${output_file}" -nt /usr/local/bin/xmonad ]; then
+	echo "${output_file} is newer than xmonad.hs"
+	exit 0
+fi
+
 cabal v2-install exe:xmonad-config --overwrite-policy=always --install-method=copy
 
 [ -f "${output_file}" ] && mv -f -- "${output_file}" "${output_file}.old"
