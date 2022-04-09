@@ -35,19 +35,16 @@ usage() {
 
 
 MPV="$(command -vp 'mpv')" || err 'mpv not found in PATH or not executable.'
-OS="$(uname)"
 
 
 case "${0##*/}" in
 
 	'mpv')
-		[ "${OS}" = 'OpenBSD' ] && pkill xcompmgr >/dev/null 2>&1
+		pkill xcompmgr >/dev/null 2>&1
 
 		"${MPV}" "$@"
 
-		[ "${OS}" = 'OpenBSD' ] \
-			&& [ -x "$(command -v 'xcompmgr')" ] \
-			&& xcompmgr >/dev/null 2>&1 &
+		[ -x "$(command -v 'xcompmgr')" ] && xcompmgr >/dev/null 2>&1 &
 
 		;;
 
