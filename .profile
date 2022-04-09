@@ -15,7 +15,6 @@ export \
 	VISUAL="${EDITOR}" \
 	HISTFILE="${HOME}/.history" \
 	HISTSIZE=10000 \
-	LC_CTYPE='en_US.UTF-8' \
 	LESS='-iMRx 4' \
 	LESSSECURE=1 \
 	PAGER='less' \

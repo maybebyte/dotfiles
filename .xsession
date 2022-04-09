@@ -21,6 +21,7 @@ mkdir -m 700 "${HOME}/Downloads"
 export \
 	BROWSER='firefox' \
 	GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
+	LC_CTYPE='en_US.UTF-8' \
 	QT_STYLE_OVERRIDE='Adwaita-dark' \
 	READER='zathura' \
 	TERMINAL='urxvt'
