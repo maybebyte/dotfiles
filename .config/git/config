@@ -1,0 +1,5 @@
+[user]
+	name = Ashlen
+	email = eurydice@riseup.net
+[core]
+	whitespace = indent-with-non-tab,tabwidth=4
