@@ -19,11 +19,8 @@ super + W
 	tor-browser
 
 # element-web
-#
-# this alias should be changed if ${BROWSER} != firefox since it uses
-# a flag specific to firefox.
 super + M
-	${BROWSER} -P 'matrix' 'http://localhost:8080'
+	${XDG_BIN_HOME}/launch-elemweb
 
 # password manager
 #
