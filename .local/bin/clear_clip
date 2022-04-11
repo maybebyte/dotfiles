@@ -40,7 +40,7 @@ EOF
 xclip -selection clipboard -i /dev/null || err 'Unable to clear the clipboard.'
 
 case "$1" in
-	'notify') notify-send '📋 Cleared the clipboard.' ;;
+	'notify') notify-send 'Cleared the clipboard.' ;;
 	# undefined positional parameters should do nothing
 	*) ;;
 esac

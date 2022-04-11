@@ -47,11 +47,11 @@ gen_site() {
 
 sync_site() {
 	doas /bin/sh <<-EOF
-	rm -rf -- ${SRVDIR:?}
-	mkdir -p -- ${SRVDIR}
-	mv -- ${HTMLDIR}/* ${SRVDIR}/
-	rcctl reload httpd >/dev/null
-EOF
+		rm -rf -- ${SRVDIR:?}
+		mkdir -p -- ${SRVDIR}
+		mv -- ${HTMLDIR}/* ${SRVDIR}/
+		rcctl reload httpd >/dev/null
+	EOF
 }
 
 

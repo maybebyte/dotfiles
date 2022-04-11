@@ -24,6 +24,6 @@ err() {
 
 
 [ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-[ -x "$(command -v -- 'lemonbar-xft')" ] || err 'lemonbar-xft not found in PATH or not executable.'
+[ -x "$(command -v 'lemonbar-xft')" ] || err 'lemonbar-xft not found in PATH or not executable.'
 
 lemonbar-xft -f sans-11 -f 'Noto Sans CJK JP-11' -pd

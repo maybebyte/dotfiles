@@ -136,7 +136,7 @@ $(show_date)"
 
 
 [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
-[ -x "$(command -v -- 'mpc')" ] || err 'mpc not found in PATH or not executable.'
+[ -x "$(command -v 'mpc')" ] || err 'mpc not found in PATH or not executable.'
 import_colors_sh
 
 
