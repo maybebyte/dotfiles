@@ -117,31 +117,31 @@ alias \
 	up='uptime'
 
 
-[ -x "$(command -v -- 'exiftool')" ] && alias exifrm='exiftool -all= '
-[ -x "$(command -v -- 'ftp')" ] && alias ftp="ftp -nU ''"
-[ -x "$(command -v -- 'mimeopen')" ] && alias o='mimeopen'
-[ -x "$(command -v -- 'ncmpcpp')" ] && alias mus='ncmpcpp 2>/dev/null'
-[ -x "$(command -v -- 'neomutt')" ] && alias m='neomutt'
-[ -x "$(command -v -- 'newsboat')" ] && alias nb='newsboat'
-[ -x "$(command -v -- 'nikto')" ] && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
-[ -x "$(command -v -- 'nmap')" ] && alias scan='nmap -sn'
-[ -x "$(command -v -- 'nnn')" ] && alias n='nnn'
-[ -x "$(command -v -- 'searchsploit')" ] && alias sspl='searchsploit'
-[ -x "$(command -v -- 'speedtest-cli')" ] && alias stcli='speedtest-cli'
-[ -x "$(command -v -- 'transmission-remote')" ] && alias trem='transmission-remote'
-[ -x "$(command -v -- 'wget')" ] && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
-[ -x "$(command -v -- 'zathura')" ] && alias pdfman='MANPAGER=zathura man -T pdf'
+[ -x "$(command -v 'exiftool')" ] && alias exifrm='exiftool -all= '
+[ -x "$(command -v 'ftp')" ] && alias ftp="ftp -nU ''"
+[ -x "$(command -v 'mimeopen')" ] && alias o='mimeopen'
+[ -x "$(command -v 'ncmpcpp')" ] && alias mus='ncmpcpp 2>/dev/null'
+[ -x "$(command -v 'neomutt')" ] && alias m='neomutt'
+[ -x "$(command -v 'newsboat')" ] && alias nb='newsboat'
+[ -x "$(command -v 'nikto')" ] && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
+[ -x "$(command -v 'nmap')" ] && alias scan='nmap -sn'
+[ -x "$(command -v 'nnn')" ] && alias n='nnn'
+[ -x "$(command -v 'searchsploit')" ] && alias sspl='searchsploit'
+[ -x "$(command -v 'speedtest-cli')" ] && alias stcli='speedtest-cli'
+[ -x "$(command -v 'transmission-remote')" ] && alias trem='transmission-remote'
+[ -x "$(command -v 'wget')" ] && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
+[ -x "$(command -v 'zathura')" ] && alias pdfman='MANPAGER=zathura man -T pdf'
 
 
-[ -x "$(command -v -- 'torsocks')" ] && {
+[ -x "$(command -v 'torsocks')" ] && {
 	alias anonsh='torsocks --shell'
-	[ -x "$(which -- 'ftp')" ] && alias anonftp="torsocks ftp -nU ''"
-	[ -x "$(command -v -- 'tuir')" ] && alias tuir='torsocks tuir'
+	[ -x "$(which 'ftp')" ] && alias anonftp="torsocks ftp -nU ''"
+	[ -x "$(command -v 'tuir')" ] && alias tuir='torsocks tuir'
 }
 
 
-[ -x "$(command -v -- 'proxychains4')" ] \
-	&& [ -x "$(command -v -- 'irssi')" ] \
+[ -x "$(command -v 'proxychains4')" ] \
+	&& [ -x "$(command -v 'irssi')" ] \
 	&& alias irssi='proxychains4 irssi'
 
 
@@ -180,7 +180,7 @@ else
 fi
 
 
-[ -x "$(command -v -- 'git' )" ] &&
+[ -x "$(command -v 'git' )" ] &&
 	alias \
 		d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
 		da='d add' \
@@ -205,13 +205,13 @@ fi
 		gs='g status'
 
 
-[ -x "$(command -v -- 'keepassxc-cli')" ] &&
+[ -x "$(command -v 'keepassxc-cli')" ] &&
 	alias \
 		kp='keepassxc-cli' \
 		kpo="kp open \${HOME}/passwords/KeePass\ Database.kdbx"
 
 
-if [ -x "$(command -v -- 'netstat')" ]; then
+if [ -x "$(command -v 'netstat')" ]; then
 	alias \
 		ntstr6='netstat -rf inet6' \
 		ntstr='netstat -rf inet' \
@@ -230,7 +230,7 @@ else
 fi
 
 
-[ -x "$(command -v -- 'task')" ] &&
+[ -x "$(command -v 'task')" ] &&
 	alias \
 		t='task' \
 		ta='t add' \
@@ -257,7 +257,7 @@ fi
 		tup="td \$(tdue)"
 
 
-if [ -x "$(command -v -- 'tmux')" ]; then
+if [ -x "$(command -v 'tmux')" ]; then
 	alias \
 		tm='tmux' \
 		tma='tm attach' \
@@ -270,7 +270,7 @@ else
 fi
 
 
-[ -x "$(command -v -- 'yt-dlp')" ] &&
+[ -x "$(command -v 'yt-dlp')" ] &&
 	alias \
 		yt='yt-dlp' \
 		yta='yt -xf bestaudio/best' \

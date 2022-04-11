@@ -39,7 +39,7 @@ genfavi() {
 }
 
 
-[ -x "$(command -v -- 'convert')" ] || err "convert not found in PATH or not executable."
+[ -x "$(command -v 'convert')" ] || err "convert not found in PATH or not executable."
 
 [ -z "$1" ] && usage
 

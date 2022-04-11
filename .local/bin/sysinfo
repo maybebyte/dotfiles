@@ -115,7 +115,7 @@ show_track() {
 
 
 show_disk_space() {
-	diskspace="$(df -h '/home' | awk -- '/^\/dev/{print $4}')"
+	diskspace="$(df -h '/home' | awk '/^\/dev/{print $4}')"
 	echo "/home: ${diskspace}${DELIMITER}"
 }
 

@@ -29,7 +29,7 @@ main() {
 	[ -n "${html}" ] || usage
 
 	base="${INDEX_FILE%/*}"
-	base_url="$(echo "${html}" | get_url | sed -- 's#\(.*\)/[^/]*#\1#')"
+	base_url="$(echo "${html}" | get_url | sed 's#\(.*\)/[^/]*#\1#')"
 
 	url="$(echo "${html}" | get_url)"
 
@@ -70,7 +70,7 @@ no_file() {
 
 
 md_to_html() {
-	[ -x "$(command -v -- 'lowdown')" ] || exit 3
+	[ -x "$(command -v 'lowdown')" ] || exit 3
 
 	lowdown \
 		--html-no-escapehtml \
@@ -87,13 +87,13 @@ get_title() {
 
 
 get_url() {
-	grep -i -- '<a .*rss.xml"' | head -1 | sed -- 's#.*href="\(.*\)".*#\1#'
+	grep -i '<a .*rss.xml"' | head -1 | sed 's#.*href="\(.*\)".*#\1#'
 }
 
 
 get_items() {
-	grep -i -- 'href=".*" title="' \
-		| sed -- 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
+	grep -i 'href=".*" title="' \
+		| sed 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
 }
 
 
@@ -105,12 +105,12 @@ get_description() {
 
 
 remove_tags() {
-	sed -- 's#<[^>]*>##g;s#</[^>]*>##g'
+	sed 's#<[^>]*>##g;s#</[^>]*>##g'
 }
 
 
 remove_nbsp() {
-	sed -- 's#\&nbsp;# #g'
+	sed 's#\&nbsp;# #g'
 }
 
 
@@ -142,10 +142,10 @@ render_item() {
 	base_url="$2"
 	item="$3"
 
-	site_url="$(echo "${base_url}"| sed -- 's#\(.*//.*\)/.*#\1#')"
+	site_url="$(echo "${base_url}"| sed 's#\(.*//.*\)/.*#\1#')"
 
-	date="$(echo "${item}" | awk -- '{print $2}')"
-	url="$(echo "${item}" | awk -- '{print $1}')"
+	date="$(echo "${item}" | awk '{print $2}')"
+	url="$(echo "${item}" | awk '{print $1}')"
 
 	f="${base}/${url}"
 	[ -f "${f}" ] && html="$(cat -- "${f}")"
@@ -158,7 +158,7 @@ render_item() {
 	)"
 
 	title="$(echo "${description}" | get_title)"
-	guid="${base_url}/$(echo "${url}" | sed -- 's#^/##')"
+	guid="${base_url}/$(echo "${url}" | sed 's#^/##')"
 
 	echo '
 <item>

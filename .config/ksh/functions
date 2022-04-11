@@ -45,7 +45,7 @@ anonread [URL linking to an ebook]' >&2
 
 	esac
 
-	anonftp -o - -- "$1" | zathura -- -
+	anonftp -o - -- "$1" | zathura -
 }
 
 # invoke apropos(1) to match $1 against any available macro key of
@@ -403,7 +403,7 @@ pkgsize [package name]' >&2
 
 	esac
 
-	SIZE="$(pkgq -s -- "$1" | awk -- '/Size/{print $2}')"
+	SIZE="$(pkgq -s -- "$1" | awk '/Size/{print $2}')"
 	hreadable "${SIZE}"
 }
 

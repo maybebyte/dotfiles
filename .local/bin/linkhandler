@@ -146,7 +146,7 @@ linkhandler() {
 			;;
 
 		'read')
-			tmux new-window "ftp -no - -U '' -- ${URL} | zathura -- -"
+			tmux new-window "ftp -no - -U '' -- ${URL} | zathura -"
 
 			;;
 

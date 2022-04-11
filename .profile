@@ -1,10 +1,10 @@
 # use nvim if it's installed, vi otherwise
-[ -x "$(command -v -- 'nvim')" ] && export EDITOR='nvim'
+[ -x "$(command -v 'nvim')" ] && export EDITOR='nvim'
 [ -z "${EDITOR}" ] && export EDITOR='vi'
 
 
 # use colorls if it's installed, ls otherwise
-[ -x "$(command -v -- 'colorls')" ] && export LS='colorls'
+[ -x "$(command -v 'colorls')" ] && export LS='colorls'
 [ -z "${LS}" ] && export LS='ls'
 
 
@@ -40,7 +40,7 @@ export \
 case "$(uname)" in
 
 	'OpenBSD')
-		GATEWAY="$(netstat -rn 2>/dev/null | awk -- '/^default/{print $2}')"
+		GATEWAY="$(netstat -rn 2>/dev/null | awk '/^default/{print $2}')"
 		export GATEWAY
 
 		NIC="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')"
@@ -69,7 +69,7 @@ esac
 case "$(hostname -s)" in
 
 	'aphrodite'|'lain')
-		[ -x "$(command -v -- 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
+		[ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
 
 		export \
 			MARKDOWNDIR="${HOME}/src/website_md" \

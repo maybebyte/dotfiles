@@ -182,7 +182,7 @@ list_newer_files() {
 
 
 has_partials() {
-	grep -qE -- '^./_.*\.html$|^./_.*\.js$|^./_.*\.css$'
+	grep -qE '^./_.*\.html$|^./_.*\.js$|^./_.*\.css$'
 }
 
 
@@ -268,7 +268,7 @@ list_pages() {
 	e="\\( -name '*.html' -o -name '*.md' \\)"
 	cd "$1" \
 		&& eval "find . -type f ! -path '*/.*' ! -path '*/_*' ${IGNORE} ${e}" \
-		| sed -- 's#^./##;s#.md$#.html#;s#/index.html$#/#'
+		| sed 's#^./##;s#.md$#.html#;s#/index.html$#/#'
 }
 
 
