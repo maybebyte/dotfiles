@@ -89,7 +89,7 @@ while read -r file; do
 		# yank the relative file path
 		'y')
 			printf '%s' "${file}" | xclip -selection clipboard
-			notify-send -- "📋 ${file} copied to clipboard."
+			notify-send -- "${file} copied to clipboard."
 
 			;;
 
@@ -98,7 +98,7 @@ while read -r file; do
 			abs_path_of_file="$(readlink -f -- "${file}")"
 
 			printf '%s' "${abs_path_of_file}" | xclip -selection clipboard
-			notify-send -- "📋 ${abs_path_of_file} copied to clipboard."
+			notify-send -- "${abs_path_of_file} copied to clipboard."
 
 			;;
 
