@@ -55,7 +55,7 @@ if [ "${BATT_PERCENT}" -lt 20 ]; then
 	# exporting ${DISPLAY} is needed for cron(8) jobs.
 	[ -z "${DISPLAY}" ] && export DISPLAY=:0
 
-	notify-send -- "🔋 Your device is at ${BATT_PERCENT}%!"
+	notify-send -- "Your device is at ${BATT_PERCENT}%!"
 
 else
 	exit 0
