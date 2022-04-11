@@ -66,15 +66,6 @@ embedart:
 fetchart:
 	minwidth: 1000
 
-	# not all album art is 1:1, but it can be overridden as needed.
-	#
-	# I typically run `beet fetchart` twice if albums are missed. The
-	# first time is with this option enabled to enforce ratio on the
-	# albums it can be enforced on, then the second time with this
-	# commented out and the restriction relaxed to catch those that have
-	# album art available that didn't meet that criteria.
-	enforce_ratio: yes
-
 	# use cover art from filesystem as a fallback if nothing can be
 	# fetched.
 	sources:
