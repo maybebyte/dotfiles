@@ -9,8 +9,8 @@
 source "gpg2 -dq ${HOME}/passwords/email_pass.gpg |"
 
 subscribe announcements@openbsd.org
-subscribe bugs@openbsd.org
 subscribe misc@openbsd.org
+subscribe ports@openbsd.org
 
 set beep = no
 set crypt_autosign = no
