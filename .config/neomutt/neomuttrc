@@ -64,7 +64,7 @@ set use_from = yes
 set use_domain = yes
 set wait_key = no
 
-mailboxes =  +INBOX
+mailboxes = +INBOX
 
 ignore *
 unignore From To Cc Bcc Date Subject
