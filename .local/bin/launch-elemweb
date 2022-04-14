@@ -15,6 +15,9 @@
 
 
 # simple script to update element-web when we try to launch it.
+#
+# TODO: find a way to add version number to notification. check-elemweb
+# already has the variable needed, maybe start from there.
 
 set -e
 
