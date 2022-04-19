@@ -40,12 +40,12 @@ check_deps() {
 
 
 viewimg() {
-	FILENAME="$(mktemp)"
+	FILENAME="$(mktemp)" || err "Failed to create tmpfile at ${FILENAME}."
 	readonly FILENAME
 
-	ftp -nU '' -o "${FILENAME}" -- "$1"
+	ftp -nU '' -o "${FILENAME}" -- "$1" || err "Failed to retrieve from $1."
 
-	sxiv -- "${FILENAME}"
+	sxiv -- "${FILENAME}" || err "Failed to open ${FILENAME}."
 }
 
 
