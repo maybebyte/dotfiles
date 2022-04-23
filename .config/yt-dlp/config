@@ -2,6 +2,7 @@
 --embed-metadata
 --embed-subs
 --embed-thumbnail
+--format 'bestvideo*[height<=?1080][width<=?1920]+bestaudio/best'
 --output "${HOME}/Downloads/%(uploader)s/%(title)s.%(ext)s"
 --sponsorblock-mark default
 --write-description
