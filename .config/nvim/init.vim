@@ -54,12 +54,6 @@ nnoremap <leader>o :set spell! spelllang=en_us<CR>
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
 
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
 " automatically deletes all trailing whitespace and newlines at end of
 " file on save.
 autocmd BufWritePre * %s/\s\+$//e
