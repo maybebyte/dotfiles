@@ -49,6 +49,7 @@ set pop_user = "eurydice@riseup.net"
 set print = no
 set realname = "Ashlen"
 set record = "${HOME}/mail"
+set reflow_wrap = 72
 set reverse_alias = yes
 set reverse_name
 set rfc2047_parameters = yes
@@ -63,6 +64,7 @@ set strict_threads = yes
 set use_from = yes
 set use_domain = yes
 set wait_key = no
+set wrap = 72
 
 mailboxes = +INBOX
 
