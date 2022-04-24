@@ -103,7 +103,6 @@ call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
 	Plug 'junegunn/fzf'
 	Plug 'junegunn/fzf.vim'
 	Plug 'junegunn/goyo.vim'
-	Plug 'junegunn/vim-easy-align'
 	Plug 'scrooloose/nerdcommenter'
 	Plug 'scrooloose/nerdtree'
 	Plug 'scrooloose/syntastic'
