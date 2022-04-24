@@ -12,58 +12,54 @@ subscribe announcements@openbsd.org
 subscribe misc@openbsd.org
 subscribe ports@openbsd.org
 
-set beep = no
-set crypt_autosign = no
-set crypt_replyencrypt = yes
-set crypt_replysign = no
-set crypt_replysignencrypted = yes
-set crypt_use_gpgme = yes
+unset beep
+unset crypt_autosign
+set crypt_reply_encrypt
+unset crypt_reply_sign
+set crypt_reply_sign_encrypted
+set crypt_use_gpgme
 set date_format = "%y/%m/%d %H:%M"
-set delete = yes
+set delete
 set fast_reply
 set folder = pops://mail.riseup.net/
 set forward_format = "Fwd: %s"
 set forward_quote
 set from = eurydice@riseup.net
 set header_cache = "${XDG_CACHE_HOME}/neomutt"
-set hidden_host = yes
-set ignore_list_reply_to = yes
+set hidden_host
+set ignore_list_reply_to
 set include
 set mail_check = 600
 set mail_check_stats
 set mail_check_stats_interval = 600
-set mark_old = no
-set markers = no
+unset mark_old
+unset markers
 set mbox = "${HOME}/mail"
 set mbox_type = "Maildir"
 set message_cachedir = "${XDG_CACHE_HOME}/neomutt"
-set mime_forward = yes
-set move = yes
-set pgp_auto_decode = yes
-set pgp_show_unusable = no
+set mime_forward
+set move
+set pgp_auto_decode
+unset pgp_show_unusable
 set pop_checkinterval = 600
-set pop_delete = yes
+set pop_delete
 set pop_host = "mail.riseup.net"
 set pop_pass = $my_pass
 set pop_user = "eurydice@riseup.net"
-set print = no
+unset print
 set realname = "Ashlen"
 set record = "${HOME}/mail"
 set reflow_wrap = 72
-set reverse_alias = yes
-set reverse_name
-set rfc2047_parameters = yes
-set sidebar_next_new_wrap = yes
-set sidebar_visible = no
+set rfc2047_parameters
+set sidebar_next_new_wrap
+unset sidebar_visible
 set sidebar_width = 15
 set sleep_time = 0
 set sort = threads
-set spoolfile = +INBOX
-set ssl_force_tls = yes
-set strict_threads = yes
-set use_from = yes
-set use_domain = yes
-set wait_key = no
+set spool_file = +INBOX
+set ssl_force_tls
+set strict_threads
+unset wait_key
 set wrap = 72
 
 mailboxes = +INBOX
