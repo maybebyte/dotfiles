@@ -63,6 +63,9 @@ autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $XDG_CONFIG_HOME/ksh/kshrc !. %
 autocmd BufWritePost $XDG_CONFIG_HOME/sxhkd/sxhkdrc !pkill -USR1 sxhkd
 
+" compile lilypond files after writing
+autocmd BufWritePost *.ly !lilypond %
+
 " Enable Goyo for help files
 autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
 	\$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* :Goyo
