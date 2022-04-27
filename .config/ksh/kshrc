@@ -11,6 +11,9 @@
 	&& [ -z "${TMUX}" ] \
 	&& { tmux attach || tmux; } >/dev/null 2>&1
 
+# enable ^T for status, useful for dd(1)
+stty status "^T"
+
 # ksh options
 set -o vi
 
