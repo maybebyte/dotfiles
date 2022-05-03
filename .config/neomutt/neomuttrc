@@ -21,7 +21,7 @@ set crypt_use_gpgme
 set date_format = "%y/%m/%d %H:%M"
 set delete
 set fast_reply
-set folder = pops://mail.riseup.net/
+set folder = pops://mail.riseup.net:995
 set forward_format = "Fwd: %s"
 set forward_quote
 set from = eurydice@riseup.net
