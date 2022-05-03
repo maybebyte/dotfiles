@@ -41,7 +41,7 @@ set mime_forward
 set move
 set pgp_auto_decode
 unset pgp_show_unusable
-set pop_checkinterval = 600
+set pop_check_interval = 600
 set pop_delete
 set pop_host = "mail.riseup.net"
 set pop_pass = $my_pass
