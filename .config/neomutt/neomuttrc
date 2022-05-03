@@ -13,7 +13,7 @@ subscribe misc@openbsd.org
 subscribe ports@openbsd.org
 
 unset beep
-unset crypt_autosign
+unset crypt_auto_sign
 set crypt_reply_encrypt
 unset crypt_reply_sign
 set crypt_reply_sign_encrypted
@@ -47,7 +47,7 @@ set pop_host = "mail.riseup.net"
 set pop_pass = $my_pass
 set pop_user = "eurydice@riseup.net"
 unset print
-set realname = "Ashlen"
+set real_name = "Ashlen"
 set record = "${HOME}/mail"
 set reflow_wrap = 72
 set rfc2047_parameters
