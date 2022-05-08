@@ -284,13 +284,13 @@ then opens up the file in ${EDITOR:-EDITOR}." >&2
 		echo
 		echo "${TODAY}"
 		date '+%H:%M'
-		} > "${JRNL_ENTRY}"
+	} > "${JRNL_ENTRY}"
 
 	else {
 		echo
 		echo '-'
 		date '+%H:%M'
-		} >> "${JRNL_ENTRY}"
+	} >> "${JRNL_ENTRY}"
 
 	fi
 
