@@ -41,5 +41,5 @@ main = do
 		, borderWidth = myBorderWidth
 		, modMask = myModMask
 		, terminal = myTerminal
-		, focusFollowsMouse	= myMouseFocusRule
+		, focusFollowsMouse = myMouseFocusRule
 		, manageHook = myManageHook <+> manageHook def }
