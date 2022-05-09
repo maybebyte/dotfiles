@@ -120,7 +120,7 @@ cpbak [file]' >&2
 
 	case "${1##*.bak}" in
 		'') cp -- "$1" "${1%.bak}" ;;
-		*)	cp -- "$1" "$1.bak" ;;
+		*) cp -- "$1" "$1.bak" ;;
 	esac
 }
 
@@ -336,7 +336,7 @@ mvbak [file]' >&2
 
 	case "${1##*.bak}" in
 		'') mv -- "$1" "${1%.bak}" ;;
-		*)	mv -- "$1" "$1.bak" ;;
+		*) mv -- "$1" "$1.bak" ;;
 	esac
 }
 
