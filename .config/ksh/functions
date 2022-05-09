@@ -234,8 +234,7 @@ hreadable [positive integer]' >&2
 # to send a GET request to ipinfo.io with $1 as the path. Then, send the
 # results to STDOUT.
 #
-# $1 is an IP address. If left blank, ipinf will return results for our
-# public IP.
+# $1 is an IP address.
 ipinf() {
 	case "$1" in
 
