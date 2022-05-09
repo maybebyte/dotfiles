@@ -53,7 +53,4 @@ fi
 # status bar.
 "${XDG_BIN_HOME}/sysinfo" | "${XDG_BIN_HOME}/lbar" &
 
-# random manual page for didactic purposes
-"${XDG_BIN_HOME}/randman" | xargs -- "${TERMINAL}" -e man -- &
-
 exec xmonad
