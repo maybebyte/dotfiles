@@ -273,6 +273,11 @@ then opens up the file in ${EDITOR:-EDITOR}." >&2
 
 	esac
 
+	[ -z "${EDITOR}" ] && {
+		echo 'jrnl() needs EDITOR to be defined.' >&2
+		return 1
+	}
+
 	TODAY="$(date '+%F')"
 	JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.txt"
 
