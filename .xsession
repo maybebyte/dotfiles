@@ -50,7 +50,4 @@ if [ "$(hostname -s)" = 'lain' ]; then
 	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Axes' 6 7 4 5
 fi
 
-# status bar.
-"${XDG_BIN_HOME}/sysinfo" | "${XDG_BIN_HOME}/lbar" &
-
-exec xmonad
+exec spectrwm
