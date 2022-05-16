@@ -27,23 +27,6 @@ err() {
 }
 
 
-import_colors_sh() {
-	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
-
-	if ! [ -r "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not readable." >&2
-
-	elif ! [ -f "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not a file." >&2
-
-	# passed sanity checks, so source the file
-	else
-		. "${COLORS_SH}"
-
-	fi
-}
-
-
 show_battery() {
 	case "${BATT_STATUS}" in
 		4|255) return 1 ;;
@@ -120,16 +103,10 @@ show_disk_space() {
 }
 
 
-show_date() {
-	date '+%a %m-%d %H:%M'
-}
-
-
 sysinfo() {
 	# spaces at the beginning of a new line bork ${stats}
-	stats="${BGFG} %{l}$(show_battery)$(show_temp)\
-%{c}$(show_track) %{r}$(show_disk_space)\
-$(show_date)"
+	stats="$(show_battery) +< $(show_temp) \
++|C $(show_track) +|R $(show_disk_space)"
 
 	echo "${stats}"
 }
@@ -137,12 +114,9 @@ $(show_date)"
 
 [ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
 [ -x "$(command -v 'mpc')" ] || err 'mpc not found in PATH or not executable.'
-import_colors_sh
 
 
 BATT_STATUS="$(apm -b)"
-DELIMITER="  %{F${color3:=#9974E7}}|%{F${foreground:=#e0cef3}}  "
-BGFG="%{B${background:=#040516}} %{F${foreground:=#e0cef3}"
 
 [ -z "${HOSTNAME}" ] && HOSTNAME="$(hostname -s)"
 readonly HOSTNAME
