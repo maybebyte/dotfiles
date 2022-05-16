@@ -29,10 +29,7 @@ export \
 # these have to come after XDG_* are defined
 export \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
-	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
-	XMONAD_CACHE_DIR="${XDG_CACHE_HOME}/xmonad" \
-	XMONAD_CONFIG_DIR="${XDG_CONFIG_HOME}/xmonad" \
-	XMONAD_DATA_DIR="${XDG_DATA_HOME}/xmonad"
+	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc"
 
 
 # OS specific actions

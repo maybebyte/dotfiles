@@ -169,11 +169,11 @@ else
 		enbu="\${EDITOR} \${XDG_CONFIG_HOME}/newsboat/urls" \
 		enm="\${EDITOR} \${XDG_CONFIG_HOME}/neomutt/neomuttrc" \
 		eres="\${EDITOR} /etc/resolv.conf" \
+		espctr="\${EDITOR} \${XDG_CONFIG_HOME}/spectrwm/spectrwm.conf" \
 		esxh="\${EDITOR} \${XDG_CONFIG_HOME}/sxhkd/sxhkdrc" \
 		esys="\${EDITOR} /etc/sysctl.conf" \
 		etm="\${EDITOR} \${HOME}/.tmux.conf" \
 		ev="\${EDITOR} \${XDG_CONFIG_HOME}/nvim/init.vim" \
-		exm="\${EDITOR} \${XDG_CONFIG_HOME}/xmonad/xmonad.hs" \
 		exmb="\${EDITOR} \${XDG_CONFIG_HOME}/xmobar/xmobarrc" \
 		exr="\${EDITOR} \${HOME}/.Xresources" \
 		exs="\${EDITOR} \${HOME}/.xsession"
