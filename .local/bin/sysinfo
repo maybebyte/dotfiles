@@ -106,7 +106,7 @@ show_disk_space() {
 sysinfo() {
 	# spaces at the beginning of a new line bork ${stats}
 	stats="$(show_battery) +< $(show_temp) \
-+|C $(show_track) +|R $(show_disk_space)"
++|C +@fn=1;$(show_track) +|R +@fn=0;$(show_disk_space)"
 
 	echo "${stats}"
 }
