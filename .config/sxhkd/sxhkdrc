@@ -31,7 +31,7 @@ super + s
 	pkill -USR1 xidle
 
 # clear the clipboard and notify the user about it
-super + X
+super + c
 	${XDG_BIN_HOME}/clear_clip notify
 
 # full screenshot
