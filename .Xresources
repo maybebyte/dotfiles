@@ -43,3 +43,4 @@ XLock.password: password:
 ! sets up xidle to execute lockscreen script after 90 seconds
 XIdle.program: .local/bin/lockscreen
 XIdle.timeout: 90
+XIdle.position: no
