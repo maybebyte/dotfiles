@@ -1,7 +1,7 @@
 #!/bin/sh
+# shellcheck disable=SC1090,SC1091
 
 # sourced files
-# shellcheck disable=SC1090,SC1091
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
