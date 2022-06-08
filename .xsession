@@ -50,4 +50,8 @@ if [ "$(hostname -s)" = 'lain' ]; then
 	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation Axes' 6 7 4 5
 fi
 
+# no pointer acceleration, only constant deceleration.
+# see POINTER ACCELERATION in xorg.conf(5)
+xinput set-prop '/dev/wsmouse' 'Device Accel Profile' -1
+
 exec spectrwm
