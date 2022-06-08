@@ -31,6 +31,11 @@ let g:markdown_folding = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+" add proselint to tex and markdown checkers
+" http://proselint.com/
+let g:syntastic_tex_checkers = [ "lacheck", "chktex", "proselint" ]
+let g:syntastic_markdown_checkers = [ "proselint" ]
+
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
 nnoremap <C-p> "+P
