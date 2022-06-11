@@ -17,15 +17,10 @@ pf_aliases() {
 		epf="\${EDITOR} /etc/pf.conf" \
 		pfdump='tcpdump -er /var/log/pflog' \
 		pfdumpb='pfdump action block' \
-		pfdumpp='pfdump action pass' \
 		pfload='pfctl -f /etc/pf.conf' \
-		pfoff='pfctl -d' \
-		pfon='pfctl -e' \
-		pfrules='pfshow rules' \
-		pfshow='pfctl -s' \
+		pfrules='pfctl -s rules' \
 		pftail='tcpdump -ei pflog0' \
 		pftailb='pftail action block' \
-		pftailp='pftail action pass' \
 		pftest='pfload -n'
 }
 
