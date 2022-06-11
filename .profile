@@ -40,9 +40,6 @@ case "$(uname)" in
 		GATEWAY="$(netstat -rn 2>/dev/null | awk '/^default/{print $2}')"
 		export GATEWAY
 
-		NIC="$(ifconfig egress 2>/dev/null | head -1 | cut -f 1 -d ':')"
-		export NIC
-
 		# prepend /usr/games and ~/.local/bin to PATH
 		#
 		# PATH parameter expansion explanation:

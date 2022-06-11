@@ -69,18 +69,6 @@ openbsd_aliases() {
 		tailmail='tail -f /var/log/maillog' \
 		webtest="webtest \${SITE} \${MARKDOWNDIR} \${SRVDIR}"
 
-
-	[ -n "${NIC}" ] &&
-		alias \
-			ehn="e /etc/hostname.\${NIC}" \
-			nicdel="ifconfig \${NIC} delete" \
-			nicoff="ifconfig \${NIC} down" \
-			nicon="ifconfig \${NIC} up" \
-			renetnic="renet \${NIC}" \
-			nicre='nicoff && nicon' \
-			nicshow="ifconfig \${NIC}" \
-			nictail="tcpdump -pi \${NIC}"
-
 	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
 
