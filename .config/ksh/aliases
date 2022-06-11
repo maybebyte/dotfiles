@@ -215,26 +215,13 @@ fi
 [ -x "$(command -v 'task')" ] &&
 	alias \
 		ta='task add' \
-		tafin='task add project:finances' \
-		tagroc='task add project:groceries' \
-		taedu='task add project:education' \
-		taself='task add project:selfcare' \
-		tashop='task add project:shopping' \
-		tatech='task add project:tech' \
-		tconf='task config' \
 		td='task done' \
 		tdel='task delete' \
 		tdue='task due.before:today ids' \
-		tedu='task list project:education' \
-		tfin='task list project:finances' \
-		tgroc='task list project:groceries' \
 		tid='task ids' \
 		tls='task list' \
 		tmod='task modify' \
-		tself='task list project:selfcare' \
-		tshop='task list project:shopping' \
 		tt='task list due:today' \
-		ttech='task list project:tech' \
 		tup="task done \$(tdue)"
 
 
@@ -256,8 +243,7 @@ fi
 		yt='yt-dlp' \
 		yta='yt-dlp -xf bestaudio/best' \
 		ytdesc='yt-dlp --get-description' \
-		ytlen='yt-dlp --get-duration' \
-		ytrm='yt-dlp --rm-cache-dir'
+		ytlen='yt-dlp --get-duration'
 
 
 [ -n "${MARKDOWNDIR}" ] && alias cdmd="cd \${MARKDOWNDIR}"
