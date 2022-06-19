@@ -15,9 +15,6 @@
 
 
 # simple script to update element-web when we try to launch it.
-#
-# TODO: find a way to add version number to notification. check-elemweb
-# already has the variable needed, maybe start from there.
 
 set -e
 
@@ -46,21 +43,21 @@ launch_browser() {
 : "${BROWSER_PROFILE:=matrix}"
 : "${MATRIX_URI:=http://localhost:8080}"
 : "${XDG_BIN_HOME:=${HOME}/.local/bin}"
-: "${CHECK_SCRIPT:=${XDG_BIN_HOME}/check-elemweb}"
+: "${HANDLER:=${XDG_BIN_HOME}/handle-element-web.pl}"
 
 
 check_deps <<-EOF
 	${BROWSER}
-	${CHECK_SCRIPT}
+	${HANDLER}
 EOF
 
 
 # automatically check for a new version of element-web and update if a
 # new version is found.
-if "${CHECK_SCRIPT}"; then
+if "${HANDLER}"; then
 	[ -n "${DISPLAY}" ] \
 		&& [ -x "$(command -v 'notify-send')" ] \
-		&& notify-send 'element-web updated, be sure to restart httpd(8) if needed.'
+		&& notify-send 'element-web updated'
 fi
 
 launch_browser
