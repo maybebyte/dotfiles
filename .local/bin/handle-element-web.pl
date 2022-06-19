@@ -144,4 +144,4 @@ unlink "$element_web_ui_dir/element"
 # will return a 404, because it cannot see anything outside of
 # /var/www.
 symlink "./element-$remote_version", "./element"
-	|| die "Failed to create a symbolic link.";
+	|| die "Failed to create a symbolic link";
