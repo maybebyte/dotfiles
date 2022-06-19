@@ -15,9 +15,21 @@
 
 use strict;
 use warnings;
+
+# Extract the release tarball.
 use Archive::Tar;
+
+# Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS;
+
+# Make an API request and download the release + detached signature.
+#
+# HTTP::Tiny did not play nice with GitHub's API, as it kept returning
+# '400 Bad Request'. If there is a way to make HTTP::Tiny work, that
+# would be my preference over LWP::UserAgent due to the latter's size.
 use LWP::UserAgent;
+
+# Create temporary directories.
 use Path::Tiny;
 
 
