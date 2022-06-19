@@ -140,5 +140,8 @@ $tar->extract_archive("$tmpdir/element-$remote_version.tar.gz");
 unlink "$element_web_ui_dir/element"
 	|| die "Failed to remove $element_web_ui_dir/element";
 
-symlink "$element_web_ui_dir/element-$remote_version", "$element_web_ui_dir/element"
+# Symbolic link has to made with a relative path. Otherwise httpd(8)
+# will return a 404, because it cannot see anything outside of
+# /var/www.
+symlink "./element-$remote_version", "./element"
 	|| die "Failed to create a symbolic link.";
