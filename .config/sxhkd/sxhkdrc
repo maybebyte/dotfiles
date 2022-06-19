@@ -20,7 +20,7 @@ super + T
 
 # element-web
 super + M
-	${XDG_BIN_HOME}/launch-elemweb
+	${XDG_BIN_HOME}/launch-element-web
 
 # password manager
 super + p
