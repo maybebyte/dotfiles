@@ -36,8 +36,8 @@ use Path::Tiny;
 sub make_api_url {
 	my ($username, $repository) = @_;
 
-	($username) || die '$username is undefined';
-	($repository) || die '$repository is undefined';
+	$username or die '$username is undefined';
+	$repository or die '$repository is undefined';
 
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
@@ -46,9 +46,9 @@ sub make_api_url {
 sub make_release_url {
 	my ($username, $repository, $version) = @_;
 
-	($username) || die '$username is undefined';
-	($repository) || die '$repository is undefined';
-	($version) || die '$version is undefined';
+	$username or die '$username is undefined';
+	$repository or die '$repository is undefined';
+	$version or die '$version is undefined';
 
 	return "https://github.com/$username/$repository/releases/download/$version";
 }
@@ -59,7 +59,7 @@ sub make_release_url {
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
 system "which gpg >/dev/null 2>&1";
-($? == 0) || die "GnuPG is not installed";
+$? == 0 or die "GnuPG is not installed";
 
 
 my $element_web_ui_dir;
@@ -74,7 +74,7 @@ if ($ENV{'element_web_ui_dir'}) {
 
 # Try to change directory now and quit early if it fails, before
 # downloading anything. Quitting after is a waste.
-chdir "$element_web_ui_dir" || die "Failed to change directory to $element_web_ui_dir";
+chdir "$element_web_ui_dir" or die "Failed to change directory to $element_web_ui_dir";
 
 
 my $user_agent = LWP::UserAgent->new(
@@ -84,19 +84,19 @@ my $user_agent = LWP::UserAgent->new(
 my $api_url = make_api_url 'vector-im', 'element-web';
 my $api_response = $user_agent->get($api_url);
 
-($api_response->is_success) || die $api_response->status_line;
+$api_response->is_success or die $api_response->status_line;
 
 
 my $decoded_json = decode_json $api_response->decoded_content;
 my $remote_version = ${$decoded_json}{'name'};
 
 # Exclude release candidates and catch unknown release schemes.
-($remote_version =~ m/^v(\d)+\.(\d)+\.(\d)+$/)
-	|| die "Release version did not match expected release scheme";
+$remote_version =~ m/^v(\d)+\.(\d)+\.(\d)+$/
+	or die "Release version did not match expected release scheme";
 
 
 open my $local_version_fh, '<', "$element_web_ui_dir/element/version"
-	|| die "Could not open $element_web_ui_dir/element/version";
+	or die "Could not open $element_web_ui_dir/element/version";
 
 my $local_version = <$local_version_fh>;
 close $local_version_fh;
@@ -105,8 +105,8 @@ close $local_version_fh;
 chomp $local_version;
 $local_version = "v$local_version";
 
-($remote_version gt $local_version)
-	|| die "Remote version of element-web is not newer than local version";
+$remote_version gt $local_version
+	or die "Remote version of element-web is not newer than local version";
 
 
 my $release_url = make_release_url 'vector-im', 'element-web', "$remote_version";
@@ -126,7 +126,7 @@ $user_agent->mirror(
 system "gpg --verify $tmpdir/element-$remote_version.tar.gz.asc \\
 	$tmpdir/element-$remote_version.tar.gz >/dev/null 2>&1";
 
-($? == 0) || die <<'EOF';
+$? == 0 or die <<'EOF';
 GPG verification failed. Make sure the public key mentioned in
 https://github.com/vector-im/element-web#getting-started is in
 the key ring.
@@ -138,10 +138,10 @@ $tar->extract_archive("$tmpdir/element-$remote_version.tar.gz");
 
 
 unlink "$element_web_ui_dir/element"
-	|| die "Failed to remove $element_web_ui_dir/element";
+	or die "Failed to remove $element_web_ui_dir/element";
 
 # Symbolic link has to made with a relative path. Otherwise httpd(8)
 # will return a 404, because it cannot see anything outside of
 # /var/www.
 symlink "./element-$remote_version", "./element"
-	|| die "Failed to create a symbolic link";
+	or die "Failed to create a symbolic link";
