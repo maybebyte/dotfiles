@@ -19,6 +19,9 @@ use warnings;
 # Extract the release tarball.
 use Archive::Tar;
 
+# Create temporary directories.
+use File::Temp;
+
 # Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS;
 
@@ -28,9 +31,6 @@ use JSON::MaybeXS;
 # '400 Bad Request'. If there is a way to make HTTP::Tiny work, that
 # would be my preference over LWP::UserAgent due to the latter's size.
 use LWP::UserAgent;
-
-# Create temporary directories.
-use Path::Tiny;
 
 
 sub make_api_url {
@@ -110,7 +110,7 @@ $remote_version gt $local_version
 
 
 my $release_url = make_release_url 'vector-im', 'element-web', "$remote_version";
-my $tmpdir = Path::Tiny->tempdir;
+my $tmpdir = File::Temp->newdir;
 
 $user_agent->mirror(
 	"$release_url/element-$remote_version.tar.gz",
