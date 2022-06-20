@@ -66,8 +66,8 @@ my $element_web_ui_dir;
 
 # $element_web_ui_dir can be changed by modifying it in the environment:
 # element_web_ui_dir=/path/to/dir handle-element-web.pl
-if ($ENV{'element_web_ui_dir'}) {
-	$element_web_ui_dir = "$ENV{'element_web_ui_dir'}";
+if ($ENV{'ELEMENT_WEB_UI_DIR'}) {
+	$element_web_ui_dir = "$ENV{'ELEMENT_WEB_UI_DIR'}";
 } else {
 	$element_web_ui_dir = '/var/www/htdocs/element-web';
 }
