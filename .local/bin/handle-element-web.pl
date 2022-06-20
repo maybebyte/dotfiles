@@ -58,7 +58,7 @@ sub make_release_url {
 #
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
-system "which gpg >/dev/null 2>&1";
+system "command -v gpg >/dev/null 2>&1";
 $? == 0 or die "GnuPG is not installed";
 
 
