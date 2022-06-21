@@ -1,7 +1,7 @@
 [global]
 	corner_radius = 7
 	enable_recursive_icon_lookup = true
-	font = mono-10, Symbola-10
+	font = Monospace 12
 	format = "<b>%s</b>\n%b"
 	frame_color = "#e0cef3"
 	frame_width = 2
