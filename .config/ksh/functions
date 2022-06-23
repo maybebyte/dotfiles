@@ -175,61 +175,6 @@ grabipv6 [IPv6 address]' >&2
 	dig AAAA +short "$1"
 }
 
-# if $1 is less than 1024, print it and exit successfully.
-# if $1 is not an integer, exit with an error.
-# otherwise, convert $1 to its human readable counterpart.
-#
-# $1 is a positive integer (supporting rational numbers would require
-# some additional code to handle exceptions).
-#
-# bug: 1024000 returns 0MB.
-#
-# TODO: perhaps this can use bc(1)
-hreadable() {
-	case "$1" in
-
-		''|'-h')
-			echo 'return a human readable integer.
-
-hreadable [positive integer]' >&2
-
-			return
-
-			;;
-
-	esac
-
-	no_of_loops=0
-	size="$1"
-
-	# sanity check so math below works. also alleviates the need to use
-	# printf(1) below since we can at least know that ${size} is an
-	# integer.
-	case "${size}" in
-		*[!0-9]*) echo 'Only integers are accepted.' >&2; return ;;
-		# size is an integer, so do nothing and proceed
-		*) ;;
-	esac
-
-	# size < 1024 means the value printed should be in bytes.
-	[ "${size}" -lt 1024 ] \
-		&& echo "${size}B" \
-		&& return 0
-
-	until [ "${#size}" -le 3 ]; do
-		: $((no_of_loops += 1))
-		: $((size /= 1024))
-	done
-
-	case ${no_of_loops} in
-		1) echo "${size}KB" ;;
-		2) echo "${size}MB" ;;
-		3) echo "${size}GB" ;;
-		4) echo "${size}TB" ;;
-		*) echo 'hreadable() can only convert up to terabytes.' >&2; return ;;
-	esac
-}
-
 # with no auto-login, no progress meter and no verbose mode, use ftp(1)
 # to send a GET request to ipinfo.io with $1 as the path. Then, send the
 # results to STDOUT.
@@ -396,29 +341,6 @@ otherwise, use it the same way you would use nc(1).' >&2
 	esac
 
 	nc -X 5 -x 127.0.0.1:9050 "$@"
-}
-
-# obtains the estimated size of a package and returns it in a human
-# readable format.
-#
-# $1 is the name of a valid package.
-pkgsize() {
-	case "$1" in
-
-		''|'-h')
-			echo 'obtains the estimated size of a package and returns it in a human
-readable format.
-
-pkgsize [package name]' >&2
-
-			return
-
-			;;
-
-	esac
-
-	SIZE="$(pkgq -s -- "$1" | awk '/Size/{print $2}')"
-	hreadable "${SIZE}"
 }
 
 # with rffd, open up random pics with sxiv(1).
