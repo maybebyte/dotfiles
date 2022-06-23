@@ -102,7 +102,6 @@ my $local_version = <$local_version_fh>;
 close $local_version_fh;
 
 # Set up $local_version for comparison against $remote_version.
-chomp $local_version;
 $local_version = "v$local_version";
 
 $remote_version gt $local_version
