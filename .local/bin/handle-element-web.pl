@@ -74,7 +74,7 @@ if ($ENV{'ELEMENT_WEB_UI_DIR'}) {
 
 # Try to change directory now and quit early if it fails, before
 # downloading anything. Quitting after is a waste.
-chdir "$element_web_ui_dir" or die "Failed to change directory to $element_web_ui_dir";
+chdir "$element_web_ui_dir" or die "Failed to change directory to $element_web_ui_dir: $!";
 
 
 my $user_agent = LWP::UserAgent->new(
@@ -96,7 +96,7 @@ $remote_version =~ m/^v(\d)+\.(\d)+\.(\d)+$/
 
 
 open my $local_version_fh, '<', "$element_web_ui_dir/element/version"
-	or die "Could not open $element_web_ui_dir/element/version";
+	or die "Could not open $element_web_ui_dir/element/version: $!";
 
 my $local_version = <$local_version_fh>;
 close $local_version_fh;
@@ -137,10 +137,10 @@ $tar->extract_archive("$tmpdir/element-$remote_version.tar.gz");
 
 
 unlink "$element_web_ui_dir/element"
-	or die "Failed to remove $element_web_ui_dir/element";
+	or die "Failed to remove $element_web_ui_dir/element: $!";
 
 # Symbolic link has to made with a relative path. Otherwise httpd(8)
 # will return a 404, because it cannot see anything outside of
 # /var/www.
 symlink "./element-$remote_version", "./element"
-	or die "Failed to create a symbolic link";
+	or die "Failed to create a symbolic link: $!";
