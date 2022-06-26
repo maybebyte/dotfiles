@@ -59,7 +59,7 @@ sub make_release_url {
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
 system "command -v gpg >/dev/null 2>&1";
-$? == 0 or die "GnuPG is not installed";
+$? == 0 or die "GnuPG is not installed\n";
 
 
 my $element_web_ui_dir;
@@ -81,9 +81,7 @@ my $user_agent = LWP::UserAgent->new(
 	protocols_allowed => [ 'https' ],
 );
 
-my $api_url = make_api_url 'vector-im', 'element-web';
-my $api_response = $user_agent->get($api_url);
-
+my $api_response = $user_agent->get(make_api_url('vector-im', 'element-web'));
 $api_response->is_success or die $api_response->status_line;
 
 
@@ -92,23 +90,20 @@ my $remote_version = ${$decoded_json}{'name'};
 
 # Exclude release candidates and catch unknown release schemes.
 $remote_version =~ m/^v(\d)+\.(\d)+\.(\d)+$/
-	or die "Release version did not match expected release scheme";
+	or die "Release version did not match expected release scheme.\n";
 
 
 open my $local_version_fh, '<', "$element_web_ui_dir/element/version"
 	or die "Could not open $element_web_ui_dir/element/version: $!";
 
-my $local_version = <$local_version_fh>;
+chomp(my $local_version = 'v' . <$local_version_fh>);
 close $local_version_fh;
 
-# Set up $local_version for comparison against $remote_version.
-$local_version = "v$local_version";
-
 $remote_version gt $local_version
-	or die "Remote version of element-web is not newer than local version";
+	or die "Remote version of element-web is not newer than local version.\n";
 
 
-my $release_url = make_release_url 'vector-im', 'element-web', "$remote_version";
+my $release_url = make_release_url 'vector-im', 'element-web', $remote_version;
 my $tmpdir = File::Temp->newdir;
 
 $user_agent->mirror(
