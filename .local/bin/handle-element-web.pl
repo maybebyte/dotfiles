@@ -15,6 +15,7 @@
 
 use strict;
 use warnings;
+use v5.14; # character interpretation
 
 # Extract the release tarball.
 use Archive::Tar;
@@ -89,7 +90,7 @@ my $decoded_json = decode_json $api_response->decoded_content;
 my $remote_version = ${$decoded_json}{'name'};
 
 # Exclude release candidates and catch unknown release schemes.
-$remote_version =~ m/^v(\d)+\.(\d)+\.(\d)+$/
+$remote_version =~ /^v\d+\.\d+\.\d+$/a
 	or die "Release version did not match expected release scheme.\n";
 
 
