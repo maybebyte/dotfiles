@@ -90,7 +90,7 @@ my $decoded_json = decode_json $api_response->decoded_content;
 my $remote_version = ${$decoded_json}{'name'};
 
 # Exclude release candidates and catch unknown release schemes.
-$remote_version =~ /^v\d+\.\d+\.\d+$/a
+$remote_version =~ /\Av\d+\.\d+\.\d+\Z/a
 	or die "Release version did not match expected release scheme.\n";
 
 
