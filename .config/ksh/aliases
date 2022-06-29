@@ -123,9 +123,9 @@ alias \
 }
 
 
-[ -x "$(command -v 'proxychains4')" ] \
+[ -x "$(command -v 'torsocks')" ] \
 	&& [ -x "$(command -v 'irssi')" ] \
-	&& alias irssi='proxychains4 irssi'
+	&& alias irssi='torsocks irssi'
 
 
 if [ -z "${EDITOR}" ]; then
