@@ -63,15 +63,9 @@ system "command -v gpg >/dev/null 2>&1";
 $? == 0 or die "GnuPG is not installed\n";
 
 
-my $element_web_ui_dir;
-
 # $element_web_ui_dir can be changed by modifying it in the environment:
 # ELEMENT_WEB_UI_DIR=/path/to/dir handle-element-web.pl
-if ($ENV{'ELEMENT_WEB_UI_DIR'}) {
-	$element_web_ui_dir = "$ENV{'ELEMENT_WEB_UI_DIR'}";
-} else {
-	$element_web_ui_dir = '/var/www/htdocs/element-web';
-}
+my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'} // '/var/www/htdocs/element-web';
 
 # Try to change directory now and quit early if it fails, before
 # downloading anything. Quitting after is a waste.
