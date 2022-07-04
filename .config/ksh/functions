@@ -294,8 +294,8 @@ mvbak [file]' >&2
 
 
 	case "${MVBAK_FILE##*.bak}" in
-		'') mv -- "$MVBAK_FILE" "${MVBAK_FILE%.bak}" ;;
-		*) mv -- "$MVBAK_FILE" "$MVBAK_FILE.bak" ;;
+		'') mv -- "${MVBAK_FILE}" "${MVBAK_FILE%.bak}" ;;
+		*) mv -- "${MVBAK_FILE}" "${MVBAK_FILE}.bak" ;;
 	esac
 }
 
