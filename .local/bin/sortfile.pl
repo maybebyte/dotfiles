@@ -45,11 +45,19 @@ for (@ARGV) {
 		next;
 	}
 
+
 	open my $unsorted_file_fh, '<', $_ or die "Could not open $_ for reading: $!";
-	my @lines = <$unsorted_file_fh>;
+
+	my @lines;
+
+	while (my $line = <$unsorted_file_fh>) {
+		push @lines, $line;
+	}
+
 	close $unsorted_file_fh;
 
 	rename $_, "$_.bak";
+
 
 	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!";
 
