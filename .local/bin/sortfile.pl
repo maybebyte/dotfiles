@@ -25,7 +25,7 @@ sub usage {
 	die <<EOT;
 $program_name [file_to_sort] ...
 
-$program_name will append '.bak' to the original file.
+$program_name will append '.bak' to the original file name.
 $program_name removes redundant entries.
 EOT
 }
