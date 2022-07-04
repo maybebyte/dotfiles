@@ -46,7 +46,7 @@ for (@ARGV) {
 	}
 
 
-	open my $unsorted_file_fh, '<', $_ or die "Could not open $_ for reading: $!";
+	open my $unsorted_file_fh, '<', $_ or die "Could not open $_ for reading: $!\n";
 
 	my @lines;
 
@@ -56,7 +56,7 @@ for (@ARGV) {
 
 	close $unsorted_file_fh;
 
-	rename $_, "$_.bak";
+	rename $_, "$_.bak" or die "Could not rename $_ to $_.bak: $!\n";
 
 
 	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!";
