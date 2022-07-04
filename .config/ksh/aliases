@@ -175,6 +175,7 @@ fi
 		dpsh='d push' \
 		dre='d restore' \
 		ds='d status' \
+		g='git' \
 		ga='git add' \
 		gcl='git clone' \
 		gcmt='git commit -a' \
