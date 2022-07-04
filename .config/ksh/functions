@@ -400,45 +400,6 @@ readmd [markdown document]' >&2
 	lowdown -T 'term' --term-no-colour "$1" | less
 }
 
-# sorts a file and removes unique entries.
-# note that sortfile modifies (replaces) the original copy.
-sortfile() {
-	[ -n "$*" ] || {
-		echo 'sortfile /path/to/file ...
-note that sortfile modifies (replaces) the original copy.' >&2
-		return 1
-	}
-
-	for file_to_be_sorted in "$@"; do
-
-		[ -f "${file_to_be_sorted}" ] || {
-			echo "${file_to_be_sorted} is not a file." >&2
-			continue
-		}
-
-		[ -w "${file_to_be_sorted}" ] || {
-			echo "${file_to_be_sorted} is not writable." >&2
-			continue
-		}
-
-		tmpfile="$(mktemp)" || {
-			echo "${tmpfile} could not be created, exiting." >&2
-			return 1
-		}
-
-		sort -u "${file_to_be_sorted}" > "${tmpfile}" || {
-			echo "${file_to_be_sorted} could not be sorted and written to ${tmpfile}." >&2
-			continue
-		}
-
-		mv "${tmpfile}" "${file_to_be_sorted}" || {
-			echo "${tmpfile} could not be moved to ${file_to_be_sorted}." >&2
-			continue
-		}
-
-	done
-}
-
 # usage:
 #
 # tarpv [archive target] > filename
