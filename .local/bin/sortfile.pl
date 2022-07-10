@@ -18,7 +18,7 @@ use warnings;
 
 use File::Basename;
 
-my $program_name = basename $0;
+my $program_name = fileparse $0;
 
 
 sub usage {
