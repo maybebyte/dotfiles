@@ -45,10 +45,13 @@ check_deps <<-EOF
 	$1
 EOF
 
-[ -r "$2" ] || err "$2 is not readable."
-[ -d "$2" ] || err "$2 is not a directory."
-
-CHOSEN_FILE="$( (cd "$2" && fzf) )"
+CHOSEN_FILE="$( (
+	if cd "$2"; then
+		fzf
+	else
+		err "Could not change directory to $2"
+	fi
+) )"
 readonly CHOSEN_FILE
 
 FULL_PATH_OF_FILE="$(readlink -f -- "$2/${CHOSEN_FILE}")"
