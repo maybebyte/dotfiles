@@ -38,7 +38,7 @@ while read -r file; do
 
 		# copy file with filehandler
 		'c')
-			filehandler -c "${file}"
+			filehandler copy "${file}"
 
 			;;
 
@@ -58,13 +58,13 @@ while read -r file; do
 
 		# move file with filehandler
 		'm')
-			filehandler -m "${file}"
+			filehandler move "${file}"
 
 			;;
 
 		# rename file with filehandler
 		'n')
-			filehandler -n "${file}"
+			filehandler rename "${file}"
 
 			;;
 
