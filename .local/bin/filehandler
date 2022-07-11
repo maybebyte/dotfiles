@@ -32,7 +32,7 @@ operations:
 help - display help
 copy - copy file
 move - move file
-rename - rename and then move file
+rename - rename file
 EOF
 
 	exit 1
@@ -110,8 +110,7 @@ copy_file() {
 move_file() {
 	readonly FILE_TO_MOVE="$1"
 
-	# This may have been handled by rename_file already.
-	[ -z "${DESTINATION}" ] && handle_destination "${FILE_TO_MOVE}"
+	handle_destination "${FILE_TO_MOVE}"
 	readonly BASENAME
 
 	mv -- "$1" "${DESTINATION}/${BASENAME}" && {
@@ -124,16 +123,25 @@ move_file() {
 
 rename_file() {
 	readonly FILE_TO_RENAME="$1"
-	handle_destination "${FILE_TO_RENAME}"
+	readonly DIRNAME="${FILE_TO_RENAME%/*}"
+	readonly BASENAME="${FILE_TO_RENAME##*/}"
 
-	BASENAME="$(echo 'exit' | menu -p "Rename '${BASENAME}' to what?")"
+	NEW_FILENAME="$(echo 'exit' | menu -p "Rename '${BASENAME}' to what?")"
+	readonly NEW_FILENAME
 
-	[ -n "${BASENAME}" ] ||
+
+	[ -n "${NEW_FILENAME}" ] ||
 		err "${PROGRAM_NAME} needs a new name to rename '${BASENAME}' to."
 
-	[ "${BASENAME}" = 'exit' ] && exit
+	[ "${NEW_FILENAME}" = 'exit' ] && exit
 
-	move_file "${FILE_TO_RENAME}"
+
+	mv "${FILE_TO_RENAME}" "${DIRNAME}/${NEW_FILENAME}" && {
+		notify-send -- "'${BASENAME}' renamed to '${NEW_FILENAME}'"
+		return
+	}
+
+	err "Failed to rename '${BASENAME}' to '${NEW_FILENAME}'"
 }
 
 
