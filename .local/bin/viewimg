@@ -15,49 +15,41 @@
 
 set -e
 
+warn() {
+	printf '%s\n' "$*" >&2
+}
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 usage() {
-	err "usage:
+	warn "usage:
 ${0##*/} [URL]"
+	exit;
 }
 
+local_ftp() { ftp -nU '' "$@" >/dev/null 2>&1; }
+local_sxiv() { sxiv "$@" >/dev/null 2>&1; }
 
-check_deps() {
-	while read -r dependency; do
-
-		[ -x "$(command -v -- "${dependency}")" ] \
-			|| err "${dependency} not found in PATH or not executable."
-
-	done
-}
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
+[ -n "$1" ] || usage
 
 
-viewimg() {
-	FILENAME="$(mktemp)" || err "Failed to create tmpfile at ${FILENAME}."
-	readonly FILENAME
+readonly DEPENDENCIES='ftp
+sxiv'
 
-	ftp -nU '' -o "${FILENAME}" -- "$1" || err "Failed to retrieve from $1."
-
-	sxiv -- "${FILENAME}" || err "Failed to open ${FILENAME}."
-}
-
-
-[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-
-check_deps <<-'EOF'
-	ftp
-	sxiv
-EOF
-
-[ -z "$1" ] && usage
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" >/dev/null 2>&1 ||
+		err "${dependency} not found in PATH."
+done
 
 
-viewimg "$1" >/dev/null 2>&1
+FILENAME="$(mktemp)" || err "Failed to create tmpfile at ${FILENAME}."
+readonly FILENAME
+trap 'rm -- ${FILENAME}' EXIT INT QUIT TERM
 
-rm -- "${FILENAME}"
+
+local_ftp -o "${FILENAME}" -- "$1" || err "Failed to retrieve from $1."
+local_sxiv -- "${FILENAME}" || err "Failed to open ${FILENAME}."

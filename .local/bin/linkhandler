@@ -55,7 +55,7 @@ fi
 
 echo "${DEPENDENCIES}" | while read -r dependency; do
 	command -v -- "${dependency}" >/dev/null 2>&1 ||
-		err "${dependency} not found in PATH or not executable."
+		err "${dependency} not found in PATH."
 done
 
 
@@ -68,7 +68,7 @@ echo "${OPTIONS}" |
 			[ -n "${DURATION}" ] || err 'Empty input, so no duration was yanked.'
 
 			printf '%s' "${DURATION}" | xclip -selection clipboard
-			notify-send -- "Copied video duration (${DURATION})."
+			exec notify-send -- "Copied video duration (${DURATION})."
 			;;
 
 		'copy title')
@@ -77,47 +77,47 @@ echo "${OPTIONS}" |
 			[ -n "${TITLE}" ] || err 'Empty input, so no title yanked.'
 
 			printf '%s' "${TITLE}" | xclip -selection clipboard
-			notify-send -- "${TITLE} yanked."
+			exec notify-send -- "${TITLE} yanked."
 			;;
 
 		'download audio')
-			tmux new-window "yt-dlp -xf bestaudio/best -- ${URL}; read"
+			exec tmux new-window "yt-dlp -xf bestaudio/best -- ${URL}; read"
 			;;
 
 		'download file')
-			tmux new-window "( cd ${HOME}/Downloads && local_ftp -- ${URL} );
+			exec tmux new-window "( cd ${HOME}/Downloads && local_ftp -- ${URL} );
 			read"
 			;;
 
 		'download video')
-			tmux new-window "yt-dlp -- ${URL}; read"
+			exec tmux new-window "yt-dlp -- ${URL}; read"
 			;;
 
 		'listen')
-			tmux new-window "mpva -- ${URL}"
+			exec tmux new-window "mpva -- ${URL}"
 			;;
 
 		'print duration')
 			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
 			[ -n "${DURATION}" ] || err 'Empty input, so no duration printed.'
 
-			notify-send -- "${DURATION}"
+			exec notify-send -- "${DURATION}"
 			;;
 
 		'read')
-			tmux new-window "local_ftp -o - -- ${URL} | zathura -"
+			exec tmux new-window "local_ftp -o - -- ${URL} | zathura -"
 			;;
 
 		'view image')
-			viewimg "${URL}"
+			exec viewimg "${URL}"
 			;;
 
 		'watch')
-			tmux new-window "mpv -- ${URL}"
+			exec tmux new-window "mpv -- ${URL}"
 			;;
 
 		'watch (loop)')
-			tmux new-window "mpv --loop -- ${URL}"
+			exec tmux new-window "mpv --loop -- ${URL}"
 			;;
 
 		*)
