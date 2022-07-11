@@ -50,7 +50,7 @@ for (@ARGV) {
 
 	my @lines;
 
-	while (my $line = <$unsorted_file_fh>) {
+	while (chomp(my $line = <$unsorted_file_fh>)) {
 		next if $line =~ /\A \s* \z/ax;
 		push @lines, $line;
 	}
@@ -63,7 +63,7 @@ for (@ARGV) {
 	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!";
 
 	my @unique_lines = uniq @lines;
-	print $sorted_file_fh sort @unique_lines;
+	print $sorted_file_fh join("\n", sort @unique_lines);
 
 	close $sorted_file_fh;
 }
