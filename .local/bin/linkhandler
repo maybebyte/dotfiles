@@ -17,38 +17,12 @@
 set -e
 
 
+local_ftp() { ftp -nU '' "$@"; }
+
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
-
-
-check_deps() {
-	while read -r dependency; do
-
-		[ -x "$(command -v -- "${dependency}")" ] \
-			|| err "${dependency} not found in PATH or not executable."
-
-	done
-}
-
-
-import_colors_sh() {
-	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
-
-	if ! [ -r "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not readable." >&2
-
-	elif ! [ -f "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not a file." >&2
-
-	# passed sanity checks, so source the file
-	else
-		. "${COLORS_SH}"
-
-	fi
-}
-
 
 menu() {
 	dmenu -i -fn 'mono-12' \
@@ -60,135 +34,13 @@ menu() {
 }
 
 
-# if no arg is passed and STDIN is empty, exit with an error.
-check_opts() {
-	if [ -n "$1" ]; then
-		readonly URL="$1"
-
-	elif [ ! -t 0 ]; then
-		read -r URL && readonly URL
-
-	else
-		err "${0##*/} needs a URL!"
-
-	fi
-}
-
-
-# given a URL and a choice, perform the associated action.
-#
-# output is squelched for most options since I primarily use this with
-# newsboat.
-linkhandler() {
-	case "$(menu -l "${NUM_OF_OPTS}" -p 'What to do with this URL?')" in
-
-		'copy duration')
-			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
-			readonly DURATION
-
-			if [ -n "${DURATION}" ]; then
-				printf '%s' "${DURATION}" | xclip -selection clipboard
-				notify-send -- "Copied video duration (${DURATION})."
-
-			else
-				err 'Empty input, so no duration was yanked.'
-
-			fi
-
-			;;
-
-		'copy title')
-			TITLE="$(yt-dlp -e -- "${URL}" 2>/dev/null)"
-			readonly TITLE
-
-			if [ -n "${TITLE}" ]; then
-				printf '%s' "${TITLE}" | xclip -selection clipboard
-				notify-send -- "${TITLE} yanked."
-
-			else
-				err 'Empty input, so no title yanked.'
-
-			fi
-
-			;;
-
-		'download audio')
-			tmux new-window "yt-dlp -xf bestaudio/best -- ${URL}; read"
-
-			;;
-
-		'download file')
-			tmux new-window "(cd ${HOME}/Downloads && ftp -nU '' -- ${URL}); read"
-
-			;;
-
-		'download video')
-			tmux new-window "yt-dlp -- ${URL}; read"
-
-			;;
-
-		'listen')
-			tmux new-window "mpva -- ${URL}"
-
-			;;
-
-		'print duration')
-			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
-
-			if [ -n "${DURATION}" ]; then
-				notify-send -- "${DURATION}"
-
-			else
-				err 'Empty input, so no duration printed.'
-
-			fi
-
-			;;
-
-		'read')
-			tmux new-window "ftp -no - -U '' -- ${URL} | zathura -"
-
-			;;
-
-		'view image')
-			viewimg "${URL}"
-
-			;;
-
-		'watch')
-			tmux new-window "mpv -- ${URL}"
-
-			;;
-
-		'watch (loop)')
-			tmux new-window "mpv --loop -- ${URL}"
-
-			;;
-
-		*)
-			err "${0##*/} doesn't support that option."
-
-			;;
-
-	esac
-}
-
-
-[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-
-check_deps <<-'EOF'
-	dmenu
-	ftp
-	mpv
-	notify-send
-	sxiv
-	xclip
-	yt-dlp
-EOF
-
-check_opts "$1"
-
-import_colors_sh
+readonly DEPENDENCIES='dmenu
+ftp
+mpv
+notify-send
+sxiv
+xclip
+yt-dlp'
 
 readonly OPTIONS='copy duration
 copy title
@@ -205,4 +57,102 @@ watch (loop)'
 NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
 readonly NUM_OF_OPTS
 
-echo "${OPTIONS}" | linkhandler
+readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+. "${COLORS_SH}"
+
+
+if [ -n "$1" ]; then
+	readonly URL="$1"
+elif [ ! -t 0 ]; then
+	read -r URL && readonly URL
+else
+	err "${0##*/} needs a URL!"
+fi
+
+
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" >/dev/null 2>&1 ||
+		err "${dependency} not found in PATH or not executable."
+done
+
+
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
+
+
+echo "${OPTIONS}" |
+	case "$(menu -l "${NUM_OF_OPTS}" -p 'What to do with this URL?')" in
+
+		'copy duration')
+			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
+			readonly DURATION
+
+			if [ -n "${DURATION}" ]; then
+				printf '%s' "${DURATION}" | xclip -selection clipboard
+				notify-send -- "Copied video duration (${DURATION})."
+			else
+				err 'Empty input, so no duration was yanked.'
+			fi
+			;;
+
+		'copy title')
+			TITLE="$(yt-dlp -e -- "${URL}" 2>/dev/null)"
+			readonly TITLE
+
+			if [ -n "${TITLE}" ]; then
+				printf '%s' "${TITLE}" | xclip -selection clipboard
+				notify-send -- "${TITLE} yanked."
+			else
+				err 'Empty input, so no title yanked.'
+			fi
+			;;
+
+		'download audio')
+			tmux new-window "yt-dlp -xf bestaudio/best -- ${URL};
+			read"
+			;;
+
+		'download file')
+			tmux new-window "( cd ${HOME}/Downloads && local_ftp -- ${URL} );
+			read"
+			;;
+
+		'download video')
+			tmux new-window "yt-dlp -- ${URL};
+			read"
+			;;
+
+		'listen')
+			tmux new-window "mpva -- ${URL}"
+			;;
+
+		'print duration')
+			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
+
+			if [ -n "${DURATION}" ]; then
+				notify-send -- "${DURATION}"
+			else
+				err 'Empty input, so no duration printed.'
+			fi
+			;;
+
+		'read')
+			tmux new-window "local_ftp -o - -- ${URL} | zathura -"
+			;;
+
+		'view image')
+			viewimg "${URL}"
+			;;
+
+		'watch')
+			tmux new-window "mpv -- ${URL}"
+			;;
+
+		'watch (loop)')
+			tmux new-window "mpv --loop -- ${URL}"
+			;;
+
+		*)
+			err "${0##*/} doesn't support that option."
+			;;
+
+	esac

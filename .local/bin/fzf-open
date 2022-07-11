@@ -45,13 +45,9 @@ check_deps <<-EOF
 	$1
 EOF
 
-CHOSEN_FILE="$( (
-	if cd "$2"; then
-		fzf
-	else
-		err "Could not change directory to $2"
-	fi
-) )"
+cd "$2" || err "Could not change directory to $2"
+
+CHOSEN_FILE="$(fzf)"
 readonly CHOSEN_FILE
 
 FULL_PATH_OF_FILE="$(readlink -f -- "$2/${CHOSEN_FILE}")"
