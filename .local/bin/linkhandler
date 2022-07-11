@@ -67,24 +67,20 @@ echo "${OPTIONS}" |
 			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
 			readonly DURATION
 
-			if [ -n "${DURATION}" ]; then
-				printf '%s' "${DURATION}" | xclip -selection clipboard
-				notify-send -- "Copied video duration (${DURATION})."
-			else
-				err 'Empty input, so no duration was yanked.'
-			fi
+			[ -n "${DURATION}" ] || err 'Empty input, so no duration was yanked.'
+
+			printf '%s' "${DURATION}" | xclip -selection clipboard
+			notify-send -- "Copied video duration (${DURATION})."
 			;;
 
 		'copy title')
 			TITLE="$(yt-dlp -e -- "${URL}" 2>/dev/null)"
 			readonly TITLE
 
-			if [ -n "${TITLE}" ]; then
-				printf '%s' "${TITLE}" | xclip -selection clipboard
-				notify-send -- "${TITLE} yanked."
-			else
-				err 'Empty input, so no title yanked.'
-			fi
+			[ -n "${TITLE}" ] || err 'Empty input, so no title yanked.'
+
+			printf '%s' "${TITLE}" | xclip -selection clipboard
+			notify-send -- "${TITLE} yanked."
 			;;
 
 		'download audio')
@@ -109,11 +105,9 @@ echo "${OPTIONS}" |
 		'print duration')
 			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
 
-			if [ -n "${DURATION}" ]; then
-				notify-send -- "${DURATION}"
-			else
-				err 'Empty input, so no duration printed.'
-			fi
+			[ -n "${DURATION}" ] || err 'Empty input, so no duration printed.'
+
+			notify-send -- "${DURATION}"
 			;;
 
 		'read')
