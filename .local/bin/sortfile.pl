@@ -52,8 +52,7 @@ for (@ARGV) {
 
 	while (my $line = <$unsorted_file_fh>) {
 		chomp $line;
-		next if $line =~ /\A \s* \z/ax;
-		push @lines, $line;
+		push @lines, $line unless $line =~ /\A \s* \z/ax;
 	}
 
 	close $unsorted_file_fh;
