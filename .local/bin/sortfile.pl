@@ -40,12 +40,6 @@ sub uniq {
 @ARGV or usage;
 
 for (@ARGV) {
-	unless (-e -r -w) {
-		warn "$_ either does not exist, cannot be read, or cannot be written.\n";
-		next;
-	}
-
-
 	open my $unsorted_file_fh, '<', $_ or die "Could not open $_ for reading: $!\n";
 
 	my @lines;
@@ -60,7 +54,7 @@ for (@ARGV) {
 	rename $_, "$_.bak" or die "Could not rename $_ to $_.bak: $!\n";
 
 
-	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!";
+	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!\n";
 
 	my @unique_lines = uniq @lines;
 	print $sorted_file_fh join("\n", sort @unique_lines);
