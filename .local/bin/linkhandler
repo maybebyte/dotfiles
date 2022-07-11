@@ -24,16 +24,6 @@ err() {
 	exit 1
 }
 
-menu() {
-	dmenu -i -fn 'mono-12' \
-		-nb "${background:-#040516}" \
-		-nf "${color3:-#9974e7}" \
-		-sb "${background:-#040516}" \
-		-sf "${foreground:-#e0cef3}" \
-		"$@"
-}
-
-
 readonly DEPENDENCIES='dmenu
 ftp
 mpv
@@ -54,12 +44,6 @@ view image
 watch
 watch (loop)'
 
-NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
-readonly NUM_OF_OPTS
-
-readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
-. "${COLORS_SH}"
-
 
 if [ -n "$1" ]; then
 	readonly URL="$1"
@@ -76,11 +60,8 @@ echo "${DEPENDENCIES}" | while read -r dependency; do
 done
 
 
-[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
-
-
 echo "${OPTIONS}" |
-	case "$(menu -l "${NUM_OF_OPTS}" -p 'What to do with this URL?')" in
+	case "$(fzf)" in
 
 		'copy duration')
 			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
