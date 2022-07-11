@@ -24,12 +24,7 @@ err() {
 	exit 1
 }
 
-usage() {
-	warn "usage:
-${0##*/} [URL]"
-	exit;
-}
-
+usage() { err "usage: ${0##*/} [URL]"; }
 local_ftp() { ftp -nU '' "$@" >/dev/null 2>&1; }
 local_sxiv() { sxiv "$@" >/dev/null 2>&1; }
 
