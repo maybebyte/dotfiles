@@ -49,11 +49,12 @@ done
 [ -n "$*" ] || usage
 
 while [ -n "$*" ]; do
+	IMAGE="$1"
 
-	case "$(file -ib -- "$1")" in
-		image/jpeg) jpegoptim -s -- "$1" ;;
-		image/png) optipng -strip all -fix -- "$1" ;;
-		*) warn "$1 does not use a supported image format." ;;
+	case "$(file -ib -- "${IMAGE}")" in
+		image/jpeg) jpegoptim -s -- "${IMAGE}" ;;
+		image/png) optipng -strip all -fix -- "${IMAGE}" ;;
+		*) warn "${IMAGE} does not use a supported image format." ;;
 	esac
 
 	shift
