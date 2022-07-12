@@ -43,7 +43,6 @@ convert_to_16bit() {
 	# According to sox(1), most noise shaping filters are only available
 	# at 44.1kHz, so that is the chosen sample rate.
 	if sox -SG "$1" -b 16 "${STAGING_FILE}" rate -v 44100 dither -s; then
-
 		if [ "${DELETE}" = 'yes' ]; then
 			rm -- "$1"
 		else
@@ -51,9 +50,10 @@ convert_to_16bit() {
 		fi
 
 		mv -- "${STAGING_FILE}" "$1"
-	else
-		err 'Failed to convert 24-bit FLAC file to 16-bit.'
+		return
 	fi
+
+	err 'Failed to convert 24-bit FLAC file to 16-bit.'
 }
 
 splitflac() {
@@ -102,9 +102,9 @@ if command -v 'cuetag' >/dev/null 2>&1; then
 	readonly CUETAG='cuetag'
 elif command -v 'cuetag.sh' >/dev/null 2>&1; then
 	readonly CUETAG='cuetag.sh'
-else
-	err 'Neither cuetag nor cuetag.sh found.'
 fi
+
+[ -n "${CUETAG}" ] || err 'Neither cuetag nor cuetag.sh found.'
 
 
 [ "${CONVERT}" = 'yes' ] && {

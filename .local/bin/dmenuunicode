@@ -53,6 +53,6 @@ grep -Fq -- "${EMOJI}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}.
 
 if printf '%s' "${EMOJI}" | xclip -selection clipboard; then
 	exec notify-send 'Emoji copied to clipboard.'
-else
-	err 'Unable to grab emoji with xclip(1).'
 fi
+
+err 'Unable to grab emoji with xclip(1).'

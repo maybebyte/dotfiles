@@ -48,9 +48,9 @@ if [ -n "$1" ]; then
 	readonly URL="$1"
 elif [ ! -t 0 ]; then
 	read -r URL && readonly URL
-else
-	err "${0##*/} needs a URL!"
 fi
+
+[ -n "${URL}" ] || err "${0##*/} needs a URL!"
 
 
 echo "${DEPENDENCIES}" | while read -r dependency; do

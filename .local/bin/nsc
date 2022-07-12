@@ -40,14 +40,19 @@ nsc() {
 }
 
 
+command -v 'priv' >/dev/null 2>&1 ||
+	err 'priv alias left undefined; no privilege elevation available.'
+
 command -v 'nmap' >/dev/null 2>&1 || err 'nmap not found in PATH.'
+
 [ -n "$1" ] || usage
+
 
 TMPDIR="$(mktemp -d)"
 readonly TMPDIR
 
-
 nsc "$@"
+
 
 readonly UNPRIV_USER="${LOGNAME}"
 priv chown -R -- "${UNPRIV_USER}:${UNPRIV_USER}" "${TMPDIR}"
