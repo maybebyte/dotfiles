@@ -15,62 +15,42 @@
 
 set -e
 
+readonly PROGRAM_NAME="${0##*/}"
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 usage() {
-	err "usage: ${0##*/} [-i indexfile] [domain] [markdown directory] [server directory]
+	cat >&2 <<EOF
+usage:
+${PROGRAM_NAME} [-i indexfile] [domain] [markdown directory] [server directory]
 
 -i: Specify the name of an alternate index file (by default, INDEX is
     set to index.md). It must be present in the provided markdown
-    directory, otherwise ${0##*/} will fail."
-}
-
-
-gen_site() {
-	: "${INDEX:=index.md}"
-	[ -r "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not readable."
-	[ -f "${MARKDOWNDIR}/${INDEX}" ] || err "${MARKDOWNDIR}/${INDEX} is not a file."
-
-	ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
-		"${SITE}" >/dev/null 2>&1
-
-	rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
-		> "${HTMLDIR}/rss.xml" 2>/dev/null
-}
-
-
-sync_site() {
-	doas /bin/sh <<-EOF
-		rm -rf -- ${SRVDIR:?}
-		mkdir -p -- ${SRVDIR}
-		mv -- ${HTMLDIR}/* ${SRVDIR}/
-		rcctl reload httpd >/dev/null
-	EOF
+    directory, otherwise ${PROGRAM_NAME} will fail.
+EOF
+	exit 1
 }
 
 
 while getopts i:h opt; do
-
 	case "${opt}" in
 		'i') readonly INDEX="${OPTARG##*/}" ;;
 		'h'|*) usage ;;
 	esac
-
 done
-
 shift $((OPTIND - 1))
 
-umask 022
-[ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
 
-for pos_par in "$1" "$2" "$3"; do
-	[ -z "${pos_par}" ] && usage
-done
+umask 022
+[ "$(uname)" = 'OpenBSD' ] || err "${PROGRAM_NAME} only supports OpenBSD."
+
+[ -n "$1" ] || usage
+[ -n "$2" ] || usage
+[ -n "$3" ] || usage
+
 
 readonly SITE="$1"
 readonly MARKDOWNDIR="$2"
@@ -78,12 +58,24 @@ readonly SRVDIR="$3"
 
 HTMLDIR="$(mktemp -d)"
 readonly HTMLDIR
-
 trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
 
-readonly UNPRIV_USER="${LOGNAME}"
 
-gen_site || err 'Unable to generate site.'
-sync_site || err 'Unable to sync web server.'
+readonly UNPRIV_USER="${LOGNAME}"
+: "${INDEX:=index.md}"
+
+ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
+	"${SITE}" >/dev/null 2>&1
+
+rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
+	> "${HTMLDIR}/rss.xml" 2>/dev/null
+
+
+doas /bin/sh <<-EOF
+	rm -rf -- ${SRVDIR:?}
+	mkdir -p -- ${SRVDIR}
+	mv -- ${HTMLDIR}/* ${SRVDIR}/
+	rcctl reload httpd >/dev/null
+EOF
 
 echo 'Web server synced.'
