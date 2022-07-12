@@ -15,27 +15,24 @@
 
 set -e
 
-
-if [ -x "$(command -v 'doas')" ]; then
+if command -v 'doas' >/dev/null 2>&1; then
 	alias priv='doas '
-
-elif [ -x "$(command -v 'sudo')" ]; then
+elif command -v 'sudo' >/dev/null 2>&1; then
 	alias priv='sudo '
-
 fi
-
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 usage() {
-	err "usage:
-${0##*/} [target] [options]"
+	cat >&2 <<EOF
+usage:
+${0##*/} [target] [options]
+EOF
+	exit 1
 }
-
 
 nsc() {
 	priv nmap -Av --osscan-limit \
@@ -43,24 +40,21 @@ nsc() {
 }
 
 
-fix_perms() {
-	readonly UNPRIV_USER="${LOGNAME}"
-
-	priv chown -R -- "${UNPRIV_USER}:${UNPRIV_USER}" "${TMPDIR}"
-
-	find "${TMPDIR}" \
-		\( -type f ! -perm 600 -exec chmod 600 '{}' \; \) -o \
-		\( -type d ! -perm 700 -exec chmod 700 '{}' \; \)
-}
-
-
-[ -x "$(command -v 'nmap')" ] || err 'nmap not found in PATH or not executable.'
-[ -z "$1" ] && usage
+command -v 'nmap' >/dev/null 2>&1 || err 'nmap not found in PATH.'
+[ -n "$1" ] || usage
 
 TMPDIR="$(mktemp -d)"
 readonly TMPDIR
 
-nsc "$@" || err 'Unable to scan target.'
-fix_perms || err 'Unable to fix permissions.'
+
+nsc "$@"
+
+readonly UNPRIV_USER="${LOGNAME}"
+priv chown -R -- "${UNPRIV_USER}:${UNPRIV_USER}" "${TMPDIR}"
+
+find "${TMPDIR}" \
+	\( -type f ! -perm 600 -exec chmod 600 '{}' \; \) -o \
+	\( -type d ! -perm 700 -exec chmod 700 '{}' \; \)
+
 
 echo "Scan finished, results available in ${TMPDIR}."
