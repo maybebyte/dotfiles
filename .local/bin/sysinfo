@@ -19,106 +19,122 @@
 
 set -eh
 
-
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
+warn() {
+	printf '%s\n' "$*" >&2
+}
 
-show_battery() {
-	case "${BATT_STATUS}" in
-		4|255) return 1 ;;
+get_battery_life() {
+	# Measured in minutes.
+	estimated_battery_life="$(apm -m)"
+
+	[ -n "${estimated_battery_life}" ] || {
+		warn 'Battery life estimation was empty.'
+		return 1
+	}
+
+	case "${estimated_battery_life}" in
+		*[!0-9]*)
+			warn 'Battery life must be an integer.'
+			return 1
+			;;
+	esac
+
+
+	minutes=$((estimated_battery_life % 60))
+	hours=$((estimated_battery_life / 60))
+	remaining="~${hours}h & ${minutes}m"
+
+	echo "bat: ${remaining}, at ${percentage}%"
+}
+
+show_battery_life() {
+	case "${BATTERY_STATUS}" in
+		4|255)
+			warn 'Battery status: absent/unknown.'
+			return 1
+			;;
 	esac
 
 	adapter_status="$(apm -a)"
 	percentage="$(apm -l)"
 
 	case "${adapter_status}" in
+		# A/C disconnected.
+		0) get_battery_life ;;
 
-		0) # disconnected (on battery)
-			estimated_battery_life="$(apm -m)"
+		# A/C connected (charging).
+		1) echo "chr: at ${percentage}%" ;;
 
-			case "${estimated_battery_life}" in
-				''|*[!0-9]*) err 'show_battery() only accepts integers.' ;;
-				# integers are OK, so continue
-				*) ;;
-			esac
-
-			ebl_minutes=$((estimated_battery_life % 60))
-			ebl_hours=$((estimated_battery_life / 60))
-			remaining="~${ebl_hours}h & ${ebl_minutes}m"
-
-			echo "bat: ${remaining}, at ${percentage}%"
-
-			;;
-
-		1) # charging
-			echo "chr: at ${percentage}%"
-
-			;;
-
-		*) # there's no battery information to display
-			return 1
-
-			;;
-
+		# No battery information to display.
+		*) warn 'No battery information.'; return 1 ;;
 	esac
 }
 
 
-show_temp() {
+show_temperature() {
 	case "${HOSTNAME}" in
-		'lain') temperature="$(sysctl -n hw.sensors.cpu0.temp0)" ;;
-		'aphrodite') temperature="$(sysctl -n hw.sensors.ksmn0.temp0)" ;;
-		# if temp sensor is unknown, return nothing
-		*) return 1 ;;
+		'lain') # laptop
+			temperature="$(sysctl -n hw.sensors.cpu0.temp0)"
+			;;
+
+		'aphrodite') # desktop
+			temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"
+			;;
+
+		*)
+			warn 'Host name is unknown; no temperature sensor found.'
+			return 1
+			;;
 	esac
 
-	case "${BATT_STATUS}" in
-		4|255) echo "temp: ${temperature%%.*} °C" ;;
-		*) echo "${DELIMITER}temp: ${temperature%%.*} °C" ;;
-	esac
+	echo "temp: ${temperature%%.*} °C"
 }
 
 
-show_track() {
-	if ! pgrep -q 'mpd'; then
-		return 1
+show_current_track() {
+	# If mpd isn't running, return.
+	pgrep -q 'mpd' || return 1
 
-	elif mpc | grep -qi 'paused'; then
-		return 1
+	# If mpd is paused, return.
+	mpc | grep -qi 'paused' || return 1
 
-	else
-		mpc current
-
-	fi
+	# Otherwise, display the current track.
+	mpc current
 }
 
 
 show_disk_space() {
 	diskspace="$(df -h '/home' | awk '/^\/dev/{print $4}')"
-	echo "/home: ${diskspace}${DELIMITER}"
+	echo "/home: ${diskspace}"
 }
 
 
 sysinfo() {
-	# spaces at the beginning of a new line bork ${stats}
-	stats="$(show_battery) +< $(show_temp) \
-+|C +@fn=1;$(show_track) +|R +@fn=0;$(show_disk_space)"
-
-	echo "${stats}"
+	echo "$(show_battery_life) +< $(show_temperature) \
++|C +@fn=1; $(show_current_track) +|R +@fn=0; $(show_disk_space)"
 }
 
 
-[ "$(uname)" = 'OpenBSD' ] || err "${0##*/} only supports OpenBSD."
-[ -x "$(command -v 'mpc')" ] || err 'mpc not found in PATH or not executable.'
+readonly DEPENDENCIES='apm
+mpc'
+
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" >/dev/null 2>&1 ||
+		err "${dependency} not found in PATH."
+done
 
 
-BATT_STATUS="$(apm -b)"
+BATTERY_STATUS="$(apm -b)"
+readonly BATTERY_STATUS
 
-[ -z "${HOSTNAME}" ] && HOSTNAME="$(hostname -s)"
+HOSTNAME="$(hostname -s)"
 readonly HOSTNAME
+
 
 while true; do
 	sysinfo
