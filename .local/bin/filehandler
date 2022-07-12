@@ -34,7 +34,6 @@ copy - copy file
 move - move file
 rename - rename file
 EOF
-
 	exit 1
 }
 
