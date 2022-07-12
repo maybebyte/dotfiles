@@ -98,7 +98,7 @@ copy_file() {
 	readonly FILE_TO_COPY="$1"
 	handle_destination "${FILE_TO_COPY}"
 
-	cp -- "$1" "${DESTINATION}/${BASENAME}" && {
+	cp -- "${FILE_TO_COPY}" "${DESTINATION}/${BASENAME}" && {
 		notify-send -- "'${BASENAME}' copied to '${DESTINATION}'"
 		return
 	}
@@ -110,7 +110,7 @@ move_file() {
 	readonly FILE_TO_MOVE="$1"
 	handle_destination "${FILE_TO_MOVE}"
 
-	mv -- "$1" "${DESTINATION}/${BASENAME}" && {
+	mv -- "${FILE_TO_MOVE}" "${DESTINATION}/${BASENAME}" && {
 		notify-send -- "'${BASENAME}' moved to '${DESTINATION}'"
 		return
 	}
