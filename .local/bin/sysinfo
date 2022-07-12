@@ -95,7 +95,6 @@ show_temperature() {
 	echo "temp: ${temperature%%.*} °C"
 }
 
-
 show_current_track() {
 	# If mpd isn't running, return.
 	pgrep -q 'mpd' || return 1
@@ -107,12 +106,10 @@ show_current_track() {
 	mpc current
 }
 
-
 show_disk_space() {
 	diskspace="$(df -h '/home' | awk '/^\/dev/{print $4}')"
 	echo "/home: ${diskspace}"
 }
-
 
 sysinfo() {
 	echo "$(show_battery_life) +< $(show_temperature) \
@@ -120,13 +117,8 @@ sysinfo() {
 }
 
 
-readonly DEPENDENCIES='apm
-mpc'
-
-echo "${DEPENDENCIES}" | while read -r dependency; do
-	command -v -- "${dependency}" >/dev/null 2>&1 ||
-		err "${dependency} not found in PATH."
-done
+[ "$(uname)" = 'OpenBSD' ] || err "${PROGRAM_NAME} only supports OpenBSD."
+command -v 'mpc' >/dev/null 2>&1 || err 'mpc not found in PATH.'
 
 
 BATTERY_STATUS="$(apm -b)"
