@@ -14,6 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+set -e
 
 err() {
 	printf '%s\n' "$*" >&2
@@ -21,28 +22,12 @@ err() {
 }
 
 
-import_colors_sh() {
-	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+. "${COLORS_SH}"
 
-	if ! [ -r "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not readable." >&2
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
+command -v 'dmenu_run' >/dev/null 2>&1 || err 'dmenu_run not found in PATH.'
 
-	elif ! [ -f "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not a file." >&2
-
-	# passed sanity checks, so source the file
-	else
-		. "${COLORS_SH}"
-
-	fi
-}
-
-
-[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-
-[ -x "$(command -v 'dmenu_run')" ] || err 'dmenu_run not found in PATH or not executable.'
-
-import_colors_sh
 
 dmenu_run -i -fn 'mono-12' \
 	-nb "${background:-#040516}" \
