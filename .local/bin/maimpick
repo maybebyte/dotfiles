@@ -5,39 +5,10 @@
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
-
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
-
-
-check_deps() {
-	while read -r dependency; do
-
-		[ -x "$(command -v -- "${dependency}")" ] \
-			|| err "${dependency} not found in PATH or not executable."
-
-	done
-}
-
-
-import_colors_sh() {
-	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
-
-	if ! [ -r "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not readable." >&2
-
-	elif ! [ -f "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not a file." >&2
-
-	# passed sanity checks, so source the file
-	else
-		. "${COLORS_SH}"
-
-	fi
-}
-
 
 menu() {
 	dmenu -i -fn 'mono-12' \
@@ -48,28 +19,24 @@ menu() {
 		"$@"
 }
 
-
 yankpic() {
-	xclip -selection clipboard -t image/png \
-		|| err 'Unable to copy image data to clipboard.'
+	xclip -selection clipboard -t image/png ||
+		err 'Unable to copy image data to clipboard.'
 }
-
 
 # --hide-cursor, --quiet, --capturebackground, --delay
-maim_with_flags() {
-	maim -uqBd 0.5 "$@"
-}
-
+maim_with_flags() { maim -uqBd 0.5 "$@"; }
 
 present_options() {
-	case "$(menu -l "${NUM_OF_OPTS}" -p "Screenshot which area?")" in
+	readonly SAVEDIR="${HOME}/screenshots"
+
+	case "$(menu -l "${NUM_OF_OPTS}" -p 'Screenshot which area?')" in
 
 		'a selected area')
 			FILENAME="selected-$(date '+%Y%m%d-%H%M%S').png"
 			readonly FILENAME
 
 			maim_with_flags -s -- "${SAVEDIR}/${FILENAME}"
-
 			;;
 
 		'current window')
@@ -77,7 +44,6 @@ present_options() {
 			readonly FILENAME
 
 			maim_with_flags -i "$(xdotool getactivewindow)" -- "${SAVEDIR}/${FILENAME}"
-
 			;;
 
 		'full screen')
@@ -85,43 +51,32 @@ present_options() {
 			readonly FILENAME
 
 			maim_with_flags -- "${SAVEDIR}/${FILENAME}"
-
 			;;
 
 		'a selected area (copy)')
 			maim_with_flags -s | yankpic
-
 			;;
 
 		'current window (copy)')
 			maim_with_flags -i "$(xdotool getactivewindow)" | yankpic
-
 			;;
 
 		'full screen (copy)')
 			maim_with_flags | yankpic
-
 			;;
 
 		*)
 			err 'Not a valid area.'
-
 			;;
 
 	esac
 }
 
 
-[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-
-check_deps <<-'EOF'
-	dmenu
-	maim
-	xclip
-	xdotool
-EOF
-
-import_colors_sh
+readonly DEPENDENCIES='dmenu
+maim
+xclip
+xdotool'
 
 readonly OPTIONS='a selected area
 current window
@@ -130,7 +85,18 @@ a selected area (copy)
 current window (copy)
 full screen (copy)'
 
-readonly SAVEDIR="${HOME}/screenshots"
+
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" >/dev/null 2>&1 ||
+		err "${dependency} not found in PATH."
+done
+
+
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
+
+readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+. "${COLORS_SH}"
+
 
 NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
 readonly NUM_OF_OPTS
