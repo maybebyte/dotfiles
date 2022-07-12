@@ -14,38 +14,31 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-# disable xcompmgr(1) during playback since it seems to cause
-# screen tearing with modesetting(4)
+# Disable xcompmgr(1) during playback since it seems to cause
+# screen tearing with modesetting(4).
 
+readonly PROGRAM_NAME="${0##*/}"
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 usage() {
 	err "$0 is a wrapper script, see mpv(1) for usage details."
 }
 
 
-[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
-
-[ -z "$*" ] && usage
-
-
-MPV="$(command -vp 'mpv')" || err 'mpv not found in PATH or not executable.'
+[ -n "${DISPLAY}" ] || err "${PROGRAM_NAME} requires a graphical environment."
+[ -n "$*" ] || usage
+MPV="$(command -vp 'mpv')" || err 'mpv not found in PATH.'
 
 
-case "${0##*/}" in
-
+case "${PROGRAM_NAME}" in
 	'mpv')
-		pkill xcompmgr >/dev/null 2>&1
-
+		pkill xcompmgr
 		"${MPV}" "$@"
-
-		[ -x "$(command -v 'xcompmgr')" ] && xcompmgr >/dev/null 2>&1 &
-
+		command -v 'xcompmgr' >/dev/null 2>&1 && xcompmgr >/dev/null 2>&1 &
 		;;
 
 	# workaround for screen tearing isn't needed if only playing audio
@@ -55,12 +48,9 @@ case "${0##*/}" in
 			--no-resume-playback \
 			--no-pause \
 			--no-video "$@"
-
 		;;
 
 	*)
-		err "${0##*/} is not an expected program name."
-
+		err "${PROGRAM_NAME} is not an expected program name."
 		;;
-
 esac
