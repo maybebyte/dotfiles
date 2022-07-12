@@ -13,55 +13,40 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+set -e
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 usage() {
 	err "usage:
 ${0##*/} [inc|dec|mute]"
 }
 
-
-check_deps() {
-	while read -r dependency; do
-
-		[ -x "$(command -v -- "${dependency}")" ] \
-			|| err "${dependency} not found in PATH or not executable."
-
-	done
-}
-
-
-# either increase, decrease, or mute the volume if the appropriate
-# argument is given. if not, error and display usage details.
-adjust_vol() {
+# Increase, decrease, or mute the volume given the appropriate argument.
+adjust_volume() {
 	case "$1" in
-		'inc') check_mute || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-		'dec') check_mute || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
+		'inc') is_muted || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
+		'dec') is_muted || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
 		'mute') sndioctl output.mute=! >/dev/null 2>&1 ;;
 		*) usage ;;
 	esac
 }
 
 
-print_vol() {
-	if [ "${MUTED}" = 'true' ]; then
-		echo 'MUTED'
-
-	else
-		echo "$@"
-
-	fi
+print_volume() {
+	case "${MUTED}" in
+		true) echo 'MUTED' ;;
+		*) echo "$@" ;;
+	esac
 }
 
 
-# if muted, succeed.
-# if not muted, fail.
-check_mute() {
+# If muted, succeed.
+# If not muted, fail.
+is_muted() {
 	case "$(sndioctl -n output.mute 2>/dev/null)" in
 		1) return 0 ;;
 		0) return 1 ;;
@@ -70,35 +55,42 @@ check_mute() {
 }
 
 
-# get raw output level and convert it to something more parsable.
-get_vol() {
-	RAW_VOL="$(sndioctl -n output.level 2>/dev/null)"
-	readonly RAW_VOL
+# Get raw output level and convert it to something more parsable.
+get_volume() {
+	RAW_VOLUME="$(sndioctl -n output.level 2>/dev/null)"
+	readonly RAW_VOLUME
 
-	case "${RAW_VOL}" in
+	case "${RAW_VOLUME}" in
 		1.000) echo 100 ;;
 		0.000) echo 0 ;;
-		# division is here to truncate the floating point number.
-		*) printf 'scale=0; (%.2g * %s) / 1\n' "${RAW_VOL}" 100 | bc ;;
+		# Dividing by one is to truncate the floating point number.
+		*) printf '(%.2f * %s) / 1\n' "${RAW_VOLUME}" 100 | bc ;;
 	esac
 }
 
 
-[ -z "${DISPLAY}" ] && err "${0##*/} requires a graphical environment."
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
 
-check_deps <<-'EOF'
-	bc
-	dunstify
-	sndioctl
-EOF
 
-adjust_vol "$1"
+readonly DEPENDENCIES='bc
+dunstify
+sndioctl'
 
-VOL="$(get_vol)"
-readonly VOL
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" >/dev/null 2>&1 ||
+		err "${dependency} not found in PATH."
+done
 
-check_mute && readonly MUTED='true'
 
-readonly MSG_ID="25231"
+adjust_volume "$1"
 
-dunstify -u low -r "${MSG_ID}" -- "$(print_vol "${VOL}%")"
+VOLUME="$(get_volume)"
+readonly VOLUME
+
+is_muted && readonly MUTED='true'
+
+# Arbitrary ID for dunstify to track, so it doesn't send stacked
+# notifications.
+readonly MESSAGE_ID='25231'
+
+dunstify -u low -r "${MESSAGE_ID}" -- "$(print_volume "${VOLUME}%")"
