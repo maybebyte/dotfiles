@@ -39,8 +39,8 @@ echo "${DEPENDENCIES}" | while read -r dependency; do
 		err "${dependency} not found in PATH."
 done
 
-[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
 
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
 . "${COLORS_SH}"
 
 
@@ -52,7 +52,8 @@ readonly EMOJI="${CHOSEN_ENTRY%% *}"
 grep -Fq -- "${EMOJI}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
 
 
-printf '%s' "${EMOJI}" | xclip -selection clipboard &&
+if printf '%s' "${EMOJI}" | xclip -selection clipboard; then
 	exec notify-send 'Emoji copied to clipboard.'
-
-err 'Unable to grab emoji with xclip(1).'
+else
+	err 'Unable to grab emoji with xclip(1).'
+fi
