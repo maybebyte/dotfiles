@@ -1,112 +1,86 @@
 #!/bin/sh
 # shellcheck disable=SC1090
 
-import_colors_sh() {
-	readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+set -e
 
-	if ! [ -r "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not readable." >&2
-
-	elif ! [ -f "${COLORS_SH}" ]; then
-		echo "${COLORS_SH} is not a file." >&2
-
-	# passed sanity checks, so source the file
-	else
-		. "${COLORS_SH}"
-
-	fi
-}
+readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
+. "${COLORS_SH}"
 
 
-# generic dmenu function to handle customizations. uses colors that
-# import_colors_sh() gathers.
 menu() {
 	dmenu -i -fn 'mono-12' \
-		-nb "${background:=#040516}" \
-		-nf "${color3:=#9974e7}" \
-		-sb "${background:=#040516}" \
-		-sf "${foreground:=#e0cef3}" \
+		-nb "${background:-#040516}" \
+		-nf "${color3:-#9974e7}" \
+		-sb "${background:-#040516}" \
+		-sf "${foreground:-#e0cef3}" \
 		"$@"
 }
 
 
-import_colors_sh
-
 while read -r file; do
-
 	case "$1" in
-
 		# copy file with filehandler
 		'c')
 			filehandler copy "${file}"
-
 			;;
 
 		# delete file
 		'd')
-			really_delete="$( {
+			really_delete="$(
+				{
 				echo 'Yes'
 				echo 'No'
-			} | menu -p "Really delete ${file}?")"
+				} | menu -p "Really delete ${file}?"
+			)"
 
-			if [ "${really_delete}" = 'Yes' ]; then
+			[ "${really_delete}" = 'Yes' ] && {
 				rm -- "${file}"
 				notify-send -- "${file} deleted."
-			fi
-
+			}
 			;;
 
 		# move file with filehandler
 		'm')
 			filehandler move "${file}"
-
 			;;
 
 		# rename file with filehandler
 		'n')
 			filehandler rename "${file}"
-
 			;;
 
 		# rotate clockwise
 		'r')
 			convert -rotate 90 -- "${file}" "${file}"
-
 			;;
 
 		# rotate counter-clockwise
 		'R')
 			convert -rotate -90 -- "${file}" "${file}"
-
 			;;
 
 		# horizontally invert file, aka 'flop' it
 		'f')
 			convert -flop -- "${file}" "${file}"
-
 			;;
 
 		# yank the relative file path
 		'y')
 			printf '%s' "${file}" | xclip -selection clipboard
 			notify-send -- "${file} copied to clipboard."
-
 			;;
 
 		# yank the absolute file path
 		'Y')
-			abs_path_of_file="$(readlink -f -- "${file}")"
+			ABSOLUTE_PATH="$(readlink -f -- "${file}")"
 
-			printf '%s' "${abs_path_of_file}" | xclip -selection clipboard
-			notify-send -- "${abs_path_of_file} copied to clipboard."
-
+			printf '%s' "${ABSOLUTE_PATH}" | xclip -selection clipboard
+			notify-send -- "${ABSOLUTE_PATH} copied to clipboard."
 			;;
 
 		*)
 			err 'Key not bound.'
-
 			;;
 
 	esac
-
 done
