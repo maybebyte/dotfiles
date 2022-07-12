@@ -13,29 +13,13 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-
-# simple script to update element-web when we try to launch it.
+# Simple script to update element-web when we try to launch it.
 
 set -e
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
-}
-
-
-check_deps() {
-	while read -r dependency; do
-
-		[ -x "$(command -v -- "${dependency}")" ] \
-			|| err "${dependency} not found in PATH or not executable."
-
-	done
-}
-
-
-launch_browser() {
-	"${BROWSER}" -P "${BROWSER_PROFILE}" "${MATRIX_URI}"
 }
 
 
@@ -46,18 +30,21 @@ launch_browser() {
 : "${HANDLER:=${XDG_BIN_HOME}/handle-element-web.pl}"
 
 
-check_deps <<-EOF
-	${BROWSER}
-	${HANDLER}
-EOF
+readonly DEPENDENCIES="notify-send
+${BROWSER}
+${HANDLER}"
+
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" >/dev/null 2>&1 ||
+		err "${dependency} not found in PATH."
+done
+
+
+[ -n "${DISPLAY}" ] || err "${0##*/} needs a graphical environment."
 
 
 # automatically check for a new version of element-web and update if a
 # new version is found.
-if "${HANDLER}"; then
-	[ -n "${DISPLAY}" ] \
-		&& [ -x "$(command -v 'notify-send')" ] \
-		&& notify-send 'element-web updated'
-fi
+"${HANDLER}" && notify-send 'element-web updated'
 
-launch_browser
+exec "${BROWSER}" -P "${BROWSER_PROFILE}" "${MATRIX_URI}"

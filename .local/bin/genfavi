@@ -15,18 +15,20 @@
 
 set -e
 
+readonly PROGRAM_NAME="${0##*/}"
 
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 usage() {
-	err "usage:
-${0##*/} [image]"
+	cat >&2 <<EOF
+usage:
+${PROGRAM_NAME} [image]
+EOF
+	exit 1
 }
-
 
 genfavi() {
 	convert "$1" -background white \
@@ -38,19 +40,16 @@ genfavi() {
 }
 
 
-[ -x "$(command -v 'convert')" ] || err "convert not found in PATH or not executable."
+command -v 'convert' >/dev/null 2>&1 || err 'convert not found in PATH.'
 
-[ -z "$1" ] && usage
+[ -n "$1" ] || usage
 
 case "$(file -ib -- "$1")" in
 	image/*) : ;; # images are OK to process
 	*) err "$1 isn't an image." ;;
 esac
 
-if genfavi "$1"; then
-	cp 'favicon.ico' 'favicon.png'
 
-else
-	err 'Unable to generate favicon.'
+genfavi "$1" && exec cp 'favicon.ico' 'favicon.png'
 
-fi
+err 'Unable to generate favicon.'
