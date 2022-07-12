@@ -13,6 +13,8 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+set -e
+
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
@@ -28,10 +30,10 @@ echo "${DEPENDENCIES}" | while read -r dependency; do
 done
 
 
-# if A/C is connected, exit.
-[ "$(apm -a)" -eq 1 ] && exit 0
+# If A/C is connected, exit.
+[ "$(apm -a)" -eq 1 ] && exit
 
-# if battery is missing, exit.
+# If battery is missing, exit.
 case "$(apm -b)" in
 	4) err "Battery status is 'absent.'" ;;
 	255) err "Battery status is 'unknown.'" ;;
@@ -41,10 +43,10 @@ esac
 BATT_PERCENT="$(apm -l)"
 readonly BATT_PERCENT
 
-[ "${BATT_PERCENT}" -lt 20 ] && {
-	# exporting ${DISPLAY} is needed for cron(8) jobs.
+if [ "${BATT_PERCENT}" -lt 20 ]; then
+	# An exported ${DISPLAY} is needed for cron(8) jobs.
 	[ -n "${DISPLAY}" ] || export DISPLAY=:0
 	exec notify-send -- "Your device is at ${BATT_PERCENT}%!"
-}
-
-exit 0
+else
+	exit 0
+fi
