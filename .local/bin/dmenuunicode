@@ -44,11 +44,12 @@ done
 . "${COLORS_SH}"
 
 
-CHOSEN_ENTRY="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu)"
-readonly CHOSEN_ENTRY
-[ -n "${CHOSEN_ENTRY}" ] || err 'Must choose an emoji.'
+EMOJI="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu)"
+EMOJI="${EMOJI%% *}"
+readonly EMOJI
 
-readonly EMOJI="${CHOSEN_ENTRY%% *}"
+[ -n "${EMOJI}" ] || err 'Must choose an emoji.'
+
 grep -Fq -- "${EMOJI}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
 
 
