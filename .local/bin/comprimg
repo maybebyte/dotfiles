@@ -15,17 +15,14 @@
 
 set -e
 
-
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
 }
 
-
 warn() {
 	printf '%s\n' "$*" >&2
 }
-
 
 usage() {
 	err "${0##*/} is for losslessly compressing images. It compresses given
@@ -33,9 +30,6 @@ files in place with the appropriate tool.
 
 ${0##*/} [inpic] ..."
 }
-
-
-[ -n "$*" ] || usage
 
 
 readonly DEPENDENCIES='jpegoptim
@@ -46,6 +40,8 @@ echo "${DEPENDENCIES}" | while read -r dependency; do
 		err "${dependency} not found in PATH."
 done
 
+
+[ -n "$*" ] || usage
 
 while [ -n "$*" ]; do
 
