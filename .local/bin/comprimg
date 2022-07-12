@@ -58,5 +58,4 @@ while [ -n "$*" ]; do
 	esac
 
 	shift
-
 done
