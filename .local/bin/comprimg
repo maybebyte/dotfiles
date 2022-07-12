@@ -27,12 +27,13 @@ warn() {
 }
 
 usage() {
-	cat <<EOF
+	cat >&2 <<EOF
 ${PROGRAM_NAME} is for losslessly compressing images. It compresses
 given files in place with the appropriate tool.
 
 ${PROGRAM_NAME} [inpic] ...
 EOF
+	exit 1
 }
 
 
