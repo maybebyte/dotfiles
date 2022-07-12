@@ -17,4 +17,4 @@ set -e
 
 # lists man page paths from listed sections, shuffles them, and returns
 # the first page (like drawing the top card from a shuffled deck).
-apropos -wS "$(uname -m)" sec~^1\|5\|6\|7\|8$ | sort -R | head -1
+apropos -w sec~^1\|5\|6\|7\|8$ | sort -R | head -1
