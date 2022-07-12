@@ -65,7 +65,7 @@ print_preload_dir() {
 
 handle_destination() {
 	readonly FILE_WITHOUT_DESTINATION="$1"
-	BASENAME="${FILE_WITHOUT_DESTINATION##*/}"
+	readonly BASENAME="${FILE_WITHOUT_DESTINATION##*/}"
 
 	PRELOAD_DIR="$(print_preload_dir "${FILE_WITHOUT_DESTINATION}")"
 	readonly PRELOAD_DIR
@@ -97,7 +97,6 @@ handle_destination() {
 copy_file() {
 	readonly FILE_TO_COPY="$1"
 	handle_destination "${FILE_TO_COPY}"
-	readonly BASENAME
 
 	cp -- "$1" "${DESTINATION}/${BASENAME}" && {
 		notify-send -- "'${BASENAME}' copied to '${DESTINATION}'"
@@ -109,9 +108,7 @@ copy_file() {
 
 move_file() {
 	readonly FILE_TO_MOVE="$1"
-
 	handle_destination "${FILE_TO_MOVE}"
-	readonly BASENAME
 
 	mv -- "$1" "${DESTINATION}/${BASENAME}" && {
 		notify-send -- "'${BASENAME}' moved to '${DESTINATION}'"
