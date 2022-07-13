@@ -44,8 +44,6 @@ BATT_PERCENT="$(apm -l)"
 readonly BATT_PERCENT
 
 if [ "${BATT_PERCENT}" -lt 20 ]; then
-	# An exported ${DISPLAY} is needed for cron(8) jobs.
-	[ -n "${DISPLAY}" ] || export DISPLAY=:0
 	exec notify-send -- "Your device is at ${BATT_PERCENT}%!"
 fi
 
