@@ -16,8 +16,6 @@
 
 set -e
 
-local_ftp() { ftp -nU '' "$@"; }
-
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
@@ -85,7 +83,7 @@ echo "${OPTIONS}" |
 			;;
 
 		'download file')
-			exec tmux new-window "( cd ${HOME}/Downloads && local_ftp -- ${URL} );
+			exec tmux new-window "( cd ${HOME}/Downloads && ftp -nU '' -- ${URL} );
 			read"
 			;;
 
@@ -105,7 +103,7 @@ echo "${OPTIONS}" |
 			;;
 
 		'read')
-			exec tmux new-window "local_ftp -o - -- ${URL} | zathura -"
+			exec tmux new-window "ftp -nU '' -o - -- ${URL} | zathura -"
 			;;
 
 		'view image')
