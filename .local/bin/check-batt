@@ -43,8 +43,7 @@ esac
 BATT_PERCENT="$(apm -l)"
 readonly BATT_PERCENT
 
-if [ "${BATT_PERCENT}" -lt 20 ]; then
+[ "${BATT_PERCENT}" -lt 20 ] &&
 	exec notify-send -- "Your device is at ${BATT_PERCENT}%!"
-fi
 
 exit 0
