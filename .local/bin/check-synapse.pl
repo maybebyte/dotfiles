@@ -77,5 +77,5 @@ chomp(my $current_synapse_version =
 
 
 if ($remote_synapse_version gt $current_synapse_version) {
-	system 'notify-send', "Time to upgrade to synapse $remote_synapse_version";
+	exec 'notify-send', "Time to upgrade to synapse $remote_synapse_version";
 }
