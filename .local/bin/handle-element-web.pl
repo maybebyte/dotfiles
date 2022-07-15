@@ -34,7 +34,7 @@ use JSON::MaybeXS;
 use LWP::UserAgent;
 
 
-sub make_api_url {
+sub make_github_api_url {
 	my ($username, $repository) = @_;
 
 	$username or die '$username is undefined';
@@ -44,7 +44,7 @@ sub make_api_url {
 }
 
 
-sub make_release_url {
+sub make_github_release_url {
 	my ($username, $repository, $version) = @_;
 
 	$username or die '$username is undefined';
@@ -76,7 +76,7 @@ my $user_agent = LWP::UserAgent->new(
 	protocols_allowed => [ 'https' ],
 );
 
-my $api_response = $user_agent->get(make_api_url('vector-im', 'element-web'));
+my $api_response = $user_agent->get(make_github_api_url('vector-im', 'element-web'));
 $api_response->is_success or die $api_response->status_line;
 
 
@@ -98,7 +98,7 @@ $remote_version gt $local_version
 	or die "Remote version of element-web is not newer than local version.\n";
 
 
-my $release_url = make_release_url 'vector-im', 'element-web', $remote_version;
+my $release_url = make_github_release_url 'vector-im', 'element-web', $remote_version;
 my $tmpdir = File::Temp->newdir;
 
 $user_agent->mirror(
