@@ -41,12 +41,11 @@ sub uniq {
 
 for (@ARGV) {
 	open my $unsorted_file_fh, '<', $_ or die "Could not open $_ for reading: $!\n";
-
 	my @lines;
 
 	while (my $line = <$unsorted_file_fh>) {
 		chomp $line;
-		push @lines, $line unless $line =~ /\A \s* \z/ax;
+		push @lines, $line;
 	}
 
 	close $unsorted_file_fh;
