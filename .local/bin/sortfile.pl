@@ -56,7 +56,7 @@ for (@ARGV) {
 	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!\n";
 
 	my @unique_lines = uniq @lines;
-	print $sorted_file_fh join("\n", sort @unique_lines);
+	say $sorted_file_fh join("\n", sort @unique_lines);
 
 	close $sorted_file_fh;
 }
