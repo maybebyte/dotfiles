@@ -100,31 +100,31 @@ alias \
 	up='uptime'
 
 
-[ -x "$(command -v 'exiftool')" ] && alias exifrm='exiftool -all= '
-[ -x "$(command -v 'ftp')" ] && alias ftp="ftp -nU ''"
-[ -x "$(command -v 'mimeopen')" ] && alias o='mimeopen'
-[ -x "$(command -v 'ncmpcpp')" ] && alias mus='ncmpcpp 2>/dev/null'
-[ -x "$(command -v 'neomutt')" ] && alias m='neomutt'
-[ -x "$(command -v 'newsboat')" ] && alias nb='newsboat'
-[ -x "$(command -v 'nikto')" ] && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
-[ -x "$(command -v 'nmap')" ] && alias scan='nmap -sn'
-[ -x "$(command -v 'nnn')" ] && alias n='nnn'
-[ -x "$(command -v 'searchsploit')" ] && alias sspl='searchsploit'
-[ -x "$(command -v 'speedtest-cli')" ] && alias stcli='speedtest-cli'
-[ -x "$(command -v 'transmission-remote')" ] && alias trem='transmission-remote'
-[ -x "$(command -v 'wget')" ] && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
-[ -x "$(command -v 'zathura')" ] && alias pdfman='MANPAGER=zathura man -T pdf'
+command -v 'exiftool' >/dev/null 2>&1 && alias exifrm='exiftool -all= '
+command -v 'ftp' >/dev/null 2>&1 && alias ftp="ftp -nU ''"
+command -v 'mimeopen' >/dev/null 2>&1 && alias o='mimeopen'
+command -v 'ncmpcpp' >/dev/null 2>&1 && alias mus='ncmpcpp 2>/dev/null'
+command -v 'neomutt' >/dev/null 2>&1 && alias m='neomutt'
+command -v 'newsboat' >/dev/null 2>&1 && alias nb='newsboat'
+command -v 'nikto' >/dev/null 2>&1 && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
+command -v 'nmap' >/dev/null 2>&1 && alias scan='nmap -sn'
+command -v 'nnn' >/dev/null 2>&1 && alias n='nnn'
+command -v 'searchsploit' >/dev/null 2>&1 && alias sspl='searchsploit'
+command -v 'speedtest-cli' >/dev/null 2>&1 && alias stcli='speedtest-cli'
+command -v 'transmission-remote' >/dev/null 2>&1 && alias trem='transmission-remote'
+command -v 'wget' >/dev/null 2>&1 && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
+command -v 'zathura' >/dev/null 2>&1 && alias pdfman='MANPAGER=zathura man -T pdf'
 
 
-[ -x "$(command -v 'torsocks')" ] && {
+command -v 'torsocks' >/dev/null 2>&1 && {
 	alias anonsh='torsocks --shell'
-	[ -x "$(which 'ftp')" ] && alias anonftp="torsocks ftp -nU ''"
-	[ -x "$(command -v 'tuir')" ] && alias tuir='torsocks tuir'
+	which 'ftp' >/dev/null 2>&1 && alias anonftp="torsocks ftp -nU ''"
+	command -v 'tuir' >/dev/null 2>&1 && alias tuir='torsocks tuir'
 }
 
 
-[ -x "$(command -v 'torsocks')" ] \
-	&& [ -x "$(command -v 'irssi')" ] \
+command -v 'torsocks' >/dev/null 2>&1 \
+	&& command -v 'irssi' >/dev/null 2>&1 \
 	&& alias irssi='torsocks irssi'
 
 
@@ -132,7 +132,7 @@ if [ -z "${EDITOR}" ]; then
 	# shellcheck disable=SC2016
 	complain_undefined '${EDITOR}'
 
-elif ! [ -x "$(command -v -- "${EDITOR}")" ]; then
+elif ! command -v -- "${EDITOR}" >/dev/null 2>&1; then
 	complain_noexec "${EDITOR}"
 
 else
@@ -163,7 +163,7 @@ else
 fi
 
 
-[ -x "$(command -v 'git' )" ] &&
+command -v 'git' >/dev/null 2>&1  &&
 	alias \
 		d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
 		da='d add' \
@@ -188,13 +188,13 @@ fi
 		gs='git status'
 
 
-[ -x "$(command -v 'keepassxc-cli')" ] &&
+command -v 'keepassxc-cli' >/dev/null 2>&1 &&
 	alias \
 		kp='keepassxc-cli' \
 		kpo="keepassxc-cli open \${HOME}/passwords/KeePass\ Database.kdbx"
 
 
-if [ -x "$(command -v 'netstat')" ]; then
+if command -v 'netstat' >/dev/null 2>&1; then
 	alias \
 		ntstr6='netstat -rf inet6' \
 		ntstr='netstat -rf inet' \
@@ -213,7 +213,7 @@ else
 fi
 
 
-[ -x "$(command -v 'task')" ] &&
+command -v 'task' >/dev/null 2>&1 &&
 	alias \
 		ta='task add' \
 		td='task done' \
@@ -226,7 +226,7 @@ fi
 		tup="task done \$(tdue)"
 
 
-if [ -x "$(command -v 'tmux')" ]; then
+if command -v 'tmux' >/dev/null 2>&1; then
 	alias \
 		tm='tmux' \
 		tma='tmux attach' \
@@ -239,7 +239,7 @@ else
 fi
 
 
-[ -x "$(command -v 'yt-dlp')" ] &&
+command -v 'yt-dlp' >/dev/null 2>&1 &&
 	alias \
 		yt='yt-dlp' \
 		yta='yt-dlp -xf bestaudio/best' \

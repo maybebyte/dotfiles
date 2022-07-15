@@ -75,12 +75,12 @@ main() {
 
 		if echo "${fs}" | grep -q '\.md$'; then
 
-			if [ -x "$(command -v 'lowdown')" ]; then
+			if command -v 'lowdown' >/dev/null 2>&1; then
 				echo "${fs}" \
 					| grep '\.md$' \
 					| render_md_files_lowdown "${SRC}" "${DST}" "${title}"
 
-			elif [ -x "$(command -v 'Markdown.pl')" ]; then
+			elif command -v 'Markdown.pl' >/dev/null 2>&1; then
 				echo "${fs}" \
 					| grep '\.md$' \
 					| render_md_files_Markdown_pl "${SRC}" "${DST}" "${title}"

@@ -24,8 +24,6 @@ set -o vi
 # shellcheck disable=SC3040
 case "${KSH_VERSION%%\ KSH*}" in
 	'@(#)PD') set -o vi-show8 ;;
-	# do nothing for other ksh types
-	*) ;;
 esac
 
 # needs to happen for each shell invocation
@@ -33,6 +31,5 @@ GPG_TTY="$(tty)"
 export GPG_TTY
 
 for srcfile in 'aliases' 'functions' 'prompt'; do
-	[ -r "${XDG_CONFIG_HOME}/ksh/${srcfile}" ] \
-		&& . "${XDG_CONFIG_HOME}/ksh/${srcfile}"
+	. "${XDG_CONFIG_HOME}/ksh/${srcfile}"
 done

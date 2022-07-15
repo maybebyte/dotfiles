@@ -1,10 +1,10 @@
 # use nvim if it's installed, vi otherwise
-[ -x "$(command -v 'nvim')" ] && export EDITOR='nvim'
+command -v 'nvim' >/dev/null 2>&1 && export EDITOR='nvim'
 [ -z "${EDITOR}" ] && export EDITOR='vi'
 
 
 # use colorls if it's installed, ls otherwise
-[ -x "$(command -v 'colorls')" ] && export LS='colorls'
+command -v 'colorls' >/dev/null 2>&1 && export LS='colorls'
 [ -z "${LS}" ] && export LS='ls'
 
 
@@ -63,7 +63,7 @@ esac
 case "$(hostname -s)" in
 
 	'aphrodite'|'lain')
-		[ -x "$(command -v 'gpg-agent')" ] && eval "$(gpg-agent --daemon)"
+		command -v 'gpg-agent' >/dev/null 2>&1 && eval "$(gpg-agent --daemon)"
 
 		export \
 			MARKDOWNDIR="${HOME}/src/website_md" \
