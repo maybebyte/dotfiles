@@ -44,12 +44,14 @@ done
 shift $((OPTIND - 1))
 
 
-umask 022
-[ "$(uname)" = 'OpenBSD' ] || err "${PROGRAM_NAME} only supports OpenBSD."
-
 [ -n "$1" ] || usage
 [ -n "$2" ] || usage
 [ -n "$3" ] || usage
+
+set -u
+
+umask 022
+[ "$(uname)" = 'OpenBSD' ] || err "${PROGRAM_NAME} only supports OpenBSD."
 
 
 readonly SITE="$1"

@@ -15,7 +15,7 @@
 
 # Simple script to update element-web when we try to launch it.
 
-set -e
+set -eu
 
 err() {
 	printf '%s\n' "$*" >&2

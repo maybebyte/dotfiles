@@ -30,6 +30,8 @@ fi
 
 [ -n "${URL}" ] || err "${0##*/} needs a URL!"
 
+set -u
+
 
 readonly DEPENDENCIES='dmenu
 ftp

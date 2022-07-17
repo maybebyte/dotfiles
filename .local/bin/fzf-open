@@ -23,7 +23,7 @@ err() {
 usage() {
 	cat >&2 <<EOF
 usage:
-${0##*/} [command] [dir for fzf]"
+${0##*/} [command] [dir for fzf]
 EOF
 	exit 1
 }
@@ -31,6 +31,8 @@ EOF
 
 [ -n "$1" ] || usage
 [ -n "$2" ] || usage
+
+set -u
 
 
 readonly DEPENDENCIES="fzf

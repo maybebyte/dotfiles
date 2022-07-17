@@ -69,8 +69,10 @@ get_volume() {
 }
 
 
+[ -n "$1" ] || usage
 [ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
 
+set -u
 
 readonly DEPENDENCIES='bc
 dunstify
@@ -88,9 +90,9 @@ VOLUME="$(get_volume)"
 readonly VOLUME
 
 is_muted && readonly MUTED='true'
+: "${MUTED:='false'}"
 
 # Arbitrary ID for dunstify to track, so it doesn't send stacked
 # notifications.
 readonly MESSAGE_ID='25231'
-
 dunstify -u low -r "${MESSAGE_ID}" -- "$(print_volume "${VOLUME}%")"

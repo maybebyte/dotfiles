@@ -13,7 +13,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set -e
+set -eu
 
 if command -v 'doas' >/dev/null 2>&1; then
 	alias priv='doas '
@@ -45,7 +45,7 @@ command -v 'priv' >/dev/null 2>&1 ||
 
 command -v 'nmap' >/dev/null 2>&1 || err 'nmap not found in PATH.'
 
-[ -n "$1" ] || usage
+[ -n "$*" ] || usage
 
 
 TMPDIR="$(mktemp -d)"

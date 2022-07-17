@@ -40,9 +40,11 @@ genfavi() {
 }
 
 
-command -v 'convert' >/dev/null 2>&1 || err 'convert not found in PATH.'
-
 [ -n "$1" ] || usage
+
+set -u
+
+command -v 'convert' >/dev/null 2>&1 || err 'convert not found in PATH.'
 
 case "$(file -ib -- "$1")" in
 	image/*) : ;; # images are OK to process

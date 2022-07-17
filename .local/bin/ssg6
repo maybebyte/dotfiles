@@ -21,6 +21,8 @@ main() {
 		[ -n "${pos_par}" ] || usage
 	done
 
+	set -u
+
 	for pos_par in "$1" "$2"; do
 		[ -d "${pos_par}" ] || no_dir "${pos_par}"
 	done

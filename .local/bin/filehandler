@@ -140,6 +140,12 @@ rename_file() {
 	err "Failed to rename '${BASENAME}' to '${NEW_FILENAME}'"
 }
 
+[ -n "$1" ] || usage
+[ -n "$2" ] || usage
+[ -n "${DISPLAY}" ] || err "${PROGRAM_NAME} requires a graphical environment."
+
+set -u
+
 
 readonly DEPENDENCIES='dmenu
 notify-send'
@@ -150,14 +156,8 @@ echo "${DEPENDENCIES}" | while read -r dependency; do
 done
 
 
-[ -n "$1" ] || usage
-[ -n "$2" ] || usage
-[ -n "${DISPLAY}" ] || err "${PROGRAM_NAME} requires a graphical environment."
-
-
 readonly COLORS_SH="${XDG_CACHE_HOME:-${HOME}/.cache}/wal/colors.sh"
 . "${COLORS_SH}"
-
 
 FILE_TO_HANDLE="$(readlink -f -- "$2")"
 readonly FILE_TO_HANDLE

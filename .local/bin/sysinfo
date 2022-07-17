@@ -17,7 +17,7 @@
 # figure out how to set a refresh timer appropriate for each function,
 # rather than a global refresh timer
 
-set -eh
+set -ehu
 
 err() {
 	printf '%s\n' "$*" >&2

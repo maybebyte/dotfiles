@@ -32,6 +32,8 @@ local_sxiv() { sxiv "$@" >/dev/null 2>&1; }
 [ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
 [ -n "$1" ] || usage
 
+set -u
+
 
 readonly DEPENDENCIES='ftp
 sxiv'

@@ -20,6 +20,8 @@ set -e
 main() {
 	[ -n "$1" ] || usage
 	[ -n "$2" ] || usage
+	set -u
+
 	[ -f "$1" ] || no_file "$1"
 
 	INDEX_FILE="$(readlink -f -- "$1")"

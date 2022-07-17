@@ -13,9 +13,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-# note that 'set -e' is not set in this script because the screen must
-# be locked even if the other steps fail.
-
+set -eu
 
 err() {
 	printf '%s\n' "$*" >&2
@@ -25,6 +23,8 @@ err() {
 
 command -v 'xlock' >/dev/null 2>&1 || err 'xlock not found in PATH.'
 
-clear_clip
-pkill -q 'keepass'
+# Must lock the screen even if these fail.
+clear_clip || :
+pkill -q 'keepass' || :
+
 xlock

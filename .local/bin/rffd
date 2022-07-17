@@ -87,6 +87,8 @@ elif [ -z "$2" ]; then
 	usage
 fi
 
+set -u
+
 
 # if ${COUNT} is unset, 1 result is returned by default
 : "${COUNT:=1}"

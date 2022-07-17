@@ -5,6 +5,8 @@
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/maimpick
 # his dotfiles can be accessed here: https://github.com/LukeSmithxyz/voidrice
 
+set -eu
+
 err() {
 	printf '%s\n' "$*" >&2
 	exit 1
@@ -100,5 +102,3 @@ full screen (copy)'
 
 NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
 readonly NUM_OF_OPTS
-
-echo "${OPTIONS}" | present_options

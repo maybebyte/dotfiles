@@ -31,6 +31,8 @@ export \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc"
 
+# shellcheck disable=SC1091
+[ -n "${DISPLAY}" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
 
 # OS specific actions
 # written so it can be expanded later if needed
@@ -85,8 +87,6 @@ esac
 # ksh(1).
 if [ -r "${XDG_CONFIG_HOME}/ksh/kshrc" ]; then
 	export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
-
 else
 	echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable."
-
 fi
