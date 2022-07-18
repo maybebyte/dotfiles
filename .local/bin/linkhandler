@@ -94,7 +94,8 @@ echo "${OPTIONS}" |
 			;;
 
 		'listen')
-			exec tmux new-window "mpva -- ${URL}"
+			exec tmux new-window "mpv --no-resume-playback \
+			--no-keep-open --no-pause --no-video -- ${URL}"
 			;;
 
 		'print duration')
