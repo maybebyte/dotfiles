@@ -24,6 +24,9 @@ set undofile
 set wrap
 set wrapscan
 
+" VimTeX should use zathura as the viewer
+let g:vimtex_view_method = 'zathura'
+
 " allow Markdown folds
 let g:markdown_folding = 1
 
@@ -114,6 +117,7 @@ call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
 		Plug 'dylanaraps/wal.vim'
 		Plug 'kovetskiy/sxhkd-vim'
 		Plug 'plasticboy/vim-markdown'
+		Plug 'lervag/vimtex'
 	endif
 
 call plug#end()

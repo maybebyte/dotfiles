@@ -102,3 +102,5 @@ full screen (copy)'
 
 NUM_OF_OPTS="$(echo "${OPTIONS}" | wc -l)"
 readonly NUM_OF_OPTS
+
+echo "${OPTIONS}" | present_options
