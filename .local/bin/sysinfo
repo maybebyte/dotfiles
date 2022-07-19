@@ -100,7 +100,7 @@ show_current_track() {
 	pgrep -q 'mpd' || return 1
 
 	# If mpd is paused, return.
-	mpc | grep -qi 'paused' || return 1
+	mpc | grep -Fq 'paused' && return 1
 
 	# Otherwise, display the current track.
 	mpc current
