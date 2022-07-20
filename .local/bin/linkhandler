@@ -54,6 +54,7 @@ download file
 download video
 listen
 print duration
+print title
 read
 view image
 watch
@@ -100,9 +101,18 @@ echo "${OPTIONS}" |
 
 		'print duration')
 			DURATION="$(yt-dlp --get-duration -- "${URL}" 2>/dev/null)"
+			readonly DURATION
 			[ -n "${DURATION}" ] || err 'Empty input, so no duration printed.'
 
 			exec notify-send -- "${DURATION}"
+			;;
+
+		'print title')
+			TITLE="$(yt-dlp -e -- "${URL}" 2>/dev/null)"
+			readonly TITLE
+			[ -n "${TITLE}" ] || err 'Empty input, so no title printed.'
+
+			exec notify-send -- "${TITLE}"
 			;;
 
 		'read')
