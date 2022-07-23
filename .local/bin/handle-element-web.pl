@@ -59,7 +59,7 @@ sub make_github_release_url {
 #
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
-system "command -v gpg >/dev/null 2>&1";
+system 'command -v gpg >/dev/null 2>&1';
 $? == 0 or die "GnuPG is not installed\n";
 
 
@@ -81,7 +81,7 @@ $api_response->is_success or die $api_response->status_line;
 
 
 my $decoded_json = decode_json $api_response->decoded_content;
-my $remote_version = ${$decoded_json}{'name'};
+chomp(my $remote_version = ${$decoded_json}{'name'});
 
 # Exclude release candidates and catch unknown release schemes.
 $remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax
