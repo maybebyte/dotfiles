@@ -71,7 +71,7 @@ chdir "$element_web_ui_dir" or die "Failed to change directory to $element_web_u
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
-die "TLS is not supported!\n" unless $http->can_ssl;
+die "TLS is not supported: $!\n" unless $http->can_ssl;
 
 my $api_response = $http->get(make_github_api_url('vector-im', 'element-web'));
 $api_response->{success} or die "$api_response->{status} $api_response->{reason}";

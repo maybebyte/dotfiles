@@ -51,7 +51,7 @@ die "notify-send is not installed.\n" if $?;
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
-die "TLS is unsupported!\n" unless $http->can_ssl;
+die "TLS is not supported: $!\n" unless $http->can_ssl;
 
 
 my $github_api_response = $http->get(make_github_api_url('matrix-org', 'synapse'));
