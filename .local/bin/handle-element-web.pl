@@ -27,11 +27,7 @@ use File::Temp;
 use JSON::MaybeXS;
 
 # Make an API request and download the release + detached signature.
-#
-# HTTP::Tiny did not play nice with GitHub's API, as it kept returning
-# '400 Bad Request'. If there is a way to make HTTP::Tiny work, that
-# would be my preference over LWP::UserAgent due to the latter's size.
-use LWP::UserAgent;
+use HTTP::Tiny;
 
 
 sub make_github_api_url {
@@ -72,15 +68,16 @@ my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'} // '/var/www/htdocs/element-
 chdir "$element_web_ui_dir" or die "Failed to change directory to $element_web_ui_dir: $!";
 
 
-my $user_agent = LWP::UserAgent->new(
-	protocols_allowed => [ 'https' ],
+my $http = HTTP::Tiny->new(
+	verify_SSL => 1,
 );
+die "TLS is not supported!\n" unless $http->can_ssl;
 
-my $api_response = $user_agent->get(make_github_api_url('vector-im', 'element-web'));
-$api_response->is_success or die $api_response->status_line;
+my $api_response = $http->get(make_github_api_url('vector-im', 'element-web'));
+$api_response->{success} or die "$api_response->{status} $api_response->{reason}";
 
 
-my $decoded_json = decode_json $api_response->decoded_content;
+my $decoded_json = decode_json $api_response->{content};
 chomp(my $remote_version = ${$decoded_json}{'name'});
 
 # Exclude release candidates and catch unknown release schemes.
@@ -101,12 +98,12 @@ $remote_version gt $local_version
 my $release_url = make_github_release_url 'vector-im', 'element-web', $remote_version;
 my $tmpdir = File::Temp->newdir;
 
-$user_agent->mirror(
+$http->mirror(
 	"$release_url/element-$remote_version.tar.gz",
 	"$tmpdir/element-$remote_version.tar.gz",
 );
 
-$user_agent->mirror(
+$http->mirror(
 	"$release_url/element-$remote_version.tar.gz.asc",
 	"$tmpdir/element-$remote_version.tar.gz.asc",
 );
