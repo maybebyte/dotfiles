@@ -63,10 +63,9 @@ readonly HTMLDIR
 trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
 
 
-readonly UNPRIV_USER="${LOGNAME}"
 : "${INDEX:=index.md}"
 
-ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${UNPRIV_USER}" \
+ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${LOGNAME}" \
 	"${SITE}" >/dev/null 2>&1
 
 rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
