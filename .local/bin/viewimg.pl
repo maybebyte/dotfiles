@@ -24,13 +24,6 @@ use v5.10; # say
 
 my $program_name = fileparse $0;
 
-sub usage {
-	die <<EOF;
-$program_name [URL]
-EOF
-}
-
-
 my $uri = URI->new(shift) or die "$program_name needs a URL.\n";
 $uri->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
