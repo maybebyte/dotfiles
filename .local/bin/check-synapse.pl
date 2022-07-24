@@ -20,11 +20,7 @@ use warnings;
 use JSON::MaybeXS;
 
 # Make API requests.
-#
-# HTTP::Tiny did not play nice with GitHub's API, as it kept returning
-# '400 Bad Request'. If there is a way to make HTTP::Tiny work, that
-# would be my preference over LWP::UserAgent due to the latter's size.
-use LWP::UserAgent;
+use HTTP::Tiny;
 
 # Get the basename of the program we're running.
 use File::Basename;
@@ -52,15 +48,17 @@ my $matrix_server = shift or die "$program_name needs a domain name to check.\n"
 system 'command -v notify-send >/dev/null 2>&1';
 die "notify-send is not installed.\n" if $?;
 
-my $user_agent = LWP::UserAgent->new(
-	protocols_allowed => [ 'https' ],
+my $http = HTTP::Tiny->new(
+	verify_SSL => 1,
 );
+die "TLS is unsupported!\n" unless $http->can_ssl;
 
 
-my $github_api_response = $user_agent->get(make_github_api_url('matrix-org', 'synapse'));
-$github_api_response->is_success or die $github_api_response->status_line;
+my $github_api_response = $http->get(make_github_api_url('matrix-org', 'synapse'));
+$github_api_response->{success}
+	or die "$github_api_response->{status} $github_api_response->{reason}\n";
 
-my $decoded_github_api_response = decode_json $github_api_response->decoded_content;
+my $decoded_github_api_response = decode_json $github_api_response->{content};
 chomp(my $remote_synapse_version = ${$decoded_github_api_response}{'name'});
 
 # Exclude release candidates and catch unknown release schemes.
@@ -68,10 +66,11 @@ $remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax
 	or die "Release version did not match expected release scheme.\n";
 
 
-my $federation_api_response = $user_agent->get(make_federation_api_url($matrix_server));
-$federation_api_response->is_success or die $federation_api_response->status_line;
+my $federation_api_response = $http->get(make_federation_api_url($matrix_server));
+$federation_api_response->{success}
+	or die "$federation_api_response->{status} $federation_api_response->{reason}\n";
 
-my $decoded_federation_api_response = decode_json $federation_api_response->decoded_content;
+my $decoded_federation_api_response = decode_json $federation_api_response->{content};
 chomp(my $current_synapse_version =
 	'v' . ${$decoded_federation_api_response}{'Version'}{'version'});
 
