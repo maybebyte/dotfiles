@@ -120,7 +120,7 @@ echo "${OPTIONS}" |
 			;;
 
 		'view image')
-			exec viewimg "${URL}"
+			exec viewimg.pl "${URL}"
 			;;
 
 		'watch')
