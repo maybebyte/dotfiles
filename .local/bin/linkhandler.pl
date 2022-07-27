@@ -99,7 +99,8 @@ sub fetch_response {
 
 sub check_dependencies {
 	# Is there a portable way to do this that doesn't involve shell?
-	open my $sh_fh, '-|', '/bin/sh', '-c', "command -v @_";
+	open my $sh_fh, '-|', '/bin/sh', '-c', "command -v @_"
+		or die "Could not open shell filehandle: $!\n";
 
 	my @dependency_checks;
 	while (<$sh_fh>) {
