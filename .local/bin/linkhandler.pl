@@ -109,11 +109,10 @@ if ($option eq 'copy duration') {
 	open my $yt_dlp_fh, '-|', 'yt-dlp', '--get-duration', '--', $url
 		or die "Could not run yt-dlp: $!\n";
 
-	chomp(my $duration = <$yt_dlp_fh>);
+	chomp(my $duration = <$yt_dlp_fh> // die "No duration.\n");
 
 	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
 	die "yt-dlp: non-zero exit of $?" if $?;
-	die 'No duration' unless $duration;
 
 
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard'
@@ -133,11 +132,10 @@ elsif ($option eq 'copy title') {
 	open my $yt_dlp_fh, '-|', 'yt-dlp', '-e', '--', $url
 		or die "Could not run yt-dlp: $!\n";
 
-	chomp(my $title = <$yt_dlp_fh>);
+	chomp(my $title = <$yt_dlp_fh> // die "No title.\n");
 
 	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
 	die "yt-dlp: non-zero exit of $?" if $?;
-	die 'No title' unless $title;
 
 
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard'
@@ -206,11 +204,10 @@ elsif ($option eq 'print duration') {
 	open my $yt_dlp_fh, '-|', 'yt-dlp', '--get-duration', '--', $url
 		or die "Could not run yt-dlp: $!\n";
 
-	chomp(my $duration = <$yt_dlp_fh>);
+	chomp(my $duration = <$yt_dlp_fh> // die "Nonexistent duration.\n");
 
 	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
 	die "yt-dlp non-zero exit of $?" if $?;
-	die "Nonexistent duration.\n" unless $duration;
 
 	exec 'notify-send', '--', "Video duration: ($duration).";
 	die "exec 'notify-send' failed: $!\n";
@@ -220,11 +217,10 @@ elsif ($option eq 'print title') {
 	open my $yt_dlp_fh, '-|', 'yt-dlp', '-e', '--', $url
 		or die "Could not run yt-dlp: $!\n";
 
-	chomp(my $title = <$yt_dlp_fh>);
+	chomp(my $title = <$yt_dlp_fh> // die "No title.\n");
 
 	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
 	die "yt-dlp: non-zero exit of $?" if $?;
-	die 'No title' unless $title;
 
 	exec 'notify-send', '--', "Video title: ($title).";
 	die "exec 'notify-send' failed: $!\n";
