@@ -13,6 +13,11 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# TODO:
+# xclip could potentially be replaced with a Perl equivalent.
+# yt-dlp invocations could leave the tty open after exiting.
+# may not need fzf (although it does make things easy).
+
 use strict;
 use warnings;
 
