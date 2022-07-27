@@ -71,6 +71,10 @@ my @options = (
 chomp(my $url = $ARGV[0] // <STDIN>);
 die "$program_name needs a URL!\n" unless $url;
 
+$url = URI->new($url);
+die "$program_name only handles the 'https' scheme.\n"
+	unless $url->scheme eq 'https';
+
 
 # Is there a portable way to do this that doesn't involve shell?
 open my $sh_fh, '-|',
@@ -102,8 +106,6 @@ close $fzf_out or die "Could not close fzf filehandle: $!\n";
 close $fzf_in or die "Could not close fzf filehandle: $!\n";
 waitpid $fzf_pid, 0;
 
-
-$url = URI->new($url);
 
 if ($option eq 'copy duration') {
 	open my $yt_dlp_fh, '-|', 'yt-dlp', '--get-duration', '--', $url
