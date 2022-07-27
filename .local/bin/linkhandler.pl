@@ -266,6 +266,4 @@ elsif ($option eq 'watch (loop)') {
 	die "exec 'tmux new-window mpv' failed: $!\n";
 }
 
-else {
-	die "$program_name doesn't support that option.\n";
-}
+else { die "$program_name doesn't support that option.\n"; }
