@@ -17,6 +17,9 @@
 # xclip could potentially be replaced with a Perl equivalent.
 # yt-dlp invocations could leave the tty open after exiting.
 # may not need fzf (although it does make things easy).
+#
+# Checking dependencies could be more efficient (right now the shell is
+# opened for each dependency).
 
 use strict;
 use warnings;
