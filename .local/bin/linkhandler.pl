@@ -77,8 +77,7 @@ die "$program_name only handles the 'https' scheme.\n"
 
 
 # Is there a portable way to do this that doesn't involve shell?
-open my $sh_fh, '-|',
-	"for dependency in @dependencies; do command -v \${dependency}; done";
+open my $sh_fh, '-|', '/bin/sh', '-c', "command -v @dependencies";
 
 my @dependency_checks;
 while (<$sh_fh>) {
