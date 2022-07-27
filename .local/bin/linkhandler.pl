@@ -87,7 +87,7 @@ while (<$sh_fh>) {
 if ($#dependencies != $#dependency_checks) {
 	my $count = 0;
 	while (<@dependencies>) {
-		$dependency_checks[$count] =~ /$_/
+		$dependency_checks[$count] // '' =~ /$_/
 			or die "$_ is not installed!\n";
 		$count++;
 	}
@@ -97,7 +97,7 @@ close $sh_fh or die "Could not close shell filehandle: $!\n";
 
 
 my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf')
-	or die "Failed to run fzf: $!\n";
+	// die "Failed to run fzf: $!\n";
 
 say $fzf_in join "\n", @options;
 chomp(my $option = <$fzf_out> // die "Option must be defined.\n");
