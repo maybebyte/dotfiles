@@ -68,8 +68,7 @@ my @options = (
 );
 
 
-chomp(my $url = $ARGV[0] // <STDIN>);
-die "$program_name needs a URL!\n" unless $url;
+chomp(my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n");
 
 $url = URI->new($url);
 die "$program_name only handles the 'https' scheme.\n"
