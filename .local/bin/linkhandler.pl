@@ -52,7 +52,7 @@ sub get_duration {
 	chomp(my $duration = <$yt_dlp_fh> // die "No duration.\n");
 
 	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
-	die "yt-dlp: non-zero exit of $?" if $?;
+	die "yt-dlp: non-zero exit of $?\n" if $?;
 
 	return $duration;
 }
@@ -65,7 +65,7 @@ sub get_title {
 	chomp(my $title = <$yt_dlp_fh> // die "No title.\n");
 
 	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
-	die "yt-dlp: non-zero exit of $?" if $?;
+	die "yt-dlp: non-zero exit of $?\n" if $?;
 
 	return $title;
 }
@@ -79,7 +79,7 @@ sub copy_to_clipboard {
 	print $xclip_fh $stuff_to_copy;
 
 	close $xclip_fh or die "Could not close xclip filehandle: $!\n";
-	die "xclip: non-zero exit of $?" if $?;
+	die "xclip: non-zero exit of $?\n" if $?;
 
 	return length $stuff_to_copy;
 }
@@ -250,7 +250,7 @@ elsif ($option eq 'read') {
 	say $zathura_fh $content;
 
 	close $zathura_fh or die "Could not close zathura filehandle: $!\n";
-	die "zathura: non-zero exit of $?" if $?;
+	die "zathura: non-zero exit of $?\n" if $?;
 }
 
 elsif ($option eq 'view image') {
