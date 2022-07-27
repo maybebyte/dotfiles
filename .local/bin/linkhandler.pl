@@ -104,7 +104,7 @@ sub check_dependencies {
 	my @dependency_checks;
 	while (<$sh_fh>) {
 		chomp;
-		push @_, $_;
+		push @dependency_checks, $_;
 	}
 
 	if ($#_ != $#dependency_checks) {
