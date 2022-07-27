@@ -152,7 +152,9 @@ elsif ($option eq 'download audio') {
 elsif ($option eq 'download file') {
 	chdir or die "Could not change directory to HOME: $!\n";
 
-	my $http = HTTP::Tiny->new();
+	my $http = HTTP::Tiny->new(
+		verify_SSL => 1,
+	);
 	die "TLS is unsupported: $!\n" unless $http->can_ssl;
 
 	my $response = $http->get($url);
@@ -220,7 +222,9 @@ elsif ($option eq 'print title') {
 }
 
 elsif ($option eq 'read') {
-	my $http = HTTP::Tiny->new();
+	my $http = HTTP::Tiny->new(
+		verify_SSL => 1,
+	);
 	die "TLS is unsupported: $!\n" unless $http->can_ssl;
 
 	my $response = $http->get($url);
