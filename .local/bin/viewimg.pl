@@ -24,8 +24,12 @@ use v5.10; # say
 
 my $program_name = fileparse $0;
 
-my $uri = URI->new(shift) or die "$program_name needs a URL.\n";
+my $url = shift // die "$program_name needs a URL.\n";
+$url =~ s/\Ahttp:/https:/;
+
+my $uri = URI->new($url);
 $uri->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
+
 
 system 'command -v sxiv >/dev/null 2>&1';
 die "sxiv is not installed.\n" if $?;

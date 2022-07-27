@@ -149,6 +149,7 @@ my @options = (
 
 chomp(my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n");
 
+$url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
 die "$program_name only handles the 'https' scheme.\n"
 	unless $url->scheme // '' eq 'https';
