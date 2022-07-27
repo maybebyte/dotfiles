@@ -41,12 +41,12 @@ die "No TLS support: $!\n" unless $http->can_ssl;
 
 
 my $response = $http->get($uri);
-$response->{success} or die "$response->{status} $response->{reason}\n";
+die "$response->{status} $response->{reason}\n" unless $response->{success};
 
 
 open my $tmp_fh, '>', $tmpfile or die "$tmpfile could not be opened for writing: $!\n";
 say $tmp_fh $response->{content};
-close $tmp_fh;
+close $tmp_fh or die "Could not close $tmpfile file handle: $!\n";
 
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system 'sxiv', '--', $tmpfile;
