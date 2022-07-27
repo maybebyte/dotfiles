@@ -117,6 +117,7 @@ sub check_dependencies {
 		}
 	}
 
+	# Placing this before the comparison loop masks the real error.
 	close $sh_fh or die "Could not close shell filehandle: $!\n";
 
 	return scalar @dependency_checks;
