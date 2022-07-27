@@ -86,11 +86,13 @@ while (<$sh_fh>) {
 	push @dependency_checks, $_;
 }
 
-my $count = 0;
-while (<@dependencies>) {
-	$dependency_checks[$count] =~ /$dependencies[$count]/
-		or die "$_ is not installed!\n";
-	$count++;
+if ($#dependencies != $#dependency_checks) {
+	my $count = 0;
+	while (<@dependencies>) {
+		$dependency_checks[$count] =~ /$_/
+			or die "$_ is not installed!\n";
+		$count++;
+	}
 }
 
 close $sh_fh or die "Could not close shell filehandle: $!\n";
