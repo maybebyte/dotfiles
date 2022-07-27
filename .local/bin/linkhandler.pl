@@ -241,10 +241,11 @@ elsif ($option eq 'print title') {
 }
 
 elsif ($option eq 'read') {
+	my $content = fetch_response($url);
 	open my $zathura_fh, '|-', 'zathura', '-'
 		or die "Could not run zathura: $!\n";
 
-	say $zathura_fh fetch_response($url);
+	say $zathura_fh $content;
 
 	close $zathura_fh or die "Could not close zathura filehandle: $!\n";
 	die "zathura: non-zero exit of $?" if $?;
