@@ -107,7 +107,7 @@ sub check_dependencies {
 		push @dependency_checks, $_;
 	}
 
-	if ($#_ != $#dependency_checks) {
+	if (scalar @_ != scalar @dependency_checks) {
 		my $count = 0;
 		while (<@_>) {
 			$dependency_checks[$count] // '' =~ /$_/
@@ -118,7 +118,7 @@ sub check_dependencies {
 
 	close $sh_fh or die "Could not close shell filehandle: $!\n";
 
-	return $#dependency_checks;
+	return scalar @dependency_checks;
 }
 
 
