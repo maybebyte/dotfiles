@@ -26,9 +26,8 @@ my $program_name = fileparse $0;
 
 my $url = shift // die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
-
-my $uri = URI->new($url);
-$uri->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
+$url = URI->new($url);
+$url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
 
 system 'command -v sxiv >/dev/null 2>&1';
@@ -44,7 +43,7 @@ my $http = HTTP::Tiny->new(
 die "No TLS support: $!\n" unless $http->can_ssl;
 
 
-my $response = $http->get($uri);
+my $response = $http->get($url);
 die "$response->{status} $response->{reason}\n" unless $response->{success};
 
 
