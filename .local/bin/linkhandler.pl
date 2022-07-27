@@ -81,7 +81,7 @@ sub copy_to_clipboard {
 	close $xclip_fh or die "Could not close xclip filehandle: $!\n";
 	die "xclip: non-zero exit of $?" if $?;
 
-	return length($stuff_to_copy);
+	return length $stuff_to_copy;
 }
 
 sub fetch_response {
