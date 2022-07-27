@@ -17,9 +17,6 @@
 # xclip could potentially be replaced with a Perl equivalent.
 # yt-dlp invocations could leave the tty open after exiting.
 # may not need fzf (although it does make things easy).
-#
-# Checking dependencies could be more efficient (right now the shell is
-# opened for each dependency).
 
 use strict;
 use warnings;
@@ -74,24 +71,36 @@ my @options = (
 chomp(my $url = $ARGV[0] // <STDIN>);
 die "$program_name needs a URL!\n" unless $url;
 
+
 # Is there a portable way to do this that doesn't involve shell?
-for (@dependencies) {
-	system "command -v $_ >/dev/null 2>&1";
-	die "$_ is not available and is needed by $program_name.\n" if $?;
+open my $sh_fh, '-|',
+	"for dependency in @dependencies; do command -v \${dependency}; done";
+
+my @dependency_checks;
+while (<$sh_fh>) {
+	chomp;
+	push @dependency_checks, $_;
 }
+
+my $count = 0;
+while (<@dependencies>) {
+	$dependency_checks[$count] =~ /$dependencies[$count]/
+		or die "$_ is not installed!\n";
+	$count++;
+}
+
+close $sh_fh or die "Could not close shell filehandle: $!\n";
 
 
 my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf')
 	or die "Failed to run fzf: $!\n";
 
 say $fzf_in join "\n", @options;
-chomp(my $option = <$fzf_out>);
+chomp(my $option = <$fzf_out> // die "Option must be defined.\n");
 
 close $fzf_out or die "Could not close fzf filehandle: $!\n";
 close $fzf_in or die "Could not close fzf filehandle: $!\n";
 waitpid $fzf_pid, 0;
-
-die "Option must be defined.\n" unless $option;
 
 
 $url = URI->new($url);
