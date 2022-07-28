@@ -21,15 +21,37 @@ use File::Temp;
 use HTTP::Tiny;
 use URI;
 use OpenBSD::Pledge;
+use OpenBSD::Unveil;
 use v5.10; # say
 
+my %unveiled_paths = (
+	'/bin/sh' => 'x', # command -v
+	'/etc/ssl/cert.pem' => 'r', # TLS
+	'/tmp' => 'rwc', # tmpfile
+	'/usr/lib' => 'r', # libcrypto, libssl
+	'/usr/libdata/perl5' => 'r', # modules
+	'/usr/local/bin/sxiv' => 'x', # image viewer
+	'/usr/local/libdata/perl5/site_perl' => 'r', # modules
+);
+
+
+pledge( qw(rpath tmppath fattr proc exec prot_exec dns inet unveil) )
+	or die "Pledge failed: $!\n";
+
+for (keys %unveiled_paths) {
+	unveil($_, $unveiled_paths{$_}) or die "Unveil failed: $!\n";
+}
+
+# No need for unveil anymore.
 pledge( qw(rpath tmppath fattr proc exec prot_exec dns inet) )
 	or die "Pledge failed: $!\n";
+
 
 my $program_name = fileparse $0;
 
 my $url = shift // die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
+
 $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
@@ -40,21 +62,18 @@ die "sxiv is not installed.\n" if $?;
 die "$program_name needs a graphical environment!\n" unless $ENV{'DISPLAY'};
 
 
+chdir '/tmp' or die "Could not change directory to /tmp: $!\n";
 my $tmpfile = File::Temp->new();
+
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
 die "No TLS support: $!\n" unless $http->can_ssl;
 
-# No need for prot_exec anymore.
-# ($http->can_ssl requires prot_exec).
-pledge( qw(rpath tmppath fattr inet dns proc exec) )
-	or die "Pledge failed: $!\n";
-
 my $response = $http->get($url);
 
 # No need for dns or inet anymore, as the request is stored.
-pledge( qw(rpath tmppath fattr proc exec) )
+pledge( qw(rpath tmppath fattr proc exec prot_exec) )
 	or die "Pledge failed: $!\n";
 
 die "$response->{status} $response->{reason}\n" unless $response->{success};
@@ -66,5 +85,5 @@ close $tmp_fh or die "Could not close $tmpfile file handle: $!\n";
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system 'sxiv', '--', $tmpfile;
 
-# No need for exec or proc anymore.
+# No need for exec, proc, or prot_exec anymore.
 pledge( qw(rpath tmppath fattr) ) or die "Pledge failed: $!\n";
