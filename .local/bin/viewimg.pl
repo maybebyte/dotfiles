@@ -20,7 +20,11 @@ use File::Basename;
 use File::Temp;
 use HTTP::Tiny;
 use URI;
+use OpenBSD::Pledge;
 use v5.10; # say
+
+pledge( qw(rpath tmppath fattr proc exec prot_exec dns inet) )
+	or die "Pledge failed: $!\n";
 
 my $program_name = fileparse $0;
 
@@ -42,10 +46,18 @@ my $http = HTTP::Tiny->new(
 );
 die "No TLS support: $!\n" unless $http->can_ssl;
 
+# No need for prot_exec anymore.
+# ($http->can_ssl requires prot_exec).
+pledge( qw(rpath tmppath fattr inet dns proc exec) )
+	or die "Pledge failed: $!\n";
 
 my $response = $http->get($url);
-die "$response->{status} $response->{reason}\n" unless $response->{success};
 
+# No need for dns or inet anymore, as the request is stored.
+pledge( qw(rpath tmppath fattr proc exec) )
+	or die "Pledge failed: $!\n";
+
+die "$response->{status} $response->{reason}\n" unless $response->{success};
 
 open my $tmp_fh, '>', $tmpfile or die "$tmpfile could not be opened for writing: $!\n";
 say $tmp_fh $response->{content};
@@ -53,3 +65,6 @@ close $tmp_fh or die "Could not close $tmpfile file handle: $!\n";
 
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system 'sxiv', '--', $tmpfile;
+
+# No need for exec or proc anymore.
+pledge( qw(rpath tmppath fattr) ) or die "Pledge failed: $!\n";

@@ -17,6 +17,7 @@
 # xclip could potentially be replaced with a Perl equivalent.
 # yt-dlp invocations could leave the tty open after exiting.
 # may not need fzf (although it does make things easy).
+# this could use flags/args so that it can be used non-interactively
 
 use strict;
 use warnings;
