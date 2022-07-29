@@ -30,7 +30,6 @@ $program_name removes redundant entries.
 EOT
 }
 
-
 sub uniq {
 	my %seen;
 	return grep {! $seen{$_}++} @_;
@@ -40,23 +39,22 @@ sub uniq {
 @ARGV or usage;
 
 for (@ARGV) {
-	open my $unsorted_file_fh, '<', $_ or die "Could not open $_ for reading: $!\n";
-	my @lines;
+	open my $unsorted_file_fh, '<', $_ or die "Could not open '$_' for reading: $!\n";
 
+	my @lines;
 	while (my $line = <$unsorted_file_fh>) {
 		chomp $line;
 		push @lines, $line;
 	}
 
-	close $unsorted_file_fh;
+	close $unsorted_file_fh or die "Could not close '$_': $!\n";
 
-	rename $_, "$_.bak" or die "Could not rename $_ to $_.bak: $!\n";
+	rename $_, "$_.bak" or die "Could not rename '$_' to '$_.bak': $!\n";
 
-
-	open my $sorted_file_fh, '>', $_ or die "Could not open $_ for writing: $!\n";
+	open my $sorted_file_fh, '>', $_ or die "Could not open '$_' for writing: $!\n";
 
 	my @unique_lines = uniq @lines;
-	say $sorted_file_fh join("\n", sort @unique_lines);
+	say $sorted_file_fh join "\n", sort @unique_lines;
 
-	close $sorted_file_fh;
+	close $sorted_file_fh or die "Could not close '$_': $!\n";
 }
