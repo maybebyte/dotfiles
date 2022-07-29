@@ -13,9 +13,6 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-# TODO:
-# use which(1) instead of command -v, since this is confined to OpenBSD anyway
-
 use strict;
 use warnings;
 
@@ -28,7 +25,7 @@ use OpenBSD::Unveil;
 use v5.10; # say
 
 my %unveiled_paths = (
-	'/bin/sh' => 'x', # command -v
+	'/usr/bin/which' => 'x', # discover executables
 	'/etc/ssl/cert.pem' => 'r', # TLS
 	'/tmp' => 'rwc', # tmpfile
 	'/usr/lib' => 'r', # libcrypto, libssl
@@ -57,11 +54,15 @@ $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
-
-system 'command -v sxiv >/dev/null 2>&1';
-die "sxiv is not installed.\n" if $?;
-
 die "$program_name needs a graphical environment!\n" unless $ENV{'DISPLAY'};
+
+
+open my $which_fh, '-|', 'which', 'sxiv'
+	or die "Cannot open 'which' filehandle: $!\n";
+
+chomp(my $which_output = <$which_fh>);
+die "sxiv is not installed.\n" unless $which_output =~ /sxiv\z/;
+close $which_fh or die "Cannot close 'which' filehandle: $!\n";
 
 
 chdir '/tmp' or die "Could not change directory to /tmp: $!\n";
