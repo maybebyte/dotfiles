@@ -1,86 +1,127 @@
-#!/bin/sh
-# shellcheck disable=SC1090
+#!/usr/bin/env perl
+# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set -eu
+# TODO:
+# Read files from STDIN into an array and act on them so execution only
+# happens once (useful for moving files in bulk). On a related note,
+# make 'y' and 'Y' bindings useful in this context. Renaming files in
+# bulk could not happen this way (file clobbering), so that must be
+# revisited as well.
 
-readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
-. "${COLORS_SH}"
+use strict;
+use warnings;
 
+use IPC::Open2;
+use File::Spec;
+use File::Basename;
+use JSON::MaybeXS;
 
-menu() {
-	dmenu -i -fn 'mono-12' \
-		-nb "${background:-#040516}" \
-		-nf "${color3:-#9974e7}" \
-		-sb "${background:-#040516}" \
-		-sf "${foreground:-#e0cef3}" \
-		"$@"
+sub yank {
+	chomp(my $stuff_to_copy = shift // die "yank needs something to copy!\n");
+	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard'
+		or die "Could not run xclip: $!\n";
+
+	print $xclip_fh $stuff_to_copy;
+	close $xclip_fh or die "Could not close xclip STDIN: $!\n";
 }
 
 
-while read -r file; do
-	case "$1" in
-		# copy file with filehandler
-		'c')
-			filehandler copy "${file}"
-			;;
+my $background;
+my $foreground;
+my $color3;
 
-		# delete file
-		'd')
-			really_delete="$(
-				{
-				echo 'Yes'
-				echo 'No'
-				} | menu -p "Really delete ${file}?"
-			)"
+my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // $ENV{'HOME'} . '/.cache';
+my $colors_wal = $xdg_cache_home . '/wal/colors.json';
 
-			[ "${really_delete}" = 'Yes' ] && {
-				rm -- "${file}"
-				notify-send -- "${file} deleted."
-			}
-			;;
+if (-e -r $colors_wal) {
+	open my $json_fh, '<', $colors_wal or die "Could not open '$colors_wal': $!\n";
 
-		# move file with filehandler
-		'm')
-			filehandler move "${file}"
-			;;
+	# JSON::MaybeXS is unhappy with slurping the whole file into a
+	# scalar and trying to read it that way. It can't find the string
+	# terminator for some reason.
+	my @json_lines;
+	while (<$json_fh>) {
+		chomp;
+		push @json_lines, $_;
+	}
 
-		# rename file with filehandler
-		'n')
-			filehandler rename "${file}"
-			;;
+	close $json_fh or die "Could not close '$colors_wal': $!\n";
 
-		# rotate clockwise
-		'r')
-			convert -rotate 90 -- "${file}" "${file}"
-			;;
+	my $json = join "\n", @json_lines;
+	my $decoded_json = decode_json $json;
 
-		# rotate counter-clockwise
-		'R')
-			convert -rotate -90 -- "${file}" "${file}"
-			;;
+	$background = ${$decoded_json}{'special'}{'background'}
+		// die "pywal background color could not be read from $colors_wal.\n";
+	$foreground = ${$decoded_json}{'special'}{'foreground'}
+		// die "pywal foreground color could not be read from $colors_wal.\n";
+	$color3 = ${$decoded_json}{'colors'}{'color3'}
+		// die "pywal color3 could not be read from $colors_wal.\n";
+}
 
-		# horizontally invert file, aka 'flop' it
-		'f')
-			convert -flop -- "${file}" "${file}"
-			;;
 
-		# yank the relative file path
-		'y')
-			printf '%s' "${file}" | xclip -selection clipboard
-			notify-send -- "${file} copied to clipboard."
-			;;
+my @dmenu_options = (
+	'-i',
+	'-fn', 'mono-12',
+	'-nb', $background // '#040516',
+	'-nf', $color3 // '#9974e7',
+	'-sb', $background // '#040516',
+	'-sf', $foreground // '#e0cef3',
+);
 
-		# yank the absolute file path
-		'Y')
-			ABSOLUTE_PATH="$(readlink -f -- "${file}")"
 
-			printf '%s' "${ABSOLUTE_PATH}" | xclip -selection clipboard
-			notify-send -- "${ABSOLUTE_PATH} copied to clipboard."
-			;;
+my $key = shift // die "Need a key.\n";
 
-		*)
-			err 'Key not bound.'
-			;;
+while (<STDIN>) {
+	chomp(my $file = $_ // die "Need a file!\n");
 
-	esac
-done
+	if ($key eq 'c') {
+		system 'filehandler', 'copy', $file;
+	} elsif ($key eq 'd') {
+		my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
+			'-p', "Really delete $file?") // die "Could not open dmenu: $!\n";
+
+		say $menu_in join "\n", qw(Yes No);
+		close $menu_in or die "Could not close dmenu STDIN: $!\n";
+
+		chomp(my $user_response = <$menu_out> // 'No');
+		close $menu_out or die "Could not close dmenu STDOUT: $!\n";
+		waitpid($menu_pid, 0);
+
+		if ($user_response eq 'Yes') {
+			unlink $file or die "Could not delete '$file': $!\n";
+			system 'notify-send', '--', "$file deleted!";
+		}
+	} elsif ($key eq 'm') {
+		system 'filehandler', 'move', $file;
+	} elsif ($key eq 'n') {
+		system 'filehandler', 'rename', $file;
+	} elsif ($key eq 'r') {
+		system 'convert', '-rotate', '90', '--', $file, $file;
+	} elsif ($key eq 'R') {
+		system 'convert', '-rotate', '-90', '--', $file, $file;
+	} elsif ($key eq 'f') {
+		system 'convert', '-flop', '--', $file, $file;
+	} elsif ($key eq 'y') {
+		my $basename = fileparse $file;
+		yank $basename;
+		system 'notify-send', '--', "File name ($basename) copied to clipboard.";
+	} elsif ($key eq 'Y') {
+		my $absolute_path = File::Spec->rel2abs($file) // die "Need an absolute path!\n";
+		yank $absolute_path;
+		system 'notify-send', '--', "File path ($absolute_path) copied to clipboard.";
+	} else {
+		die "Key not bound!\n";
+	}
+}

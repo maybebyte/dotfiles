@@ -164,10 +164,11 @@ my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf')
 	// die "Failed to run fzf: $!\n";
 
 say $fzf_in join "\n", @options;
-chomp(my $option = <$fzf_out> // die "Option must be defined.\n");
+close $fzf_in or die "Could not close fzf STDIN $!\n";
 
-close $fzf_out or die "Could not close fzf filehandle: $!\n";
-close $fzf_in or die "Could not close fzf filehandle: $!\n";
+chomp(my $option = <$fzf_out> // die "Option must be defined.\n");
+close $fzf_out or die "Could not close fzf STDOUT $!\n";
+
 waitpid $fzf_pid, 0;
 
 
