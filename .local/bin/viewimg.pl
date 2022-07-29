@@ -25,12 +25,11 @@ use OpenBSD::Unveil;
 use v5.10; # say
 
 my %unveiled_paths = (
-	'/usr/bin/which' => 'x', # discover executables
 	'/etc/ssl/cert.pem' => 'r', # TLS
 	'/tmp' => 'rwc', # tmpfile
 	'/usr/lib' => 'r', # libcrypto, libssl
 	'/usr/libdata/perl5' => 'r', # modules
-	'/usr/local/bin/sxiv' => 'x', # image viewer
+	'/usr/local/bin/sxiv' => 'rx', # image viewer
 	'/usr/local/libdata/perl5/site_perl' => 'r', # modules
 );
 
@@ -55,14 +54,7 @@ $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
 die "$program_name needs a graphical environment!\n" unless $ENV{'DISPLAY'};
-
-
-open my $which_fh, '-|', 'which', 'sxiv'
-	or die "Cannot open 'which' filehandle: $!\n";
-
-chomp(my $which_output = <$which_fh>);
-die "sxiv is not installed.\n" unless $which_output =~ /sxiv\z/;
-close $which_fh or die "Cannot close 'which' filehandle: $!\n";
+-e -x -r '/usr/local/bin/sxiv' or die "sxiv is not installed.\n";
 
 
 chdir '/tmp' or die "Could not change directory to /tmp: $!\n";
