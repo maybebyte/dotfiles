@@ -33,10 +33,6 @@ my %unveiled_paths = (
 	'/usr/local/libdata/perl5/site_perl' => 'r', # modules
 );
 
-
-pledge( qw(rpath tmppath fattr proc exec prot_exec dns inet unveil) )
-	or die "Pledge failed: $!\n";
-
 for (keys %unveiled_paths) {
 	unveil($_, $unveiled_paths{$_}) or die "Unveil failed: $!\n";
 }
