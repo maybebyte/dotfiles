@@ -79,7 +79,7 @@ say $tmp_fh $response->{content};
 close $tmp_fh or die "Could not close $tmpfile file handle: $!\n";
 
 # Cannot be exec, since the temporary file needs to be cleaned up.
-system 'sxiv', '--', $tmpfile;
+system '/usr/local/bin/sxiv', '--', $tmpfile;
 
 # No need for exec, proc, or prot_exec anymore.
 pledge( qw(rpath tmppath fattr) ) or die "Pledge failed: $!\n";
