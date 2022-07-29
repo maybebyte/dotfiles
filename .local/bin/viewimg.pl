@@ -51,7 +51,6 @@ my $program_name = fileparse $0;
 
 my $url = shift // die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
-
 $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
@@ -69,6 +68,7 @@ my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
 die "No TLS support: $!\n" unless $http->can_ssl;
+
 
 my $response = $http->get($url);
 
