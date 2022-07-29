@@ -13,6 +13,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# TODO:
+# use which(1) instead of command -v, since this is confined to OpenBSD anyway
+
 use strict;
 use warnings;
 
