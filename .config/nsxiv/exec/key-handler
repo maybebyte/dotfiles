@@ -24,7 +24,7 @@ use strict;
 use warnings;
 
 use IPC::Open2;
-use File::Spec;
+use File::Spec::Functions 'rel2abs';
 use File::Basename;
 use JSON::MaybeXS;
 
@@ -118,7 +118,7 @@ while (<STDIN>) {
 		yank $basename;
 		system 'notify-send', '--', "File name ($basename) copied to clipboard.";
 	} elsif ($key eq 'Y') {
-		my $absolute_path = File::Spec->rel2abs($file) // die "Need an absolute path!\n";
+		my $absolute_path = rel2abs $file // die "Need an absolute path!\n";
 		yank $absolute_path;
 		system 'notify-send', '--', "File path ($absolute_path) copied to clipboard.";
 	} else {
