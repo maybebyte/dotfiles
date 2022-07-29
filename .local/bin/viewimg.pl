@@ -53,7 +53,7 @@ $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
-die "$program_name needs a graphical environment!\n" unless $ENV{'DISPLAY'};
+$ENV{'DISPLAY'} or die "$program_name needs a graphical environment!\n";
 -e -x -r '/usr/local/bin/sxiv' or die "sxiv is not installed.\n";
 
 
@@ -63,7 +63,7 @@ my $tmpfile = File::Temp->new();
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
-die "No TLS support: $!\n" unless $http->can_ssl;
+$http->can_ssl or die "No TLS support: $!\n";
 
 
 my $response = $http->get($url);
@@ -72,7 +72,7 @@ my $response = $http->get($url);
 pledge( qw(rpath tmppath fattr proc exec prot_exec) )
 	or die "Pledge failed: $!\n";
 
-die "$response->{status} $response->{reason}\n" unless $response->{success};
+$response->{success} or die "$response->{status} $response->{reason}\n";
 
 open my $tmp_fh, '>', $tmpfile or die "$tmpfile could not be opened for writing: $!\n";
 say $tmp_fh $response->{content};
