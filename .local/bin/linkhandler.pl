@@ -27,11 +27,8 @@ use feature "say";
 # Determine program name.
 use File::Basename;
 
-# make_path
-use File::Path;
-
-# catdir
-use File::Spec;
+use File::Path 'make_path';
+use File::Spec::Functions 'catdir';
 
 # Bidirectional interprocess communication.
 use IPC::Open2;
@@ -201,10 +198,10 @@ elsif ($option eq 'download file') {
 	my $host = $url->authority;
 
 
-	my $dir_to_write_to = File::Spec->catdir('Downloads', $host);
+	my $dir_to_write_to = catdir('Downloads', $host);
 
 	unless (-e $dir_to_write_to) {
-		File::Path->make_path($dir_to_write_to)
+		make_path($dir_to_write_to)
 			or die "Could not create directory named '$dir_to_write_to': $!\n";
 	}
 
