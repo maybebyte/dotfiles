@@ -24,6 +24,7 @@ use OpenBSD::Pledge;
 use OpenBSD::Unveil;
 use v5.10; # say
 
+
 my %unveiled_paths = (
 	'/etc/ssl/cert.pem' => 'r', # TLS
 	'/tmp' => 'rwc', # tmpfile
@@ -50,7 +51,8 @@ $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
 $ENV{'DISPLAY'} or die "$program_name needs a graphical environment!\n";
--e -x -r '/usr/local/bin/sxiv' or die "sxiv is not installed.\n";
+-e -x -r '/usr/local/bin/sxiv'
+	or die "/usr/local/bin/sxiv cannot be read and executed.\n";
 
 
 chdir '/tmp' or die "Could not change directory to /tmp: $!\n";
