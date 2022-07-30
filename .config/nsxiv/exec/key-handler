@@ -25,8 +25,8 @@ use warnings;
 
 use IPC::Open2;
 use File::Spec::Functions 'rel2abs';
-use File::Basename;
-use JSON::MaybeXS;
+use File::Basename 'fileparse';
+use JSON::MaybeXS 'decode_json';
 
 sub yank {
 	chomp(my $stuff_to_copy = shift // die "yank needs something to copy!\n");

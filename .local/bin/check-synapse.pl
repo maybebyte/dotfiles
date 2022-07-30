@@ -17,13 +17,13 @@ use strict;
 use warnings;
 
 # Decode JSON and manipulate it with Perl.
-use JSON::MaybeXS;
+use JSON::MaybeXS 'decode_json';
 
 # Make API requests.
 use HTTP::Tiny;
 
 # Get the basename of the program we're running.
-use File::Basename;
+use File::Basename 'fileparse';
 
 
 sub make_github_api_url {

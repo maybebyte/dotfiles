@@ -16,7 +16,7 @@
 use strict;
 use warnings;
 
-use File::Basename;
+use File::Basename 'fileparse';
 use File::Temp;
 use HTTP::Tiny;
 use URI;

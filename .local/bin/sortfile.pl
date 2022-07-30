@@ -16,7 +16,7 @@
 use strict;
 use warnings;
 
-use File::Basename;
+use File::Basename 'fileparse';
 
 my $program_name = fileparse $0;
 

@@ -24,7 +24,7 @@ use Archive::Tar;
 use File::Temp;
 
 # Decode JSON and manipulate it with Perl.
-use JSON::MaybeXS;
+use JSON::MaybeXS 'decode_json';
 
 # Make an API request and download the release + detached signature.
 use HTTP::Tiny;
