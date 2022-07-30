@@ -254,8 +254,8 @@ elsif ($option eq 'read') {
 }
 
 elsif ($option eq 'view image') {
-	exec 'viewimg.pl', $url;
-	die "exec 'viewimg.pl' failed: $!\n";
+	exec 'viewimg', $url;
+	die "exec 'viewimg' failed: $!\n";
 }
 
 elsif ($option eq 'watch') {

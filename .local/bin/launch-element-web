@@ -27,7 +27,7 @@ err() {
 : "${BROWSER_PROFILE:=matrix}"
 : "${MATRIX_URI:=http://localhost:8080}"
 : "${XDG_BIN_HOME:=${HOME}/.local/bin}"
-: "${HANDLER:=${XDG_BIN_HOME}/handle-element-web.pl}"
+: "${HANDLER:=${XDG_BIN_HOME}/handle-element-web}"
 
 
 readonly DEPENDENCIES="notify-send
