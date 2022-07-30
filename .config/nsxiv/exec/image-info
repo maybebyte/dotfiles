@@ -1,6 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env perl
 
-# Example for $XDG_CONFIG_HOME/sxiv/exec/image-info
 # Called by sxiv(1) whenever an image gets loaded.
 # The output is displayed in sxiv's status bar.
 # Arguments:
@@ -8,14 +7,30 @@
 #   $2: image width
 #   $3: image height
 
-set -eu
+# TODO:
+# Get the bytes and do the human readable conversion in Perl and ditch
+# du(1) entirely.
+#
+# The whole thing could be pledged so that it doesn't use capabilities
+# it doesn't need.
 
-S=" | " # field separator
+use strict;
+use warnings;
+use File::Basename 'fileparse';
 
-exec 2>/dev/null
+my $separator = ' | ';
 
-FILENAME="${1##*/}"
-FILESIZE="$(du -Hh -- "$1" | cut -f 1)"
-GEOMETRY="$2x$3"
+my $filename = shift // die "Need a file name.\n";
+my $basename = fileparse $filename;
 
-printf '%s' "${FILESIZE}${S}${GEOMETRY}${S}${FILENAME}"
+my $width = shift // die "Need a width.\n";
+my $height = shift // die "Need a height.\n";
+my $geometry = $width . 'x' . $height;
+
+open my $du_fh, '-|', 'du', '-Hh', '--', $filename or die "Could not run 'du': $!\n";
+my $du_output = <$du_fh>;
+close $du_fh or die "Could not close 'du' filehandle: $!\n";
+die "'du' exited with non-zero exit status: $?\n" if $?;
+
+my ($filesize) = split ' ', $du_output;
+print $filesize . $separator . $geometry . $separator . $basename;
