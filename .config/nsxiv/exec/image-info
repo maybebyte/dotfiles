@@ -9,19 +9,23 @@
 
 # TODO:
 # Review Number::Bytes::Human to see exactly how it does what it does.
-#
-# The whole thing could be pledged so that it doesn't use capabilities
-# it doesn't need.
 
 use strict;
 use warnings;
 use File::Basename 'fileparse';
 use Number::Bytes::Human 'format_bytes';
+use OpenBSD::Pledge;
+use OpenBSD::Unveil;
+
+pledge( qw(rpath unveil) ) or die "Pledge failed: $!\n";
 
 my $separator = ' | ';
 
 my $filename = shift // die "Need a file name.\n";
 my $basename = fileparse $filename;
+
+unveil($filename, 'r') or die "Unveil failed: $!\n";
+pledge( qw(rpath) ) or die "Pledge failed: $!\n";
 
 my $width = shift // die "Need a width.\n";
 my $height = shift // die "Need a height.\n";
