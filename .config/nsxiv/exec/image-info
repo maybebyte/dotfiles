@@ -8,8 +8,7 @@
 #   $3: image height
 
 # TODO:
-# Get the bytes and do the human readable conversion in Perl and ditch
-# du(1) entirely.
+# Review Number::Bytes::Human to see exactly how it does what it does.
 #
 # The whole thing could be pledged so that it doesn't use capabilities
 # it doesn't need.
@@ -17,6 +16,7 @@
 use strict;
 use warnings;
 use File::Basename 'fileparse';
+use Number::Bytes::Human 'format_bytes';
 
 my $separator = ' | ';
 
@@ -27,10 +27,7 @@ my $width = shift // die "Need a width.\n";
 my $height = shift // die "Need a height.\n";
 my $geometry = $width . 'x' . $height;
 
-open my $du_fh, '-|', 'du', '-Hh', '--', $filename or die "Could not run 'du': $!\n";
-my $du_output = <$du_fh>;
-close $du_fh or die "Could not close 'du' filehandle: $!\n";
-die "'du' exited with non-zero exit status: $?\n" if $?;
+my $file_size = (stat $filename)[7];
+$file_size = format_bytes $file_size;
 
-my ($filesize) = split ' ', $du_output;
-print $filesize . $separator . $geometry . $separator . $basename;
+print $file_size . $separator . $geometry . $separator . $basename;
