@@ -21,17 +21,21 @@
 
 use strict;
 use warnings;
-
-use feature "say";
+use autodie ':all';
+use feature 'say';
 
 # Determine program name.
 use File::Basename;
 
+# Path manipulation.
 use File::Path 'make_path';
 use File::Spec::Functions 'catdir';
 
 # Bidirectional interprocess communication.
 use IPC::Open2;
+
+# Simpler interprocess communication.
+use IPC::System::Simple 'capturex';
 
 # Perform web requests.
 use HTTP::Tiny;
@@ -44,39 +48,22 @@ my $program_name = fileparse $0;
 
 sub get_duration {
 	my $yt_url = shift // die "get_duration needs a URL.\n";
-	open my $yt_dlp_fh, '-|', 'yt-dlp', '--get-duration', '--', $yt_url
-		or die "Could not run yt-dlp: $!\n";
-
-	chomp(my $duration = <$yt_dlp_fh> // die "No duration.\n");
-
-	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
-	die "yt-dlp: non-zero exit of $?\n" if $?;
-
+	chomp(my $duration = capturex 'yt-dlp', '--get-duration', '--', $yt_url);
 	return $duration;
 }
 
 sub get_title {
 	my $yt_url = shift // die "get_title needs a URL.\n";
-	open my $yt_dlp_fh, '-|', 'yt-dlp', '-e', '--', $yt_url
-		or die "Could not run yt-dlp: $!\n";
-
-	chomp(my $title = <$yt_dlp_fh> // die "No title.\n");
-
-	close $yt_dlp_fh or die "Could not close yt-dlp filehandle: $!\n";
-	die "yt-dlp: non-zero exit of $?\n" if $?;
-
+	chomp(my $title = capturex 'yt-dlp', '-e', '--', $yt_url);
 	return $title;
 }
 
 sub copy_to_clipboard {
 	chomp(my $stuff_to_copy = shift // die "copy_to_clipboard needs something to copy.\n");
 
-	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard'
-		or die "Could not send duration to xclip: $!\n";
-
+	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
 	print $xclip_fh $stuff_to_copy;
-
-	close $xclip_fh or die "Could not close xclip filehandle: $!\n";
+	close $xclip_fh;
 	die "xclip: non-zero exit of $?\n" if $?;
 
 	return length $stuff_to_copy;
@@ -97,8 +84,7 @@ sub fetch_response {
 
 sub check_dependencies {
 	# Is there a portable way to do this that doesn't involve shell?
-	open my $sh_fh, '-|', '/bin/sh', '-c', "command -v @_"
-		or die "Could not open shell filehandle: $!\n";
+	open my $sh_fh, '-|', '/bin/sh', '-c', "command -v @_";
 
 	my @dependency_checks;
 	while (<$sh_fh>) {
@@ -116,7 +102,7 @@ sub check_dependencies {
 	}
 
 	# Placing this before the comparison loop masks the real error.
-	close $sh_fh or die "Could not close shell filehandle: $!\n";
+	close $sh_fh;
 
 	return scalar @dependency_checks;
 }
@@ -161,10 +147,10 @@ my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf')
 	// die "Failed to run fzf: $!\n";
 
 say $fzf_in join "\n", @options;
-close $fzf_in or die "Could not close fzf STDIN $!\n";
+close $fzf_in;
 
 chomp(my $option = <$fzf_out> // die "Option must be defined.\n");
-close $fzf_out or die "Could not close fzf STDOUT $!\n";
+close $fzf_out;
 
 waitpid $fzf_pid, 0;
 
@@ -172,31 +158,25 @@ waitpid $fzf_pid, 0;
 if ($option eq 'copy duration') {
 	my $duration = get_duration $url;
 	copy_to_clipboard $duration;
-
 	exec 'notify-send', '--', "Copied video duration: ($duration).";
-	die "exec 'notify-send' failed: $!\n";
 }
 
 elsif ($option eq 'copy title') {
 	my $title = get_title $url;
 	copy_to_clipboard $title;
-
 	exec 'notify-send', '--', "Copied video title: ($title).";
-	die "exec 'notify-send' failed: $!\n";
 }
 
 elsif ($option eq 'download audio') {
 	exec 'tmux', 'new-window', 'yt-dlp', '-xf', 'bestaudio/best', '--', $url;
-	die "exec 'tmux new-window yt-dlp' failed: $!\n";
 }
 
 elsif ($option eq 'download file') {
-	chdir or die "Could not change directory to HOME: $!\n";
+	chdir;
 
 	my $content = fetch_response($url);
 	my @uri_segments = $url->path_segments;
 	my $host = $url->authority;
-
 
 	my $dir_to_write_to = catdir('Downloads', $host);
 
@@ -205,67 +185,46 @@ elsif ($option eq 'download file') {
 			or die "Could not create directory named '$dir_to_write_to': $!\n";
 	}
 
-	chdir $dir_to_write_to
-		or die "Could not change directory to '$dir_to_write_to': $!\n";
+	chdir $dir_to_write_to;
 
-
-	open my $download_fh, '>', $uri_segments[-1]
-		or die "Could not open file named '$uri_segments[-1]': $!\n";
-
-	say $download_fh $content;
-	close $download_fh or die "Could not close filehandle: $!\n";
+	open my $download_fh, '>', $uri_segments[-1];
+	print $download_fh $content;
+	close $download_fh;
 }
 
 elsif ($option eq 'download video') {
 	exec 'tmux', 'new-window', 'yt-dlp', '--', $url;
-	die "exec 'tmux new-window yt-dlp' failed: $!\n";
 }
 
 elsif ($option eq 'listen') {
 	exec 'tmux', 'new-window', 'mpv', '--no-resume-playback',
 		'--no-keep-open', '--no-pause', '--no-video', '--', $url;
-
-	die "exec 'tmux new-window mpv' failed: $!\n";
 }
 
 elsif ($option eq 'print duration') {
 	my $duration = get_duration $url;
-
 	exec 'notify-send', '--', "Video duration: ($duration).";
-	die "exec 'notify-send' failed: $!\n";
 }
 
 elsif ($option eq 'print title') {
 	my $title = get_title $url;
-
 	exec 'notify-send', '--', "Video title: ($title).";
-	die "exec 'notify-send' failed: $!\n";
 }
 
 elsif ($option eq 'read') {
 	my $content = fetch_response($url);
-	open my $zathura_fh, '|-', 'zathura', '-'
-		or die "Could not run zathura: $!\n";
+	open my $zathura_fh, '|-', 'zathura', '-';
+	print $zathura_fh $content;
 
-	say $zathura_fh $content;
-
-	close $zathura_fh or die "Could not close zathura filehandle: $!\n";
+	close $zathura_fh;
 	die "zathura: non-zero exit of $?\n" if $?;
 }
 
-elsif ($option eq 'view image') {
-	exec 'viewimg', $url;
-	die "exec 'viewimg' failed: $!\n";
-}
-
-elsif ($option eq 'watch') {
-	exec 'tmux', 'new-window', 'mpv', '--', $url;
-	die "exec 'tmux new-window mpv' failed: $!\n";
-}
+elsif ($option eq 'view image') { exec 'viewimg', $url; }
+elsif ($option eq 'watch') { exec 'tmux', 'new-window', 'mpv', '--', $url; }
 
 elsif ($option eq 'watch (loop)') {
 	exec 'tmux', 'new-window', 'mpv', '--loop', '--', $url;
-	die "exec 'tmux new-window mpv' failed: $!\n";
 }
 
 else { die "$program_name doesn't support that option.\n"; }

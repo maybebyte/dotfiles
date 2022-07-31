@@ -15,6 +15,7 @@
 
 use strict;
 use warnings;
+use autodie ':all';
 use v5.14; # character interpretation
 
 # Extract the release tarball.
@@ -22,6 +23,9 @@ use Archive::Tar;
 
 # Create temporary directories.
 use File::Temp;
+
+# Run commands simply, with detailed diagnostics
+use IPC::System::Simple;
 
 # Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS 'decode_json';
@@ -39,7 +43,6 @@ sub make_github_api_url {
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
 
-
 sub make_github_release_url {
 	my ($username, $repository, $version) = @_;
 
@@ -56,16 +59,11 @@ sub make_github_release_url {
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
 system 'command -v gpg >/dev/null 2>&1';
-$? == 0 or die "GnuPG is not installed\n";
-
 
 # $element_web_ui_dir can be changed by modifying it in the environment:
 # ELEMENT_WEB_UI_DIR=/path/to/dir handle-element-web
 my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'} // '/var/www/htdocs/element-web';
-
-# Try to change directory now and quit early if it fails, before
-# downloading anything. Quitting after is a waste.
-chdir "$element_web_ui_dir" or die "Failed to change directory to $element_web_ui_dir: $!";
+chdir "$element_web_ui_dir";
 
 
 my $http = HTTP::Tiny->new(
@@ -85,9 +83,7 @@ $remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax
 	or die "Release version did not match expected release scheme.\n";
 
 
-open my $local_version_fh, '<', "$element_web_ui_dir/element/version"
-	or die "Could not open $element_web_ui_dir/element/version: $!";
-
+open my $local_version_fh, '<', "$element_web_ui_dir/element/version";
 chomp(my $local_version = 'v' . <$local_version_fh>);
 close $local_version_fh;
 
@@ -112,22 +108,13 @@ $http->mirror(
 system "gpg --verify $tmpdir/element-$remote_version.tar.gz.asc \\
 	$tmpdir/element-$remote_version.tar.gz >/dev/null 2>&1";
 
-$? == 0 or die <<'EOF';
-GPG verification failed. Make sure the public key mentioned in
-https://github.com/vector-im/element-web#getting-started is in
-the key ring.
-EOF
-
 
 my $tar = Archive::Tar->new;
 $tar->extract_archive("$tmpdir/element-$remote_version.tar.gz");
 
-
-unlink "$element_web_ui_dir/element"
-	or die "Failed to remove $element_web_ui_dir/element: $!";
+unlink "$element_web_ui_dir/element";
 
 # Symbolic link has to made with a relative path. Otherwise httpd(8)
 # will return a 404, because it cannot see anything outside of
 # /var/www.
-symlink "./element-$remote_version", "./element"
-	or die "Failed to create a symbolic link: $!";
+symlink "./element-$remote_version", "./element";

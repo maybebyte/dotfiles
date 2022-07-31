@@ -15,10 +15,12 @@
 
 use strict;
 use warnings;
+use autodie ':all';
 
 use File::Basename 'fileparse';
 use File::Temp;
 use HTTP::Tiny;
+use IPC::System::Simple;
 use URI;
 use OpenBSD::Pledge;
 use OpenBSD::Unveil;
@@ -55,7 +57,7 @@ $ENV{'DISPLAY'} or die "$program_name needs a graphical environment!\n";
 	or die "/usr/local/bin/sxiv cannot be read and executed.\n";
 
 
-chdir '/tmp' or die "Could not change directory to /tmp: $!\n";
+chdir '/tmp';
 my $tmpfile = File::Temp->new();
 
 my $http = HTTP::Tiny->new(
@@ -72,9 +74,9 @@ pledge( qw(rpath tmppath fattr proc exec prot_exec) )
 
 $response->{success} or die "$response->{status} $response->{reason}\n";
 
-open my $tmp_fh, '>', $tmpfile or die "$tmpfile could not be opened for writing: $!\n";
+open my $tmp_fh, '>', $tmpfile;
 say $tmp_fh $response->{content};
-close $tmp_fh or die "Could not close $tmpfile file handle: $!\n";
+close $tmp_fh;
 
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system '/usr/local/bin/sxiv', '--', $tmpfile;

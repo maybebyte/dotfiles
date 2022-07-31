@@ -15,11 +15,11 @@
 
 use strict;
 use warnings;
+use autodie;
 
 use File::Basename 'fileparse';
 
 my $program_name = fileparse $0;
-
 
 sub usage {
 	die <<EOT;
@@ -39,7 +39,7 @@ sub uniq {
 @ARGV or usage;
 
 for (@ARGV) {
-	open my $unsorted_file_fh, '<', $_ or die "Could not open '$_' for reading: $!\n";
+	open my $unsorted_file_fh, '<', $_;
 
 	my @lines;
 	while (my $line = <$unsorted_file_fh>) {
@@ -47,14 +47,12 @@ for (@ARGV) {
 		push @lines, $line;
 	}
 
-	close $unsorted_file_fh or die "Could not close '$_': $!\n";
+	close $unsorted_file_fh;
+	rename $_, "$_.bak";
 
-	rename $_, "$_.bak" or die "Could not rename '$_' to '$_.bak': $!\n";
 
-	open my $sorted_file_fh, '>', $_ or die "Could not open '$_' for writing: $!\n";
-
+	open my $sorted_file_fh, '>', $_;
 	my @unique_lines = uniq @lines;
 	say $sorted_file_fh join "\n", sort @unique_lines;
-
-	close $sorted_file_fh or die "Could not close '$_': $!\n";
+	close $sorted_file_fh;
 }
