@@ -12,6 +12,7 @@
 
 use strict;
 use warnings;
+use autodie;
 use File::Basename 'fileparse';
 use Number::Bytes::Human 'format_bytes';
 use OpenBSD::Pledge;

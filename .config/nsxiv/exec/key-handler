@@ -22,8 +22,10 @@
 
 use strict;
 use warnings;
+use autodie ':all';
 
 use IPC::Open2;
+use IPC::System::Simple;
 use File::Spec::Functions 'rel2abs';
 use File::Basename 'fileparse';
 use JSON::MaybeXS 'decode_json';
@@ -44,7 +46,7 @@ my $colors_wal = $xdg_cache_home . '/wal/colors.json';
 my ($background, $foreground, $color3);
 
 unless (eval {
-	open my $json_fh, '<', $colors_wal or die "Could not open '$colors_wal': $!\n";
+	open my $json_fh, '<', $colors_wal;
 
 	# JSON::MaybeXS is unhappy with slurping the whole file into a
 	# scalar and trying to read it that way. It can't find the string
@@ -55,7 +57,7 @@ unless (eval {
 		push @json_lines, $_;
 	}
 
-	close $json_fh or die "Could not close '$colors_wal': $!\n";
+	close $json_fh;
 
 	my $json = join "\n", @json_lines;
 	my $decoded_json = decode_json $json;
@@ -101,7 +103,7 @@ while (<STDIN>) {
 		waitpid($menu_pid, 0);
 
 		if ($user_response eq 'Yes') {
-			unlink $file or die "Could not delete '$file': $!\n";
+			unlink $file;
 			system 'notify-send', '--', "$file deleted!";
 		}
 	} elsif ($key eq 'm') {
