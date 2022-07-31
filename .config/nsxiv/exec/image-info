@@ -19,18 +19,19 @@ use OpenBSD::Unveil;
 
 pledge( qw(rpath unveil) ) or die "Pledge failed: $!\n";
 
-my $separator = ' | ';
-
 my $filename = shift // die "Need a file name.\n";
-my $basename = fileparse $filename;
 
 unveil($filename, 'r') or die "Unveil failed: $!\n";
 pledge( qw(rpath) ) or die "Pledge failed: $!\n";
+
+
+my $basename = fileparse $filename;
 
 my $width = shift // die "Need a width.\n";
 my $height = shift // die "Need a height.\n";
 my $geometry = $width . 'x' . $height;
 
 my $file_size = format_bytes( (stat $filename)[7] );
+my $separator = ' | ';
 
 print $file_size . $separator . $geometry . $separator . $basename;
