@@ -18,6 +18,7 @@ use warnings;
 use autodie;
 
 use File::Basename 'fileparse';
+use List::Util 'uniq';
 
 my $program_name = fileparse $0;
 
@@ -28,11 +29,6 @@ $program_name [file_to_sort] ...
 $program_name will append '.bak' to the original file name.
 $program_name removes redundant entries.
 EOT
-}
-
-sub uniq {
-	my %seen;
-	return grep {! $seen{$_}++} @_;
 }
 
 
