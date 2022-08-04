@@ -23,6 +23,7 @@ use strict;
 use warnings;
 use autodie ':all';
 use feature 'say';
+use experimental 'switch';
 
 # Determine program name.
 use File::Basename;
@@ -155,76 +156,79 @@ close $fzf_out;
 waitpid $fzf_pid, 0;
 
 
-if ($option eq 'copy duration') {
-	my $duration = get_duration $url;
-	copy_to_clipboard $duration;
-	exec 'notify-send', '--', "Copied video duration: ($duration).";
-}
+given ($option) {
 
-elsif ($option eq 'copy title') {
-	my $title = get_title $url;
-	copy_to_clipboard $title;
-	exec 'notify-send', '--', "Copied video title: ($title).";
-}
-
-elsif ($option eq 'download audio') {
-	exec 'tmux', 'new-window', 'yt-dlp', '-xf', 'bestaudio/best', '--', $url;
-}
-
-elsif ($option eq 'download file') {
-	chdir;
-
-	my $content = fetch_response($url);
-	my @uri_segments = $url->path_segments;
-	my $host = $url->authority;
-
-	my $dir_to_write_to = catdir('Downloads', $host);
-
-	unless (-e $dir_to_write_to) {
-		make_path($dir_to_write_to)
-			or die "Could not create directory named '$dir_to_write_to': $!\n";
+	when ('copy duration') {
+		my $duration = get_duration $url;
+		copy_to_clipboard $duration;
+		exec 'notify-send', '--', "Copied video duration: ($duration).";
 	}
 
-	chdir $dir_to_write_to;
+	when ('copy title') {
+		my $title = get_title $url;
+		copy_to_clipboard $title;
+		exec 'notify-send', '--', "Copied video title: ($title).";
+	}
 
-	open my $download_fh, '>', $uri_segments[-1];
-	print $download_fh $content;
-	close $download_fh;
+	when ('download audio') {
+		exec 'tmux', 'new-window', 'yt-dlp', '-xf', 'bestaudio/best', '--', $url;
+	}
+
+	when ('download file') {
+		chdir;
+
+		my $content = fetch_response($url);
+		my @uri_segments = $url->path_segments;
+		my $host = $url->authority;
+
+		my $dir_to_write_to = catdir('Downloads', $host);
+
+		unless (-e $dir_to_write_to) {
+			make_path($dir_to_write_to)
+				or die "Could not create directory named '$dir_to_write_to': $!\n";
+		}
+
+		chdir $dir_to_write_to;
+
+		open my $download_fh, '>', $uri_segments[-1];
+		print $download_fh $content;
+		close $download_fh;
+	}
+
+	when ('download video') {
+		exec 'tmux', 'new-window', 'yt-dlp', '--', $url;
+	}
+
+	when ('listen') {
+		exec 'tmux', 'new-window', 'mpv', '--no-resume-playback',
+			'--no-keep-open', '--no-pause', '--no-video', '--', $url;
+	}
+
+	when ('print duration') {
+		my $duration = get_duration $url;
+		exec 'notify-send', '--', "Video duration: ($duration).";
+	}
+
+	when ('print title') {
+		my $title = get_title $url;
+		exec 'notify-send', '--', "Video title: ($title).";
+	}
+
+	when ('read') {
+		my $content = fetch_response($url);
+		open my $zathura_fh, '|-', 'zathura', '-';
+		print $zathura_fh $content;
+
+		close $zathura_fh;
+		die "zathura: non-zero exit of $?\n" if $?;
+	}
+
+	when ('view image') { exec 'viewimg', $url; }
+	when ('watch') { exec 'tmux', 'new-window', 'mpv', '--', $url; }
+
+	when ('watch (loop)') {
+		exec 'tmux', 'new-window', 'mpv', '--loop', '--', $url;
+	}
+
+	default { die "$program_name doesn't support that option.\n"; }
 }
-
-elsif ($option eq 'download video') {
-	exec 'tmux', 'new-window', 'yt-dlp', '--', $url;
-}
-
-elsif ($option eq 'listen') {
-	exec 'tmux', 'new-window', 'mpv', '--no-resume-playback',
-		'--no-keep-open', '--no-pause', '--no-video', '--', $url;
-}
-
-elsif ($option eq 'print duration') {
-	my $duration = get_duration $url;
-	exec 'notify-send', '--', "Video duration: ($duration).";
-}
-
-elsif ($option eq 'print title') {
-	my $title = get_title $url;
-	exec 'notify-send', '--', "Video title: ($title).";
-}
-
-elsif ($option eq 'read') {
-	my $content = fetch_response($url);
-	open my $zathura_fh, '|-', 'zathura', '-';
-	print $zathura_fh $content;
-
-	close $zathura_fh;
-	die "zathura: non-zero exit of $?\n" if $?;
-}
-
-elsif ($option eq 'view image') { exec 'viewimg', $url; }
-elsif ($option eq 'watch') { exec 'tmux', 'new-window', 'mpv', '--', $url; }
-
-elsif ($option eq 'watch (loop)') {
-	exec 'tmux', 'new-window', 'mpv', '--loop', '--', $url;
-}
-
-else { die "$program_name doesn't support that option.\n"; }
