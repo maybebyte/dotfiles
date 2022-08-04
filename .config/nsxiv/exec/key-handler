@@ -19,6 +19,10 @@
 # make 'y' and 'Y' bindings useful in this context. Renaming files in
 # bulk could not happen this way (file clobbering), so that must be
 # revisited as well.
+#
+# eval the things we don't care about succeeding/failing (filehandler?),
+# or change filehandler so it doesn't send a >0 exit code when
+# move/rename/copy are given empty parameters.
 
 use strict;
 use warnings;
