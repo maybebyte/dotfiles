@@ -23,6 +23,7 @@
 use strict;
 use warnings;
 use autodie ':all';
+use experimental 'switch';
 
 use IPC::Open2;
 use IPC::System::Simple;
@@ -89,42 +90,45 @@ my $key = shift // die "Need a key.\n";
 while (<STDIN>) {
 	chomp(my $file = $_ // die "Need a file!\n");
 
-	if ($key eq 'c') {
-		system 'filehandler', 'copy', $file;
-	} elsif ($key eq 'd') {
-		my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
-			'-p', "Really delete $file?") // die "Could not open dmenu: $!\n";
+	given ($key) {
 
-		say $menu_in join "\n", qw(Yes No);
-		close $menu_in or die "Could not close dmenu STDIN: $!\n";
+		when ('c') { system 'filehandler', 'copy', $file; }
 
-		chomp(my $user_response = <$menu_out> // 'No');
-		close $menu_out or die "Could not close dmenu STDOUT: $!\n";
-		waitpid($menu_pid, 0);
+		when ('d') {
+			my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
+				'-p', "Really delete $file?") // die "Could not open dmenu: $!\n";
 
-		if ($user_response eq 'Yes') {
-			unlink $file;
-			system 'notify-send', '--', "$file deleted!";
+			say $menu_in join "\n", qw(Yes No);
+			close $menu_in or die "Could not close dmenu STDIN: $!\n";
+
+			chomp(my $user_response = <$menu_out> // 'No');
+			close $menu_out or die "Could not close dmenu STDOUT: $!\n";
+			waitpid($menu_pid, 0);
+
+			if ($user_response eq 'Yes') {
+				unlink $file;
+				system 'notify-send', '--', "$file deleted!";
+			}
 		}
-	} elsif ($key eq 'm') {
-		system 'filehandler', 'move', $file;
-	} elsif ($key eq 'n') {
-		system 'filehandler', 'rename', $file;
-	} elsif ($key eq 'r') {
-		system 'convert', '-rotate', '90', '--', $file, $file;
-	} elsif ($key eq 'R') {
-		system 'convert', '-rotate', '-90', '--', $file, $file;
-	} elsif ($key eq 'f') {
-		system 'convert', '-flop', '--', $file, $file;
-	} elsif ($key eq 'y') {
-		my $basename = fileparse $file;
-		yank $basename;
-		system 'notify-send', '--', "File name ($basename) copied to clipboard.";
-	} elsif ($key eq 'Y') {
-		my $absolute_path = rel2abs $file // die "Need an absolute path!\n";
-		yank $absolute_path;
-		system 'notify-send', '--', "File path ($absolute_path) copied to clipboard.";
-	} else {
-		die "Key not bound!\n";
+
+		when ('m') { system 'filehandler', 'move', $file; }
+		when ('n') { system 'filehandler', 'rename', $file; }
+		when ('r') { system 'convert', '-rotate', '90', '--', $file, $file; }
+		when ('R') { system 'convert', '-rotate', '-90', '--', $file, $file; }
+		when ('f') { system 'convert', '-flop', '--', $file, $file; }
+
+		when ('y') {
+			my $basename = fileparse $file;
+			yank $basename;
+			system 'notify-send', '--', "File name ($basename) copied to clipboard.";
+		}
+
+		when ('Y') {
+			my $absolute_path = rel2abs $file // die "Need an absolute path!\n";
+			yank $absolute_path;
+			system 'notify-send', '--', "File path ($absolute_path) copied to clipboard.";
+		}
+
+		default { die "Key not bound!\n"; }
 	}
 }
