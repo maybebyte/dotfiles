@@ -19,10 +19,11 @@
 # may not need fzf (although it does make things easy).
 # this could use flags/args so that it can be used non-interactively
 
-use strict;
-use warnings;
 use autodie ':all';
 use feature 'say';
+use strict;
+use warnings;
+
 use experimental 'switch';
 
 # Determine program name.

@@ -25,9 +25,10 @@
 # move/rename/copy are given empty parameters.
 
 use autodie ':all';
-use experimental 'switch';
 use strict;
 use warnings;
+
+use experimental 'switch';
 
 use File::Basename 'fileparse';
 use File::Spec::Functions 'rel2abs';
