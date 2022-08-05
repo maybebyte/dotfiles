@@ -144,8 +144,7 @@ die "$program_name only handles the 'https' scheme.\n"
 check_dependencies @dependencies;
 
 
-my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf')
-	// die "Failed to run fzf: $!\n";
+my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf');
 
 say $fzf_in join "\n", @options;
 close $fzf_in;
