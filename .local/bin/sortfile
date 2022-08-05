@@ -48,7 +48,6 @@ for (@ARGV) {
 
 
 	open my $sorted_file_fh, '>', $_;
-	my @unique_lines = uniq @lines;
-	say $sorted_file_fh join "\n", sort @unique_lines;
+	say $sorted_file_fh join "\n", sort &uniq(@lines);
 	close $sorted_file_fh;
 }
