@@ -37,11 +37,10 @@ use JSON::MaybeXS 'decode_json';
 
 sub yank {
 	chomp(my $stuff_to_copy = shift // die "yank needs something to copy!\n");
-	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard'
-		or die "Could not run xclip: $!\n";
+	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
 
 	print $xclip_fh $stuff_to_copy;
-	close $xclip_fh or die "Could not close xclip STDIN: $!\n";
+	close $xclip_fh;
 }
 
 
@@ -100,13 +99,13 @@ while (<STDIN>) {
 
 		when ('d') {
 			my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
-				'-p', "Really delete $file?") // die "Could not open dmenu: $!\n";
+				'-p', "Really delete $file?");
 
 			say $menu_in join "\n", qw(Yes No);
-			close $menu_in or die "Could not close dmenu STDIN: $!\n";
+			close $menu_in;
 
 			chomp(my $user_response = <$menu_out> // 'No');
-			close $menu_out or die "Could not close dmenu STDOUT: $!\n";
+			close $menu_out;
 			waitpid($menu_pid, 0);
 
 			if ($user_response eq 'Yes') {
