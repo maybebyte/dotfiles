@@ -16,7 +16,6 @@
 use strict;
 use warnings;
 use autodie ':all';
-use v5.14; # character interpretation
 
 # Extract the release tarball.
 use Archive::Tar;

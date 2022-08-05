@@ -13,18 +13,18 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+use autodie ':all';
+use feature 'say';
 use strict;
 use warnings;
-use autodie ':all';
 
 use File::Basename 'fileparse';
 use File::Temp;
 use HTTP::Tiny;
 use IPC::System::Simple;
-use URI;
 use OpenBSD::Pledge;
 use OpenBSD::Unveil;
-use v5.10; # say
+use URI;
 
 
 my %unveiled_paths = (
@@ -52,7 +52,7 @@ $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
 
-$ENV{'DISPLAY'} or die "$program_name needs a graphical environment!\n";
+$ENV{'DISPLAY'} // die "$program_name needs a graphical environment!\n";
 -e -x -r '/usr/local/bin/sxiv'
 	or die "/usr/local/bin/sxiv cannot be read and executed.\n";
 

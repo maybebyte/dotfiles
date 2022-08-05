@@ -10,9 +10,10 @@
 # TODO:
 # Review Number::Bytes::Human to see exactly how it does what it does.
 
+use autodie;
 use strict;
 use warnings;
-use autodie;
+
 use File::Basename 'fileparse';
 use Number::Bytes::Human 'format_bytes';
 use OpenBSD::Pledge;

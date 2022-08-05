@@ -13,21 +13,21 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+use autodie ':all';
 use strict;
 use warnings;
-use autodie;
+
+# Get the basename of the program we're running.
+use File::Basename 'fileparse';
+
+# Make API requests.
+use HTTP::Tiny;
 
 # Run commands simply, with detailed diagnostics.
 use IPC::System::Simple;
 
 # Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS 'decode_json';
-
-# Make API requests.
-use HTTP::Tiny;
-
-# Get the basename of the program we're running.
-use File::Basename 'fileparse';
 
 
 sub make_github_api_url {
@@ -54,7 +54,7 @@ system 'command -v notify-send >/dev/null 2>&1';
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
-die "TLS is not supported: $!\n" unless $http->can_ssl;
+$http->can_ssl or die "TLS is not supported: $!\n";
 
 
 my $github_api_response = $http->get(make_github_api_url('matrix-org', 'synapse'));

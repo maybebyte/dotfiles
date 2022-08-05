@@ -24,15 +24,15 @@
 # or change filehandler so it doesn't send a >0 exit code when
 # move/rename/copy are given empty parameters.
 
-use strict;
-use warnings;
 use autodie ':all';
 use experimental 'switch';
+use strict;
+use warnings;
 
+use File::Basename 'fileparse';
+use File::Spec::Functions 'rel2abs';
 use IPC::Open2;
 use IPC::System::Simple;
-use File::Spec::Functions 'rel2abs';
-use File::Basename 'fileparse';
 use JSON::MaybeXS 'decode_json';
 
 sub yank {
