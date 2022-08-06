@@ -76,10 +76,10 @@ sub fetch_response {
 	my $http = HTTP::Tiny->new(
 		verify_SSL => 1,
 	);
-	die "TLS is unsupported: $!\n" unless $http->can_ssl;
+	$http->can_ssl or die "TLS is unsupported: $!\n";
 
 	my $response = $http->get($fetch_url);
-	die "$response->{status} $response->{reason}" unless $response->{success};
+	$response->{success} or die "$response->{status} $response->{reason}" ;
 
 	return $response->{content};
 }
@@ -139,8 +139,8 @@ chomp(my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n");
 
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
-die "$program_name only handles the 'https' scheme.\n"
-	unless $url->scheme // '' eq 'https';
+$url->scheme eq 'https'
+	or die "$program_name only handles the 'https' scheme.\n";
 
 check_dependencies @dependencies;
 

@@ -36,8 +36,8 @@ use HTTP::Tiny;
 sub make_github_api_url {
 	my ($username, $repository) = @_;
 
-	$username or die '$username is undefined';
-	$repository or die '$repository is undefined';
+	$username // die '$username is undefined';
+	$repository // die '$repository is undefined';
 
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
@@ -45,9 +45,9 @@ sub make_github_api_url {
 sub make_github_release_url {
 	my ($username, $repository, $version) = @_;
 
-	$username or die '$username is undefined';
-	$repository or die '$repository is undefined';
-	$version or die '$version is undefined';
+	$username // die '$username is undefined';
+	$repository // die '$repository is undefined';
+	$version // die '$version is undefined';
 
 	return "https://github.com/$username/$repository/releases/download/$version";
 }
@@ -68,7 +68,7 @@ chdir "$element_web_ui_dir";
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
-die "TLS is not supported: $!\n" unless $http->can_ssl;
+$http->can_ssl or die "TLS is not supported: $!\n"
 
 my $api_response = $http->get(make_github_api_url('vector-im', 'element-web'));
 $api_response->{success} or die "$api_response->{status} $api_response->{reason}";

@@ -33,15 +33,15 @@ use JSON::MaybeXS 'decode_json';
 sub make_github_api_url {
 	my ($username, $repository) = @_;
 
-	$username or die '$username is undefined';
-	$repository or die '$repository is undefined';
+	$username // die '$username is undefined';
+	$repository // die '$repository is undefined';
 
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
 
 sub make_federation_api_url {
 	my $server_name = shift;
-	$server_name or die '$server_name is undefined';
+	$server_name // die '$server_name is undefined';
 	return "https://federationtester.matrix.org/api/report?server_name=$server_name";
 }
 
