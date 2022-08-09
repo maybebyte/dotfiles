@@ -1,6 +1,5 @@
-#!/bin/sh
-# shellcheck disable=SC1090
-# Copyright (c) 2020-2022 Ashlen <eurydice@riseup.net>
+#!/usr/bin/env perl
+# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -14,19 +13,44 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set -e
+# TODO:
+# Explore a configuration file for fallback colors, preload directories,
+# and so forth.
+#
+# The import colors process could be packaged and imported to ease
+# cognitive load (I don't know how to package things yet).
+#
+# pledge (and maybe unveil too).
 
-readonly PROGRAM_NAME="${0##*/}"
+use autodie ':all';
+use strict;
+use warnings;
 
-err() {
-	printf '%s\n' "$*" >&2
-	exit 1
-}
+use experimental qw(smartmatch switch);
+use feature 'say';
 
-usage() {
-	cat >&2 <<EOF
-usage:
-${PROGRAM_NAME} [operation] [file]
+# Base modules.
+use File::Basename 'fileparse';
+use File::Copy qw(copy move);
+use File::Find 'find';
+use File::Spec::Functions qw(catdir catfile);
+use IPC::Open2;
+
+# External modules.
+use File::MimeInfo::Magic 'magic';
+use IPC::System::Simple;
+use JSON::MaybeXS 'decode_json';
+
+
+# Variables used in subroutines.
+my $home = $ENV{'HOME'} // (getpwuid $>)[7] or die "No home directory found!\n";
+my $program_name = fileparse $0;
+my @found_directories;
+
+
+sub usage {
+	die <<EOF;
+usage: $program_name [operation] [file]
 
 operations:
 help - display help
@@ -34,139 +58,153 @@ copy - copy file
 move - move file
 rename - rename file
 EOF
-	exit 1
 }
 
-menu() {
-	dmenu -i -fn 'mono-12' \
-		-nb "${background:-#040516}" \
-		-nf "${color3:-#9974e7}" \
-		-sb "${background:-#040516}" \
-		-sf "${foreground:-#e0cef3}" \
-		"$@"
-}
+sub get_preload_dir {
+	my $file_to_examine = shift or die "No file for get_preload_dir given.\n";
+	my $mimetype = magic($file_to_examine);
+	my $preload_dir;
 
-print_preload_dir() {
-	readonly FILE_TO_EXAMINE="$1"
-
-	MIMETYPE="$(file -ib -- "${FILE_TO_EXAMINE}")"
-	readonly MIMETYPE
-
-	case "${MIMETYPE}" in
-		application/epub) echo "${HOME}/books" ;;
-		application/pdf) echo "${HOME}/books" ;;
-		image/vnd.djvu) echo "${HOME}/books" ;;
-		image/*) echo "${HOME}/pics" ;;
-		video/*) echo "${HOME}/videos" ;;
-		*) err 'No preload directory for this filetype.' ;;
-	esac
-}
-
-handle_destination() {
-	readonly FILE_WITHOUT_DESTINATION="$1"
-	readonly BASENAME="${FILE_WITHOUT_DESTINATION##*/}"
-
-	PRELOAD_DIR="$(print_preload_dir "${FILE_WITHOUT_DESTINATION}")"
-	readonly PRELOAD_DIR
-
-	[ -d "${PRELOAD_DIR}" ] || err "'${PRELOAD_DIR}' is not a directory."
-
-
-	# Substitute ${HOME} with a tilde so the list of directories in
-	# dmenu is more readable.
-	DESTINATION="$(
-		{
-		find "${PRELOAD_DIR}" -type d | sed "s|^${HOME}|~|g"
-		echo 'exit'
-		} | menu -l 10 -p "Where should ${BASENAME} be placed?"
-	)"
-
-	[ -n "${DESTINATION}" ] || err "${PROGRAM_NAME} needs a destination."
-	[ "${DESTINATION}" = 'exit' ] && exit
-
-
-	# Revert prior substitution.
-	DESTINATION="$(echo "${DESTINATION}" | sed -- "s|^~|${HOME}|g")"
-	readonly DESTINATION
-
-	mkdir -p -- "${DESTINATION}" ||
-		err "Failed to create directory '${DESTINATION}'."
-}
-
-copy_file() {
-	readonly FILE_TO_COPY="$1"
-	handle_destination "${FILE_TO_COPY}"
-
-	cp -- "${FILE_TO_COPY}" "${DESTINATION}/${BASENAME}" && {
-		notify-send -- "'${BASENAME}' copied to '${DESTINATION}'"
-		return
+	given ($mimetype) {
+		when (m{/(?:epub|pdf|djvu)}a)
+			{ $preload_dir = catfile $home, 'books'; }
+		when (m{\Aimage/}a)
+			{ $preload_dir = catfile $home, 'pics'; }
+		when (m{\Avideo/}a)
+			{ $preload_dir = catfile $home, 'videos'; }
 	}
 
-	err "Failed to copy '${BASENAME}'"
+	return ($preload_dir, $mimetype);
 }
 
-move_file() {
-	readonly FILE_TO_MOVE="$1"
-	handle_destination "${FILE_TO_MOVE}"
+sub wanted {
+	-d && push @found_directories, $File::Find::name;
+}
 
-	mv -- "${FILE_TO_MOVE}" "${DESTINATION}/${BASENAME}" && {
-		notify-send -- "'${BASENAME}' moved to '${DESTINATION}'"
-		return
+sub build_filetree {
+	my $file_without_destination = shift
+		or die "No file for build_filetree given.\n";
+
+	my ($preload_dir, $mimetype) = get_preload_dir $file_without_destination;
+	$preload_dir or die "get_preload_dir failed. Is '$mimetype' handled yet?\n";
+	-e $preload_dir or die "'$preload_dir' doesn't exist.\n";
+	-d _ or die "'$preload_dir' isn't a directory.\n";
+
+	return find({wanted => \&wanted}, $preload_dir);
+}
+
+
+my $operation = shift or usage;
+$operation eq 'help' and usage;
+my $file_path = shift or usage;
+
+my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
+my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
+my ($background, $foreground, $color3);
+
+
+unless (eval {
+	open my $json_fh, '<', $colors_wal;
+
+	# JSON::MaybeXS is unhappy with slurping the whole file into a
+	# scalar and trying to read it that way. It can't find the string
+	# terminator for some reason.
+	my @json_lines;
+	while (<$json_fh>) {
+		chomp;
+		push @json_lines, $_;
 	}
 
-	err "Failed to move '${BASENAME}'"
-}
-
-rename_file() {
-	readonly FILE_TO_RENAME="$1"
-	readonly DIRNAME="${FILE_TO_RENAME%/*}"
-	readonly BASENAME="${FILE_TO_RENAME##*/}"
-
-	NEW_FILENAME="$(echo 'exit' | menu -p "Rename '${BASENAME}' to what?")"
-	readonly NEW_FILENAME
+	close $json_fh;
 
 
-	[ -n "${NEW_FILENAME}" ] ||
-		err "${PROGRAM_NAME} needs a new name to rename '${BASENAME}' to."
+	my $json = join "\n", @json_lines;
+	my $decoded_json = decode_json $json;
 
-	[ "${NEW_FILENAME}" = 'exit' ] && exit
+	$background = ${$decoded_json}{'special'}{'background'}
+		// die "pywal background color could not be read from $colors_wal.\n";
+	$foreground = ${$decoded_json}{'special'}{'foreground'}
+		// die "pywal foreground color could not be read from $colors_wal.\n";
+	$color3 = ${$decoded_json}{'colors'}{'color3'}
+		// die "pywal color3 could not be read from $colors_wal.\n";
+
+	return 1;
+
+}) { print STDERR "Couldn't import colors from '$colors_wal': $@" if $@; };
 
 
-	mv "${FILE_TO_RENAME}" "${DIRNAME}/${NEW_FILENAME}" && {
-		notify-send -- "'${BASENAME}' renamed to '${NEW_FILENAME}'"
-		return
+my @dmenu_options = (
+	'-i',
+	'-fn', 'mono-12',
+	'-nb', $background // '#040516',
+	'-nf', $color3 // '#9974e7',
+	'-sb', $background // '#040516',
+	'-sf', $foreground // '#e0cef3',
+);
+
+
+my ($base_file, $dirs) = fileparse $file_path;
+if ($operation eq 'move' || $operation eq 'copy') {
+	# Used for its side-effects (populating @found_directories).
+	build_filetree $file_path;
+
+	# To conserve space in the dmenu prompt, $home is replaced with a
+	# tilde for each entry.
+	my @directories_with_tildes;
+	for (@found_directories) {
+		s/\A$home/~/a;
+		push @directories_with_tildes, $_;
 	}
 
-	err "Failed to rename '${BASENAME}' to '${NEW_FILENAME}'"
+	@directories_with_tildes = sort @directories_with_tildes;
+
+
+	my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', '-l', 10,
+		@dmenu_options, '-p', "Where should $base_file be placed?");
+
+	say $menu_in "exit\n", join("\n", @directories_with_tildes);
+	close $menu_in;
+
+	chomp(my $user_input = <$menu_out> // 'exit');
+	close $menu_out;
+
+	waitpid $menu_pid, 0;
+	exit if $user_input eq 'exit';
+
+
+	# Tilde reverted since we need to do some checks.
+	$user_input =~ s/\A~/$home/;
+	-e -d $user_input
+		or die "'$user_input' doesn't exist or isn't a directory.";
+
+	my $destination = catfile $user_input, $base_file;
+
+	# Tilde added again to conserve space in notify-send output.
+	$user_input =~ s/\A$home/~/;
+
+
+	if ($operation eq 'move') {
+		move $file_path, $destination;
+		system 'notify-send', '--', "Moved '$base_file' to '$user_input'";
+	} elsif ($operation eq 'copy') {
+		copy $file_path, $destination;
+		system 'notify-send', '--', "Copied '$base_file' to '$user_input'";
+	}
+} elsif ($operation eq 'rename') {
+	my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', '-l', 10,
+		@dmenu_options, '-p', "Rename $base_file to what?");
+
+	say $menu_in "exit\n";
+	close $menu_in;
+
+	chomp(my $user_input = <$menu_out> // 'exit');
+	close $menu_out;
+
+	waitpid $menu_pid, 0;
+	exit if $user_input eq 'exit';
+
+	rename $file_path, catfile($dirs, $user_input);
+	system 'notify-send', '--', "Renamed '$base_file' to '$user_input'";
+} else {
+	die "$operation isn't a supported operation!\n";
 }
-
-[ -n "$1" ] || usage
-[ -n "$2" ] || usage
-[ -n "${DISPLAY}" ] || err "${PROGRAM_NAME} requires a graphical environment."
-
-set -u
-
-
-readonly DEPENDENCIES='dmenu
-notify-send'
-
-echo "${DEPENDENCIES}" | while read -r dependency; do
-	command -v -- "${dependency}" >/dev/null 2>&1 ||
-		err "${dependency} not found in PATH."
-done
-
-
-readonly COLORS_SH="${XDG_CACHE_HOME:-${HOME}/.cache}/wal/colors.sh"
-. "${COLORS_SH}"
-
-FILE_TO_HANDLE="$(readlink -f -- "$2")"
-readonly FILE_TO_HANDLE
-
-readonly OPERATION="$1"
-
-case "${OPERATION}" in
-	'copy') copy_file "${FILE_TO_HANDLE}" ;;
-	'move') move_file "${FILE_TO_HANDLE}" ;;
-	'rename') rename_file "${FILE_TO_HANDLE}" ;;
-	'help'|*) usage ;;
-esac
