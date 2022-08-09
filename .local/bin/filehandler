@@ -37,7 +37,7 @@ use File::Spec::Functions qw(catdir catfile);
 use IPC::Open2;
 
 # External modules.
-use File::MimeInfo::Magic 'magic';
+use File::MimeInfo::Magic;
 use IPC::System::Simple;
 use JSON::MaybeXS 'decode_json';
 
@@ -62,7 +62,7 @@ EOF
 
 sub get_preload_dir {
 	my $file_to_examine = shift or die "No file for get_preload_dir given.\n";
-	my $mimetype = magic($file_to_examine);
+	my $mimetype = mimetype($file_to_examine);
 	my $preload_dir;
 
 	given ($mimetype) {
