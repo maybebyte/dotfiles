@@ -68,7 +68,7 @@ chdir "$element_web_ui_dir";
 my $http = HTTP::Tiny->new(
 	verify_SSL => 1,
 );
-$http->can_ssl or die "TLS is not supported: $!\n"
+$http->can_ssl or die "TLS is not supported: $!\n";
 
 my $api_response = $http->get(make_github_api_url('vector-im', 'element-web'));
 $api_response->{success} or die "$api_response->{status} $api_response->{reason}";
