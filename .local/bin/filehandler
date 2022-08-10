@@ -177,10 +177,10 @@ if ($operation eq 'move' || $operation eq 'copy') {
 
 
 	if ($operation eq 'move') {
-		move $file_path, $destination;
+		move $file_path, $destination or die "'$base_file' not moved: $!\n";
 		system 'notify-send', '--', "Moved '$base_file' to '$user_input'";
 	} elsif ($operation eq 'copy') {
-		copy $file_path, $destination;
+		copy $file_path, $destination or die "'$base_file' not copied: $!\n";
 		system 'notify-send', '--', "Copied '$base_file' to '$user_input'";
 	}
 } elsif ($operation eq 'rename') {
