@@ -51,20 +51,12 @@ my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
 my ($background, $foreground, $color3);
 
 unless (eval {
-	open my $json_fh, '<', $colors_wal;
+	my $json = do {
+		local $/;
+		open my $json_fh, '<', $colors_wal;
+		<$json_fh>;
+	};
 
-	# JSON::MaybeXS is unhappy with slurping the whole file into a
-	# scalar and trying to read it that way. It can't find the string
-	# terminator for some reason.
-	my @json_lines;
-	while (<$json_fh>) {
-		chomp;
-		push @json_lines, $_;
-	}
-
-	close $json_fh;
-
-	my $json = join "\n", @json_lines;
 	my $decoded_json = decode_json $json;
 
 	$background = ${$decoded_json}{'special'}{'background'}
