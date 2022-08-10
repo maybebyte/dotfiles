@@ -82,9 +82,11 @@ $remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax
 	or die "Release version did not match expected release scheme.\n";
 
 
-open my $local_version_fh, '<', "$element_web_ui_dir/element/version";
-chomp(my $local_version = 'v' . <$local_version_fh>);
-close $local_version_fh;
+chomp(my $local_version = do {
+	local $/;
+	open my $local_version_fh, '<', "$element_web_ui_dir/element/version";
+	'v' . <$local_version_fh>;
+});
 
 $remote_version gt $local_version
 	or die "Remote version of element-web is not newer than local version.\n";
