@@ -42,13 +42,13 @@ case "$(uname)" in
 		GATEWAY="$(netstat -rn 2>/dev/null | awk '/^default/{print $2}')"
 		export GATEWAY
 
-		# prepend /usr/games and ~/.local/bin to PATH
+		# prepend ~/.local/bin to PATH
 		#
 		# PATH parameter expansion explanation:
 		# https://unix.stackexchange.com/a/415028
 		#
 		# the extra colon is intentional, it's the delimiter for PATH.
-		export PATH="${XDG_BIN_HOME}:/usr/games${PATH:+:${PATH}}"
+		export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
 
 		;;
 
