@@ -358,7 +358,7 @@ randpics [directory with pics]' >&2
 
 	esac
 
-	rffd -c 0 pic "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
+	rffd image "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
 }
 
 # with rffd, open up random videos with mpv(1).
@@ -376,7 +376,7 @@ randvids [directory with videos]' >&2
 
 	esac
 
-	rffd -c 0 video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
+	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
 }
 
 # choose a book with fzf and read it.

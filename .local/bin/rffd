@@ -1,5 +1,5 @@
-#!/bin/sh
-# Copyright (c) 2020-2022 Ashlen <eurydice@riseup.net>
+#!/usr/bin/env perl
+# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -13,101 +13,52 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set -e
+use autodie;
+use strict;
+use warnings;
 
-err() {
-	printf '%s\n' "$*" >&2
-	exit 1
-}
+use feature 'say';
 
-# usage information for random file from directory (rffd)
-usage() {
-	cat >&2 <<EOF
-${0##*/} [flags] [filetype] [directory]
+use File::Basename 'fileparse';
+use File::Find;
+use List::Util 'shuffle';
 
-flags can be:
--c: number of files to return, aka (c)ount. specify 0 for no
-	limit/count, i.e., return all results.
--h: usage information
+sub usage {
+	my $program_name = fileparse $0;
+	die <<EOF;
+$program_name [filetype] [directory]
 
 filetype can be:
 video - webm, mp4, mkv
-pic - jpg, jpeg, png
+image - jpg, jpeg, png
 any - matches all files
 EOF
-	exit 1
-}
-
-# the base find(1) command for find_* functions to use. will only return
-# files.
-#
-# $1 is a path for find(1) to search. base_find_cmd() then accepts all
-# positional parameters after that.
-base_find_cmd() {
-	readonly SEARCH_PATH="$1"
-	[ -d "${SEARCH_PATH}" ] || err "${SEARCH_PATH} is not a directory"
-
-	shift
-	find "${SEARCH_PATH}" -type f "$@"
-}
-
-# given a directory, print all video files in it.
-find_videos() {
-	base_find_cmd "$1" \
-		\( -iname '*.webm' \
-		-o -iname '*.mp4' \
-		-o -iname '*.mkv' \)
-}
-
-# given a directory, print all photos in it.
-find_pics() {
-	base_find_cmd "$1" \
-		\( -iname '*.jpg' \
-		-o -iname '*.jpeg' \
-		-o -iname '*.png' \)
 }
 
 
-while getopts c:h opt; do
-	case "${opt}" in
-		c) readonly COUNT="${OPTARG}" ;;
-		h|*) usage ;;
-	esac
-done
-shift $((OPTIND - 1))
+my $filetype_to_look_for = shift or usage;
+my $directory_to_search_in = shift or usage;
+-e $directory_to_search_in or die "'$directory_to_search_in doesn't exist.\n";
+-d _ or die "'$directory_to_search_in isn't a directory.\n";
 
 
-if [ -z "$1" ]; then
-	echo "${0##*/} needs a filetype." >&2
-	echo >&2
-	usage
-elif [ -z "$2" ]; then
-	echo "${0##*/} needs a directory to search." >&2
-	echo >&2
-	usage
-fi
+my @wanted_files;
+sub wanted {
+	-f or return;
 
-set -u
-
-
-# if ${COUNT} is unset, 1 result is returned by default
-: "${COUNT:=1}"
-
-# sanity check
-case "${COUNT}" in
-	*[!0-9]*) err 'The -c option only accepts integers.' ;;
-esac
+	if ($filetype_to_look_for eq 'video') {
+		/\.(?:mkv|mp4|webm)\z/ or return;
+		push @wanted_files, $File::Find::name;
+	} elsif ($filetype_to_look_for eq 'image') {
+		/\.(?:jpg|jpeg|png)\z/ or return;
+		push @wanted_files, $File::Find::name;
+	} elsif ($filetype_to_look_for eq 'any') {
+		push @wanted_files, $File::Find::name;
+	} else {
+		die "'$filetype_to_look_for' isn't a supported filetype.\n";
+	}
+}
 
 
-case "$1" in
-	'video') find_videos "$2" ;;
-	'pic') find_pics "$2" ;;
-	'any') base_find_cmd "$2" ;;
-	*) err 'Invalid filetype.' ;;
-esac |
-
-	if [ "${COUNT}" -eq 0 ]; then
-		sort -R
-	else
-		sort -R | head -"${COUNT}"
-	fi
+File::Find::find({wanted => \&wanted}, $directory_to_search_in);
+say join("\n", shuffle(@wanted_files)) if @wanted_files;
