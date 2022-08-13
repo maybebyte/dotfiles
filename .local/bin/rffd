@@ -48,15 +48,15 @@ sub wanted {
 
 	if ($filetype_to_look_for eq 'video') {
 		/\.(?:mkv|mp4|webm)\z/ or return;
-		push @wanted_files, $File::Find::name;
 	} elsif ($filetype_to_look_for eq 'image') {
 		/\.(?:jpg|jpeg|png)\z/ or return;
-		push @wanted_files, $File::Find::name;
 	} elsif ($filetype_to_look_for eq 'any') {
-		push @wanted_files, $File::Find::name;
+		# do nothing
 	} else {
 		die "'$filetype_to_look_for' isn't a supported filetype.\n";
 	}
+
+	push @wanted_files, $File::Find::name;
 }
 
 
