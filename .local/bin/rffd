@@ -42,6 +42,8 @@ my $directory_to_search_in = shift or usage;
 -d _ or die "'$directory_to_search_in isn't a directory.\n";
 
 
+# TODO: This really shouldn't be checking for the filetype on every
+# invocation.
 my @wanted_files;
 sub wanted {
 	-f or return;
@@ -60,5 +62,5 @@ sub wanted {
 }
 
 
-File::Find::find({wanted => \&wanted}, $directory_to_search_in);
+find({wanted => \&wanted}, $directory_to_search_in);
 say join("\n", shuffle(@wanted_files)) if @wanted_files;
