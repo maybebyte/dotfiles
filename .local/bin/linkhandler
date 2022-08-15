@@ -49,19 +49,19 @@ my $program_name = fileparse $0;
 
 
 sub get_duration {
-	my $yt_url = shift // die "get_duration needs a URL.\n";
+	my $yt_url = shift or die "get_duration needs a URL.\n";
 	chomp(my $duration = capturex 'yt-dlp', '--get-duration', '--', $yt_url);
 	return $duration;
 }
 
 sub get_title {
-	my $yt_url = shift // die "get_title needs a URL.\n";
+	my $yt_url = shift or die "get_title needs a URL.\n";
 	chomp(my $title = capturex 'yt-dlp', '-e', '--', $yt_url);
 	return $title;
 }
 
 sub copy_to_clipboard {
-	chomp(my $stuff_to_copy = shift // die "copy_to_clipboard needs something to copy.\n");
+	chomp(my $stuff_to_copy = shift or die "copy_to_clipboard needs something to copy.\n");
 
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
 	print $xclip_fh $stuff_to_copy;
@@ -72,7 +72,7 @@ sub copy_to_clipboard {
 }
 
 sub fetch_response {
-	my $fetch_url = shift // die "fetch_response needs a URL.\n";
+	my $fetch_url = shift or die "fetch_response needs a URL.\n";
 	my $http = HTTP::Tiny->new(
 		verify_SSL => 1,
 	);

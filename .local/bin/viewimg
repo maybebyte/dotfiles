@@ -47,7 +47,7 @@ pledge( qw(rpath tmppath fattr proc exec prot_exec dns inet) )
 
 my $program_name = fileparse $0;
 
-my $url = shift // die "$program_name needs a URL.\n";
+my $url = shift or die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
 $url->scheme eq 'https' or die "$program_name only supports the 'https' scheme.\n";
