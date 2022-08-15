@@ -38,29 +38,49 @@ EOF
 
 my $filetype_to_look_for = shift or usage;
 my $directory_to_search_in = shift or usage;
--e $directory_to_search_in or die "'$directory_to_search_in doesn't exist.\n";
--d _ or die "'$directory_to_search_in isn't a directory.\n";
+-e $directory_to_search_in or die "'$directory_to_search_in' doesn't exist.\n";
+-d _ or die "'$directory_to_search_in' isn't a directory.\n";
 
-
-# TODO: This really shouldn't be checking for the filetype on every
-# invocation.
 my @wanted_files;
-sub wanted {
+
+# Takes a subroutine. Returns a closure that will call the subroutine.
+#
+# https://www.perlmonks.org/?node_id=109068
+#
+# NOTE: Still not sure if this is the best way to handle different
+# callback subroutines for File::Find, but it's a lot better than
+# checking the filetype on every invocation.
+sub make_wanted {
+	my $sub = shift;
+	return sub { $sub->(); };
+}
+
+sub randvids {
+	/\.(?:mkv|mp4|webm)\z/ or return;
 	-f or return;
+	push @wanted_files, $File::Find::name;
+}
 
-	if ($filetype_to_look_for eq 'video') {
-		/\.(?:mkv|mp4|webm)\z/ or return;
-	} elsif ($filetype_to_look_for eq 'image') {
-		/\.(?:jpg|jpeg|png)\z/ or return;
-	} elsif ($filetype_to_look_for eq 'any') {
-		# do nothing
-	} else {
-		die "'$filetype_to_look_for' isn't a supported filetype.\n";
-	}
+sub randpics {
+	/\.(?:jpe?g|png)\z/ or return;
+	-f or return;
+	push @wanted_files, $File::Find::name;
+}
 
+sub randfiles {
+	-f or return;
 	push @wanted_files, $File::Find::name;
 }
 
 
-find({wanted => \&wanted}, $directory_to_search_in);
+if ($filetype_to_look_for eq 'video') {
+	find(make_wanted(\&randvids), $directory_to_search_in);
+} elsif ($filetype_to_look_for eq 'image') {
+	find(make_wanted(\&randpics), $directory_to_search_in);
+} elsif ($filetype_to_look_for eq 'any') {
+	find(make_wanted(\&randfiles), $directory_to_search_in);
+} else {
+	die "'$filetype_to_look_for' isn't a supported filetype.\n";
+}
+
 say join("\n", shuffle(@wanted_files)) if @wanted_files;
