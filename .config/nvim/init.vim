@@ -64,6 +64,9 @@ nnoremap S :%s//g<Left><Left>
 autocmd Filetype perl nnoremap <leader>t :%!perltidy -q<CR>
 autocmd Filetype perl vnoremap <leader>t :%!perltidy -q<CR>
 
+autocmd Filetype sh nnoremap <leader>s :%!shfmt -s -i 0 -ci -sr<CR>
+autocmd Filetype sh vnoremap <leader>s :%!shfmt -s -i 0 -ci -sr<CR>
+
 " automatically deletes all trailing whitespace and newlines at end of
 " file on save.
 autocmd BufWritePre * %s/\s\+$//e
