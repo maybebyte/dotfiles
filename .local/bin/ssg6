@@ -74,25 +74,19 @@ main() {
 
 	if [ -n "${fs}" ]; then
 		echo "${fs}" | tee -- "${DST}/.files"
-
 		if echo "${fs}" | grep -q '\.md$'; then
-
 			if command -v 'lowdown' > /dev/null 2>&1; then
 				echo "${fs}" |
 					grep '\.md$' |
 					render_md_files_lowdown "${SRC}" "${DST}" "${title}"
-
 			elif command -v 'Markdown.pl' > /dev/null 2>&1; then
 				echo "${fs}" |
 					grep '\.md$' |
 					render_md_files_Markdown_pl "${SRC}" "${DST}" "${title}"
-
 			else
 				echo "couldn't find lowdown nor Markdown.pl"
 				exit 3
-
 			fi
-
 		fi
 
 		echo "${fs}" |
