@@ -65,10 +65,8 @@ main() {
 	fs="$(
 		if [ -f "${DST}/.files" ]; then
 			list_affected_files "${SRC}" "${DST}/.files"
-
 		else
 			list_files "$1"
-
 		fi
 	)"
 
@@ -88,7 +86,6 @@ main() {
 				exit 3
 			fi
 		fi
-
 		echo "${fs}" |
 			grep '\.html$' |
 			render_html_files "${SRC}" "${DST}" "${title}"
@@ -96,7 +93,6 @@ main() {
 		echo "${fs}" |
 			grep -Ev '\.md$|\.html$' |
 			(cd "${SRC}" && cpio -pu -- "${DST}")
-
 	fi
 
 	printf '[ssg] ' >&2
@@ -176,23 +172,19 @@ list_affected_files() {
 
 	if echo "${fs}" | has_partials; then
 		list_dependent_files "$1"
-
 	else
 		echo "${fs}"
-
 	fi
 }
 
 render_html_files() {
 	while read -r f; do
 		render_html_file "$3" < "$1/${f}" > "$2/${f}"
-
 	done
 }
 
 render_md_files_lowdown() {
 	while read -r f; do
-
 		lowdown \
 			--html-no-escapehtml \
 			--html-no-skiphtml \
@@ -201,17 +193,14 @@ render_md_files_lowdown() {
 			-- "$1/${f}" |
 			render_html_file "$3" \
 				> "$2/${f%\.md}.html"
-
 	done
 }
 
 render_md_files_Markdown_pl() {
 	while read -r f; do
-
 		Markdown.pl -- "$1/${f}" |
 			render_html_file "$3" \
 				> "$2/${f%\.md}.html"
-
 	done
 }
 
