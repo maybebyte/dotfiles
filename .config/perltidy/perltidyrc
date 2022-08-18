@@ -1,0 +1,21 @@
+# I/O Control
+--standard-error-output
+--warning-output
+
+# Basic Options
+--indent-columns=4
+--maximum-line-length=80
+
+# Tabs
+--entab-leading-whitespace=4
+
+# Code Indentation Control
+--continuation-indentation=4
+--extended-continuation-indentation
+
+# Vertical alignment
+--no-valign
+
+# Misc
+--no-outdent-long-quotes
+--minimum-space-to-comment=2

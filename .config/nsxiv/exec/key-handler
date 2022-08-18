@@ -37,39 +37,41 @@ use IPC::System::Simple;
 use JSON::MaybeXS 'decode_json';
 
 sub yank {
-	chomp(my $stuff_to_copy = shift or die "yank needs something to copy!\n");
+	chomp( my $stuff_to_copy = shift or die "yank needs something to copy!\n" );
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
 
 	print $xclip_fh $stuff_to_copy;
 	close $xclip_fh;
 }
 
-
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $ENV{'HOME'}, '.cache';
 my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
 
-my ($background, $foreground, $color3);
+my ( $background, $foreground, $color3 );
 
-unless (eval {
-	my $json = do {
-		local $/;
-		open my $json_fh, '<', $colors_wal;
-		<$json_fh>;
-	};
+unless (
+	eval {
+		my $json = do {
+			local $/;
+			open my $json_fh, '<', $colors_wal;
+			<$json_fh>;
+		};
 
-	my $decoded_json = decode_json $json;
+		my $decoded_json = decode_json $json;
 
-	$background = ${$decoded_json}{'special'}{'background'}
-		// die "pywal background color could not be read from $colors_wal.\n";
-	$foreground = ${$decoded_json}{'special'}{'foreground'}
-		// die "pywal foreground color could not be read from $colors_wal.\n";
-	$color3 = ${$decoded_json}{'colors'}{'color3'}
-		// die "pywal color3 could not be read from $colors_wal.\n";
+		$background = ${$decoded_json}{'special'}{'background'} // die
+			"pywal background color could not be read from $colors_wal.\n";
+		$foreground = ${$decoded_json}{'special'}{'foreground'} // die
+			"pywal foreground color could not be read from $colors_wal.\n";
+		$color3 = ${$decoded_json}{'colors'}{'color3'} // die
+			"pywal color3 could not be read from $colors_wal.\n";
 
-	return 1;
-
-}) { print STDERR "Couldn't import colors from '$colors_wal': $@" if $@; };
-
+		return 1;
+	}
+	)
+{
+	print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
+}
 
 my @dmenu_options = (
 	'-i',
@@ -80,28 +82,27 @@ my @dmenu_options = (
 	'-sf', $foreground // '#e0cef3',
 );
 
-
 my $key = shift or die "Need a key.\n";
 
 while (<STDIN>) {
-	chomp(my $file = $_ // die "Need a file!\n");
+	chomp( my $file = $_ // die "Need a file!\n" );
 
 	given ($key) {
-
 		when ('c') { system 'filehandler', 'copy', $file; }
 
 		when ('d') {
-			my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
-				'-p', "Really delete $file?");
+			my $menu_pid =
+				open2( my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
+					'-p', "Really delete $file?" );
 
 			say $menu_in join "\n", qw(Yes No);
 			close $menu_in;
 
-			chomp(my $user_response = <$menu_out> // 'No');
+			chomp( my $user_response = <$menu_out> // 'No' );
 			close $menu_out;
-			waitpid($menu_pid, 0);
+			waitpid( $menu_pid, 0 );
 
-			if ($user_response eq 'Yes') {
+			if ( $user_response eq 'Yes' ) {
 				unlink $file;
 				system 'notify-send', '--', "$file deleted!";
 			}
@@ -116,13 +117,15 @@ while (<STDIN>) {
 		when ('y') {
 			my $basename = fileparse $file;
 			yank $basename;
-			system 'notify-send', '--', "File name ($basename) copied to clipboard.";
+			system 'notify-send', '--',
+				"File name ($basename) copied to clipboard.";
 		}
 
 		when ('Y') {
 			my $absolute_path = rel2abs $file // die "Need an absolute path!\n";
 			yank $absolute_path;
-			system 'notify-send', '--', "File path ($absolute_path) copied to clipboard.";
+			system 'notify-send', '--',
+				"File path ($absolute_path) copied to clipboard.";
 		}
 
 		default { die "Key not bound!\n"; }

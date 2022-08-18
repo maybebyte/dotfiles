@@ -35,7 +35,6 @@ any - matches all files
 EOF
 }
 
-
 my $filetype_to_look_for = shift or usage;
 my $directory_to_search_in = shift or usage;
 -e $directory_to_search_in or die "'$directory_to_search_in' doesn't exist.\n";
@@ -72,15 +71,17 @@ sub randfiles {
 	push @wanted_files, $File::Find::name;
 }
 
-
-if ($filetype_to_look_for eq 'video') {
-	find(make_wanted(\&randvids), $directory_to_search_in);
-} elsif ($filetype_to_look_for eq 'image') {
-	find(make_wanted(\&randpics), $directory_to_search_in);
-} elsif ($filetype_to_look_for eq 'any') {
-	find(make_wanted(\&randfiles), $directory_to_search_in);
-} else {
+if ( $filetype_to_look_for eq 'video' ) {
+	find( make_wanted( \&randvids ), $directory_to_search_in );
+}
+elsif ( $filetype_to_look_for eq 'image' ) {
+	find( make_wanted( \&randpics ), $directory_to_search_in );
+}
+elsif ( $filetype_to_look_for eq 'any' ) {
+	find( make_wanted( \&randfiles ), $directory_to_search_in );
+}
+else {
 	die "'$filetype_to_look_for' isn't a supported filetype.\n";
 }
 
-say join("\n", shuffle(@wanted_files)) if @wanted_files;
+say join( "\n", shuffle(@wanted_files) ) if @wanted_files;

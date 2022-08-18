@@ -39,21 +39,21 @@ use URI;
 
 my $program_name = fileparse $0;
 
-
 sub get_duration {
 	my $yt_url = shift or die "get_duration needs a URL.\n";
-	chomp(my $duration = capturex 'yt-dlp', '--get-duration', '--', $yt_url);
+	chomp( my $duration = capturex 'yt-dlp', '--get-duration', '--', $yt_url );
 	return $duration;
 }
 
 sub get_title {
 	my $yt_url = shift or die "get_title needs a URL.\n";
-	chomp(my $title = capturex 'yt-dlp', '-e', '--', $yt_url);
+	chomp( my $title = capturex 'yt-dlp', '-e', '--', $yt_url );
 	return $title;
 }
 
 sub copy_to_clipboard {
-	my $stuff_to_copy = shift or die "copy_to_clipboard needs something to copy.\n";
+	my $stuff_to_copy = shift
+		or die "copy_to_clipboard needs something to copy.\n";
 	chomp $stuff_to_copy;
 
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
@@ -66,13 +66,11 @@ sub copy_to_clipboard {
 
 sub fetch_response {
 	my $fetch_url = shift or die "fetch_response needs a URL.\n";
-	my $http = HTTP::Tiny->new(
-		verify_SSL => 1,
-	);
+	my $http = HTTP::Tiny->new( verify_SSL => 1, );
 	$http->can_ssl or die "TLS is unsupported: $!\n";
 
 	my $response = $http->get($fetch_url);
-	$response->{success} or die "$response->{status} $response->{reason}" ;
+	$response->{success} or die "$response->{status} $response->{reason}";
 
 	return $response->{content};
 }
@@ -86,7 +84,7 @@ sub check_dependencies {
 		push @dependency_checks, $_;
 	}
 
-	if (scalar @_ != scalar @dependency_checks) {
+	if ( scalar @_ != scalar @dependency_checks ) {
 		my $count = 0;
 		while (<@_>) {
 			$dependency_checks[$count] // '' =~ /$_/
@@ -101,15 +99,7 @@ sub check_dependencies {
 	return scalar @dependency_checks;
 }
 
-
-my @dependencies = (
-	'fzf',
-	'mpv',
-	'notify-send',
-	'sxiv',
-	'xclip',
-	'yt-dlp',
-);
+my @dependencies = qw(fzf mpv notify-send sxiv xclip yt-dlp);
 
 my @options = (
 	'copy duration',
@@ -126,8 +116,7 @@ my @options = (
 	'watch (loop)',
 );
 
-
-chomp(my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n");
+chomp( my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n" );
 
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
@@ -136,20 +125,14 @@ $url->scheme eq 'https'
 
 check_dependencies @dependencies;
 
-
-my $fzf_pid = open2(my $fzf_out, my $fzf_in, 'fzf');
-
+my $fzf_pid = open2( my $fzf_out, my $fzf_in, 'fzf' );
 say $fzf_in join "\n", @options;
 close $fzf_in;
-
-chomp(my $option = <$fzf_out> // die "Option must be defined.\n");
+chomp( my $option = <$fzf_out> // die "Option must be defined.\n" );
 close $fzf_out;
-
 waitpid $fzf_pid, 0;
 
-
 given ($option) {
-
 	when ('copy duration') {
 		my $duration = get_duration $url;
 		copy_to_clipboard $duration;
@@ -163,7 +146,8 @@ given ($option) {
 	}
 
 	when ('download audio') {
-		exec 'tmux', 'new-window', 'yt-dlp', '-xf', 'bestaudio/best', '--', $url;
+		exec 'tmux', 'new-window', 'yt-dlp', '-xf', 'bestaudio/best', '--',
+			$url;
 	}
 
 	when ('download file') {
@@ -173,11 +157,12 @@ given ($option) {
 		my @uri_segments = $url->path_segments;
 		my $host = $url->authority;
 
-		my $dir_to_write_to = catdir('Downloads', $host);
+		my $dir_to_write_to = catdir( 'Downloads', $host );
 
-		unless (-e $dir_to_write_to) {
+		unless ( -e $dir_to_write_to ) {
 			make_path($dir_to_write_to)
-				or die "Could not create directory named '$dir_to_write_to': $!\n";
+				or die
+				"Could not create directory named '$dir_to_write_to': $!\n";
 		}
 
 		chdir $dir_to_write_to;

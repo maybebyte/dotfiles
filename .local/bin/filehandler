@@ -41,12 +41,11 @@ use File::MimeInfo::Magic;
 use IPC::System::Simple;
 use JSON::MaybeXS 'decode_json';
 
-
 # Variables used in subroutines.
-my $home = $ENV{'HOME'} // (getpwuid $>)[7] or die "No home directory found!\n";
+my $home = $ENV{'HOME'} // ( getpwuid $> )[7]
+	or die "No home directory found!\n";
 my $program_name = fileparse $0;
 my @found_directories;
-
 
 sub usage {
 	die <<EOF;
@@ -66,17 +65,15 @@ sub get_preload_dir {
 	my $preload_dir;
 
 	given ($mimetype) {
-		when (m{\Aapplication/(?:epub|pdf)}a)
-			{ $preload_dir = catfile $home, 'books'; }
-		when (m{\Aimage/.*djvu}a)
-			{ $preload_dir = catfile $home, 'books'; }
-		when (m{\Aimage/}a)
-			{ $preload_dir = catfile $home, 'pics'; }
-		when (m{\Avideo/}a)
-			{ $preload_dir = catfile $home, 'videos'; }
+		when (m{\Aapplication/(?:epub|pdf)}a) {
+			$preload_dir = catfile $home, 'books';
+		}
+		when (m{\Aimage/.*djvu}a) { $preload_dir = catfile $home, 'books'; }
+		when (m{\Aimage/}a) { $preload_dir = catfile $home, 'pics'; }
+		when (m{\Avideo/}a) { $preload_dir = catfile $home, 'videos'; }
 	}
 
-	return ($preload_dir, $mimetype);
+	return ( $preload_dir, $mimetype );
 }
 
 sub wanted {
@@ -87,14 +84,13 @@ sub build_filetree {
 	my $file_without_destination = shift
 		or die "No file for build_filetree given.\n";
 
-	my ($preload_dir, $mimetype) = get_preload_dir $file_without_destination;
+	my ( $preload_dir, $mimetype ) = get_preload_dir $file_without_destination;
 	$preload_dir or die "get_preload_dir failed. Is '$mimetype' handled yet?\n";
 	-e $preload_dir or die "'$preload_dir' doesn't exist.\n";
 	-d _ or die "'$preload_dir' isn't a directory.\n";
 
-	return find({wanted => \&wanted}, $preload_dir);
+	return find( { wanted => \&wanted }, $preload_dir );
 }
-
 
 my $operation = shift or usage;
 $operation eq 'help' and usage;
@@ -102,29 +98,31 @@ my $file_path = shift or usage;
 
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
 my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
-my ($background, $foreground, $color3);
+my ( $background, $foreground, $color3 );
 
+unless (
+	eval {
+		my $json = do {
+			local $/;
+			open my $json_fh, '<', $colors_wal;
+			<$json_fh>;
+		};
 
-unless (eval {
-	my $json = do {
-		local $/;
-		open my $json_fh, '<', $colors_wal;
-		<$json_fh>;
-	};
+		my $decoded_json = decode_json $json;
 
-	my $decoded_json = decode_json $json;
+		$background = ${$decoded_json}{'special'}{'background'} // die
+			"pywal background color could not be read from $colors_wal.\n";
+		$foreground = ${$decoded_json}{'special'}{'foreground'} // die
+			"pywal foreground color could not be read from $colors_wal.\n";
+		$color3 = ${$decoded_json}{'colors'}{'color3'}
+			// die "pywal color3 could not be read from $colors_wal.\n";
 
-	$background = ${$decoded_json}{'special'}{'background'}
-		// die "pywal background color could not be read from $colors_wal.\n";
-	$foreground = ${$decoded_json}{'special'}{'foreground'}
-		// die "pywal foreground color could not be read from $colors_wal.\n";
-	$color3 = ${$decoded_json}{'colors'}{'color3'}
-		// die "pywal color3 could not be read from $colors_wal.\n";
-
-	return 1;
-
-}) { print STDERR "Couldn't import colors from '$colors_wal': $@" if $@; };
-
+		return 1;
+	}
+	)
+{
+	print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
+}
 
 my @dmenu_options = (
 	'-i',
@@ -135,9 +133,9 @@ my @dmenu_options = (
 	'-sf', $foreground // '#e0cef3',
 );
 
+my ( $base_file, $dirs ) = fileparse $file_path;
+if ( $operation eq 'move' || $operation eq 'copy' ) {
 
-my ($base_file, $dirs) = fileparse $file_path;
-if ($operation eq 'move' || $operation eq 'copy') {
 	# Used for its side-effects (populating @found_directories).
 	build_filetree $file_path;
 
@@ -151,19 +149,17 @@ if ($operation eq 'move' || $operation eq 'copy') {
 
 	@directories_with_tildes = sort @directories_with_tildes;
 
+	my $menu_pid = open2( my $menu_out, my $menu_in, 'dmenu', '-l', 10,
+		@dmenu_options, '-p', "Where should $base_file be placed?" );
 
-	my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', '-l', 10,
-		@dmenu_options, '-p', "Where should $base_file be placed?");
-
-	say $menu_in "exit\n", join("\n", @directories_with_tildes);
+	say $menu_in "exit\n", join( "\n", @directories_with_tildes );
 	close $menu_in;
 
-	chomp(my $user_input = <$menu_out> // 'exit');
+	chomp( my $user_input = <$menu_out> // 'exit' );
 	close $menu_out;
 
 	waitpid $menu_pid, 0;
 	exit if $user_input eq 'exit';
-
 
 	# Tilde reverted since we need to do some checks.
 	$user_input =~ s/\A~/$home/;
@@ -175,29 +171,31 @@ if ($operation eq 'move' || $operation eq 'copy') {
 	# Tilde added again to conserve space in notify-send output.
 	$user_input =~ s/\A$home/~/;
 
-
-	if ($operation eq 'move') {
+	if ( $operation eq 'move' ) {
 		move $file_path, $destination or die "'$base_file' not moved: $!\n";
 		system 'notify-send', '--', "Moved '$base_file' to '$user_input'";
-	} elsif ($operation eq 'copy') {
+	}
+	elsif ( $operation eq 'copy' ) {
 		copy $file_path, $destination or die "'$base_file' not copied: $!\n";
 		system 'notify-send', '--', "Copied '$base_file' to '$user_input'";
 	}
-} elsif ($operation eq 'rename') {
-	my $menu_pid = open2(my $menu_out, my $menu_in, 'dmenu', '-l', 10,
-		@dmenu_options, '-p', "Rename $base_file to what?");
+}
+elsif ( $operation eq 'rename' ) {
+	my $menu_pid = open2( my $menu_out, my $menu_in, 'dmenu', '-l', 10,
+		@dmenu_options, '-p', "Rename $base_file to what?" );
 
 	say $menu_in "exit\n";
 	close $menu_in;
 
-	chomp(my $user_input = <$menu_out> // 'exit');
+	chomp( my $user_input = <$menu_out> // 'exit' );
 	close $menu_out;
 
 	waitpid $menu_pid, 0;
 	exit if $user_input eq 'exit';
 
-	rename $file_path, catfile($dirs, $user_input);
+	rename $file_path, catfile( $dirs, $user_input );
 	system 'notify-send', '--', "Renamed '$base_file' to '$user_input'";
-} else {
+}
+else {
 	die "$operation isn't a supported operation!\n";
 }

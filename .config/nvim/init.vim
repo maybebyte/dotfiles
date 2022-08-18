@@ -19,7 +19,7 @@ set smartcase
 set splitbelow
 set splitright
 set tabstop =4
-set textwidth =72
+set textwidth =80
 set undofile
 set wrap
 set wrapscan
@@ -60,6 +60,9 @@ nnoremap <leader>o :set spell! spelllang=en_us<CR>
 
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
+
+autocmd Filetype perl nnoremap <leader>t :%!perltidy -q<CR>
+autocmd Filetype perl vnoremap <leader>t :%!perltidy -q<CR>
 
 " automatically deletes all trailing whitespace and newlines at end of
 " file on save.
