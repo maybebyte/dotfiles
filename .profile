@@ -35,7 +35,6 @@ export \
 # OS specific actions
 # written so it can be expanded later if needed
 case "$(uname)" in
-
 	'OpenBSD')
 		GATEWAY="$(netstat -rn 2> /dev/null | awk '/^default/{print $2}')"
 		export GATEWAY
@@ -53,12 +52,10 @@ case "$(uname)" in
 		# no /usr/games if not OpenBSD
 		export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
 		;;
-
 esac
 
 # host-specific actions
 case "$(hostname -s)" in
-
 	'aphrodite' | 'lain')
 		command -v 'gpg-agent' > /dev/null 2>&1 && eval "$(gpg-agent --daemon)"
 
@@ -69,7 +66,6 @@ case "$(hostname -s)" in
 
 	*) # if the hostname doesn't match, do nothing
 		;;
-
 esac
 
 # sh/ksh initialization
