@@ -26,23 +26,15 @@ use warnings;
 
 use experimental 'switch';
 
-# Determine program name.
+# Base modules.
 use File::Basename;
-
-# Path manipulation.
 use File::Path 'make_path';
 use File::Spec::Functions 'catdir';
-
-# Bidirectional interprocess communication.
 use IPC::Open2;
-
-# Simpler interprocess communication.
-use IPC::System::Simple 'capturex';
-
-# Perform web requests.
 use HTTP::Tiny;
 
-# Escape URIs and otherwise manipulate them.
+# External modules.
+use IPC::System::Simple 'capturex';
 use URI;
 
 my $program_name = fileparse $0;
@@ -61,7 +53,8 @@ sub get_title {
 }
 
 sub copy_to_clipboard {
-	chomp(my $stuff_to_copy = shift or die "copy_to_clipboard needs something to copy.\n");
+	my $stuff_to_copy = shift or die "copy_to_clipboard needs something to copy.\n";
+	chomp $stuff_to_copy;
 
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
 	print $xclip_fh $stuff_to_copy;
@@ -85,11 +78,10 @@ sub fetch_response {
 }
 
 sub check_dependencies {
-	# Is there a portable way to do this that doesn't involve shell?
-	open my $sh_fh, '-|', '/bin/sh', '-c', "command -v @_";
+	open my $which_fh, '-|', qw(which --), @_;
 
 	my @dependency_checks;
-	while (<$sh_fh>) {
+	while (<$which_fh>) {
 		chomp;
 		push @dependency_checks, $_;
 	}
@@ -104,7 +96,7 @@ sub check_dependencies {
 	}
 
 	# Placing this before the comparison loop masks the real error.
-	close $sh_fh;
+	close $which_fh;
 
 	return scalar @dependency_checks;
 }
