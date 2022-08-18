@@ -361,6 +361,25 @@ randpics [directory with pics]' >&2
 	rffd image "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
 }
 
+# with rffd, open up random things to listen to with mpv(1).
+randlisten() {
+	case "$1" in
+
+		''|'-h')
+			echo 'with rffd, open up random things to listen to with mpv(1).
+
+randvids [directory with videos]' >&2
+
+			return
+
+			;;
+
+	esac
+
+	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback \
+		--no-keep-open --no-pause --no-video --
+}
+
 # with rffd, open up random videos with mpv(1).
 randvids() {
 	case "$1" in
