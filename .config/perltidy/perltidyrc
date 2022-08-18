@@ -14,7 +14,7 @@
 --extended-continuation-indentation
 
 # Vertical alignment
---no-valign
+-novalign
 
 # Misc
 --no-outdent-long-quotes
