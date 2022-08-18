@@ -77,21 +77,7 @@ show_battery_life() {
 
 
 show_temperature() {
-	case "${HOSTNAME}" in
-		'lain') # laptop
-			temperature="$(sysctl -n hw.sensors.cpu0.temp0)"
-			;;
-
-		'aphrodite') # desktop
-			temperature="$(sysctl -n hw.sensors.ksmn0.temp0)"
-			;;
-
-		*)
-			warn 'Host name is unknown; no temperature sensor found.'
-			return 1
-			;;
-	esac
-
+	temperature="$(sysctl -n hw.sensors.cpu0.temp0)"
 	echo "temp: ${temperature%%.*} °C"
 }
 
