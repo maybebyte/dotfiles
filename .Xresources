@@ -5,7 +5,7 @@
 URxvt.font: xft:monospace:size=14, xft:Symbola:size=14
 URxvt.scrollBar: false
 ! Disable printing the terminal contents when pressing PrintScreen.
-URxvt.print-pipe: "cat >/dev/null"
+URxvt.print-pipe: "cat > /dev/null"
 ! Reduce space between letters.
 URxvt.letterSpace: -1
 

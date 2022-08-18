@@ -49,7 +49,7 @@ my $program_name = fileparse $0;
 my $matrix_server = shift
 	or die "$program_name needs a domain name to check.\n";
 
-system 'command -v notify-send >/dev/null 2>&1';
+system 'command -v notify-send > /dev/null 2>&1';
 
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
 $http->can_ssl or die "TLS is not supported: $!\n";

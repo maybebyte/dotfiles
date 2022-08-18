@@ -56,7 +56,7 @@ sub make_github_release_url {
 #
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
-system 'command -v gpg >/dev/null 2>&1';
+system 'command -v gpg > /dev/null 2>&1';
 
 # $element_web_ui_dir can be changed by modifying it in the environment:
 # ELEMENT_WEB_UI_DIR=/path/to/dir handle-element-web
@@ -106,7 +106,7 @@ $http->mirror(
 );
 
 system "gpg --verify $tmpdir/element-$remote_version.tar.gz.asc \\
-	$tmpdir/element-$remote_version.tar.gz >/dev/null 2>&1";
+	$tmpdir/element-$remote_version.tar.gz > /dev/null 2>&1";
 
 my $tar = Archive::Tar->new;
 $tar->extract_archive("$tmpdir/element-$remote_version.tar.gz");

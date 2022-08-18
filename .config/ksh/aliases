@@ -104,7 +104,7 @@ command -v 'mimeopen' > /dev/null 2>&1 &&
 	alias o='mimeopen'
 
 command -v 'ncmpcpp' > /dev/null 2>&1 &&
-	alias mus='ncmpcpp 2>/dev/null'
+	alias mus='ncmpcpp 2> /dev/null'
 
 command -v 'neomutt' > /dev/null 2>&1 &&
 	alias m='neomutt'

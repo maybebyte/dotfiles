@@ -71,7 +71,7 @@ doas /bin/sh <<- EOF
 	rm -rf -- ${SRVDIR:?}
 	mkdir -p -- ${SRVDIR}
 	mv -- ${HTMLDIR}/* ${SRVDIR}/
-	rcctl reload httpd >/dev/null
+	rcctl reload httpd > /dev/null
 EOF
 
 echo 'Web server synced.'
