@@ -24,8 +24,8 @@ main() {
 
 	set -u
 
-	[ -d "$1" ] || no_dir "${pos_par}"
-	[ -d "$2" ] || no_dir "${pos_par}"
+	[ -d "$1" ] || no_dir "$1"
+	[ -d "$2" ] || no_dir "$2"
 
 	SRC="$(readlink_f "$1")"
 	readonly SRC
