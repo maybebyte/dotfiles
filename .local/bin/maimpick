@@ -33,7 +33,6 @@ present_options() {
 	readonly SAVEDIR="${HOME}/screenshots"
 
 	case "$(menu -l "${NUM_OF_OPTS}" -p 'Screenshot which area?')" in
-
 		'a selected area')
 			FILENAME="selected-$(date '+%Y%m%d-%H%M%S').png"
 			readonly FILENAME
@@ -70,7 +69,6 @@ present_options() {
 		*)
 			err 'Not a valid area.'
 			;;
-
 	esac
 }
 
