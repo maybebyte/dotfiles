@@ -17,15 +17,15 @@
 set -e
 
 main() {
-	for pos_par in "$1" "$2" "$3" "$4"; do
-		[ -n "${pos_par}" ] || usage
-	done
+	[ -n "$1" ] || usage
+	[ -n "$2" ] || usage
+	[ -n "$3" ] || usage
+	[ -n "$4" ] || usage
 
 	set -u
 
-	for pos_par in "$1" "$2"; do
-		[ -d "${pos_par}" ] || no_dir "${pos_par}"
-	done
+	[ -d "$1" ] || no_dir "${pos_par}"
+	[ -d "$2" ] || no_dir "${pos_par}"
 
 	SRC="$(readlink_f "$1")"
 	readonly SRC
