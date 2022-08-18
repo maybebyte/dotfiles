@@ -64,7 +64,7 @@ case "$(hostname -s)" in
 
 		export \
 			MARKDOWNDIR="${HOME}/src/website_md" \
-			SRVDIR='/var/www/htdocs/aml'
+			SRVDIR="/var/www/htdocs/${SITE##*//}"
 		;;
 
 	*) # if the hostname doesn't match, do nothing
