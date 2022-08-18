@@ -10,16 +10,12 @@
 # a wrapper around curl(1) that passes -x to use tor(1).
 anoncurl() {
 	case "$@" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'curl(1) with tor(1).
-
 otherwise, use it the same way you would use curl(1).' >&2
 
 			return
-
 			;;
-
 	esac
 
 	curl -x socks5://127.0.0.1:9050 "$@"
@@ -33,16 +29,12 @@ otherwise, use it the same way you would use curl(1).' >&2
 # zathura(1) can open.
 anonread() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'read PDFs with tor(1).
-
 anonread [URL linking to an ebook]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	anonftp -o - -- "$1" | zathura -
@@ -54,17 +46,14 @@ anonread [URL linking to an ebook]' >&2
 # $1 is a word/phrase to search for (phrases must be quoted).
 aprv() {
 	case "$1" in
-
-		''|'-h')
-			echo 'invoke apropos(1) to match the given query against any available macro
-key of manpages that match the current machine architecture.
+		'' | '-h')
+			echo 'invoke apropos(1) to match the given query against any
+available macro key of manpages that match the current machine architecture.
 
 aprv [query]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	apropos -S "$(uname -m)" -- any="$1"
@@ -77,21 +66,16 @@ aprv [query]' >&2
 # $1 is a program one wants to learn more about.
 cht() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'retrieve command cheat sheets from cht.sh
-
 cht [command name]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
 }
-
 
 # if $1 ends in '.bak', copy $1 to an identically named file except the
 # new file omits '.bak'.
@@ -102,10 +86,9 @@ cht [command name]' >&2
 # $1 is a file.
 cpbak() {
 	case "$1" in
-
-		''|'-h')
-			echo 'if the given file ends in ".bak", copy to an identically named file
-except the new file omits ".bak".
+		'' | '-h')
+			echo 'if the given file ends in ".bak", copy to an identically
+named file except the new file omits ".bak".
 
 otherwise, copy the given file to an identically named file except the
 new file ends in ".bak".
@@ -113,9 +96,7 @@ new file ends in ".bak".
 cpbak [file]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	case "${1##*.bak}" in
@@ -140,16 +121,12 @@ fzf_hist() {
 # $1 is a domain.
 grabipv4() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'perform an A record lookup and return the IP address.
-
 grabipv4 [IP address]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	dig A +short "$1"
@@ -160,16 +137,12 @@ grabipv4 [IP address]' >&2
 # $1 is a domain.
 grabipv6() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'perform an AAAA record lookup and return the IPv6 address.
-
 grabipv6 [IPv6 address]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	dig AAAA +short "$1"
@@ -182,16 +155,12 @@ grabipv6 [IPv6 address]' >&2
 # $1 is an IP address.
 ipinf() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'display IP address information from ipinfo.io
-
 ipinf [IP address]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	ftp -VMo - -- "https://ipinfo.io/$1"
@@ -200,12 +169,10 @@ ipinf [IP address]' >&2
 # journal
 jrnl() {
 	case "$@" in
-
 		'') # being used as intended
-
 			;;
 
-		'-h'|*)
+		'-h' | *)
 			echo "jrnl (for journaling) takes no arguments.
 
 It creates ${HOME}/notes/journal/$(date '+%F').txt (including the
@@ -213,9 +180,7 @@ directory tree, if it doesn't exist) with appropriate formatting and
 then opens up the file in ${EDITOR:-EDITOR}." >&2
 
 			return
-
 			;;
-
 	esac
 
 	[ -z "${EDITOR}" ] && {
@@ -229,18 +194,18 @@ then opens up the file in ${EDITOR:-EDITOR}." >&2
 	# easier to just create the directory than error
 	mkdir -p "${JRNL_ENTRY%/*}"
 
-	if ! [ -e "${JRNL_ENTRY}" ]; then {
-		echo
-		echo "${TODAY}"
-		date '+%H:%M'
-	} > "${JRNL_ENTRY}"
-
-	else {
-		echo
-		echo '-'
-		date '+%H:%M'
-	} >> "${JRNL_ENTRY}"
-
+	if ! [ -e "${JRNL_ENTRY}" ]; then
+		{
+			echo
+			echo "${TODAY}"
+			date '+%H:%M'
+		} > "${JRNL_ENTRY}"
+	else
+		{
+			echo
+			echo '-'
+			date '+%H:%M'
+		} >> "${JRNL_ENTRY}"
 	fi
 
 	"${EDITOR}" "${JRNL_ENTRY}"
@@ -249,16 +214,12 @@ then opens up the file in ${EDITOR:-EDITOR}." >&2
 # read a markdown document with man(1).
 manmd() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'read a markdown document with man(1).
-
 manmd [markdown document]' >&2
 
 			return
-
-		;;
-
+			;;
 	esac
 
 	lowdown -T 'man' "$1" | mandoc -a
@@ -270,28 +231,21 @@ manmd [markdown document]' >&2
 # $1 is a file.
 mvbak() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'if the given file ends in ".bak", remove ".bak" from the filename.
 otherwise, append ".bak" to the filename.
 
 mvbak [file]' >&2
 
 			return
-
 			;;
-
 	esac
-
 
 	if [ -z "${1##*/}" ]; then
 		MVBAK_FILE="${1%/}"
-
 	else
 		MVBAK_FILE="$1"
-
 	fi
-
 
 	case "${MVBAK_FILE##*.bak}" in
 		'') mv -- "${MVBAK_FILE}" "${MVBAK_FILE%.bak}" ;;
@@ -304,10 +258,8 @@ mvbak [file]' >&2
 # nc_head [path] -c [domain] 443 for HTTPS.
 nc_head() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'checks the headers of a website with tor(1).
-
 HTTP:
 nc_head [path] [domain] 80
 
@@ -315,9 +267,7 @@ HTTPS:
 nc_head [path] -c [domain] 443' >&2
 
 			return
-
 			;;
-
 	esac
 
 	URI="$1"
@@ -328,16 +278,12 @@ nc_head [path] -c [domain] 443' >&2
 # nc(1) + tor(1) = fun.
 nc_tor() {
 	case "$@" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'nc(1) + tor(1) = nc_tor()
-
 otherwise, use it the same way you would use nc(1).' >&2
 
 			return
-
 			;;
-
 	esac
 
 	nc -X 5 -x 127.0.0.1:9050 "$@"
@@ -346,16 +292,12 @@ otherwise, use it the same way you would use nc(1).' >&2
 # with rffd, open up random pics with sxiv(1).
 randpics() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'with rffd, open up random pics with sxiv(1).
-
 randpics [directory with pics]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	rffd image "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
@@ -364,16 +306,12 @@ randpics [directory with pics]' >&2
 # with rffd, open up random things to listen to with mpv(1).
 randlisten() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'with rffd, open up random things to listen to with mpv(1).
-
 randvids [directory with videos]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback \
@@ -383,16 +321,12 @@ randvids [directory with videos]' >&2
 # with rffd, open up random videos with mpv(1).
 randvids() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'with rffd, open up random videos with mpv(1).
-
 randvids [directory with videos]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
@@ -404,16 +338,12 @@ readabook() { fzf-open "${READER}" "${HOME}/books"; }
 # read a markdown document with less(1).
 readmd() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'read a markdown document with less(1).
-
 readmd [markdown document]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	lowdown -T 'term' --term-no-colour "$1" | less
@@ -424,8 +354,7 @@ readmd [markdown document]' >&2
 # tarpv [archive target] > filename
 tarpv() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'archive something with tar(1) and watch progress with pv(1).
 
 without compression:
@@ -435,18 +364,16 @@ with compression:
 tarpv [archive target] | gzip -c > filename' >&2
 
 			return
-
 			;;
-
 	esac
 
 	# command -v will match the alias
 	DU="$(which 'du')"
 
 	SIZE_OF_DIR="$(
-		"${DU}" -sh "$1" \
-			| sed -E "s/\.([[:digit:]])+//" \
-			| cut -f 1
+		"${DU}" -sh "$1" |
+			sed -E "s/\.([[:digit:]])+//" |
+			cut -f 1
 	)"
 
 	tar -cf - "$1" | pv -s "${SIZE_OF_DIR}"
@@ -457,16 +384,12 @@ tarpv [archive target] | gzip -c > filename' >&2
 # $1 is a domain name associated with a Matrix homeserver.
 testfed() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'test Matrix federation and output the JSON.
-
 testfed [matrix homeserver domain]' >&2
 
-		return
-
-		;;
-
+			return
+			;;
 	esac
 
 	ftp -U '' -VMno - -- \
@@ -475,12 +398,12 @@ testfed [matrix homeserver domain]' >&2
 
 # convert H.264 to HEVC using ffmpeg and x265
 to265() {
-   [ -z "$1" ] && {
-       echo 'Need an input file.' >&2
-       return
-   }
+	[ -z "$1" ] && {
+		echo 'Need an input file.' >&2
+		return
+	}
 
-   ffmpeg -i "$1" -c:v libx265 -preset slow -c:a copy "${1%.mp4}-x265.mp4"
+	ffmpeg -i "$1" -c:v libx265 -preset slow -c:a copy "${1%.mp4}-x265.mp4"
 }
 
 # use bioctl(8) to unlock an encrypted partition and attach it to
@@ -489,16 +412,12 @@ to265() {
 # $1 is an encrypted partition.
 unlockhdd() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'unlock a drive encrypted with bioctl(8).
-
 unlockhdd [encrypted partition]' >&2
 
 			return
-
 			;;
-
 	esac
 
 	priv bioctl -c C -l "$1" softraid0
@@ -511,21 +430,16 @@ unlockhdd [encrypted partition]' >&2
 # $1 is a geographical location for weather forecasting purposes.
 wttr() {
 	case "$1" in
-
-		''|'-h')
+		'' | '-h')
 			echo 'get weather information.
-
 wttr [location]' >&2
 
 			return
-
 			;;
-
 	esac
 
-	ftp -U 'curl' -VMo - -- "https://wttr.in/$1";
+	ftp -U 'curl' -VMo - -- "https://wttr.in/$1"
 }
-
 
 # for downloading YouTube channels/playlists
 ytpl() {

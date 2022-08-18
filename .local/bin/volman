@@ -28,13 +28,12 @@ ${0##*/} [inc|dec|mute]"
 # Increase, decrease, or mute the volume given the appropriate argument.
 adjust_volume() {
 	case "$1" in
-		'inc') is_muted || sndioctl output.level=+0.05 >/dev/null 2>&1 ;;
-		'dec') is_muted || sndioctl output.level=-0.05 >/dev/null 2>&1 ;;
-		'mute') sndioctl output.mute=! >/dev/null 2>&1 ;;
+		'inc') is_muted || sndioctl output.level=+0.05 > /dev/null 2>&1 ;;
+		'dec') is_muted || sndioctl output.level=-0.05 > /dev/null 2>&1 ;;
+		'mute') sndioctl output.mute=! > /dev/null 2>&1 ;;
 		*) usage ;;
 	esac
 }
-
 
 print_volume() {
 	case "${MUTED}" in
@@ -43,21 +42,19 @@ print_volume() {
 	esac
 }
 
-
 # If muted, succeed.
 # If not muted, fail.
 is_muted() {
-	case "$(sndioctl -n output.mute 2>/dev/null)" in
+	case "$(sndioctl -n output.mute 2> /dev/null)" in
 		1) return 0 ;;
 		0) return 1 ;;
 		*) err 'Failed to check output.mute with sndioctl(1).' ;;
 	esac
 }
 
-
 # Get raw output level and convert it to something more parsable.
 get_volume() {
-	RAW_VOLUME="$(sndioctl -n output.level 2>/dev/null)"
+	RAW_VOLUME="$(sndioctl -n output.level 2> /dev/null)"
 	readonly RAW_VOLUME
 
 	case "${RAW_VOLUME}" in
@@ -67,7 +64,6 @@ get_volume() {
 		*) printf '(%.2f * %s) / 1\n' "${RAW_VOLUME}" 100 | bc ;;
 	esac
 }
-
 
 [ -n "$1" ] || usage
 [ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
@@ -79,10 +75,9 @@ dunstify
 sndioctl'
 
 echo "${DEPENDENCIES}" | while read -r dependency; do
-	command -v -- "${dependency}" >/dev/null 2>&1 ||
+	command -v -- "${dependency}" > /dev/null 2>&1 ||
 		err "${dependency} not found in PATH."
 done
-
 
 adjust_volume "$1"
 

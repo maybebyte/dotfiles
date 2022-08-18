@@ -1,12 +1,10 @@
 # use nvim if it's installed, vi otherwise
-command -v 'nvim' >/dev/null 2>&1 && export EDITOR='nvim'
+command -v 'nvim' > /dev/null 2>&1 && export EDITOR='nvim'
 [ -z "${EDITOR}" ] && export EDITOR='vi'
 
-
 # use colorls if it's installed, ls otherwise
-command -v 'colorls' >/dev/null 2>&1 && export LS='colorls'
+command -v 'colorls' > /dev/null 2>&1 && export LS='colorls'
 [ -z "${LS}" ] && export LS='ls'
-
 
 export \
 	BROWSER='lynx' \
@@ -25,7 +23,6 @@ export \
 	XDG_STATE_HOME="${HOME}/.local/state" \
 	SITE='https://amissing.link'
 
-
 # these have to come after XDG_* are defined
 export \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
@@ -40,7 +37,7 @@ export \
 case "$(uname)" in
 
 	'OpenBSD')
-		GATEWAY="$(netstat -rn 2>/dev/null | awk '/^default/{print $2}')"
+		GATEWAY="$(netstat -rn 2> /dev/null | awk '/^default/{print $2}')"
 		export GATEWAY
 
 		# prepend ~/.local/bin to PATH
@@ -50,36 +47,30 @@ case "$(uname)" in
 		#
 		# the extra colon is intentional, it's the delimiter for PATH.
 		export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
-
 		;;
 
 	*)
 		# no /usr/games if not OpenBSD
 		export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
-
 		;;
 
 esac
-
 
 # host-specific actions
 case "$(hostname -s)" in
 
-	'aphrodite'|'lain')
-		command -v 'gpg-agent' >/dev/null 2>&1 && eval "$(gpg-agent --daemon)"
+	'aphrodite' | 'lain')
+		command -v 'gpg-agent' > /dev/null 2>&1 && eval "$(gpg-agent --daemon)"
 
 		export \
 			MARKDOWNDIR="${HOME}/src/website_md" \
 			SRVDIR='/var/www/htdocs/aml'
-
 		;;
 
 	*) # if the hostname doesn't match, do nothing
-
 		;;
 
 esac
-
 
 # sh/ksh initialization
 #

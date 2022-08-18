@@ -2,25 +2,18 @@
 # more attention to root shells.
 set_user_and_path_colors() {
 	case "$(id -u)" in
-
 		0)
 			_ps1_user='\[\033[1;33m\]'
 			_ps1_path='\[\033[1;35m\]'
-
 			;;
-
 		*)
 			_ps1_user='\[\033[1;35m\]'
 			_ps1_path='\[\033[1;33m\]'
-
 			;;
-
 	esac
 }
 
-
 case "${KSH_VERSION%%\ KSH*}" in
-
 	'@(#)PD')
 		set_user_and_path_colors
 
@@ -35,15 +28,12 @@ ${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
 		# There is no need for these variables to remain defined afterward.
 		# shellcheck disable=SC3009
 		unset _ps1_{user,path,bracket,hostname,clear}
-
 		;;
 
 	*)
 		echo 'Custom PS1 not available.' >&2
 		return 1
-
 		;;
-
 esac
 
 unset -f set_user_and_path_colors

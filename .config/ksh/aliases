@@ -5,12 +5,10 @@ complain_noexec() {
 	return 1
 }
 
-
 complain_undefined() {
 	echo "[$(date '+%F %H:%M:%S')]: $1 undefined, so related aliases disabled." >&2
 	return 1
 }
-
 
 pf_aliases() {
 	alias \
@@ -23,7 +21,6 @@ pf_aliases() {
 		pftailb='pftail action block' \
 		pftest='pfload -n'
 }
-
 
 openbsd_aliases() {
 	alias \
@@ -67,13 +64,11 @@ openbsd_aliases() {
 	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
 
-
 alias \
 	..='cd ..' \
 	...='cd ../..' \
 	....='cd ../../..' \
 	.....='cd ../../../..'
-
 
 alias \
 	apr='apropos' \
@@ -99,46 +94,70 @@ alias \
 	today='date +%F' \
 	up='uptime'
 
+command -v 'exiftool' > /dev/null 2>&1 &&
+	alias exifrm='exiftool -all= '
 
-command -v 'exiftool' >/dev/null 2>&1 && alias exifrm='exiftool -all= '
-command -v 'ftp' >/dev/null 2>&1 && alias ftp="ftp -nU ''"
-command -v 'mimeopen' >/dev/null 2>&1 && alias o='mimeopen'
-command -v 'ncmpcpp' >/dev/null 2>&1 && alias mus='ncmpcpp 2>/dev/null'
-command -v 'neomutt' >/dev/null 2>&1 && alias m='neomutt'
-command -v 'newsboat' >/dev/null 2>&1 && alias nb='newsboat'
-command -v 'nikto' >/dev/null 2>&1 && alias nk="nikto -output nikto-\$(date '+%F').txt -host"
-command -v 'nmap' >/dev/null 2>&1 && alias scan='nmap -sn'
-command -v 'nnn' >/dev/null 2>&1 && alias n='nnn'
-command -v 'searchsploit' >/dev/null 2>&1 && alias sspl='searchsploit'
-command -v 'speedtest-cli' >/dev/null 2>&1 && alias stcli='speedtest-cli'
-command -v 'transmission-remote' >/dev/null 2>&1 && alias trem='transmission-remote'
-command -v 'wget' >/dev/null 2>&1 && alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
-command -v 'zathura' >/dev/null 2>&1 && alias pdfman='MANPAGER=zathura man -T pdf'
+command -v 'ftp' > /dev/null 2>&1 &&
+	alias ftp="ftp -nU ''"
 
+command -v 'mimeopen' > /dev/null 2>&1 &&
+	alias o='mimeopen'
 
-command -v 'torsocks' >/dev/null 2>&1 && {
+command -v 'ncmpcpp' > /dev/null 2>&1 &&
+	alias mus='ncmpcpp 2>/dev/null'
+
+command -v 'neomutt' > /dev/null 2>&1 &&
+	alias m='neomutt'
+
+command -v 'newsboat' > /dev/null 2>&1 &&
+	alias nb='newsboat'
+
+command -v 'nikto' > /dev/null 2>&1 &&
+	alias nk="nikto -output nikto-\$(date '+%F').txt -host"
+
+command -v 'nmap' > /dev/null 2>&1 &&
+	alias scan='nmap -sn'
+
+command -v 'nnn' > /dev/null 2>&1 &&
+	alias n='nnn'
+
+command -v 'searchsploit' > /dev/null 2>&1 &&
+	alias sspl='searchsploit'
+
+command -v 'speedtest-cli' > /dev/null 2>&1 &&
+	alias stcli='speedtest-cli'
+
+command -v 'transmission-remote' > /dev/null 2>&1 &&
+	alias trem='transmission-remote'
+
+command -v 'wget' > /dev/null 2>&1 &&
+	alias mirror="wget --random-wait -np -kpcKEme robots=off -R 'index.html*'"
+
+command -v 'zathura' > /dev/null 2>&1 &&
+	alias pdfman='MANPAGER=zathura man -T pdf'
+
+command -v 'torsocks' > /dev/null 2>&1 && {
 	alias anonsh='torsocks --shell'
-	which 'ftp' >/dev/null 2>&1 && alias anonftp="torsocks ftp -nU ''"
-	command -v 'tuir' >/dev/null 2>&1 && alias tuir='torsocks tuir'
+
+	which 'ftp' > /dev/null 2>&1 &&
+		alias anonftp="torsocks ftp -nU ''"
+
+	command -v 'tuir' > /dev/null 2>&1 &&
+		alias tuir='torsocks tuir'
 }
 
+command -v 'torsocks' > /dev/null 2>&1 &&
+	command -v 'irssi' > /dev/null 2>&1 &&
+	alias irssi='torsocks irssi'
 
-command -v 'torsocks' >/dev/null 2>&1 \
-	&& command -v 'irssi' >/dev/null 2>&1 \
-	&& alias irssi='torsocks irssi'
-
-
-command -v 'mpv' >/dev/null 2>&1 &&
+command -v 'mpv' > /dev/null 2>&1 &&
 	alias mpva='mpv --no-keep-open --no-resume-playback --no-pause --no-video'
-
 
 if [ -z "${EDITOR}" ]; then
 	# shellcheck disable=SC2016
 	complain_undefined '${EDITOR}'
-
-elif ! command -v -- "${EDITOR}" >/dev/null 2>&1; then
+elif ! command -v -- "${EDITOR}" > /dev/null 2>&1; then
 	complain_noexec "${EDITOR}"
-
 else
 	alias \
 		e="\${EDITOR}" \
@@ -166,8 +185,7 @@ else
 		exs="\${EDITOR} \${HOME}/.xsession"
 fi
 
-
-command -v 'git' >/dev/null 2>&1  &&
+command -v 'git' > /dev/null 2>&1 &&
 	alias \
 		d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/" \
 		da='d add' \
@@ -191,14 +209,12 @@ command -v 'git' >/dev/null 2>&1  &&
 		gre='git restore' \
 		gs='git status'
 
-
-command -v 'keepassxc-cli' >/dev/null 2>&1 &&
+command -v 'keepassxc-cli' > /dev/null 2>&1 &&
 	alias \
 		kp='keepassxc-cli' \
 		kpo="keepassxc-cli open \${HOME}/passwords/KeePass\ Database.kdbx"
 
-
-if command -v 'netstat' >/dev/null 2>&1; then
+if command -v 'netstat' > /dev/null 2>&1; then
 	alias \
 		ntstr6='netstat -rf inet6' \
 		ntstr='netstat -rf inet' \
@@ -210,14 +226,11 @@ if command -v 'netstat' >/dev/null 2>&1; then
 		alias \
 			ntstl6='netstat -lf inet6' \
 			ntstl='netstat -lf inet'
-
 else
 	complain_noexec 'netstat'
-
 fi
 
-
-command -v 'task' >/dev/null 2>&1 &&
+command -v 'task' > /dev/null 2>&1 &&
 	alias \
 		ta='task add' \
 		td='task done' \
@@ -229,32 +242,29 @@ command -v 'task' >/dev/null 2>&1 &&
 		tt='task list due:today' \
 		tup="task done \$(tdue)"
 
-
-if command -v 'tmux' >/dev/null 2>&1; then
+if command -v 'tmux' > /dev/null 2>&1; then
 	alias \
 		tm='tmux' \
 		tma='tmux attach' \
 		tmk='tmux kill-server' \
 		tml='tmux list-sessions'
-
 else
 	complain_noexec 'tmux'
-
 fi
 
-
-command -v 'yt-dlp' >/dev/null 2>&1 &&
+command -v 'yt-dlp' > /dev/null 2>&1 &&
 	alias \
 		yt='yt-dlp' \
 		yta='yt-dlp -xf bestaudio/best' \
 		ytdesc='yt-dlp --get-description' \
 		ytlen='yt-dlp --get-duration'
 
-
-[ -n "${MARKDOWNDIR}" ] && alias cdmd="cd \${MARKDOWNDIR}"
-[ -n "${SRVDIR}" ] && alias cdsrv="cd \${MARKDOWNDIR}"
-[ -n "${SITE}" ] && alias tnet="ping \${SITE##*//}"
-
+[ -n "${MARKDOWNDIR}" ] &&
+	alias cdmd="cd \${MARKDOWNDIR}"
+[ -n "${SRVDIR}" ] &&
+	alias cdsrv="cd \${MARKDOWNDIR}"
+[ -n "${SITE}" ] &&
+	alias tnet="ping \${SITE##*//}"
 
 OS="$(uname)"
 [ -z "${OS##*BSD}" ] && pf_aliases

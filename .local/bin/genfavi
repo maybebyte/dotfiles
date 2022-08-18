@@ -23,7 +23,7 @@ err() {
 }
 
 usage() {
-	cat >&2 <<EOF
+	cat >&2 << EOF
 usage:
 ${PROGRAM_NAME} [image]
 EOF
@@ -39,18 +39,16 @@ genfavi() {
 		-delete 0 -alpha off -colors 256 favicon.ico
 }
 
-
 [ -n "$1" ] || usage
 
 set -u
 
-command -v 'convert' >/dev/null 2>&1 || err 'convert not found in PATH.'
+command -v 'convert' > /dev/null 2>&1 || err 'convert not found in PATH.'
 
 case "$(file -ib -- "$1")" in
 	image/*) : ;; # images are OK to process
 	*) err "$1 isn't an image." ;;
 esac
-
 
 genfavi "$1" && exec cp 'favicon.ico' 'favicon.png'
 

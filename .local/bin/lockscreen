@@ -20,8 +20,7 @@ err() {
 	exit 1
 }
 
-
-command -v 'xlock' >/dev/null 2>&1 || err 'xlock not found in PATH.'
+command -v 'xlock' > /dev/null 2>&1 || err 'xlock not found in PATH.'
 
 # Must lock the screen even if these fail.
 clear_clip || :

@@ -23,7 +23,7 @@ err() {
 }
 
 usage() {
-	cat >&2 <<EOF
+	cat >&2 << EOF
 usage:
 ${PROGRAM_NAME} [-i indexfile] [domain] [markdown directory] [server directory]
 
@@ -34,15 +34,13 @@ EOF
 	exit 1
 }
 
-
 while getopts i:h opt; do
 	case "${opt}" in
 		'i') readonly INDEX="${OPTARG##*/}" ;;
-		'h'|*) usage ;;
+		'h' | *) usage ;;
 	esac
 done
 shift $((OPTIND - 1))
-
 
 [ -n "$1" ] || usage
 [ -n "$2" ] || usage
@@ -53,7 +51,6 @@ set -u
 umask 022
 [ "$(uname)" = 'OpenBSD' ] || err "${PROGRAM_NAME} only supports OpenBSD."
 
-
 readonly SITE="$1"
 readonly MARKDOWNDIR="$2"
 readonly SRVDIR="$3"
@@ -62,17 +59,15 @@ HTMLDIR="$(mktemp -d)"
 readonly HTMLDIR
 trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
 
-
 : "${INDEX:=index.md}"
 
 ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${LOGNAME}" \
-	"${SITE}" >/dev/null 2>&1
+	"${SITE}" > /dev/null 2>&1
 
 rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
-	> "${HTMLDIR}/rss.xml" 2>/dev/null
+	> "${HTMLDIR}/rss.xml" 2> /dev/null
 
-
-doas /bin/sh <<-EOF
+doas /bin/sh <<- EOF
 	rm -rf -- ${SRVDIR:?}
 	mkdir -p -- ${SRVDIR}
 	mv -- ${HTMLDIR}/* ${SRVDIR}/

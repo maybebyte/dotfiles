@@ -21,13 +21,11 @@ err() {
 	exit 1
 }
 
-
 readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 . "${COLORS_SH}"
 
 [ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
-command -v 'dmenu_run' >/dev/null 2>&1 || err 'dmenu_run not found in PATH.'
-
+command -v 'dmenu_run' > /dev/null 2>&1 || err 'dmenu_run not found in PATH.'
 
 dmenu_run -i -fn 'mono-12' \
 	-nb "${background:-#040516}" \

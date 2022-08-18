@@ -21,7 +21,7 @@ err() {
 }
 
 usage() {
-	cat >&2 <<EOF
+	cat >&2 << EOF
 usage:
 ${0##*/} [cue file] [FLAC file]
 
@@ -73,7 +73,6 @@ splitflac() {
 	"${CUETAG}" "$1" ./*.flac || err 'Unable to tag FLAC files.'
 }
 
-
 while getopts cd opt; do
 	case "${opt}" in
 		c) readonly CONVERT='yes' ;;
@@ -88,33 +87,29 @@ shift $((OPTIND - 1))
 
 set -u
 
-
 # cuetag is checked later since the executable's name isn't consistent
 # among operating systems.
 readonly DEPENDENCIES='flac
 shntool'
 
 echo "${DEPENDENCIES}" | while read -r dependency; do
-	command -v -- "${dependency}" >/dev/null 2>&1 ||
+	command -v -- "${dependency}" > /dev/null 2>&1 ||
 		err "${dependency} not found in PATH."
 done
 
-
-if command -v 'cuetag' >/dev/null 2>&1; then
+if command -v 'cuetag' > /dev/null 2>&1; then
 	readonly CUETAG='cuetag'
-elif command -v 'cuetag.sh' >/dev/null 2>&1; then
+elif command -v 'cuetag.sh' > /dev/null 2>&1; then
 	readonly CUETAG='cuetag.sh'
 fi
 
 [ -n "${CUETAG}" ] || err 'Neither cuetag nor cuetag.sh found.'
 
-
 [ "${CONVERT}" = 'yes' ] && {
 	# makes sense to check dependency only when it's really needed
-	command -v 'sox' >/dev/null 2>&1 || err 'sox not found in PATH.'
+	command -v 'sox' > /dev/null 2>&1 || err 'sox not found in PATH.'
 	convert_to_16bit "$2"
 }
-
 
 # Check for sector boundary errors and fix them if they are present
 # before splitting the FLAC file.
@@ -123,13 +118,11 @@ shnfix -c -- "$2" && {
 	mv -- "${2%.flac}-fixed.flac" "$2"
 }
 
-
 CRLESS_CUESHEET="$(mktemp)"
 readonly CRLESS_CUESHEET
 
 # removes carriage returns from cuesheet
 tr -d '\r' < "$1" > "${CRLESS_CUESHEET}"
 mv "${CRLESS_CUESHEET}" "$1"
-
 
 splitflac "$1" "$2"

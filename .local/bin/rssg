@@ -38,41 +38,38 @@ main() {
 	title="$2"
 
 	description="$(
-		echo "${html}" \
-			| get_description \
-			| remove_tags \
-			| remove_nbsp
+		echo "${html}" |
+			get_description |
+			remove_tags |
+			remove_nbsp
 	)"
 
 	ITEMS="$(echo "${html}" | get_items)"
 	readonly ITEMS
 
 	RSS="$(
-		echo "${ITEMS}" \
-			| render_items "${base}" "${base_url}" \
-			| render_feed "${url}" "${title}" "${description}"
+		echo "${ITEMS}" |
+			render_items "${base}" "${base_url}" |
+			render_feed "${url}" "${title}" "${description}"
 	)"
 	readonly RSS
 
-	>&2 echo "[rssg] ${INDEX_FILE##$(pwd)/} $(echo "${RSS}" | grep -c '<item>') items"
+	echo >&2 "[rssg] ${INDEX_FILE##$(pwd)/} $(echo "${RSS}" | grep -c '<item>') items"
 	echo "${RSS}"
 }
-
 
 usage() {
 	echo "usage: ${0##*/} index.{html,md} title > rss.xml" >&2
 	exit 1
 }
 
-
 no_file() {
 	echo "${0##*/}: $1: No such file" >&2
 	exit 2
 }
 
-
 md_to_html() {
-	command -v 'lowdown' >/dev/null 2>&1 || exit 3
+	command -v 'lowdown' > /dev/null 2>&1 || exit 3
 
 	lowdown \
 		--html-no-escapehtml \
@@ -82,22 +79,18 @@ md_to_html() {
 		-- "$1"
 }
 
-
 get_title() {
 	awk -- 'tolower($0)~/^<h1/{gsub(/<[^>]*>/,"",$0);print;exit}'
 }
-
 
 get_url() {
 	grep -i '<a .*rss.xml"' | head -1 | sed 's#.*href="\(.*\)".*#\1#'
 }
 
-
 get_items() {
-	grep -i 'href=".*" title="' \
-		| sed 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
+	grep -i 'href=".*" title="' |
+		sed 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
 }
-
 
 get_description() {
 	readonly START='sub("^.*<"s"*"t"("s"[^>]*)?>","")'
@@ -105,16 +98,13 @@ get_description() {
 	awk -v 's=[[:space:]]' -v 't=[Pp]' -- "${START},${STOP};x{exit}"
 }
 
-
 remove_tags() {
 	sed 's#<[^>]*>##g;s#</[^>]*>##g'
 }
 
-
 remove_nbsp() {
 	sed 's#\&nbsp;# #g'
 }
-
 
 rel_to_abs_urls() {
 	site_url="$1"
@@ -125,12 +115,10 @@ rel_to_abs_urls() {
 	sed -E -- "${abs};${rel}"
 }
 
-
 date_rfc_822() {
 	date -j '+%a, %d %b %Y %H:%M:%S %z' \
-		"$(echo "$1"| tr -cd '[:digit:]')0000"
+		"$(echo "$1" | tr -cd '[:digit:]')0000"
 }
-
 
 render_items() {
 	while read -r i; do
@@ -138,13 +126,12 @@ render_items() {
 	done
 }
 
-
 render_item() {
 	base="$1"
 	base_url="$2"
 	item="$3"
 
-	site_url="$(echo "${base_url}"| sed 's#\(.*//.*\)/.*#\1#')"
+	site_url="$(echo "${base_url}" | sed 's#\(.*//.*\)/.*#\1#')"
 
 	date="$(echo "${item}" | awk '{print $2}')"
 	url="$(echo "${item}" | awk '{print $1}')"
@@ -154,9 +141,9 @@ render_item() {
 	[ -f "${f%\.html}.md" ] && html="$(md_to_html "${f%\.html}.md")"
 
 	description="$(
-		echo "${html}" \
-			| rel_to_abs_urls "${site_url}" "${base_url}" \
-			| remove_nbsp
+		echo "${html}" |
+			rel_to_abs_urls "${site_url}" "${base_url}" |
+			remove_nbsp
 	)"
 
 	title="$(echo "${description}" | get_title)"
@@ -176,7 +163,6 @@ render_item() {
 </item>'
 }
 
-
 render_feed() {
 	url="$1"
 	title="$(echo "$2" | remove_nbsp)"
@@ -195,6 +181,5 @@ render_feed() {
 '"$(cat)"'
 </channel></rss>'
 }
-
 
 main "$@"
