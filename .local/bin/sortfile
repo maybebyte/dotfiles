@@ -31,21 +31,19 @@ $program_name removes redundant entries.
 EOT
 }
 
-
 @ARGV or usage;
 
 for (@ARGV) {
 	open my $unsorted_file_fh, '<', $_;
 
 	my @lines;
-	while (my $line = <$unsorted_file_fh>) {
+	while ( my $line = <$unsorted_file_fh> ) {
 		chomp $line;
 		push @lines, $line;
 	}
 
 	close $unsorted_file_fh;
 	rename $_, "$_.bak";
-
 
 	open my $sorted_file_fh, '>', $_;
 	say $sorted_file_fh join "\n", sort &uniq(@lines);

@@ -19,21 +19,20 @@ use Number::Bytes::Human 'format_bytes';
 use OpenBSD::Pledge;
 use OpenBSD::Unveil;
 
-pledge( qw(rpath unveil) ) or die "Pledge failed: $!\n";
+pledge(qw(rpath unveil)) or die "Pledge failed: $!\n";
 
-my $filename = shift // die "Need a file name.\n";
+my $filename = shift or die "Need a file name.\n";
 
-unveil($filename, 'r') or die "Unveil failed: $!\n";
-pledge( qw(rpath) ) or die "Pledge failed: $!\n";
-
+unveil( $filename, 'r' ) or die "Unveil failed: $!\n";
+pledge(qw(rpath)) or die "Pledge failed: $!\n";
 
 my $basename = fileparse $filename;
 
-my $width = shift // die "Need a width.\n";
-my $height = shift // die "Need a height.\n";
+my $width = shift or die "Need a width.\n";
+my $height = shift or die "Need a height.\n";
 my $geometry = $width . 'x' . $height;
 
-my $file_size = format_bytes( (stat $filename)[7] );
+my $file_size = format_bytes( ( stat $filename )[7] );
 my $separator = ' | ';
 
 print $file_size . $separator . $geometry . $separator . $basename;

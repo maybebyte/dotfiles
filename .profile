@@ -29,7 +29,8 @@ export \
 # these have to come after XDG_* are defined
 export \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
-	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc"
+	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
+	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidyrc"
 
 # shellcheck disable=SC1091
 [ -n "${DISPLAY}" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
