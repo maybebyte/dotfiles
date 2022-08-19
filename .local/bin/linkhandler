@@ -112,8 +112,7 @@ my @options = (
 	'watch (loop)',
 );
 
-# TODO: seems to throw a comparison error even though it's getting checked?
-chomp( my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n" );
+chomp( my $url = shift // die "$program_name needs a URL!\n" );
 
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
