@@ -292,7 +292,6 @@ otherwise, use it the same way you would use nc(1).' >&2
 # with rffd, open up random videos with mpv(1).
 randlisten() {
 	case "$1" in
-
 		'' | '-h')
 			echo 'with rffd, open up random videos with mpv(1).
 
