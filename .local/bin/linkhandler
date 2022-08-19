@@ -78,17 +78,13 @@ sub fetch_response {
 sub check_dependencies {
 	open my $which_fh, '-|', qw(which --), @_;
 
-	my @dependency_checks;
-	while (<$which_fh>) {
-		chomp;
-		push @dependency_checks, $_;
-	}
+	chomp( my @dependency_checks = <$which_fh> );
 
 	if ( scalar @_ != scalar @dependency_checks ) {
 		my $count = 0;
-		while (<@_>) {
-			$dependency_checks[$count] // '' =~ /$_/
-				or die "$_ is not installed!\n";
+		for (@_) {
+			die "$_ is not installed!\n"
+				unless ( $dependency_checks[$count] // '' ) =~ /$_/;
 			$count++;
 		}
 	}
@@ -116,6 +112,7 @@ my @options = (
 	'watch (loop)',
 );
 
+# TODO: seems to throw a comparison error even though it's getting checked?
 chomp( my $url = $ARGV[0] // <STDIN> // die "$program_name needs a URL!\n" );
 
 $url =~ s/\Ahttp:/https:/;
