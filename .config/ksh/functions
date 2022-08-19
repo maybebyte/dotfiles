@@ -289,6 +289,23 @@ otherwise, use it the same way you would use nc(1).' >&2
 	nc -X 5 -x 127.0.0.1:9050 "$@"
 }
 
+# with rffd, open up random videos with mpv(1).
+randlisten() {
+	case "$1" in
+
+		'' | '-h')
+			echo 'with rffd, open up random videos with mpv(1).
+
+randvids [directory with videos]' >&2
+
+			return
+			;;
+	esac
+
+	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv \
+		--no-resume-playback --no-keep-open --no-pause --no-video --
+}
+
 # with rffd, open up random pics with sxiv(1).
 randpics() {
 	case "$1" in
@@ -314,8 +331,8 @@ randvids [directory with videos]' >&2
 			;;
 	esac
 
-	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback \
-		--no-keep-open --no-pause --no-video --
+	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv \
+		--no-resume-playback --no-keep-open --no-pause --no-video --
 }
 
 # with rffd, open up random videos with mpv(1).
