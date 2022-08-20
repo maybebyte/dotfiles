@@ -74,8 +74,10 @@ $federation_api_response->{success}
 
 my $decoded_federation_api_response =
 	decode_json $federation_api_response->{content};
-chomp( my $current_synapse_version =
-	'v' . ${$decoded_federation_api_response}{'Version'}{'version'} );
+
+my $current_synapse_version =
+	'v' . ${$decoded_federation_api_response}{'Version'}{'version'};
+chomp($current_synapse_version);
 
 if ( $remote_synapse_version gt $current_synapse_version ) {
 	exec 'notify-send', "Time to upgrade to synapse $remote_synapse_version";

@@ -49,30 +49,29 @@ my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
 
 my ( $background, $foreground, $color3 );
 
-unless (
-	eval {
-		my $json = do {
-			local $/;
-			open my $json_fh, '<', $colors_wal;
-			<$json_fh>;
-		};
+unless ( eval {
+	my $json = do {
+		local $/;
+		open my $json_fh, '<', $colors_wal;
+		<$json_fh>;
+	};
 
-		my $decoded_json = decode_json $json;
+	my $decoded_json = decode_json $json;
 
-		$background = ${$decoded_json}{'special'}{'background'} // die
-			"pywal background color could not be read from $colors_wal.\n";
-		$foreground = ${$decoded_json}{'special'}{'foreground'} // die
-			"pywal foreground color could not be read from $colors_wal.\n";
-		$color3 = ${$decoded_json}{'colors'}{'color3'} // die
-			"pywal color3 could not be read from $colors_wal.\n";
+	$background = ${$decoded_json}{'special'}{'background'}
+		// die "pywal background color could not be read from $colors_wal.\n";
+	$foreground = ${$decoded_json}{'special'}{'foreground'}
+		// die "pywal foreground color could not be read from $colors_wal.\n";
+	$color3 = ${$decoded_json}{'colors'}{'color3'}
+		// die "pywal color3 could not be read from $colors_wal.\n";
 
-		return 1;
-	}
-	)
+	return 1;
+} )
 {
 	print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
 }
 
+#<<<
 my @dmenu_options = (
 	'-i',
 	'-fn', 'mono-12',
@@ -81,6 +80,7 @@ my @dmenu_options = (
 	'-sb', $background // '#040516',
 	'-sf', $foreground // '#e0cef3',
 );
+#>>>
 
 my $key = shift or die "Need a key.\n";
 
