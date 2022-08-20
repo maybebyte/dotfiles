@@ -1,21 +1,26 @@
-# I/O Control
+# I/O control
 --standard-error-output
 --warning-output
 
-# Basic Options
+# Basic options
 --indent-columns=4
 --maximum-line-length=80
+--converge
 
 # Tabs
 --entab-leading-whitespace=4
 
-# Code Indentation Control
+# Code indentation control
 --continuation-indentation=4
 --extended-continuation-indentation
 
 # Vertical alignment
 -novalign
+--no-logical-padding
+--no-hanging-side-comments
 
 # Misc
---no-outdent-long-quotes
+--no-outdent-long-lines
 --minimum-space-to-comment=2
+--weld-nested-containers
+--nospace-for-semicolon
