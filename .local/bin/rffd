@@ -23,6 +23,9 @@ use File::Basename 'fileparse';
 use File::Find;
 use List::Util 'shuffle';
 
+# External modules.
+use File::MimeInfo::Magic 'mimetype';
+
 sub usage {
 	my $program_name = fileparse $0;
 	die <<EOF;
@@ -55,19 +58,25 @@ sub make_wanted {
 }
 
 sub randvids {
-	/\.(?:mkv|mp4|webm)\z/ or return;
-	-f or return;
+	return unless /\.(?:mkv|mp4|webm)\z/;
+
+	my $mime_type = mimetype($_);
+	return unless $mime_type =~ m{\Avideo/};
+
 	push @wanted_files, $File::Find::name;
 }
 
 sub randpics {
-	/\.(?:jpe?g|png)\z/ or return;
-	-f or return;
+	return unless /\.(?:jpe?g|png)\z/;
+
+	my $mime_type = mimetype($_);
+	return unless $mime_type =~ m{\Aimage/};
+
 	push @wanted_files, $File::Find::name;
 }
 
 sub randfiles {
-	-f or return;
+	return unless -f;
 	push @wanted_files, $File::Find::name;
 }
 
