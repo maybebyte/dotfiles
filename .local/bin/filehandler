@@ -65,12 +65,18 @@ sub get_preload_dir {
 	my $preload_dir;
 
 	given ($mimetype) {
-		when (m{\Aapplication/(?:epub|pdf)}a) {
+		when (m{ \A application/(?:epub|pdf) }ax) {
 			$preload_dir = catfile $home, 'books';
 		}
-		when (m{\Aimage/.*djvu}a) { $preload_dir = catfile $home, 'books'; }
-		when (m{\Aimage/}a) { $preload_dir = catfile $home, 'pics'; }
-		when (m{\Avideo/}a) { $preload_dir = catfile $home, 'videos'; }
+		when (m{ \A image/.*djvu }ax) {
+			$preload_dir = catfile $home, 'books';
+		}
+		when (m{ \A image/ }ax) {
+			$preload_dir = catfile $home, 'pics';
+		}
+		when (m{ \A video/ }ax) {
+			$preload_dir = catfile $home, 'videos';
+		}
 	}
 
 	return ( $preload_dir, $mimetype );
