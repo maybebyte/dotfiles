@@ -37,7 +37,7 @@ use IPC::System::Simple;
 use JSON::MaybeXS 'decode_json';
 
 sub yank {
-	chomp( my $stuff_to_copy = shift or die "yank needs something to copy!\n" );
+	chomp( my $stuff_to_copy = shift // die "yank needs something to copy!\n" );
 	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
 
 	print $xclip_fh $stuff_to_copy;
