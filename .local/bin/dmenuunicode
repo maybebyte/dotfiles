@@ -1,54 +1,142 @@
-#!/bin/sh
-# shellcheck disable=SC1090
+#!/usr/bin/env perl
+# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
 
-# rewrite of Luke Smith's dmenuunicode:
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# inspired by Luke Smith's dmenuunicode:
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
 
-# his dotfiles can be accessed here:
-# https://github.com/LukeSmithxyz/voidrice
+use autodie ':all';
+use strict;
+use warnings;
 
-set -eu
+use feature qw(say);
 
-err() {
-	printf '%s\n' "$*" >&2
-	exit 1
+# Core modules.
+use File::Basename qw(fileparse);
+use File::Spec::Functions qw(catdir catfile);
+use IPC::Open2;
+
+# External modules.
+use IPC::System::Simple;
+use JSON::MaybeXS;
+
+sub check_dependencies {
+	open my $which_fh, '-|', qw(which --), @_;
+
+	chomp( my @dependency_checks = <$which_fh> );
+
+	if ( scalar @_ != scalar @dependency_checks ) {
+		my $count = 0;
+		for (@_) {
+			die "$_ is not installed!\n"
+				unless ( $dependency_checks[$count] // '' ) =~ /$_/;
+			$count++;
+		}
+	}
+
+	# Placing this before the comparison loop masks the real error.
+	close $which_fh;
+
+	return scalar @dependency_checks;
 }
 
-menu() {
-	dmenu -i -l 20 \
-		-fn 'mono-12' \
-		-fn 'Symbola-12' \
-		-nb "${background:-#040516}" \
-		-nf "${color3:-#9974e7}" \
-		-sb "${background:-#040516}" \
-		-sf "${foreground:-#e0cef3}"
+my @dependencies = qw(dmenu notify-send xclip);
+check_dependencies @dependencies;
+
+my $home = ( getpwuid $> )[7];
+my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
+my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
+
+my ( $background, $foreground, $color3 ) = do {
+	my $decoded_json;
+	unless ( eval {
+		my $json = do {
+			local $/;
+			open my $json_fh, '<', $colors_wal;
+			<$json_fh>;
+		};
+
+		$decoded_json = decode_json $json;
+	} )
+	{
+		print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
+	}
+
+	(
+		${$decoded_json}{'special'}{'background'} // '#040516',
+		${$decoded_json}{'special'}{'foreground'} // '#e0cef3',
+		${$decoded_json}{'colors'}{'color3'} // '#9974e7',
+	);
+};
+
+#<<<
+my @dmenu_options = (
+	'-i',
+	'-l', 20,
+	'-fn', 'mono-12',
+	'-fn', 'Symbola-12',
+	'-nb', $background,
+	'-nf', $color3,
+	'-sb', $background,
+	'-sf', $foreground,
+);
+#>>>
+
+my $program_name = fileparse $0;
+die "$program_name requires a graphical environment"
+	unless defined $ENV{'DISPLAY'};
+
+my $xdg_data_home = $ENV{'XDG_DATA_HOME'} // catdir $home, qw(.local share);
+my $emoji_file = catfile $xdg_data_home, 'emoji';
+
+open my $emoji_fh, '<', $emoji_file;
+my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
+
+while (<$emoji_fh>) {
+	my $emoji_and_description = ( split /;/ )[0];
+	say $dmenu_in $emoji_and_description;
 }
 
-readonly DEPENDENCIES='dmenu
-notify-send
-xclip'
+close $emoji_fh;
+close $dmenu_in;
 
-readonly COLORS_SH="${XDG_CACHE_HOME:-${HOME}/.cache}/wal/colors.sh"
-. "${COLORS_SH}"
+chomp( my $user_input = <$dmenu_out> // die "$program_name needs an emoji!\n" );
+close $dmenu_out;
+waitpid $dmenu_pid, 0;
 
-echo "${DEPENDENCIES}" | while read -r dependency; do
-	command -v -- "${dependency}" > /dev/null 2>&1 ||
-		err "${dependency} not found in PATH."
-done
+# NOTE: It is important to scan the file again to see if the user input is
+# actually in there, as the output returned by dmenu can be anything (in other
+# words, what dmenu sends to STDOUT is not limited to what is passed to dmenu's
+# STDIN). If this is not done, anything can be sent to the clipboard in theory.
+open $emoji_fh, '<', $emoji_file;
+my $input_found = 0;
+while (<$emoji_fh>) {
+	if (/\A$user_input/) {
+		$input_found++;
+		last;
+	}
+}
 
-[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
+close $emoji_fh;
+die "'$user_input' not found in '$emoji_file'\n" unless $input_found;
 
-readonly EMOJI_FILE="${XDG_DATA_HOME:-${HOME}/.local/share}/emoji"
-EMOJI="$(cut -d ';' -f 1 -- "${EMOJI_FILE}" | menu)"
-EMOJI="${EMOJI%% *}"
-readonly EMOJI
+my $emoji = substr $user_input, 0, index( $user_input, ' ' );
 
-[ -n "${EMOJI}" ] || err 'Must choose an emoji.'
+open my $xclip_fh, '|-', qw(xclip -i -selection clipboard);
+print $xclip_fh $emoji;
+close $xclip_fh;
 
-grep -Fq -- "${EMOJI}" "${EMOJI_FILE}" || err "Emoji not found in ${EMOJI_FILE}."
-
-if printf '%s' "${EMOJI}" | xclip -selection clipboard; then
-	exec notify-send 'Emoji copied to clipboard.'
-fi
-
-err 'Unable to grab emoji with xclip(1).'
+my $notify_toggle = shift // '';
+exec qw(notify-send --), 'Emoji copied to clipboard'
+	if $notify_toggle eq 'notify';
