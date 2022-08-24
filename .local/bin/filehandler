@@ -92,9 +92,9 @@ sub build_filetree {
 	return find( { wanted => \&wanted }, $preload_dir );
 }
 
-my $operation = shift or usage;
-$operation eq 'help' and usage;
-my $file_path = shift or usage;
+usage unless my $operation = shift;
+usage if $operation eq 'help';
+usage unless my $file_path = shift;
 
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
 my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
