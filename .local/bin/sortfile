@@ -35,14 +35,13 @@ EOT
 for (@ARGV) {
 	unless ( eval {
 		open my $unsorted_file_fh, '<', $_;
-
 		my %line_appearances;
 		while ( my $line = <$unsorted_file_fh> ) {
 			chomp $line;
 			$line_appearances{$line}++;
 		}
-
 		close $unsorted_file_fh;
+
 		rename $_, "$_.bak";
 
 		open my $sorted_file_fh, '>', $_;
