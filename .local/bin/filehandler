@@ -62,22 +62,17 @@ EOF
 sub get_preload_dir {
 	my $file_to_examine = shift or die "No file for get_preload_dir given.\n";
 	my $mimetype = mimetype($file_to_examine);
-	my $preload_dir;
-
-	given ($mimetype) {
-		when (m{ \A application/(?:epub|pdf) }ax) {
-			$preload_dir = catfile $home, 'books';
+	my $preload_dir = do {
+		given ($mimetype) {
+			when (m{ \A application/(?:epub|pdf) }ax) {
+				catfile $home, 'books';
+			}
+			when (m{ \A image/.*djvu }ax) { catfile $home, 'books'; }
+			when (m{ \A image/ }ax) { catfile $home, 'pics'; }
+			when (m{ \A video/ }ax) { catfile $home, 'videos'; }
+			default { die "$mimetype isn't a supported mimetype!"; }
 		}
-		when (m{ \A image/.*djvu }ax) {
-			$preload_dir = catfile $home, 'books';
-		}
-		when (m{ \A image/ }ax) {
-			$preload_dir = catfile $home, 'pics';
-		}
-		when (m{ \A video/ }ax) {
-			$preload_dir = catfile $home, 'videos';
-		}
-	}
+	};
 
 	return ( $preload_dir, $mimetype );
 }
@@ -91,7 +86,6 @@ sub build_filetree {
 		or die "No file for build_filetree given.\n";
 
 	my ( $preload_dir, $mimetype ) = get_preload_dir $file_without_destination;
-	$preload_dir or die "get_preload_dir failed. Is '$mimetype' handled yet?\n";
 	-e $preload_dir or die "'$preload_dir' doesn't exist.\n";
 	-d _ or die "'$preload_dir' isn't a directory.\n";
 
