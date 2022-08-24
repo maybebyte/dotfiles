@@ -86,8 +86,8 @@ sub build_filetree {
 		or die "No file for build_filetree given.\n";
 
 	my ( $preload_dir, $mimetype ) = get_preload_dir $file_without_destination;
-	-e $preload_dir or die "'$preload_dir' doesn't exist.\n";
-	-d _ or die "'$preload_dir' isn't a directory.\n";
+	die "'$preload_dir' doesn't exist.\n" unless -e $preload_dir;
+	die "'$preload_dir' isn't a directory.\n" unless -d _;
 
 	return find( { wanted => \&wanted }, $preload_dir );
 }
@@ -162,8 +162,8 @@ if ( $operation eq 'move' || $operation eq 'copy' ) {
 
 	# Tilde reverted since we need to do some checks.
 	$user_input =~ s/\A~/$home/;
-	-e $user_input or die "'$user_input' doesn't exist.\n";
-	-d _ or die "'$user_input' isn't a directory.\n";
+	die "'$user_input' doesn't exist.\n" unless -e $user_input;
+	die "'$user_input' isn't a directory.\n" unless -d _;
 
 	my $destination = catfile $user_input, $base_file;
 
