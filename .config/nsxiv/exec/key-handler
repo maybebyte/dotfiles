@@ -47,38 +47,36 @@ sub yank {
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $ENV{'HOME'}, '.cache';
 my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
 
-my ( $background, $foreground, $color3 );
+my ( $background, $foreground, $color3 ) = do {
+	my $decoded_json;
+	unless ( eval {
+		my $json = do {
+			local $/;
+			open my $json_fh, '<', $colors_wal;
+			<$json_fh>;
+		};
 
-unless ( eval {
-	my $json = do {
-		local $/;
-		open my $json_fh, '<', $colors_wal;
-		<$json_fh>;
-	};
+		$decoded_json = decode_json $json;
+	} )
+	{
+		print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
+	}
 
-	my $decoded_json = decode_json $json;
-
-	$background = ${$decoded_json}{'special'}{'background'}
-		// die "pywal background color could not be read from $colors_wal.\n";
-	$foreground = ${$decoded_json}{'special'}{'foreground'}
-		// die "pywal foreground color could not be read from $colors_wal.\n";
-	$color3 = ${$decoded_json}{'colors'}{'color3'}
-		// die "pywal color3 could not be read from $colors_wal.\n";
-
-	return 1;
-} )
-{
-	print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
-}
+	(
+		${$decoded_json}{'special'}{'background'} // '#040516',
+		${$decoded_json}{'special'}{'foreground'} // '#e0cef3',
+		${$decoded_json}{'colors'}{'color3'} // '#9974e7',
+	);
+};
 
 #<<<
 my @dmenu_options = (
 	'-i',
 	'-fn', 'mono-12',
-	'-nb', $background // '#040516',
-	'-nf', $color3 // '#9974e7',
-	'-sb', $background // '#040516',
-	'-sf', $foreground // '#e0cef3',
+	'-nb', $background,
+	'-nf', $color3,
+	'-sb', $background,
+	'-sf', $foreground,
 );
 #>>>
 
