@@ -1,5 +1,5 @@
-#!/bin/sh
-# Copyright (c) 2020-2022 Ashlen <eurydice@riseup.net>
+#!/usr/bin/env perl
+# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
 
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -13,65 +13,66 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set -e
+use autodie ':all';
+use strict;
+use warnings;
 
-readonly PROGRAM_NAME="${0##*/}"
+# Core modules.
+use File::Basename qw(fileparse);
+use File::Path qw(remove_tree);
+use File::Spec::Functions qw(catfile);
+use File::Temp qw(tempdir);
+use Getopt::Std;
+use IPC::Open2;
 
-err() {
-	printf '%s\n' "$*" >&2
-	exit 1
-}
+# External modules.
+use IPC::System::Simple;
 
-usage() {
-	cat >&2 << EOF
+our ( $opt_h, $opt_i );
+my $program_name = fileparse $0;
+
+sub usage {
+	die <<EOF;
 usage:
-${PROGRAM_NAME} [-i indexfile] [domain] [markdown directory] [server directory]
+$program_name [-i indexfile] [domain] [markdown directory] [server directory]
 
--i: Specify the name of an alternate index file (by default, INDEX is
+-i: Specify the name of an alternate index file (by default, it is
     set to index.md). It must be present in the provided markdown
-    directory, otherwise ${PROGRAM_NAME} will fail.
+    directory, otherwise $program_name will fail.
 EOF
-	exit 1
 }
 
-while getopts i:h opt; do
-	case "${opt}" in
-		'i') readonly INDEX="${OPTARG##*/}" ;;
-		'h' | *) usage ;;
-	esac
-done
-shift $((OPTIND - 1))
+getopts 'hi:';
 
-[ -n "$1" ] || usage
-[ -n "$2" ] || usage
-[ -n "$3" ] || usage
+usage unless my $domain_without_schema = shift;
+usage unless my $markdown_dir = shift;
+usage unless my $server_dir = shift;
 
-set -u
+my $index_file = $opt_i // 'index.md';
+my $html_dir = tempdir( CLEANUP => 1, );
+chdir $html_dir;
 
-umask 022
-[ "$(uname)" = 'OpenBSD' ] || err "${PROGRAM_NAME} only supports OpenBSD."
+my $ssg_pid =
+	open2( my $ssg_out, undef, 'ssg6', $markdown_dir, $html_dir,
+		( getpwuid $> )[0],
+		$domain_without_schema );
 
-readonly SITE="$1"
-readonly MARKDOWNDIR="$2"
-readonly SRVDIR="$3"
+waitpid $ssg_pid, 0;
+close $ssg_out;
 
-HTMLDIR="$(mktemp -d)"
-readonly HTMLDIR
-trap 'rm -rf -- ${HTMLDIR}' EXIT INT QUIT TERM
+remove_tree( $server_dir, { keep_root => 1, } );
+system qw(mv --), glob('*'), $server_dir;
 
-: "${INDEX:=index.md}"
+my $rssg_pid = open2(
+	my $rssg_out, undef, 'rssg',
+	catfile( $markdown_dir, $index_file ),
+	"Newsletter - $domain_without_schema"
+);
+open my $rss_feed_fh, '>', catfile( $server_dir, 'rss.xml' );
+while (<$rssg_out>) { print $rss_feed_fh $_; }
 
-ssg6 "${MARKDOWNDIR}" "${HTMLDIR}" "${LOGNAME}" \
-	"${SITE}" > /dev/null 2>&1
+waitpid $rssg_pid, 0;
 
-rssg "${MARKDOWNDIR}/${INDEX}" "Newsletter - ${SITE##*//}" \
-	> "${HTMLDIR}/rss.xml" 2> /dev/null
-
-doas /bin/sh <<- EOF
-	rm -rf -- ${SRVDIR:?}
-	mkdir -p -- ${SRVDIR}
-	mv -- ${HTMLDIR}/* ${SRVDIR}/
-	rcctl reload httpd > /dev/null
-EOF
-
-echo 'Web server synced.'
+# Does the order in which filehandles are closed matter here?
+close $rssg_out;
+close $rss_feed_fh;
