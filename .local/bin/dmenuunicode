@@ -56,7 +56,7 @@ check_dependencies @dependencies;
 
 my $home = ( getpwuid $> )[7];
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
-my $colors_wal = catfile $xdg_cache_home, 'wal', 'colors.json';
+my $colors_wal = catfile $xdg_cache_home, qw(wal colors.json);
 
 my ( $background, $foreground, $color3 ) = do {
 	my $decoded_json;
