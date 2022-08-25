@@ -35,6 +35,7 @@ use File::Spec::Functions qw(catdir catfile rel2abs);
 use IPC::Open2;
 use IPC::System::Simple;
 use JSON::MaybeXS 'decode_json';
+use Image::Magick;
 
 sub yank {
 	chomp( my $stuff_to_copy = shift // die "yank needs something to copy!\n" );
@@ -108,9 +109,24 @@ while (<STDIN>) {
 
 		when ('m') { system 'filehandler', 'move', $file; }
 		when ('n') { system 'filehandler', 'rename', $file; }
-		when ('r') { system 'convert', '-rotate', '90', '--', $file, $file; }
-		when ('R') { system 'convert', '-rotate', '-90', '--', $file, $file; }
-		when ('f') { system 'convert', '-flop', '--', $file, $file; }
+		when ('r') {
+			my $image_magick = Image::Magick->new;
+			$image_magick->Read($file);
+			$image_magick->Rotate(90);
+			$image_magick->Write($file);
+		}
+		when ('R') {
+			my $image_magick = Image::Magick->new;
+			$image_magick->Read($file);
+			$image_magick->Rotate(-90);
+			$image_magick->Write($file);
+		}
+		when ('f') {
+			my $image_magick = Image::Magick->new;
+			$image_magick->Read($file);
+			$image_magick->Flop();
+			$image_magick->Write($file);
+		}
 
 		when ('y') {
 			my $basename = fileparse $file;
