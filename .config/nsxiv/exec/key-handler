@@ -115,12 +115,14 @@ while (<STDIN>) {
 			$image_magick->Rotate(90);
 			$image_magick->Write($file);
 		}
+
 		when ('R') {
 			my $image_magick = Image::Magick->new;
 			$image_magick->Read($file);
 			$image_magick->Rotate(-90);
 			$image_magick->Write($file);
 		}
+
 		when ('f') {
 			my $image_magick = Image::Magick->new;
 			$image_magick->Read($file);
