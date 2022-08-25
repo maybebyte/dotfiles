@@ -54,6 +54,8 @@ main() {
 	)"
 	readonly RSS
 
+	# BUG: Parameter expansion does not strip PWD from path. Addressing
+	# SC2295 from shellcheck does nothing.
 	echo >&2 "[rssg] ${INDEX_FILE##$(pwd)/} $(echo "${RSS}" | grep -c '<item>') items"
 	echo "${RSS}"
 }
