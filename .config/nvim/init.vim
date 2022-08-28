@@ -60,6 +60,12 @@ nnoremap <leader>o :set spell! spelllang=en_us<CR>
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 autocmd Filetype perl nnoremap <leader>t :%!perltidy -q<CR>
 autocmd Filetype perl vnoremap <leader>t :%!perltidy -q<CR>
 
@@ -110,6 +116,7 @@ endif
 " plugins
 call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
 	Plug 'junegunn/goyo.vim'
+	Plug 'junegunn/vim-easy-align'
 	Plug 'scrooloose/nerdcommenter'
 	Plug 'scrooloose/nerdtree'
 	Plug 'scrooloose/syntastic'
