@@ -51,7 +51,6 @@ noremap : ;
 let mapleader = ","
 
 nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>f :FZF $HOME<CR>
 nnoremap <leader>g :Goyo<CR>
 nnoremap <leader>d :r !date '+\%F'<CR>
 
@@ -110,8 +109,6 @@ endif
 
 " plugins
 call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
-	Plug 'junegunn/fzf'
-	Plug 'junegunn/fzf.vim'
 	Plug 'junegunn/goyo.vim'
 	Plug 'scrooloose/nerdcommenter'
 	Plug 'scrooloose/nerdtree'

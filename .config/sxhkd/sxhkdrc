@@ -8,7 +8,7 @@ super + d
 
 # dmenuunicode (pick an emoji and copy it to clipboard)
 super + u
-	${XDG_BIN_HOME}/dmenuunicode
+	${XDG_BIN_HOME}/dmenuunicode notify
 
 # web browser
 super + B
