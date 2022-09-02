@@ -16,15 +16,22 @@ use warnings;
 
 use File::Basename 'fileparse';
 use Number::Bytes::Human 'format_bytes';
-use OpenBSD::Pledge;
-use OpenBSD::Unveil;
 
-pledge(qw(rpath unveil)) or die "Pledge failed: $!\n";
+my $operating_system = $^O;
+
+if ( $operating_system eq 'openbsd' ) {
+	use OpenBSD::Pledge;
+	use OpenBSD::Unveil;
+
+	pledge(qw(rpath unveil)) or die "Pledge failed: $!\n";
+}
 
 my $filename = shift or die "Need a file name.\n";
 
-unveil( $filename, 'r' ) or die "Unveil failed: $!\n";
-pledge(qw(rpath)) or die "Pledge failed: $!\n";
+if ( $operating_system eq 'openbsd' ) {
+	unveil( $filename, 'r' ) or die "Unveil failed: $!\n";
+	pledge(qw(rpath)) or die "Pledge failed: $!\n";
+}
 
 my $basename = fileparse $filename;
 
