@@ -22,26 +22,31 @@ use File::Basename 'fileparse';
 use File::Temp;
 use HTTP::Tiny;
 use IPC::System::Simple;
-use OpenBSD::Pledge;
-use OpenBSD::Unveil;
 use URI;
 
-my %unveiled_paths = (
-	'/etc/ssl/cert.pem' => 'r',  # TLS
-	'/tmp' => 'rwc',  # tmpfile
-	'/usr/lib' => 'r',  # libcrypto, libssl
-	'/usr/libdata/perl5' => 'r',  # modules
-	'/usr/local/bin/sxiv' => 'rx',  # image viewer
-	'/usr/local/libdata/perl5/site_perl' => 'r',  # modules
-);
+my $operating_system = $^O;
 
-for ( keys %unveiled_paths ) {
-	unveil( $_, $unveiled_paths{$_} ) or die "Unveil failed: $!\n";
+if ( $operating_system eq 'openbsd' ) {
+	use OpenBSD::Pledge;
+	use OpenBSD::Unveil;
+
+	my %unveiled_paths = (
+		'/etc/ssl/cert.pem' => 'r',  # TLS
+		'/tmp' => 'rwc',  # tmpfile
+		'/usr/lib' => 'r',  # libcrypto, libssl
+		'/usr/libdata/perl5' => 'r',  # modules
+		'/usr/local/bin/sxiv' => 'rx',  # image viewer
+		'/usr/local/libdata/perl5/site_perl' => 'r',  # modules
+	);
+
+	for ( keys %unveiled_paths ) {
+		unveil( $_, $unveiled_paths{$_} ) or die "Unveil failed: $!\n";
+	}
+
+	# No need for unveil anymore.
+	pledge(qw(rpath tmppath fattr proc exec prot_exec dns inet))
+		or die "Pledge failed: $!\n";
 }
-
-# No need for unveil anymore.
-pledge(qw(rpath tmppath fattr proc exec prot_exec dns inet))
-	or die "Pledge failed: $!\n";
 
 my $program_name = fileparse $0;
 
@@ -63,9 +68,11 @@ $http->can_ssl or die "No TLS support: $!\n";
 
 my $response = $http->get($url);
 
-# No need for dns or inet anymore, as the request is stored.
-pledge(qw(rpath tmppath fattr proc exec prot_exec))
-	or die "Pledge failed: $!\n";
+if ( $operating_system eq 'openbsd' ) {
+	# No need for dns or inet anymore, as the request is stored.
+	pledge(qw(rpath tmppath fattr proc exec prot_exec))
+		or die "Pledge failed: $!\n";
+}
 
 $response->{success} or die "$response->{status} $response->{reason}\n";
 
@@ -76,5 +83,7 @@ close $tmp_fh;
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system '/usr/local/bin/sxiv', '--', $tmpfile;
 
-# No need for exec, proc, or prot_exec anymore.
-pledge(qw(rpath tmppath fattr)) or die "Pledge failed: $!\n";
+if ( $operating_system eq 'openbsd' ) {
+	# No need for exec, proc, or prot_exec anymore.
+	pledge(qw(rpath tmppath fattr)) or die "Pledge failed: $!\n";
+}
