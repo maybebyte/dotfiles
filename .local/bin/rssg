@@ -38,19 +38,19 @@ main() {
 	title="$2"
 
 	description="$(
-		echo "${html}" |
-			get_description |
-			remove_tags |
-			remove_nbsp
+		echo "${html}" \
+			| get_description \
+			| remove_tags \
+			| remove_nbsp
 	)"
 
 	ITEMS="$(echo "${html}" | get_items)"
 	readonly ITEMS
 
 	RSS="$(
-		echo "${ITEMS}" |
-			render_items "${base}" "${base_url}" |
-			render_feed "${url}" "${title}" "${description}"
+		echo "${ITEMS}" \
+			| render_items "${base}" "${base_url}" \
+			| render_feed "${url}" "${title}" "${description}"
 	)"
 	readonly RSS
 
@@ -90,8 +90,8 @@ get_url() {
 }
 
 get_items() {
-	grep -i 'href=".*" title="' |
-		sed 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
+	grep -i 'href=".*" title="' \
+		| sed 's#.*href="\(.*\)" title="\(.*\)">\(.*\)</a>.*#\1 \2 \3#'
 }
 
 get_description() {
@@ -143,9 +143,9 @@ render_item() {
 	[ -f "${f%\.html}.md" ] && html="$(md_to_html "${f%\.html}.md")"
 
 	description="$(
-		echo "${html}" |
-			rel_to_abs_urls "${site_url}" "${base_url}" |
-			remove_nbsp
+		echo "${html}" \
+			| rel_to_abs_urls "${site_url}" "${base_url}" \
+			| remove_nbsp
 	)"
 
 	title="$(echo "${description}" | get_title)"

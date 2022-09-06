@@ -29,9 +29,9 @@ unclutter -idle 3 &
 xcompmgr &
 xidle &
 
-command -v 'dbus-launch' > /dev/null 2>&1 &&
-	[ -z "${DBUS_SESSION_BUS_ADDRESS}" ] &&
-	eval "$(dbus-launch --sh-syntax --exit-with-x11)"
+command -v 'dbus-launch' > /dev/null 2>&1 \
+	&& [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
+	&& eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 
 # look and feel
 "${XDG_BIN_HOME}/wal" -R -a 85

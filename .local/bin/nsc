@@ -39,8 +39,8 @@ nsc() {
 		-oA "${TMPDIR}/nmap-$(date '+%F')" "$@"
 }
 
-command -v 'priv' > /dev/null 2>&1 ||
-	err 'priv alias left undefined; no privilege elevation available.'
+command -v 'priv' > /dev/null 2>&1 \
+	|| err 'priv alias left undefined; no privilege elevation available.'
 
 command -v 'nmap' > /dev/null 2>&1 || err 'nmap not found in PATH.'
 

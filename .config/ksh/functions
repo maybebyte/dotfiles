@@ -387,9 +387,9 @@ tarpv [archive target] | gzip -c > filename' >&2
 	DU="$(which 'du')"
 
 	SIZE_OF_DIR="$(
-		"${DU}" -sh "$1" |
-			sed -E "s/\.([[:digit:]])+//" |
-			cut -f 1
+		"${DU}" -sh "$1" \
+			| sed -E "s/\.([[:digit:]])+//" \
+			| cut -f 1
 	)"
 
 	tar -cf - "$1" | pv -s "${SIZE_OF_DIR}"
