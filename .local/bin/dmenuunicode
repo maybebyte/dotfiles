@@ -16,11 +16,10 @@
 # inspired by Luke Smith's dmenuunicode:
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
 
+use v5.32;
 use autodie ':all';
 use strict;
 use warnings;
-
-use feature qw(say);
 
 # Core modules.
 use File::Basename qw(fileparse);

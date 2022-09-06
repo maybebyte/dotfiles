@@ -22,12 +22,12 @@
 #
 # pledge (and maybe unveil too).
 
+use v5.32;
 use autodie ':all';
 use strict;
 use warnings;
 
 use experimental qw(smartmatch switch);
-use feature 'say';
 
 # Base modules.
 use File::Basename 'fileparse';

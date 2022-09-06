@@ -24,6 +24,7 @@
 # or change filehandler so it doesn't send a >0 exit code when
 # move/rename/copy are given empty parameters.
 
+use v5.32;
 use autodie ':all';
 use strict;
 use warnings;
