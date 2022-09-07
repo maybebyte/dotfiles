@@ -130,7 +130,7 @@ while (<$emoji_fh>) {
 close $emoji_fh;
 die "'$user_input' not found in '$emoji_file'\n" unless $input_found;
 
-my $emoji = substr $user_input, 0, index( $user_input, ' ' );
+my $emoji = ( split ' ', $user_input )[0];
 
 open my $xclip_fh, '|-', qw(xclip -i -selection clipboard);
 print $xclip_fh $emoji;
