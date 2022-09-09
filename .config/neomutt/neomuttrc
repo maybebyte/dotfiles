@@ -6,7 +6,7 @@
 # smtp_{url,pass} aren't needed with a working smtpd.conf(5)
 # on OpenBSD :)
 
-source "gpg2 -dq ${HOME}/passwords/email_pass.gpg |"
+source "gpg -dq ${HOME}/passwords/email_pass.gpg |"
 
 subscribe announcements@openbsd.org
 subscribe misc@openbsd.org
