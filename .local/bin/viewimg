@@ -14,17 +14,19 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 use v5.32;
-use autodie ':all';
+use autodie qw(:all);
 use strict;
 use warnings;
 
-use File::Basename 'fileparse';
+use File::Basename qw(fileparse);
 use File::Temp;
 use HTTP::Tiny;
 use IPC::System::Simple;
 use URI;
 
 my $operating_system = $^O;
+
+my $sxiv = $operating_system eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
 
 if ( $operating_system eq 'openbsd' ) {
 	use OpenBSD::Pledge;
@@ -53,18 +55,16 @@ my $program_name = fileparse $0;
 my $url = shift or die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
-$url->scheme eq 'https'
-	or die "$program_name only supports the 'https' scheme.\n";
+die "$program_name only supports the 'https' scheme.\n"
+	unless $url->scheme eq 'https';
 
 $ENV{'DISPLAY'} // die "$program_name needs a graphical environment!\n";
--e -x -r '/usr/local/bin/sxiv'
-	or die "/usr/local/bin/sxiv cannot be read and executed.\n";
 
 chdir '/tmp';
 my $tmpfile = File::Temp->new();
 
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
-$http->can_ssl or die "No TLS support: $!\n";
+die "No TLS support: $!\n" unless $http->can_ssl;
 
 my $response = $http->get($url);
 
@@ -74,14 +74,14 @@ if ( $operating_system eq 'openbsd' ) {
 		or die "Pledge failed: $!\n";
 }
 
-$response->{success} or die "$response->{status} $response->{reason}\n";
+die "$response->{status} $response->{reason}\n" unless $response->{success};
 
 open my $tmp_fh, '>', $tmpfile;
 say $tmp_fh $response->{content};
 close $tmp_fh;
 
 # Cannot be exec, since the temporary file needs to be cleaned up.
-system '/usr/local/bin/sxiv', '--', $tmpfile;
+system $sxiv, '--', $tmpfile;
 
 if ( $operating_system eq 'openbsd' ) {
 	# No need for exec, proc, or prot_exec anymore.

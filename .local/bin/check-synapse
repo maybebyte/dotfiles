@@ -14,12 +14,12 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 use v5.32;
-use autodie ':all';
+use autodie qw(:all);
 use strict;
 use warnings;
 
 # Get the basename of the program we're running.
-use File::Basename 'fileparse';
+use File::Basename qw(fileparse);
 
 # Make API requests.
 use HTTP::Tiny;
@@ -28,7 +28,7 @@ use HTTP::Tiny;
 use IPC::System::Simple;
 
 # Decode JSON and manipulate it with Perl.
-use JSON::MaybeXS 'decode_json';
+use JSON::MaybeXS qw(decode_json);
 
 sub make_github_api_url {
 	my ( $username, $repository ) = @_;
@@ -46,40 +46,52 @@ sub make_federation_api_url {
 		. "/report?server_name=$server_name";
 }
 
+sub check_dependencies {
+	my @required = @_;
+	open my $which_fh, '-|', qw(which --), @required;
+
+	unless ( eval { close $which_fh } ) {
+		exit;
+	}
+}
+
 my $program_name = fileparse $0;
 my $matrix_server = shift
 	or die "$program_name needs a domain name to check.\n";
 
-system 'command -v notify-send > /dev/null 2>&1';
+my @dependencies = qw(notify-send);
+check_dependencies @dependencies;
 
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
-$http->can_ssl or die "TLS is not supported: $!\n";
+die "TLS is not supported: $!\n" unless $http->can_ssl;
 
 my $github_api_response =
-	$http->get( make_github_api_url( 'matrix-org', 'synapse' ) );
-$github_api_response->{success}
-	or die "$github_api_response->{status} $github_api_response->{reason}\n";
+	$http->get( make_github_api_url qw(matrix-org synapse) );
+
+die "$github_api_response->{status} $github_api_response->{reason}\n"
+	unless $github_api_response->{success};
 
 my $decoded_github_api_response = decode_json $github_api_response->{content};
-chomp( my $remote_synapse_version = ${$decoded_github_api_response}{'name'} );
+chomp( my $remote_synapse_version = $decoded_github_api_response->{'name'} );
 
 # Exclude release candidates and catch unknown release schemes.
-$remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax
-	or die "Release version did not match expected release scheme.\n";
+die "Release version did not match expected release scheme.\n"
+	unless $remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax;
 
 my $federation_api_response =
-	$http->get( make_federation_api_url($matrix_server) );
-$federation_api_response->{success}
-	or die
-	"$federation_api_response->{status} $federation_api_response->{reason}\n";
+	$http->get( make_federation_api_url $matrix_server );
+
+die "$federation_api_response->{status} $federation_api_response->{reason}\n"
+	unless $federation_api_response->{success};
 
 my $decoded_federation_api_response =
 	decode_json $federation_api_response->{content};
 
-my $current_synapse_version =
-	'v' . ${$decoded_federation_api_response}{'Version'}{'version'};
-chomp($current_synapse_version);
+#<<<
+chomp( my $current_synapse_version =
+	'v' . $decoded_federation_api_response->{'Version'}{'version'} );
+#>>>
 
-if ( $remote_synapse_version gt $current_synapse_version ) {
-	exec 'notify-send', "Time to upgrade to synapse $remote_synapse_version";
-}
+$remote_synapse_version gt $current_synapse_version
+	? exec 'notify-send', "Time to upgrade to synapse $remote_synapse_version"
+	: exit;

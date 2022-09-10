@@ -16,7 +16,7 @@
 use v5.32;
 use strict;
 use warnings;
-use autodie ':all';
+use autodie qw(:all);
 
 # Extract the release tarball.
 use Archive::Tar;
@@ -28,7 +28,7 @@ use File::Temp;
 use IPC::System::Simple;
 
 # Decode JSON and manipulate it with Perl.
-use JSON::MaybeXS 'decode_json';
+use JSON::MaybeXS qw(decode_json);
 
 # Make an API request and download the release + detached signature.
 use HTTP::Tiny;
@@ -53,11 +53,21 @@ sub make_github_release_url {
 		"https://github.com/$username/$repository/releases/download/$version";
 }
 
+sub check_dependencies {
+	my @required = @_;
+	open my $which_fh, '-|', qw(which --), @required;
+
+	unless ( eval { close $which_fh } ) {
+		exit;
+	}
+}
+
+my @dependencies = qw(gpg);
 # GnuPG is required to cryptographically verify element-web.
 #
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
-system 'command -v gpg > /dev/null 2>&1';
+check_dependencies @dependencies;
 
 # $element_web_ui_dir can be changed by modifying it in the environment:
 # ELEMENT_WEB_UI_DIR=/path/to/dir handle-element-web
@@ -66,19 +76,19 @@ my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'}
 chdir "$element_web_ui_dir";
 
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
-$http->can_ssl or die "TLS is not supported: $!\n";
+die "TLS is not supported: $!\n" unless $http->can_ssl;
 
 my $api_response =
-	$http->get( make_github_api_url( 'vector-im', 'element-web' ) );
-$api_response->{success}
-	or die "$api_response->{status} $api_response->{reason}";
+	$http->get( make_github_api_url( qw(vector-im element-web) ) );
+
+die "$api_response->{status} $api_response->{reason}" unless $api_response->{success};
 
 my $decoded_json = decode_json $api_response->{content};
-chomp( my $remote_version = ${$decoded_json}{'name'} );
+chomp( my $remote_version = $decoded_json->{'name'} );
 
 # Exclude release candidates and catch unknown release schemes.
-$remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax
-	or die "Release version did not match expected release scheme.\n";
+die "Release version did not match expected release scheme.\n"
+	unless $remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax;
 
 chomp(
 	my $local_version = do {
@@ -89,28 +99,34 @@ chomp(
 	}
 );
 
-$remote_version gt $local_version
-	or die "Remote version of element-web is not newer than local version.\n";
+die "Remote version of element-web is not newer than local version.\n"
+	unless $remote_version gt $local_version;
 
-my $release_url = make_github_release_url 'vector-im', 'element-web',
+my $release_url = make_github_release_url qw(vector-im element-web),
 	$remote_version;
 my $tmpdir = File::Temp->newdir;
 
-$http->mirror(
-	"$release_url/element-$remote_version.tar.gz",
-	"$tmpdir/element-$remote_version.tar.gz",
+my $base_filename = "element-$remote_version";
+my %file_extensions = (
+	tarfile => '.tar.gz',
+	sigfile => '.tar.gz.asc',
 );
+for my $file_type ( keys %file_extensions ) {
+	$http->mirror(
+		"$release_url/$base_filename" . $file_extensions{$file_type},
+		"$tmpdir/$base_filename" . $file_extensions{$file_type},
+	);
+}
 
-$http->mirror(
-	"$release_url/element-$remote_version.tar.gz.asc",
-	"$tmpdir/element-$remote_version.tar.gz.asc",
-);
-
-system "gpg --verify $tmpdir/element-$remote_version.tar.gz.asc \\
-	$tmpdir/element-$remote_version.tar.gz > /dev/null 2>&1";
+#<<<
+system "gpg --verify" . " "
+	. "$tmpdir/$base_filename" . $file_extensions{'sigfile'} . " "
+	. "$tmpdir/$base_filename" . $file_extensions{'tarfile'} . " "
+	. "> /dev/null 2>&1";
+#>>>
 
 my $tar = Archive::Tar->new;
-$tar->extract_archive("$tmpdir/element-$remote_version.tar.gz");
+$tar->extract_archive( "$tmpdir/$base_filename" . $file_extensions{'tarfile'} );
 
 unlink "$element_web_ui_dir/element";
 

@@ -20,34 +20,34 @@
 # this could use flags/args so that it can be used non-interactively
 
 use v5.32;
-use autodie ':all';
+use autodie qw(:all);
 use strict;
 use warnings;
 
-use experimental 'switch';
+use experimental qw(switch);
 
 # Base modules.
 use File::Basename;
-use File::Path 'make_path';
-use File::Spec::Functions 'catdir';
+use File::Path qw(make_path);
+use File::Spec::Functions qw(catdir);
 use IPC::Open2;
 use HTTP::Tiny;
 
 # External modules.
-use IPC::System::Simple 'capturex';
+use IPC::System::Simple qw(capturex);
 use URI;
 
 my $program_name = fileparse $0;
 
 sub get_duration {
 	my $yt_url = shift or die "get_duration needs a URL.\n";
-	chomp( my $duration = capturex 'yt-dlp', '--get-duration', '--', $yt_url );
+	chomp( my $duration = capturex qw(yt-dlp --get-duration --), $yt_url );
 	return $duration;
 }
 
 sub get_title {
 	my $yt_url = shift or die "get_title needs a URL.\n";
-	chomp( my $title = capturex 'yt-dlp', '-e', '--', $yt_url );
+	chomp( my $title = capturex qw(yt-dlp -e --), $yt_url );
 	return $title;
 }
 
@@ -56,10 +56,9 @@ sub copy_to_clipboard {
 		or die "copy_to_clipboard needs something to copy.\n";
 	chomp $stuff_to_copy;
 
-	open my $xclip_fh, '|-', 'xclip', '-selection', 'clipboard';
+	open my $xclip_fh, '|-', qw(xclip -selection clipboard);
 	print $xclip_fh $stuff_to_copy;
 	close $xclip_fh;
-	die "xclip: non-zero exit of $?\n" if $?;
 
 	return length $stuff_to_copy;
 }
@@ -67,10 +66,10 @@ sub copy_to_clipboard {
 sub fetch_response {
 	my $fetch_url = shift or die "fetch_response needs a URL.\n";
 	my $http = HTTP::Tiny->new( verify_SSL => 1, );
-	$http->can_ssl or die "TLS is unsupported: $!\n";
+	die "TLS is unsupported: $!\n" unless $http->can_ssl;
 
 	my $response = $http->get($fetch_url);
-	$response->{success} or die "$response->{status} $response->{reason}";
+	die "$response->{status} $response->{reason}" unless $response->{success};
 
 	return $response->{content};
 }
@@ -105,8 +104,8 @@ chomp( my $url = shift // die "$program_name needs a URL!\n" );
 
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
-$url->scheme eq 'https'
-	or die "$program_name only handles the 'https' scheme.\n";
+die "$program_name only handles the 'https' scheme.\n"
+	unless $url->scheme eq 'https';
 
 check_dependencies @dependencies;
 
@@ -121,25 +120,24 @@ given ($option) {
 	when ('copy duration') {
 		my $duration = get_duration $url;
 		copy_to_clipboard $duration;
-		exec 'notify-send', '--', "Copied video duration: ($duration).";
+		exec qw(notify-send --), "Copied video duration: ($duration).";
 	}
 
 	when ('copy title') {
 		my $title = get_title $url;
 		copy_to_clipboard $title;
-		exec 'notify-send', '--', "Copied video title: ($title).";
+		exec qw(notify-send --), "Copied video title: ($title).";
 	}
 
 	when ('download audio') {
-		exec 'tmux', 'new-window', 'yt-dlp', '-xf', 'bestaudio/best', '--',
-			$url;
+		exec qw(tmux -- new-window yt-dlp -xf bestaudio/best --), $url;
 	}
 
 	when ('download file') {
 		chdir;
 
 		my $content = fetch_response($url);
-		my @uri_segments = $url->path_segments;
+		my $filename = ($url->path_segments)[-1];
 		my $host = $url->authority;
 
 		my $dir_to_write_to = catdir( 'Downloads', $host );
@@ -152,44 +150,45 @@ given ($option) {
 
 		chdir $dir_to_write_to;
 
-		open my $download_fh, '>', $uri_segments[-1];
+		open my $download_fh, '>', $filename;
 		print $download_fh $content;
 		close $download_fh;
 	}
 
 	when ('download video') {
-		exec 'tmux', 'new-window', 'yt-dlp', '--', $url;
+		exec qw(tmux -- new-window yt-dlp --), $url;
 	}
 
 	when ('listen') {
-		exec 'tmux', 'new-window', 'mpv', '--no-resume-playback',
-			'--no-keep-open', '--no-pause', '--no-video', '--', $url;
+		exec qw(tmux -- new-window mpv
+			--no-resume-playback --no-keep-open
+			--no-pause --no-video --), $url;
 	}
 
 	when ('print duration') {
 		my $duration = get_duration $url;
-		exec 'notify-send', '--', "Video duration: ($duration).";
+		exec qw(notify-send --), "Video duration: ($duration).";
 	}
 
 	when ('print title') {
 		my $title = get_title $url;
-		exec 'notify-send', '--', "Video title: ($title).";
+		exec qw(notify-send --), "Video title: ($title).";
 	}
 
 	when ('read') {
 		my $content = fetch_response($url);
-		open my $zathura_fh, '|-', 'zathura', '-';
+		open my $zathura_fh, '|-', qw(zathura -);
 		print $zathura_fh $content;
 
 		close $zathura_fh;
 		die "zathura: non-zero exit of $?\n" if $?;
 	}
 
-	when ('view image') { exec 'viewimg', $url; }
-	when ('watch') { exec 'tmux', 'new-window', 'mpv', '--', $url; }
+	when ('view image') { exec qw(viewimg), $url; }
+	when ('watch') { exec qw(tmux -- new-window mpv --), $url; }
 
 	when ('watch (loop)') {
-		exec 'tmux', 'new-window', 'mpv', '--loop', '--', $url;
+		exec qw(tmux -- new-window mpv --loop --), $url;
 	}
 
 	default { die "$program_name doesn't support that option.\n"; }

@@ -15,8 +15,8 @@ use autodie;
 use strict;
 use warnings;
 
-use File::Basename 'fileparse';
-use Number::Bytes::Human 'format_bytes';
+use File::Basename qw(fileparse);
+use Number::Bytes::Human qw(format_bytes);
 
 my $operating_system = $^O;
 

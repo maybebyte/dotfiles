@@ -18,12 +18,14 @@ use autodie;
 use strict;
 use warnings;
 
-use File::Basename 'fileparse';
+use experimental qw(switch);
+
+use File::Basename qw(fileparse);
 use File::Find;
-use List::Util 'shuffle';
+use List::Util qw(shuffle);
 
 # External modules.
-use File::MimeInfo::Magic 'mimetype';
+use File::MimeInfo::Magic qw(mimetype);
 
 sub usage {
 	my $program_name = fileparse $0;
@@ -39,8 +41,9 @@ EOF
 
 my $filetype_to_look_for = shift or usage;
 my $directory_to_search_in = shift or usage;
--e $directory_to_search_in or die "'$directory_to_search_in' doesn't exist.\n";
--d _ or die "'$directory_to_search_in' isn't a directory.\n";
+die "'$directory_to_search_in' doesn't exist.\n"
+	unless -e $directory_to_search_in;
+die "'$directory_to_search_in' isn't a directory.\n" unless -d _;
 
 my @wanted_files;
 
@@ -79,17 +82,15 @@ sub randfiles {
 	push @wanted_files, $File::Find::name;
 }
 
-if ( $filetype_to_look_for eq 'video' ) {
-	find( make_wanted( \&randvids ), $directory_to_search_in );
-}
-elsif ( $filetype_to_look_for eq 'image' ) {
-	find( make_wanted( \&randpics ), $directory_to_search_in );
-}
-elsif ( $filetype_to_look_for eq 'any' ) {
-	find( make_wanted( \&randfiles ), $directory_to_search_in );
-}
-else {
-	die "'$filetype_to_look_for' isn't a supported filetype.\n";
+given ($filetype_to_look_for) {
+	when ('video') {
+		find( make_wanted( \&randvids ), $directory_to_search_in )
+	}
+	when ('image') {
+		find( make_wanted( \&randpics ), $directory_to_search_in )
+	}
+	when ('any') { find( make_wanted( \&randfiles ), $directory_to_search_in ) }
+	default { die "'$filetype_to_look_for' isn't a supported filetype.\n" }
 }
 
 say join( "\n", shuffle(@wanted_files) ) if @wanted_files;

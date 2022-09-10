@@ -62,9 +62,9 @@ my ( $background, $foreground, $color3 ) = do {
 	}
 
 	(
-		${$decoded_json}{'special'}{'background'} // '#040516',
-		${$decoded_json}{'special'}{'foreground'} // '#e0cef3',
-		${$decoded_json}{'colors'}{'color3'} // '#9974e7',
+		$decoded_json->{'special'}{'background'} // '#040516',
+		$decoded_json->{'special'}{'foreground'} // '#e0cef3',
+		$decoded_json->{'colors'}{'color3'} // '#9974e7',
 	);
 };
 

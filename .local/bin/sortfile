@@ -33,9 +33,9 @@ EOT
 
 @ARGV or usage;
 
-for (@ARGV) {
+for my $unsorted_file (@ARGV) {
 	unless ( eval {
-		open my $unsorted_file_fh, '<', $_;
+		open my $unsorted_file_fh, '<', $unsorted_file;
 		my %line_appearances;
 		while ( my $line = <$unsorted_file_fh> ) {
 			chomp $line;
@@ -43,13 +43,13 @@ for (@ARGV) {
 		}
 		close $unsorted_file_fh;
 
-		rename $_, "$_.bak";
+		rename $unsorted_file, "$unsorted_file.bak";
 
-		open my $sorted_file_fh, '>', $_;
+		open my $sorted_file_fh, '>', $unsorted_file;
 		say $sorted_file_fh join( "\n", sort keys %line_appearances );
 		close $sorted_file_fh;
 	} )
 	{
-		print STDERR "Couldn't sort '$_': $@" if $@;
+		print STDERR "Couldn't sort '$unsorted_file': $@" if $@;
 	}
 }
