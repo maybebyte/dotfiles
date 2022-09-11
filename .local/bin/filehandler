@@ -23,7 +23,7 @@
 # pledge (and maybe unveil too).
 
 use v5.32;
-use autodie ':all';
+use autodie qw(:all);
 use strict;
 use warnings;
 

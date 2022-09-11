@@ -17,7 +17,7 @@
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
 
 use v5.32;
-use autodie ':all';
+use autodie qw(:all);
 use strict;
 use warnings;
 

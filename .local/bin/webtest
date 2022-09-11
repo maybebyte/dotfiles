@@ -14,7 +14,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 use v5.32;
-use autodie ':all';
+use autodie qw(:all);
 use strict;
 use warnings;
 
