@@ -175,7 +175,7 @@ jrnl() {
 		'-h' | *)
 			echo "jrnl (for journaling) takes no arguments.
 
-It creates ${HOME}/notes/journal/$(date '+%F').txt (including the directory
+It creates ${HOME}/notes/journal/$(date '+%F').asc (including the directory
 tree, if it doesn't exist) and then opens up the file in ${EDITOR:-EDITOR}." >&2
 
 			return
