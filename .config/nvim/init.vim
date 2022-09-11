@@ -24,6 +24,9 @@ set undofile
 set wrap
 set wrapscan
 
+let g:GPGPreferArmor = 1
+let g:GPGDefaultRecipients=["90965AE120F8E848979DEA4853670DEBCF375780"]
+
 " VimTeX should use zathura as the viewer
 let g:vimtex_view_method = 'zathura'
 
@@ -128,6 +131,7 @@ call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
 		Plug 'kovetskiy/sxhkd-vim'
 		Plug 'plasticboy/vim-markdown'
 		Plug 'lervag/vimtex'
+		Plug 'jamessan/vim-gnupg'
 	endif
 
 call plug#end()

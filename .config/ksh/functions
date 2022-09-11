@@ -175,9 +175,8 @@ jrnl() {
 		'-h' | *)
 			echo "jrnl (for journaling) takes no arguments.
 
-It creates ${HOME}/notes/journal/$(date '+%F').txt (including the
-directory tree, if it doesn't exist) with appropriate formatting and
-then opens up the file in ${EDITOR:-EDITOR}." >&2
+It creates ${HOME}/notes/journal/$(date '+%F').txt (including the directory
+tree, if it doesn't exist) and then opens up the file in ${EDITOR:-EDITOR}." >&2
 
 			return
 			;;
@@ -189,24 +188,10 @@ then opens up the file in ${EDITOR:-EDITOR}." >&2
 	}
 
 	TODAY="$(date '+%F')"
-	JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.txt"
+	JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.asc"
 
 	# easier to just create the directory than error
 	mkdir -p "${JRNL_ENTRY%/*}"
-
-	if ! [ -e "${JRNL_ENTRY}" ]; then
-		{
-			echo
-			echo "${TODAY}"
-			date '+%H:%M'
-		} > "${JRNL_ENTRY}"
-	else
-		{
-			echo
-			echo '-'
-			date '+%H:%M'
-		} >> "${JRNL_ENTRY}"
-	fi
 
 	"${EDITOR}" "${JRNL_ENTRY}"
 }
