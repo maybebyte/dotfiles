@@ -57,8 +57,6 @@ esac
 # host-specific actions
 case "$(hostname -s)" in
 	'aphrodite' | 'lain')
-		command -v 'gpg-agent' > /dev/null 2>&1 && eval "$(gpg-agent --daemon)"
-
 		export \
 			MARKDOWNDIR="${HOME}/src/website_md" \
 			SRVDIR="/var/www/htdocs/${SITE##*//}"
