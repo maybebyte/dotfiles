@@ -132,11 +132,11 @@ given ($option) {
 	when ('download file') {
 		chdir;
 
-		my $content = fetch_response($url);
+		my $content = fetch_response $url;
 		my $filename = ($url->path_segments)[-1];
 		my $host = $url->authority;
 
-		my $dir_to_write_to = catdir( 'Downloads', $host );
+		my $dir_to_write_to = catdir 'Downloads', $host;
 
 		unless ( -e $dir_to_write_to ) {
 			make_path($dir_to_write_to)
@@ -172,7 +172,7 @@ given ($option) {
 	}
 
 	when ('read') {
-		my $content = fetch_response($url);
+		my $content = fetch_response $url;
 		open my $zathura_fh, '|-', qw(zathura -);
 		print $zathura_fh $content;
 
