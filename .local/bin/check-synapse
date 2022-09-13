@@ -25,7 +25,7 @@ use File::Basename qw(fileparse);
 use HTTP::Tiny;
 
 # Run commands simply, with detailed diagnostics.
-use IPC::System::Simple;
+use IPC::System::Simple qw(capturex);
 
 # Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS qw(decode_json);
@@ -47,12 +47,8 @@ sub make_federation_api_url {
 }
 
 sub check_dependencies {
-	my @required = @_;
-	open my $which_fh, '-|', qw(which --), @required;
-
-	unless ( eval { close $which_fh } ) {
-		exit;
-	}
+	my $which_output = capturex qw(which --), @_;
+	$which_output = undef;
 }
 
 my $program_name = fileparse $0;
