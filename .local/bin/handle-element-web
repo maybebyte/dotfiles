@@ -58,11 +58,11 @@ sub check_dependencies {
 	$which_output = undef;
 }
 
-my @dependencies = qw(gpg);
 # GnuPG is required to cryptographically verify element-web.
 #
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
+my @dependencies = qw(gpg);
 check_dependencies @dependencies;
 
 # $element_web_ui_dir can be changed by modifying it in the environment:
@@ -115,10 +115,10 @@ for my $file_type ( keys %file_extensions ) {
 }
 
 #<<<
-system "gpg --verify" . " "
-	. "$tmpdir/$base_filename" . $file_extensions{'sigfile'} . " "
-	. "$tmpdir/$base_filename" . $file_extensions{'tarfile'} . " "
-	. "> /dev/null 2>&1";
+system "gpg --verify"
+	. " $tmpdir/$base_filename" . $file_extensions{'sigfile'}
+	. " $tmpdir/$base_filename" . $file_extensions{'tarfile'}
+	. " > /dev/null 2>&1";
 #>>>
 
 my $tar = Archive::Tar->new;
