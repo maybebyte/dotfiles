@@ -27,16 +27,12 @@ use File::Spec::Functions qw(catdir catfile);
 use IPC::Open2;
 
 # External modules.
-use IPC::System::Simple;
+use IPC::System::Simple qw(capturex);
 use JSON::MaybeXS;
 
 sub check_dependencies {
-	my @required = @_;
-	open my $which_fh, '-|', qw(which --), @required;
-
-	unless ( eval { close $which_fh } ) {
-		exit;
-	}
+	my $which_output = capturex qw(which --), @_;
+	$which_output = undef;
 }
 
 my @dependencies = qw(dmenu notify-send xclip);

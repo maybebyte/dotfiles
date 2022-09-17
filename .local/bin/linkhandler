@@ -75,12 +75,8 @@ sub fetch_response {
 }
 
 sub check_dependencies {
-	my @required = @_;
-	open my $which_fh, '-|', qw(which --), @required;
-
-	unless ( eval { close $which_fh } ) {
-		exit;
-	}
+	my $which_output = capturex qw(which --), @_;
+	$which_output = undef;
 }
 
 my @dependencies = qw(fzf mpv notify-send sxiv xclip yt-dlp);
@@ -136,11 +132,11 @@ given ($option) {
 	when ('download file') {
 		chdir;
 
-		my $content = fetch_response($url);
-		my $filename = ( $url->path_segments )[-1];
+		my $content = fetch_response $url;
+		my $filename = ($url->path_segments)[-1];
 		my $host = $url->authority;
 
-		my $dir_to_write_to = catdir( 'Downloads', $host );
+		my $dir_to_write_to = catdir 'Downloads', $host;
 
 		unless ( -e $dir_to_write_to ) {
 			make_path($dir_to_write_to)
@@ -176,7 +172,7 @@ given ($option) {
 	}
 
 	when ('read') {
-		my $content = fetch_response($url);
+		my $content = fetch_response $url;
 		open my $zathura_fh, '|-', qw(zathura -);
 		print $zathura_fh $content;
 

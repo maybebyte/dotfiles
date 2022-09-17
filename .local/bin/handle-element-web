@@ -25,7 +25,7 @@ use Archive::Tar;
 use File::Temp;
 
 # Run commands simply, with detailed diagnostics
-use IPC::System::Simple;
+use IPC::System::Simple qw(capturex);
 
 # Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS qw(decode_json);
@@ -48,20 +48,15 @@ sub make_github_release_url {
 }
 
 sub check_dependencies {
-	my @required = @_;
-	open my $which_fh, '-|', qw(which --), @required;
-
-	unless ( eval { close $which_fh } ) {
-		exit;
-	}
+	my $which_output = capturex qw(which --), @_;
+	$which_output = undef;
 }
-
-my @dependencies = qw(gpg);
 
 # GnuPG is required to cryptographically verify element-web.
 #
 # There is not a good way to verify signatures in Perl as far as I can
 # tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
+my @dependencies = qw(gpg);
 check_dependencies @dependencies;
 
 # $element_web_ui_dir can be changed by modifying it in the environment:
@@ -114,10 +109,10 @@ for my $file_type ( keys %file_extensions ) {
 }
 
 #<<<
-system "gpg --verify" . " "
-	. "$tmpdir/$base_filename" . $file_extensions{'sigfile'} . " "
-	. "$tmpdir/$base_filename" . $file_extensions{'tarfile'} . " "
-	. "> /dev/null 2>&1";
+system "gpg --verify"
+	. " $tmpdir/$base_filename" . $file_extensions{'sigfile'}
+	. " $tmpdir/$base_filename" . $file_extensions{'tarfile'}
+	. " > /dev/null 2>&1";
 #>>>
 
 my $tar = Archive::Tar->new;
