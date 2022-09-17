@@ -21,6 +21,6 @@
 
 # Misc
 --no-outdent-long-lines
---minimum-space-to-comment=2
+--minimum-space-to-comment=3
 --weld-nested-containers
 --nospace-for-semicolon

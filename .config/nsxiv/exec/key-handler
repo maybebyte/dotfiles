@@ -84,7 +84,7 @@ my @dmenu_options = (
 
 my $key = shift or die "Need a key.\n";
 
-while (my $file = <STDIN>) {
+while ( my $file = <STDIN> ) {
 	chomp $file;
 
 	given ($key) {

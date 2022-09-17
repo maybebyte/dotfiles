@@ -137,7 +137,7 @@ given ($option) {
 		chdir;
 
 		my $content = fetch_response($url);
-		my $filename = ($url->path_segments)[-1];
+		my $filename = ( $url->path_segments )[-1];
 		my $host = $url->authority;
 
 		my $dir_to_write_to = catdir( 'Downloads', $host );

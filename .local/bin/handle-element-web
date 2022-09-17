@@ -34,21 +34,15 @@ use JSON::MaybeXS qw(decode_json);
 use HTTP::Tiny;
 
 sub make_github_api_url {
-	my ( $username, $repository ) = @_;
-
-	$username // die '$username is undefined';
-	$repository // die '$repository is undefined';
-
+	my $username = shift // die '$username is undefined';
+	my $repository = shift // die '$repository is undefined';
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
 
 sub make_github_release_url {
-	my ( $username, $repository, $version ) = @_;
-
-	$username // die '$username is undefined';
-	$repository // die '$repository is undefined';
-	$version // die '$version is undefined';
-
+	my $username = shift // die '$username is undefined';
+	my $repository = shift // die '$repository is undefined';
+	my $version = shift // die '$version is undefined';
 	return
 		"https://github.com/$username/$repository/releases/download/$version";
 }
@@ -63,6 +57,7 @@ sub check_dependencies {
 }
 
 my @dependencies = qw(gpg);
+
 # GnuPG is required to cryptographically verify element-web.
 #
 # There is not a good way to verify signatures in Perl as far as I can
@@ -78,10 +73,10 @@ chdir "$element_web_ui_dir";
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
 die "TLS is not supported: $!\n" unless $http->can_ssl;
 
-my $api_response =
-	$http->get( make_github_api_url( qw(vector-im element-web) ) );
+my $api_response = $http->get( make_github_api_url(qw(vector-im element-web)) );
 
-die "$api_response->{status} $api_response->{reason}" unless $api_response->{success};
+die "$api_response->{status} $api_response->{reason}"
+	unless $api_response->{success};
 
 my $decoded_json = decode_json $api_response->{content};
 chomp( my $remote_version = $decoded_json->{'name'} );
