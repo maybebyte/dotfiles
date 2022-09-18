@@ -5,6 +5,7 @@ set conceallevel =2
 set diffexpr =
 set diffopt +=iwhiteall
 set noexpandtab
+set foldlevelstart =1   " Force myself to use folds
 set ignorecase
 set laststatus =0
 set lazyredraw
