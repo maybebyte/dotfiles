@@ -78,9 +78,8 @@ sub get_preload_dir {
 }
 
 sub wanted {
-
-	# To conserve space in the dmenu prompt, $home is replaced with a
-	# tilde for each entry.
+	## To conserve space in the dmenu prompt, $home is replaced with a
+	## tilde for each entry.
 	-d && push @found_directories, $File::Find::name =~ s/\A$home/~/ar;
 }
 
@@ -137,8 +136,7 @@ my @dmenu_options = (
 
 my ( $base_file, $dirs ) = fileparse $file_path;
 if ( $operation eq 'move' || $operation eq 'copy' ) {
-
-	# Used for its side-effects (populating @found_directories).
+	## Used for its side-effects (populating @found_directories).
 	build_filetree $file_path;
 
 	my $menu_pid = open2( my $menu_out, my $menu_in, qw(dmenu -l 10),

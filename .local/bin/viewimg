@@ -69,8 +69,7 @@ die "No TLS support: $!\n" unless $http->can_ssl;
 my $response = $http->get($url);
 
 if ( $operating_system eq 'openbsd' ) {
-
-	# No need for dns or inet anymore, as the request is stored.
+	## No need for dns or inet anymore, as the request is stored.
 	pledge(qw(rpath tmppath fattr proc exec prot_exec))
 		or die "Pledge failed: $!\n";
 }
@@ -85,7 +84,6 @@ close $tmp_fh;
 system $sxiv, '--', $tmpfile;
 
 if ( $operating_system eq 'openbsd' ) {
-
-	# No need for exec, proc, or prot_exec anymore.
+	## No need for exec, proc, or prot_exec anymore.
 	pledge(qw(rpath tmppath fattr)) or die "Pledge failed: $!\n";
 }
