@@ -22,7 +22,10 @@ use autodie qw(:all);
 use Archive::Tar;
 
 # Create temporary directories.
-use File::Temp;
+use File::Temp qw(tempdir);
+
+# Needed for HTTP compression.
+use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 
 # Run commands simply, with detailed diagnostics
 use IPC::System::Simple qw(capturex);
@@ -52,6 +55,26 @@ sub check_dependencies {
 	$which_output = undef;
 }
 
+sub decompress {
+	my $response = shift // die "decompress needs a response";
+
+	if ( exists $response->{headers}
+		&& exists $response->{headers}{'content-encoding'}
+		&& $response->{headers}{'content-encoding'} eq 'gzip' )
+	{
+		my $content = $response->{content};
+		my $decompressed_content;
+
+		gunzip \$content => \$decompressed_content,
+			MultiStream => 1
+			or die "gunzip: $GunzipError\n";
+
+		$response->{content} = $decompressed_content;
+	}
+
+	return $response;
+}
+
 # GnuPG is required to cryptographically verify element-web.
 #
 # There is not a good way to verify signatures in Perl as far as I can
@@ -65,13 +88,24 @@ my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'}
 	// '/var/www/htdocs/element-web';
 chdir "$element_web_ui_dir";
 
-my $http = HTTP::Tiny->new( verify_SSL => 1, );
-die "TLS is not supported: $!\n" unless $http->can_ssl;
+my $api_response = do {
+	my $http = HTTP::Tiny->new(
+		verify_SSL => 1,
+		default_headers => {
+			'Accept-Encoding' => 'gzip'
+		}
+	);
 
-my $api_response = $http->get( make_github_api_url(qw(vector-im element-web)) );
+	die "TLS is not supported: $!\n" unless $http->can_ssl;
 
-die "$api_response->{status} $api_response->{reason}"
-	unless $api_response->{success};
+	my $api_response =
+		$http->get( make_github_api_url(qw(vector-im element-web)) );
+
+	die "$api_response->{status} $api_response->{reason}"
+		unless $api_response->{success};
+
+	decompress $api_response;
+};
 
 my $decoded_json = decode_json $api_response->{content};
 chomp( my $remote_version = $decoded_json->{'name'} );
@@ -94,7 +128,9 @@ die "Remote version of element-web is not newer than local version.\n"
 
 my $release_url = make_github_release_url qw(vector-im element-web),
 	$remote_version;
-my $tmpdir = File::Temp->newdir;
+my $tmpdir = tempdir CLEANUP => 1;
+
+my $http = HTTP::Tiny->new( verify_SSL => 1, );
 
 my $base_filename = "element-$remote_version";
 my %file_extensions = (
