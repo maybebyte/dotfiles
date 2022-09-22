@@ -33,7 +33,7 @@ EOT
 
 @ARGV or usage;
 
-for my $unsorted_file (@ARGV) {
+while ( my $unsorted_file = <@ARGV>) {
 	unless ( eval {
 		open my $unsorted_file_fh, '<', $unsorted_file;
 		my %line_appearances;
