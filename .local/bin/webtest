@@ -29,6 +29,14 @@ use IPC::Open2;
 # External modules.
 use IPC::System::Simple;
 
+my $operating_system = $^O;
+
+if ( $operating_system eq 'openbsd' ) {
+	use OpenBSD::Pledge;
+	pledge(qw(rpath wpath cpath fattr tmppath proc exec))
+		or die "Pledge failed: $!\n";
+}
+
 our ( $opt_h, $opt_i );
 my $program_name = fileparse $0;
 
