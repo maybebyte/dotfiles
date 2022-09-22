@@ -105,7 +105,7 @@ remove_tree( $server_dir, { keep_root => 1, } );
 systemx qw(mv --), glob('*'), $server_dir;
 
 my $rssg_pid = open2(
-	my $rssg_out, undef, 'rssg',
+	my $rssg_out, undef, $rssg,
 	catfile( $markdown_dir, $index_file ),
 	"Newsletter - $domain_without_schema"
 );
