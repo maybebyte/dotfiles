@@ -41,8 +41,8 @@ if ( $operating_system eq 'openbsd' ) {
 		'/usr/local/libdata/perl5/site_perl' => 'r',   # modules
 	);
 
-	for ( keys %unveiled_paths ) {
-		unveil( $_, $unveiled_paths{$_} ) or die "Unveil failed: $!\n";
+	while ( my ( $path, $permissions ) = each %unveiled_paths ) {
+		unveil( $path, $permissions ) or die "Unveil failed: $!\n";
 	}
 
 	# No need for unveil anymore.
