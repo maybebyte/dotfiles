@@ -27,15 +27,7 @@ use Getopt::Std;
 use IPC::Open2;
 
 # External modules.
-use IPC::System::Simple;
-
-my $operating_system = $^O;
-
-if ( $operating_system eq 'openbsd' ) {
-	use OpenBSD::Pledge;
-	pledge(qw(rpath wpath cpath fattr tmppath proc exec))
-		or die "Pledge failed: $!\n";
-}
+use IPC::System::Simple qw(systemx);
 
 our ( $opt_h, $opt_i );
 my $program_name = fileparse $0;
@@ -58,11 +50,51 @@ my $markdown_dir = shift or usage;
 my $server_dir = shift or usage;
 
 my $index_file = $opt_i // 'index.md';
+
+my $operating_system = $^O;
+my $home = $ENV{'HOME'} // ( getpwuid $> )[7];
+my $xdg_bin_home = $ENV{'XDG_BIN_HOME'} // catfile $home, qw(.local bin);
+my $ssg = catfile $xdg_bin_home, qw(ssg6);
+my $rssg = catfile $xdg_bin_home, qw(rssg);
+
+if ( $operating_system eq 'openbsd' ) {
+	use OpenBSD::Pledge;
+	use OpenBSD::Unveil;
+
+	pledge(qw(rpath wpath cpath fattr tmppath proc exec unveil))
+		or die "Pledge failed: $!\n";
+
+	my %unveil_perms = (
+		'/tmp' => 'rc',   # tmpfile
+		'/usr/libdata/perl5' => 'r',   # modules
+		'/usr/local/libdata/perl5/site_perl' => 'r',   # modules
+		'/etc/pwd.db' => 'r',   # getpwuid
+		$ssg => 'x',   # static site generator
+		$rssg => 'x',   # rss feed
+		'/bin/mv' => 'x',
+		$markdown_dir => 'r',
+		$server_dir => 'rwc',
+	);
+
+	while ( my ( $path, $permissions ) = each %unveil_perms ) {
+		unveil( $path => $permissions ) or die "Unveil failed: $!\n";
+	}
+}
+
 my $html_dir = tempdir( CLEANUP => 1, );
+
+if ( $operating_system eq 'openbsd' ) {
+	unveil( $html_dir => 'rc', ) or die "Unveil failed: $!\n";
+
+	# Drop unveil and fattr.
+	pledge(qw(rpath wpath cpath tmppath proc exec))
+		or die "Pledge failed: $!\n";
+}
+
 chdir $html_dir;
 
 my $ssg_pid =
-	open2( my $ssg_out, undef, 'ssg6', $markdown_dir, $html_dir,
+	open2( my $ssg_out, undef, $ssg, $markdown_dir, $html_dir,
 		( getpwuid $> )[0],
 		$domain_without_schema );
 
@@ -70,7 +102,7 @@ waitpid $ssg_pid, 0;
 close $ssg_out;
 
 remove_tree( $server_dir, { keep_root => 1, } );
-system qw(mv --), glob('*'), $server_dir;
+systemx qw(mv --), glob('*'), $server_dir;
 
 my $rssg_pid = open2(
 	my $rssg_out, undef, 'rssg',
