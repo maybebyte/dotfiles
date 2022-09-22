@@ -24,6 +24,9 @@ use File::Basename qw(fileparse);
 # Make API requests.
 use HTTP::Tiny;
 
+# Needed for HTTP compression.
+use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
+
 # Run commands simply, with detailed diagnostics.
 use IPC::System::Simple qw(capturex);
 
@@ -48,6 +51,26 @@ sub check_dependencies {
 	$which_output = undef;
 }
 
+sub decompress {
+	my $response = shift // die "decompress needs a response";
+
+	if ( exists $response->{headers}
+		&& exists $response->{headers}{'content-encoding'}
+		&& $response->{headers}{'content-encoding'} eq 'gzip' )
+	{
+		my $content = $response->{content};
+		my $decompressed_content;
+
+		gunzip \$content => \$decompressed_content,
+			MultiStream => 1
+			or die "gunzip: $GunzipError\n";
+
+		$response->{content} = $decompressed_content;
+	}
+
+	return $response;
+}
+
 my $program_name = fileparse $0;
 my $matrix_server = shift
 	or die "$program_name needs a domain name to check.\n";
@@ -55,14 +78,17 @@ my $matrix_server = shift
 my @dependencies = qw(notify-send);
 check_dependencies @dependencies;
 
-my $http = HTTP::Tiny->new( verify_SSL => 1, );
+my $http = HTTP::Tiny->new(
+	verify_SSL => 1,
+	default_headers => { 'Accept-Encoding' => 'gzip' }
+);
 die "TLS is not supported: $!\n" unless $http->can_ssl;
 
-my $github_api_response =
-	$http->get( make_github_api_url qw(matrix-org synapse) );
-
-die "$github_api_response->{status} $github_api_response->{reason}\n"
-	unless $github_api_response->{success};
+my $github_api_response = do {
+	my $res = $http->get( make_github_api_url qw(matrix-org synapse) );
+	die "$res->{status} $res->{reason}\n" unless $res->{success};
+	decompress $res;
+};
 
 my $decoded_github_api_response = decode_json $github_api_response->{content};
 chomp( my $remote_synapse_version = $decoded_github_api_response->{'name'} );
@@ -71,11 +97,11 @@ chomp( my $remote_synapse_version = $decoded_github_api_response->{'name'} );
 die "Release version did not match expected release scheme.\n"
 	unless $remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax;
 
-my $federation_api_response =
-	$http->get( make_federation_api_url $matrix_server );
-
-die "$federation_api_response->{status} $federation_api_response->{reason}\n"
-	unless $federation_api_response->{success};
+my $federation_api_response = do {
+	my $res = $http->get( make_federation_api_url $matrix_server );
+	die "$res->{status} $res->{reason}\n" unless $res->{success};
+	decompress $res;
+};
 
 my $decoded_federation_api_response =
 	decode_json $federation_api_response->{content};
