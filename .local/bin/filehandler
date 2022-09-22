@@ -61,7 +61,7 @@ EOF
 
 sub get_preload_dir {
 	my $file_to_examine = shift or die "No file for get_preload_dir given.\n";
-	my $mimetype = mimetype($file_to_examine);
+	my $mimetype = mimetype $file_to_examine;
 	my $preload_dir = do {
 		given ($mimetype) {
 			when (m{ \A application/(?:epub|pdf) }ax) {

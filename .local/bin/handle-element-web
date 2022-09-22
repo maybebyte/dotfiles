@@ -37,21 +37,21 @@ use JSON::MaybeXS qw(decode_json);
 use HTTP::Tiny;
 
 sub make_github_api_url {
-	my $username = shift // die '$username is undefined';
-	my $repository = shift // die '$repository is undefined';
+	my $username = shift or die '$username is undefined';
+	my $repository = shift or die '$repository is undefined';
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
 
 sub make_github_release_url {
-	my $username = shift // die '$username is undefined';
-	my $repository = shift // die '$repository is undefined';
-	my $version = shift // die '$version is undefined';
+	my $username = shift or die '$username is undefined';
+	my $repository = shift or die '$repository is undefined';
+	my $version = shift or die '$version is undefined';
 	return
 		"https://github.com/$username/$repository/releases/download/$version";
 }
 
 sub decompress {
-	my $response = shift // die "decompress needs a response";
+	my $response = shift or die "decompress needs a response";
 
 	if ( exists $response->{headers}
 		&& exists $response->{headers}{'content-encoding'}

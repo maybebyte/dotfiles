@@ -65,7 +65,7 @@ sub copy_to_clipboard {
 }
 
 sub decompress {
-	my $response = shift // die "decompress needs a response";
+	my $response = shift or die "decompress needs a response";
 
 	if ( exists $response->{headers}
 		&& exists $response->{headers}{'content-encoding'}
