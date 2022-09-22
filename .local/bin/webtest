@@ -71,9 +71,9 @@ if ( $operating_system eq 'openbsd' ) {
 		'/etc/pwd.db' => 'r',   # getpwuid
 		$ssg => 'x',   # static site generator
 		$rssg => 'x',   # rss feed
-		'/bin/mv' => 'x',
-		$markdown_dir => 'r',
-		$server_dir => 'rwc',
+		'/bin/mv' => 'x',   # to move lots of tiny files
+		$markdown_dir => 'r',   # markdown to turn into html
+		$server_dir => 'rwc',   # place where html goes
 	);
 
 	while ( my ( $path, $permissions ) = each %unveil_perms ) {
