@@ -32,6 +32,7 @@ use File::Path qw(make_path);
 use File::Spec::Functions qw(catdir);
 use IPC::Open2;
 use HTTP::Tiny;
+use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 
 # External modules.
 use IPC::System::Simple qw(capturex);
@@ -63,15 +64,38 @@ sub copy_to_clipboard {
 	return length $stuff_to_copy;
 }
 
+sub decompress {
+	my $response = shift // die "decompress needs a response";
+
+	if ( exists $response->{headers}
+		&& exists $response->{headers}{'content-encoding'}
+		&& $response->{headers}{'content-encoding'} eq 'gzip' )
+	{
+		my $content = $response->{content};
+		my $decompressed_content;
+
+		gunzip \$content => \$decompressed_content,
+			MultiStream => 1
+			or die "gunzip: $GunzipError\n";
+
+		$response->{content} = $decompressed_content;
+	}
+
+	return $response;
+}
+
 sub fetch_response {
 	my $fetch_url = shift or die "fetch_response needs a URL.\n";
-	my $http = HTTP::Tiny->new( verify_SSL => 1, );
+	my $http = HTTP::Tiny->new(
+		verify_SSL => 1,
+		default_headers => { 'Accept-Encoding' => 'gzip' }
+	);
 	die "TLS is unsupported: $!\n" unless $http->can_ssl;
 
 	my $response = $http->get($fetch_url);
 	die "$response->{status} $response->{reason}" unless $response->{success};
 
-	return $response->{content};
+	return decompress $response;
 }
 
 sub check_dependencies {
@@ -132,7 +156,8 @@ given ($option) {
 	when ('download file') {
 		chdir;
 
-		my $content = fetch_response $url;
+		my $response = fetch_response $url;
+		my $content = $response->{content};
 		my $filename = ($url->path_segments)[-1];
 		my $host = $url->authority;
 
@@ -172,7 +197,8 @@ given ($option) {
 	}
 
 	when ('read') {
-		my $content = fetch_response $url;
+		my $response = fetch_response $url;
+		my $content = $response->{content};
 		open my $zathura_fh, '|-', qw(zathura -);
 		print $zathura_fh $content;
 

@@ -75,6 +75,20 @@ sub decompress {
 	return $response;
 }
 
+sub fetch_response {
+	my $fetch_url = shift or die "fetch_response needs a URL.\n";
+	my $http = HTTP::Tiny->new(
+		verify_SSL => 1,
+		default_headers => { 'Accept-Encoding' => 'gzip' }
+	);
+	die "TLS is unsupported: $!\n" unless $http->can_ssl;
+
+	my $response = $http->get($fetch_url);
+	die "$response->{status} $response->{reason}" unless $response->{success};
+
+	return decompress $response;
+}
+
 # GnuPG is required to cryptographically verify element-web.
 #
 # There is not a good way to verify signatures in Perl as far as I can
@@ -88,24 +102,8 @@ my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'}
 	// '/var/www/htdocs/element-web';
 chdir "$element_web_ui_dir";
 
-my $api_response = do {
-	my $http = HTTP::Tiny->new(
-		verify_SSL => 1,
-		default_headers => {
-			'Accept-Encoding' => 'gzip'
-		}
-	);
-
-	die "TLS is not supported: $!\n" unless $http->can_ssl;
-
-	my $api_response =
-		$http->get( make_github_api_url(qw(vector-im element-web)) );
-
-	die "$api_response->{status} $api_response->{reason}"
-		unless $api_response->{success};
-
-	decompress $api_response;
-};
+my $api_response =
+	fetch_response( make_github_api_url(qw(vector-im element-web)) );
 
 my $decoded_json = decode_json $api_response->{content};
 chomp( my $remote_version = $decoded_json->{'name'} );
