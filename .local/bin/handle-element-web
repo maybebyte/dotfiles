@@ -50,11 +50,6 @@ sub make_github_release_url {
 		"https://github.com/$username/$repository/releases/download/$version";
 }
 
-sub check_dependencies {
-	my $which_output = capturex qw(which --), @_;
-	$which_output = undef;
-}
-
 sub decompress {
 	my $response = shift // die "decompress needs a response";
 
@@ -87,6 +82,11 @@ sub fetch_response {
 	die "$response->{status} $response->{reason}" unless $response->{success};
 
 	return decompress $response;
+}
+
+sub check_dependencies {
+	my $which_output = capturex qw(which --), @_;
+	$which_output = undef;
 }
 
 # GnuPG is required to cryptographically verify element-web.
