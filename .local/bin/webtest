@@ -48,15 +48,9 @@ getopts 'hi:';
 my $domain_without_schema = shift or usage;
 my $markdown_dir = shift or usage;
 my $server_dir = shift or usage;
-
 my $index_file = $opt_i // 'index.md';
 
 my $operating_system = $^O;
-my $home = $ENV{'HOME'} // ( getpwuid $> )[7];
-my $xdg_bin_home = $ENV{'XDG_BIN_HOME'} // catfile $home, qw(.local bin);
-my $ssg = catfile $xdg_bin_home, qw(ssg6);
-my $rssg = catfile $xdg_bin_home, qw(rssg);
-
 if ( $operating_system eq 'openbsd' ) {
 	use OpenBSD::Pledge;
 	use OpenBSD::Unveil;
@@ -64,29 +58,46 @@ if ( $operating_system eq 'openbsd' ) {
 	pledge(qw(rpath wpath cpath fattr tmppath proc exec unveil))
 		or die "Pledge failed: $!\n";
 
+	unveil( '/etc/pwd.db' => 'r' ) or die "Unveil failed: $!\n";
+	unveil( '/tmp' => 'rc' ) or die "Unveil failed: $!\n";
+}
+
+my ( $username, $home ) = ( getpwuid $> )[ 0, 7 ];
+my $html_dir = tempdir( CLEANUP => 1, );
+
+if ( $operating_system eq 'openbsd' ) {
+	unveil( '/etc/pwd.db' => '' ) or die "Unveil failed: $!\n";
+	unveil( '/tmp' => 'r' ) or die "Unveil failed: $!\n";
+
+	# Drop fattr.
+	pledge(qw(rpath wpath cpath tmppath proc exec unveil))
+		or die "Pledge failed: $!\n";
+}
+
+my $xdg_bin_home = $ENV{'XDG_BIN_HOME'} // catfile $home, qw(.local bin);
+
+# For safety, check if XDG_BIN_HOME starts with $home.
+$xdg_bin_home =~ /\A$home/ or die "XDG_BIN_HOME does not start with $home!\n";
+
+my $ssg = catfile $xdg_bin_home, qw(ssg6);
+my $rssg = catfile $xdg_bin_home, qw(rssg);
+
+if ( $operating_system eq 'openbsd' ) {
 	my %unveil_perms = (
-		'/tmp' => 'rc',   # tmpfile
 		'/usr/libdata/perl5' => 'r',   # modules
-		'/usr/local/libdata/perl5/site_perl' => 'r',   # modules
-		'/etc/pwd.db' => 'r',   # getpwuid
 		$ssg => 'x',   # static site generator
 		$rssg => 'x',   # rss feed
 		'/bin/mv' => 'x',   # to move lots of tiny files
 		$markdown_dir => 'r',   # markdown to turn into html
-		$server_dir => 'rwc',   # place where html goes
+		$html_dir => 'rc',   # place where html initially goes
+		$server_dir => 'rwc',   # place where html eventually goes
 	);
 
 	while ( my ( $path, $permissions ) = each %unveil_perms ) {
 		unveil( $path => $permissions ) or die "Unveil failed: $!\n";
 	}
-}
 
-my $html_dir = tempdir( CLEANUP => 1, );
-
-if ( $operating_system eq 'openbsd' ) {
-	unveil( $html_dir => 'rc', ) or die "Unveil failed: $!\n";
-
-	# Drop unveil and fattr.
+	# Drop unveil.
 	pledge(qw(rpath wpath cpath tmppath proc exec))
 		or die "Pledge failed: $!\n";
 }
@@ -95,8 +106,7 @@ chdir $html_dir;
 
 my $ssg_pid =
 	open2( my $ssg_out, undef, $ssg, $markdown_dir, $html_dir,
-		( getpwuid $> )[0],
-		$domain_without_schema );
+		$username, $domain_without_schema );
 
 waitpid $ssg_pid, 0;
 close $ssg_out;
