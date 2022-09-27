@@ -25,7 +25,6 @@ set undofile
 set wrap
 set wrapscan
 
-let g:GPGPreferArmor = 1
 let g:GPGDefaultRecipients=["90965AE120F8E848979DEA4853670DEBCF375780"]
 
 " VimTeX should use zathura as the viewer
