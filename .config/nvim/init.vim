@@ -25,6 +25,9 @@ set undofile
 set wrap
 set wrapscan
 
+" https://github.com/jamessan/vim-gnupg/issues/119
+" https://github.com/jamessan/vim-gnupg/issues/32
+let g:GPGUsePipes = 1
 let g:GPGDefaultRecipients=["90965AE120F8E848979DEA4853670DEBCF375780"]
 
 " VimTeX should use zathura as the viewer
