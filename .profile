@@ -21,7 +21,7 @@ export \
 	XDG_CONFIG_HOME="${HOME}/.config" \
 	XDG_DATA_HOME="${HOME}/.local/share" \
 	XDG_STATE_HOME="${HOME}/.local/state" \
-	SITE='https://amissing.link'
+	SITE='https://anthes.is'
 
 # these have to come after XDG_* are defined
 export \
