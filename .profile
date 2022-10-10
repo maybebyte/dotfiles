@@ -7,12 +7,12 @@ command -v 'colorls' > /dev/null 2>&1 && export LS='colorls'
 [ -z "${LS}" ] && export LS='ls'
 
 export \
-	BROWSER='lynx' \
 	CLICOLOR=1 \
 	FCEDIT="${EDITOR}" \
 	VISUAL="${EDITOR}" \
 	HISTFILE="${HOME}/.history" \
 	HISTSIZE=10000 \
+	LC_CTYPE='en_US.UTF-8' \
 	LESS='-iMRx 4' \
 	LESSSECURE=1 \
 	PAGER='less' \
