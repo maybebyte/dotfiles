@@ -5,10 +5,6 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
-# keep Downloads clean
-rm -rf "${HOME}/Downloads"
-mkdir -m 700 "${HOME}/Downloads"
-
 # environment variables that either:
 #
 # a) don't make sense to put in ~/.profile
@@ -21,21 +17,9 @@ export \
 	READER='zathura' \
 	TERMINAL='urxvt'
 
-# daemons
-dunst &
-sxhkd &
-unclutter -idle 3 &
-xcompmgr &
-xidle &
-
-command -v 'dbus-launch' > /dev/null 2>&1 \
-	&& [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
-	&& eval "$(dbus-launch --sh-syntax --exit-with-x11)"
-
-# look and feel
-"${XDG_BIN_HOME}/wal" -R -a 85
-sct 3500
-xset b off
+# keep Downloads clean
+rm -rf "${HOME}/Downloads"
+mkdir -m 700 "${HOME}/Downloads"
 
 # open FileChooser in current working directory instead of recents
 gsettings set org.gtk.Settings.FileChooser startup-mode cwd
@@ -52,5 +36,21 @@ fi
 # no pointer acceleration, only constant deceleration.
 # see POINTER ACCELERATION in xorg.conf(5)
 xinput set-prop '/dev/wsmouse' 'Device Accel Profile' -1
+
+# look and feel
+"${XDG_BIN_HOME}/wal" -R -a 85
+sct 3500
+xset b off
+
+command -v 'dbus-launch' > /dev/null 2>&1 \
+	&& [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
+	&& eval "$(dbus-launch --sh-syntax --exit-with-x11)"
+
+# daemons
+dunst &
+sxhkd &
+unclutter -idle 3 &
+xcompmgr &
+xidle &
 
 exec spectrwm
