@@ -13,10 +13,10 @@ URxvt.letterSpace: -1
 Xft.antialias: 1
 Xft.autohint: 0
 Xft.embeddedbitmap: 0
-Xft.hinting: 0
-Xft.hintstyle: hintnone
+Xft.hinting: 1
+Xft.hintstyle: hintslight
 Xft.rgba: rgb
-Xft.scalable: 0
+Xft.scalable: 1
 
 ! 5 seconds after lock for DPMS standby
 XLock.dpmsstandby: 5
