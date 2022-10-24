@@ -32,7 +32,6 @@ ${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
 
 	*)
 		echo 'Custom PS1 not available.' >&2
-		return 1
 		;;
 esac
 
