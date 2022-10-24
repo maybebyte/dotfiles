@@ -1,9 +1,10 @@
 [Default Applications]
 application/pdf=org.pwmt.zathura-pdf-mupdf.desktop;
 application/x-shellscript=nvim.desktop;
-image/gif=sxiv.desktop;
-image/jpeg=sxiv.desktop;
-image/png=sxiv.desktop;
+image/gif=nsxiv.desktop;
+image/jpeg=nsxiv.desktop;
+image/jpeg=nsxiv.desktop;
+image/png=nsxiv.desktop;
 text/html=firefox.desktop;
 text/markdown=nvim.desktop;
 text/pdf=zathura.desktop
