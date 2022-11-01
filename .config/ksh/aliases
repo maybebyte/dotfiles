@@ -146,9 +146,9 @@ command -v 'torsocks' > /dev/null 2>&1 && {
 		&& alias tuir='torsocks tuir'
 }
 
-command -v 'torsocks' > /dev/null 2>&1 \
+command -v 'proxychains4' > /dev/null 2>&1 \
 	&& command -v 'irssi' > /dev/null 2>&1 \
-	&& alias irssi='torsocks irssi'
+	&& alias irssi='proxychains4 irssi'
 
 command -v 'mpv' > /dev/null 2>&1 \
 	&& alias mpva='mpv --no-keep-open --no-resume-playback --no-pause --no-video'

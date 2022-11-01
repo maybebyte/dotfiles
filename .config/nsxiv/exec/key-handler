@@ -139,7 +139,7 @@ while ( my $file = <STDIN> ) {
 		}
 
 		when ('Y') {
-			my $absolute_path = rel2abs $file // die "Need an absolute path!\n";
+			my $absolute_path = rel2abs $file or die "Need an absolute path!\n";
 			yank $absolute_path;
 			system qw(notify-send --),
 				"File path ($absolute_path) copied to clipboard.";
