@@ -38,19 +38,9 @@ case "$(uname)" in
 	'OpenBSD')
 		GATEWAY="$(netstat -rn 2> /dev/null | awk '/^default/{print $2}')"
 		export GATEWAY
-
-		# prepend ~/.local/bin to PATH
-		#
-		# PATH parameter expansion explanation:
-		# https://unix.stackexchange.com/a/415028
-		#
-		# the extra colon is intentional, it's the delimiter for PATH.
-		export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
 		;;
 
-	*)
-		# no /usr/games if not OpenBSD
-		export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
+	*) # if this isn't OpenBSD, do nothing
 		;;
 esac
 
@@ -65,6 +55,15 @@ case "$(hostname -s)" in
 	*) # if the hostname doesn't match, do nothing
 		;;
 esac
+
+
+# prepend ~/.local/bin to PATH
+#
+# PATH parameter expansion explanation:
+# https://unix.stackexchange.com/a/415028
+#
+# the extra colon is intentional, it's the delimiter for PATH.
+export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 
 # sh/ksh initialization
 #
