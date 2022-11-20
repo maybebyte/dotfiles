@@ -1,0 +1,61 @@
+.Dd November 20, 2022
+.Dt DMENUUNICODE 1
+.Sh NAME
+.Nm dmenuunicode
+.Nd display emoji and copy selection to clipboard
+.Sh SYNOPSIS
+.Nm dmenuunicode
+.Ar notify
+.Sh DESCRIPTION
+.Nm
+sends the contents of
+.Pa ~/.local/share/emoji
+to
+.Xr dmenu 1
+so it can create a dynamic menu. A list of emoji and short descriptions are
+displayed, and the user may type in one or more keywords
+to narrow down the available entries to those that match the query.
+.Pp
+Selecting a
+desired entry and pressing
+.Aq ENTER
+causes
+.Nm
+to send the corresponding emoji to
+.Xr xclip 1
+so that it may be pasted. The input must match the beginning of a line in
+.Pa ~/.local/share/emoji .
+.Pp
+If the optional argument
+.Ar notify
+is specified, a desktop notification is sent before the program would exit
+successfully to provide visual feedback.
+.Pp
+.Aq ESC
+may be pressed at any time after the menu is displayed and before
+.Aq ENTER
+would be pressed to terminate
+.Nm
+instead.
+.Sh FILES
+.Bl -tag width Ds -compact
+.It Pa ~/.local/share/emoji
+The file containing emoji.
+.Pp
+.It Pa ~/.cache/wal/colors.json
+An optional file created by pywal
+that is parsed by
+.Nm
+when available, so that
+.Xr dmenu 1
+can use appropriate colors.
+.El
+.Sh SEE ALSO
+.Xr dmenu 1 ,
+.Xr xclip 1
+.Sh AUTHORS
+This version is written and maintained by
+.An Ashlen Aq Mt eurydice@riseup.net ,
+and was inspired by a shell script of the same name that
+.An Luke Smith Aq Mt luke@lukesmith.xyz
+wrote.
