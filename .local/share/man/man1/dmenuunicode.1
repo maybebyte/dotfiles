@@ -5,11 +5,12 @@
 .Nd display emoji and copy selection to clipboard
 .Sh SYNOPSIS
 .Nm dmenuunicode
-.Ar notify
+.Op Fl hn
+.Ar file
 .Sh DESCRIPTION
 .Nm
 sends the contents of
-.Pa ~/.local/share/emoji
+.Ar file
 to
 .Xr dmenu 1
 so it can create a dynamic menu. A list of emoji and short descriptions are
@@ -24,12 +25,7 @@ causes
 to send the corresponding emoji to
 .Xr xclip 1
 so that it may be pasted. The input must match the beginning of a line in
-.Pa ~/.local/share/emoji .
-.Pp
-If the optional argument
-.Ar notify
-is specified, a desktop notification is sent before the program would exit
-successfully to provide visual feedback.
+.Ar file .
 .Pp
 .Aq ESC
 may be pressed at any time after the menu is displayed and before
@@ -39,9 +35,6 @@ would be pressed to terminate
 instead.
 .Sh FILES
 .Bl -tag width Ds -compact
-.It Pa ~/.local/share/emoji
-The file containing emoji.
-.Pp
 .It Pa ~/.cache/wal/colors.json
 An optional file created by pywal
 that is parsed by

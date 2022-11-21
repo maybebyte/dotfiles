@@ -24,11 +24,22 @@ use warnings;
 # Core modules.
 use File::Basename qw(fileparse);
 use File::Spec::Functions qw(catdir catfile);
+use Getopt::Std;
 use IPC::Open2;
 
 # External modules.
 use IPC::System::Simple qw(capturex);
 use JSON::MaybeXS;
+
+our ( $opt_h, $opt_n );
+my $program_name = fileparse $0;
+
+sub usage {
+	die <<EOF;
+$program_name [-hn] [file]
+See $program_name(1) for more details.
+EOF
+}
 
 sub check_dependencies {
 	my $which_output = capturex qw(which --), @_;
@@ -37,6 +48,13 @@ sub check_dependencies {
 
 my @dependencies = qw(dmenu notify-send xclip);
 check_dependencies @dependencies;
+
+getopts 'hn';
+usage if $opt_h;
+
+my $notify_user = $opt_n // 0;
+
+my $emoji_file = shift or usage;
 
 my $home = ( getpwuid $> )[7];
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
@@ -77,12 +95,8 @@ my @dmenu_options = (
 );
 #>>>
 
-my $program_name = fileparse $0;
 die "$program_name requires a graphical environment"
 	unless defined $ENV{'DISPLAY'};
-
-my $xdg_data_home = $ENV{'XDG_DATA_HOME'} // catdir $home, qw(.local share);
-my $emoji_file = catfile $xdg_data_home, 'emoji';
 
 open my $emoji_fh, '<', $emoji_file;
 my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
@@ -121,6 +135,4 @@ open my $xclip_fh, '|-', qw(xclip -i -selection clipboard);
 print $xclip_fh $emoji;
 close $xclip_fh;
 
-my $notify_toggle = shift // '';
-exec qw(notify-send --), 'Emoji copied to clipboard'
-	if $notify_toggle eq 'notify';
+if ($notify_user) { exec qw(notify-send --), 'Emoji copied to clipboard'; }
