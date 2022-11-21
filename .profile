@@ -57,12 +57,10 @@ case "$(hostname -s)" in
 esac
 
 
-# prepend ~/.local/bin to PATH
+# Add XDG_BIN_HOME to PATH.
 #
 # PATH parameter expansion explanation:
 # https://unix.stackexchange.com/a/415028
-#
-# the extra colon is intentional, it's the delimiter for PATH.
 export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 
 # Add local man page directory.
