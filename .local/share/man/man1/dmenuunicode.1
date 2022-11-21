@@ -33,6 +33,15 @@ may be pressed at any time after the menu is displayed and before
 would be pressed to terminate
 .Nm
 instead.
+.Pp
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl h
+Print basic usage information and exit.
+.It Fl n
+Send a desktop notification with notify-send right before the program would
+successfully exit. This is to provide visual feedback.
+.El
 .Sh FILES
 .Bl -tag width Ds -compact
 .It Pa ~/.cache/wal/colors.json
