@@ -108,6 +108,7 @@ cpbak [file]' >&2
 # choose files with fzf and edit them.
 ebin() { fzf-open "${EDITOR}" "${XDG_BIN_HOME}"; }
 econf() { fzf-open "${EDITOR}" "${XDG_CONFIG_HOME}"; }
+eman() { fzf-open "${EDITOR}" "${XDG_DATA_HOME}/man"; }
 enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
 
 fzf_hist() {
