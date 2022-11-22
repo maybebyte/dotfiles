@@ -49,7 +49,7 @@ would be pressed to terminate
 .Nm
 instead.
 .Pp
-The options are as follows:
+Options:
 .Bl -tag -width Ds
 .It Fl h
 Print basic usage information and exit.
@@ -67,6 +67,14 @@ when available, so that
 .Xr dmenu 1
 can use appropriate colors.
 .El
+.Sh EXAMPLES
+To use
+.Pa ~/.local/share/emoji
+as the
+.Xr emoji 5
+file and display a desktop notification on success:
+.Pp
+.Dl $ dmenuunicode -n ~/.local/share/emoji
 .Sh SEE ALSO
 .Xr dmenu 1 ,
 .Xr xclip 1 ,
