@@ -1,0 +1,51 @@
+.\" Copyright (c) 2022 Ashlen <eurydice@riseup.net>
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.Dd November 22, 2022
+.Dt EMOJI 5
+.Sh NAME
+.Nm emoji
+.Nd formatted emoji file for dmenuunicode
+.Sh DESCRIPTION
+.Nm
+is a file format that contains emoji, as well as associated keywords and code points. It
+is the file format that
+.Xr dmenuunicode 1
+uses.
+.Pp
+Each line in an
+.Nm
+file starts with an emoji, followed by a space. One or more keywords follow,
+separated by spaces and terminated by a semicolon. After that, one or more code
+points are written, separated by spaces. A semicolon completes the line.
+.Pp
+An
+.Nm
+file can be generated from data files provided by www.unicode.org.
+.Sh EXAMPLES
+.Bl -tag -width Ds
+.It 😅 grinning face with sweat; 1F605;
+.It 💕 two hearts; 1F495;
+.It ♟️ chess pawn; 265F FE0F;
+.It 🐺 wolf; 1F43A;
+.It 🙈 see-no-evil monkey; 1F648;
+.El
+.Sh SEE ALSO
+.Xr dmenuunicode 1
+.Bl -tag -width Ds
+.It Lk https://www.unicode.org/emoji/techindex.html "Unicode Emoji"
+.It Lk https://www.unicode.org/Public/emoji/latest/ "Unicode Emoji Data Files"
+.El
+.Sh BUGS
+Do not rely heavily on the current format. It is historical and may be reworked
+in the future.

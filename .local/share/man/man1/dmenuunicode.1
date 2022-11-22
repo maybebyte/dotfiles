@@ -11,7 +11,7 @@
 .\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 .\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-.Dd November 21, 2022
+.Dd November 22, 2022
 .Dt DMENUUNICODE 1
 .Sh NAME
 .Nm dmenuunicode
@@ -22,13 +22,15 @@
 .Ar file
 .Sh DESCRIPTION
 .Nm
-sends the contents of
+parses the contents of a
 .Ar file
-to
+in
+.Xr emoji 5
+format. It sends the results to
 .Xr dmenu 1
-so it can create a dynamic menu. A list of emoji and short descriptions are
-displayed, and the user may type in one or more keywords
-to narrow down the available entries to those that match the query.
+to create a dynamic menu. In this menu, a list of emoji and associated keywords
+are displayed, and the user may type in one or more keywords to narrow down the
+available entries to those that match the query.
 .Pp
 Selecting a
 desired entry and pressing
@@ -67,7 +69,8 @@ can use appropriate colors.
 .El
 .Sh SEE ALSO
 .Xr dmenu 1 ,
-.Xr xclip 1
+.Xr xclip 1 ,
+.Xr emoji 5
 .Sh AUTHORS
 This version is written and maintained by
 .An Ashlen Aq Mt eurydice@riseup.net ,
