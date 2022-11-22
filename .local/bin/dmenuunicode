@@ -16,6 +16,12 @@
 # inspired by Luke Smith's dmenuunicode:
 # https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
 
+# TODO:
+# Add a flag to clear clipboard after a specified timeout period.
+#
+# Add the ability to read from STDIN and/or multiple files (act like a typical
+# *nix program or Perl text filter).
+
 use v5.32;
 use autodie qw(:all);
 use strict;
