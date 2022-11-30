@@ -18,12 +18,10 @@
 
 # TODO:
 # Add a flag to clear clipboard after a specified timeout period.
-#
-# Add the ability to read from STDIN and/or multiple files (act like a typical
-# *nix program or Perl text filter).
 
 use v5.32;
 use autodie qw(:all);
+use open qw(:std :encoding(UTF-8));
 use strict;
 use warnings;
 
@@ -59,8 +57,6 @@ getopts 'hn';
 usage if $opt_h;
 
 my $notify_user = $opt_n // 0;
-
-my $emoji_file = shift or usage;
 
 my $home = ( getpwuid $> )[7];
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
@@ -104,36 +100,24 @@ my @dmenu_options = (
 die "$program_name requires a graphical environment"
 	unless defined $ENV{'DISPLAY'};
 
-open my $emoji_fh, '<', $emoji_file;
 my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
+binmode $dmenu_out, 'encoding(UTF-8)';
+binmode $dmenu_in, 'encoding(UTF-8)';
 
-while (<$emoji_fh>) {
+while ( <<>> ) {
 	my $emoji_and_description = ( split /;/ )[0];
 	say $dmenu_in $emoji_and_description;
 }
 
-close $emoji_fh;
 close $dmenu_in;
 
 chomp( my $user_input = <$dmenu_out> // die "$program_name needs an emoji!\n" );
 close $dmenu_out;
 waitpid $dmenu_pid, 0;
 
-# NOTE: It is important to scan the file again to see if the user input is
-# actually in there, as the output returned by dmenu can be anything (in other
-# words, what dmenu sends to STDOUT is not limited to what is passed to dmenu's
-# STDIN). If this is not done, anything can be sent to the clipboard in theory.
-open $emoji_fh, '<', $emoji_file;
-my $input_found = 0;
-while (<$emoji_fh>) {
-	if (/\A$user_input/) {
-		$input_found++;
-		last;
-	}
-}
-
-close $emoji_fh;
-die "'$user_input' not found in '$emoji_file'\n" unless $input_found;
+# Check that the line starts with an emoji.
+$user_input =~ /\A \p{Emoji}+ \p{Emoji_Component}* \s/x
+	or die "Malformed input: $user_input";
 
 my $emoji = ( split ' ', $user_input )[0];
 
