@@ -115,7 +115,8 @@ chomp( my $user_input = <$dmenu_out> // die "$program_name needs an emoji!\n" );
 close $dmenu_out;
 waitpid $dmenu_pid, 0;
 
-# Check that the line starts with an emoji.
+# Check that the line starts with an emoji. This is both a sanity check and a
+# way to prevent bogus contents from getting copied into the clipboard.
 $user_input =~ /\A \p{Emoji}+ \p{Emoji_Component}* \s/x
 	or die "Malformed input: $user_input";
 
