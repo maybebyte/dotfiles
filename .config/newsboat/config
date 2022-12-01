@@ -36,9 +36,9 @@ highlight feedlist "===.*===" green default bold
 highlight feedlist ".*0/0.." green default invis
 
 macro , open-in-browser
-macro h set browser "linkhandler '%u'"; open-in-browser; set browser "${BROWSER}"
+macro h set browser "linkhandler %u"; open-in-browser; set browser "${BROWSER}"
 # (c)opy URL
-macro c set browser "printf '%s' '%u' | xclip -selection clipboard"; open-in-browser ; set browser "${BROWSER}"
+macro c set browser "printf %s %u | xclip -selection clipboard"; open-in-browser; set browser "${BROWSER}"
 
 player "mpv"
 
