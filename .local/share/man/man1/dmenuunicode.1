@@ -19,11 +19,10 @@
 .Sh SYNOPSIS
 .Nm dmenuunicode
 .Op Fl hn
-.Ar file
+.Op Ar
 .Sh DESCRIPTION
 .Nm
-parses a
-.Ar file
+parses files
 in
 .Xr emoji 5
 format. It sends the results to
@@ -39,8 +38,8 @@ causes
 .Nm
 to send the corresponding emoji to
 .Xr xclip 1
-so that it may be pasted. The input must match the beginning of a line in
-.Ar file .
+so that it may be pasted. The entry must start with an emoji followed by
+a space or tab character, otherwise it will be rejected instead.
 .Pp
 .Aq ESC
 may be pressed at any time after the menu is displayed and before
