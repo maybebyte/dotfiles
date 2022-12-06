@@ -72,10 +72,10 @@ sub fetch_response {
 		verify_SSL => 1,
 		default_headers => { 'Accept-Encoding' => 'gzip' }
 	);
-	die "TLS is unsupported: $!\n" unless $http->can_ssl;
+	$http->can_ssl or die "TLS is unsupported: $!\n";
 
 	my $response = $http->get($fetch_url);
-	die "$response->{status} $response->{reason}" unless $response->{success};
+	$response->{success} or die "$response->{status} $response->{reason}";
 
 	return decompress $response;
 }
@@ -99,8 +99,8 @@ my $decoded_github_api_response = decode_json $github_api_response->{content};
 chomp( my $remote_synapse_version = $decoded_github_api_response->{'name'} );
 
 # Exclude release candidates and catch unknown release schemes.
-die "Release version did not match expected release scheme.\n"
-	unless $remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax;
+$remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax or
+	die "Release version did not match expected release scheme.\n";
 
 my $federation_api_response =
 	fetch_response( make_federation_api_url $matrix_server );

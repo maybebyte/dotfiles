@@ -76,10 +76,10 @@ sub fetch_response {
 		verify_SSL => 1,
 		default_headers => { 'Accept-Encoding' => 'gzip' }
 	);
-	die "TLS is unsupported: $!\n" unless $http->can_ssl;
+	$http->can_ssl or die "TLS is unsupported: $!\n";
 
 	my $response = $http->get($fetch_url);
-	die "$response->{status} $response->{reason}" unless $response->{success};
+	$response->{success} or die "$response->{status} $response->{reason}";
 
 	return decompress $response;
 }
@@ -109,8 +109,8 @@ my $decoded_json = decode_json $api_response->{content};
 chomp( my $remote_version = $decoded_json->{'name'} );
 
 # Exclude release candidates and catch unknown release schemes.
-die "Release version did not match expected release scheme.\n"
-	unless $remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax;
+$remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax
+	or die "Release version did not match expected release scheme.\n";
 
 chomp(
 	my $local_version = do {
@@ -121,8 +121,8 @@ chomp(
 	}
 );
 
-die "Remote version of element-web is not newer than local version.\n"
-	unless $remote_version gt $local_version;
+$remote_version gt $local_version
+	or die "Remote version of element-web is not newer than local version.\n";
 
 my $release_url = make_github_release_url qw(vector-im element-web),
 	$remote_version;

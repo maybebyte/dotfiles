@@ -55,15 +55,15 @@ my $program_name = fileparse $0;
 my $url = shift or die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
-die "$program_name only supports the 'https' scheme.\n"
-	unless $url->scheme eq 'https';
+$url->scheme eq 'https'
+	or die "$program_name only supports the 'https' scheme.\n";
 
 $ENV{'DISPLAY'} // die "$program_name needs a graphical environment!\n";
 
 chdir '/tmp';
 
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
-die "No TLS support: $!\n" unless $http->can_ssl;
+$http->can_ssl or die "No TLS support: $!\n";
 
 my $response = $http->get($url);
 
@@ -73,7 +73,7 @@ if ( $operating_system eq 'openbsd' ) {
 		or die "Pledge failed: $!\n";
 }
 
-die "$response->{status} $response->{reason}\n" unless $response->{success};
+$response->{success} or die "$response->{status} $response->{reason}\n";
 
 my ( $tmp_fh, $tmpfile ) = tempfile UNLINK => 1;
 open $tmp_fh, '>', $tmpfile;

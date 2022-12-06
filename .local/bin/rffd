@@ -41,9 +41,9 @@ EOF
 
 my $filetype_to_look_for = shift or usage;
 my $directory_to_search_in = shift or usage;
-die "'$directory_to_search_in' doesn't exist.\n"
-	unless -e $directory_to_search_in;
-die "'$directory_to_search_in' isn't a directory.\n" unless -d _;
+
+-e $directory_to_search_in or die "'$directory_to_search_in' doesn't exist.\n";
+-d _ or die "'$directory_to_search_in' isn't a directory.\n";
 
 my @wanted_files;
 
@@ -61,18 +61,14 @@ sub make_wanted {
 
 sub randvids {
 	return unless /\.(?:mkv|mp4|webm)\z/;
-
-	my $mime_type = mimetype($_);
-	return unless $mime_type =~ m{\Avideo/};
+	return unless mimetype($_) =~ m{\Avideo/};
 
 	push @wanted_files, $File::Find::name;
 }
 
 sub randpics {
 	return unless /\.(?:jpe?g|png)\z/;
-
-	my $mime_type = mimetype($_);
-	return unless $mime_type =~ m{\Aimage/};
+	return unless mimetype($_) =~ m{\Aimage/};
 
 	push @wanted_files, $File::Find::name;
 }
@@ -89,8 +85,14 @@ given ($filetype_to_look_for) {
 	when ('image') {
 		find( make_wanted( \&randpics ), $directory_to_search_in )
 	}
-	when ('any') { find( make_wanted( \&randfiles ), $directory_to_search_in ) }
-	default { die "'$filetype_to_look_for' isn't a supported filetype.\n" }
+	when ('any') {
+		find( make_wanted( \&randfiles ), $directory_to_search_in )
+	}
+	default {
+		die "'$filetype_to_look_for' isn't a supported filetype.\n" ;
+	}
 }
 
-say join( "\n", shuffle(@wanted_files) ) if @wanted_files;
+if (@wanted_files) {
+	say join( "\n", shuffle @wanted_files );
+}

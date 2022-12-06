@@ -97,8 +97,7 @@ my @dmenu_options = (
 );
 #>>>
 
-die "$program_name requires a graphical environment"
-	unless defined $ENV{'DISPLAY'};
+$ENV{'DISPLAY'} // die "$program_name requires a graphical environment";
 
 my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
 binmode $dmenu_out, 'encoding(UTF-8)';

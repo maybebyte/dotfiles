@@ -90,10 +90,10 @@ sub fetch_response {
 		verify_SSL => 1,
 		default_headers => { 'Accept-Encoding' => 'gzip' }
 	);
-	die "TLS is unsupported: $!\n" unless $http->can_ssl;
+	$http->can_ssl or die "TLS is unsupported: $!\n";
 
 	my $response = $http->get($fetch_url);
-	die "$response->{status} $response->{reason}" unless $response->{success};
+	$response->{success} or die "$response->{status} $response->{reason}";
 
 	return decompress $response;
 }
@@ -124,8 +124,8 @@ chomp( my $url = shift // die "$program_name needs a URL!\n" );
 
 $url =~ s/\Ahttp:/https:/;
 $url = URI->new($url);
-die "$program_name only handles the 'https' scheme.\n"
-	unless $url->scheme eq 'https';
+$url->scheme eq 'https'
+	or die "$program_name only handles the 'https' scheme.\n";
 
 check_dependencies @dependencies;
 
@@ -165,8 +165,8 @@ given ($option) {
 
 		unless ( -e $dir_to_write_to ) {
 			make_path($dir_to_write_to)
-				or die
-				"Could not create directory named '$dir_to_write_to': $!\n";
+				or die "Could not create directory named "
+				. "'$dir_to_write_to': $!\n";
 		}
 
 		chdir $dir_to_write_to;
