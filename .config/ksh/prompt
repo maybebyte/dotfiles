@@ -1,38 +1,30 @@
-# Swaps user and path colors if uid is 0 (if the user is root) to draw
-# more attention to root shells.
-set_user_and_path_colors() {
-	case "$(id -u)" in
-		0)
-			_ps1_user='\[\033[1;33m\]'
-			_ps1_path='\[\033[1;35m\]'
-			;;
-		*)
-			_ps1_user='\[\033[1;35m\]'
-			_ps1_path='\[\033[1;33m\]'
-			;;
-	esac
-}
-
 case "${KSH_VERSION%%\ KSH*}" in
 	'@(#)PD')
-		set_user_and_path_colors
+		# Note that these have swapped colors. It's to call attention to shells
+		# running under a different user.
+		_unpriv_ps1_user='\[\033[1;35m\]'
+		_unpriv_ps1_path='\[\033[1;33m\]'
+		_doas_ps1_user='\[\033[1;33m\]'
+		_doas_ps1_path='\[\033[1;35m\]'
 
 		_ps1_bracket='\[\033[36m\]'
 		_ps1_hostname='\[\033[32m\]'
 		_ps1_clear='\[\033[0m\]'
 
-		PS1="${_ps1_bracket}[${_ps1_clear}${_ps1_user}\u\
+		export PS1="${_ps1_bracket}[${_ps1_clear}${_unpriv_ps1_user}\u\
 ${_ps1_clear}@${_ps1_hostname}\h${_ps1_clear} \
-${_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
+${_unpriv_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
 
-		# There is no need for these variables to remain defined afterward.
-		# shellcheck disable=SC3009
-		unset _ps1_{user,path,bracket,hostname,clear}
+		# This variable is used in doas.conf(5).
+		export DOAS_PS1="${_ps1_bracket}[${_ps1_clear}${_doas_ps1_user}\u\
+${_ps1_clear}@${_ps1_hostname}\h${_ps1_clear} \
+${_doas_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
+
+		# There's no need for these variables to remain defined afterward.
+		unset _ps1_{bracket,hostname,clear} _{unpriv,doas}_ps1_{user,path}
 		;;
 
 	*)
 		echo 'Custom PS1 not available.' >&2
 		;;
 esac
-
-unset -f set_user_and_path_colors
