@@ -33,6 +33,7 @@ sub usage {
 $program_name [filetype] [directory]
 
 filetype can be:
+audio - mp3, opus, flac, aac, ogg, wav
 video - webm, mp4, mkv
 image - jpg, jpeg, png
 any - matches all files
@@ -59,6 +60,13 @@ sub make_wanted {
 	return sub { $sub->(); };
 }
 
+sub randaudio {
+	return unless /\.(?:mp3|opus|flac|aac|ogg|wav)\z/;
+	return unless mimetype($_) =~ m{\Aaudio/};
+
+	push @wanted_files, $File::Find::name;
+}
+
 sub randvids {
 	return unless /\.(?:mkv|mp4|webm)\z/;
 	return unless mimetype($_) =~ m{\Avideo/};
@@ -79,6 +87,9 @@ sub randfiles {
 }
 
 given ($filetype_to_look_for) {
+	when ('audio') {
+		find( make_wanted( \&randaudio ), $directory_to_search_in )
+	}
 	when ('video') {
 		find( make_wanted( \&randvids ), $directory_to_search_in )
 	}
