@@ -262,7 +262,7 @@ command -v 'yt-dlp' > /dev/null 2>&1 \
 [ -n "${MARKDOWNDIR}" ] \
 	&& alias cdmd="cd \${MARKDOWNDIR}"
 [ -n "${WWWDIR}" ] \
-	&& alias cdsrv="cd \${WWWDIR}"
+	&& alias cdwww="cd \${WWWDIR}"
 [ -n "${SITE}" ] \
 	&& alias tnet="ping \${DOMAIN}"
 
