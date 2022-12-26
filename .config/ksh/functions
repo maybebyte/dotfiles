@@ -276,10 +276,26 @@ otherwise, use it the same way you would use nc(1).' >&2
 }
 
 # with rffd, open up random videos with mpv(1).
-randlisten() {
+randlisten_audio() {
 	case "$1" in
 		'' | '-h')
-			echo 'with rffd, open up random videos with mpv(1).
+			echo 'with rffd, listen to random audio files with mpv(1).
+
+randvids [directory with audio files]' >&2
+
+			return
+			;;
+	esac
+
+	rffd audio "$1" | tr '\n' '\0' | xargs -0 -- mpv \
+		--no-resume-playback --no-keep-open --no-pause --no-video --
+}
+
+# with rffd, open up random videos with mpv(1).
+randlisten_vids() {
+	case "$1" in
+		'' | '-h')
+			echo 'with rffd, listen to random videos with mpv(1).
 
 randvids [directory with videos]' >&2
 
@@ -303,21 +319,6 @@ randpics [directory with pics]' >&2
 	esac
 
 	rffd image "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
-}
-
-# with rffd, open up random things to listen to with mpv(1).
-randlisten() {
-	case "$1" in
-		'' | '-h')
-			echo 'with rffd, open up random things to listen to with mpv(1).
-randvids [directory with videos]' >&2
-
-			return
-			;;
-	esac
-
-	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv \
-		--no-resume-playback --no-keep-open --no-pause --no-video --
 }
 
 # with rffd, open up random videos with mpv(1).
