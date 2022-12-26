@@ -59,7 +59,7 @@ openbsd_aliases() {
 		sysnet='systat netstat' \
 		tailhttp='tail -f /var/www/logs/access.log' \
 		tailmail='tail -f /var/log/maillog' \
-		webtest="webtest \${SITE##*//} \${MARKDOWNDIR} \${SRVDIR}"
+		webtest="webtest \${SITE##*//} \${MARKDOWNDIR} \${WWWDIR}"
 
 	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
@@ -261,10 +261,10 @@ command -v 'yt-dlp' > /dev/null 2>&1 \
 
 [ -n "${MARKDOWNDIR}" ] \
 	&& alias cdmd="cd \${MARKDOWNDIR}"
-[ -n "${SRVDIR}" ] \
-	&& alias cdsrv="cd \${MARKDOWNDIR}"
+[ -n "${WWWDIR}" ] \
+	&& alias cdsrv="cd \${WWWDIR}"
 [ -n "${SITE}" ] \
-	&& alias tnet="ping \${SITE##*//}"
+	&& alias tnet="ping \${DOMAIN}"
 
 OS="$(uname)"
 [ -z "${OS##*BSD}" ] && pf_aliases

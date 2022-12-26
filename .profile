@@ -23,8 +23,9 @@ export \
 	XDG_STATE_HOME="${HOME}/.local/state" \
 	SITE='https://www.anthes.is'
 
-# these have to come after XDG_* are defined
+# These variables come after.
 export \
+	DOMAIN="${SITE##*//}" \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
 	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidyrc"
@@ -44,18 +45,14 @@ case "$(uname)" in
 		;;
 esac
 
-# host-specific actions
-case "$(hostname -s)" in
-	'aphrodite' | 'lain')
-		export \
-			MARKDOWNDIR="${HOME}/src/website_md" \
-			SRVDIR="/var/www/htdocs/${SITE##*//}"
-		;;
+[ -e "${HOME}/src/website_md" ] &&
+	export MARKDOWNDIR="${HOME}/src/website_md"
 
-	*) # if the hostname doesn't match, do nothing
-		;;
-esac
-
+if [ -e "/var/www/htdocs/${DOMAIN}" ]; then
+	export WWWDIR="/var/www/htdocs/${DOMAIN}"
+elif [ -e "/var/www/htdocs/${DOMAIN##www.}" ]; then
+	export WWWDIR="/var/www/htdocs/${DOMAIN##www.}"
+fi
 
 # Add XDG_BIN_HOME to PATH.
 #
