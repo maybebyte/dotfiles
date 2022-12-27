@@ -1,6 +1,7 @@
 # shellcheck shell=ksh
 export MANPAGE_COMPLETIONS='/tmp/completions/manpages'
 
+# shellcheck disable=SC2174
 mkdir -p -m 700 "${MANPAGE_COMPLETIONS%/*}"
 
 if ! [ -f "${MANPAGE_COMPLETIONS}" ]; then
@@ -11,3 +12,22 @@ fi
 # (otherwise it will only be one item in a big, long string).
 # shellcheck disable=SC2046
 set -A complete_man_1 -- $(< "${MANPAGE_COMPLETIONS}")
+
+# Is there any way to grab these programmatically instead of manually defining
+# them?
+set -A complete_rcctl_1 -- \
+	check \
+	configtest \
+	disable \
+	enable \
+	get \
+	getdef \
+	ls \
+	order \
+	set \
+	start \
+	stop \
+	reload \
+	restart
+# shellcheck disable=SC2046
+set -A complete_rcctl_2 -- $(rcctl ls all)
