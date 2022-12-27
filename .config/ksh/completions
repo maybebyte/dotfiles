@@ -13,37 +13,39 @@ mkdir -p -m 700 "${MANPAGE_COMPLETIONS%/*}"
 # shellcheck disable=SC2046
 set -A complete_man_1 -- $(< "${MANPAGE_COMPLETIONS}")
 
-# Is there any way to grab these programmatically instead of manually defining
-# them?
-set -A complete_rcctl_1 -- \
-	check \
-	configtest \
-	disable \
-	enable \
-	get \
-	getdef \
-	ls \
-	order \
-	set \
-	start \
-	stop \
-	reload \
-	restart
+command -v rcctl > /dev/null 2>&1 && {
+	# Is there any way to grab these programmatically instead of manually defining
+	# them?
+	set -A complete_rcctl_1 -- \
+		check \
+		configtest \
+		disable \
+		enable \
+		get \
+		getdef \
+		ls \
+		order \
+		set \
+		start \
+		stop \
+		reload \
+		restart
 
-# shellcheck disable=SC2046
-set -A complete_rcctl_2 -- $(rcctl ls all)
+	# shellcheck disable=SC2046
+	set -A complete_rcctl_2 -- $(rcctl ls all)
 
-set -A complete_rcctl_ls_1 -- \
-	all \
-	failed \
-	off \
-	on \
-	rogue \
-	started \
-	stopped
+	set -A complete_rcctl_ls_1 -- \
+		all \
+		failed \
+		off \
+		on \
+		rogue \
+		started \
+		stopped
+}
 
 # OpenBSD pkg_*
-command -v pkg_info >/dev/null 2>&1 && {
+command -v pkg_info > /dev/null 2>&1 && {
 	# shellcheck disable=SC2046
 	set -A PKG_LIST -- $(pkg_info -z)
 
