@@ -40,25 +40,6 @@ anonread [URL linking to an ebook]' >&2
 	anonftp -o - -- "$1" | zathura -
 }
 
-# invoke apropos(1) to match $1 against any available macro key of
-# manpages that match the current machine architecture.
-#
-# $1 is a word/phrase to search for (phrases must be quoted).
-aprv() {
-	case "$1" in
-		'' | '-h')
-			echo 'invoke apropos(1) to match the given query against any
-available macro key of manpages that match the current machine architecture.
-
-aprv [query]' >&2
-
-			return
-			;;
-	esac
-
-	apropos -S "$(uname -m)" -- any="$1"
-}
-
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
 # the path and send the results to STDOUT.
@@ -115,38 +96,6 @@ fzf_hist() {
 	RES="$(fzf --tac --no-sort -e < "${HISTFILE}")"
 	[ -n "${RES}" ] || return 0
 	eval "${RES}"
-}
-
-# perform an A record lookup on $1 and return the IP address.
-#
-# $1 is a domain.
-grabipv4() {
-	case "$1" in
-		'' | '-h')
-			echo 'perform an A record lookup and return the IP address.
-grabipv4 [IP address]' >&2
-
-			return
-			;;
-	esac
-
-	dig A +short "$1"
-}
-
-# perform an AAAA record lookup on $1 and return the IPv6 address.
-#
-# $1 is a domain.
-grabipv6() {
-	case "$1" in
-		'' | '-h')
-			echo 'perform an AAAA record lookup and return the IPv6 address.
-grabipv6 [IPv6 address]' >&2
-
-			return
-			;;
-	esac
-
-	dig AAAA +short "$1"
 }
 
 # with no auto-login, no progress meter and no verbose mode, use ftp(1)
@@ -237,28 +186,6 @@ mvbak [file]' >&2
 		'') mv -- "${MVBAK_FILE}" "${MVBAK_FILE%.bak}" ;;
 		*) mv -- "${MVBAK_FILE}" "${MVBAK_FILE}.bak" ;;
 	esac
-}
-
-# checks the headers of a website with tor(1).
-# nc_head [path] [domain] 80 for HTTP.
-# nc_head [path] -c [domain] 443 for HTTPS.
-nc_head() {
-	case "$1" in
-		'' | '-h')
-			echo 'checks the headers of a website with tor(1).
-HTTP:
-nc_head [path] [domain] 80
-
-HTTPS:
-nc_head [path] -c [domain] 443' >&2
-
-			return
-			;;
-	esac
-
-	URI="$1"
-	shift
-	printf "%s\r\n\r\n" "HEAD ${URI} HTTP/1.0" | nc_tor "$@"
 }
 
 # nc(1) + tor(1) = fun.
@@ -364,80 +291,6 @@ readmd [markdown document]' >&2
 	esac
 
 	lowdown -T 'term' --term-no-colour "$1" | less
-}
-
-# usage:
-#
-# tarpv [archive target] > filename
-tarpv() {
-	case "$1" in
-		'' | '-h')
-			echo 'archive something with tar(1) and watch progress with pv(1).
-
-without compression:
-tarpv [archive target] > filename
-
-with compression:
-tarpv [archive target] | gzip -c > filename' >&2
-
-			return
-			;;
-	esac
-
-	# command -v will match the alias
-	DU="$(which 'du')"
-
-	SIZE_OF_DIR="$(
-		"${DU}" -sh "$1" \
-			| sed -E "s/\.([[:digit:]])+//" \
-			| cut -f 1
-	)"
-
-	tar -cf - "$1" | pv -s "${SIZE_OF_DIR}"
-}
-
-# test Matrix federation and output the JSON.
-#
-# $1 is a domain name associated with a Matrix homeserver.
-testfed() {
-	case "$1" in
-		'' | '-h')
-			echo 'test Matrix federation and output the JSON.
-testfed [matrix homeserver domain]' >&2
-
-			return
-			;;
-	esac
-
-	ftp -U '' -VMno - -- \
-		"https://federationtester.matrix.org/api/report?server_name=$1"
-}
-
-# convert H.264 to HEVC using ffmpeg and x265
-to265() {
-	[ -z "$1" ] && {
-		echo 'Need an input file.' >&2
-		return
-	}
-
-	ffmpeg -i "$1" -c:v libx265 -preset slow -c:a copy "${1%.mp4}-x265.mp4"
-}
-
-# use bioctl(8) to unlock an encrypted partition and attach it to
-# softraid0.
-#
-# $1 is an encrypted partition.
-unlockhdd() {
-	case "$1" in
-		'' | '-h')
-			echo 'unlock a drive encrypted with bioctl(8).
-unlockhdd [encrypted partition]' >&2
-
-			return
-			;;
-	esac
-
-	priv bioctl -c C -l "$1" softraid0
 }
 
 # with a user agent of 'curl', no progress meter, no auto-login, and no
