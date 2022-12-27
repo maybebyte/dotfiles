@@ -39,3 +39,14 @@ set -A complete_rcctl_ls_1 -- \
 	rogue \
 	started \
 	stopped
+
+# OpenBSD pkg_*
+command -v pkg_info >/dev/null 2>&1 && {
+	# shellcheck disable=SC2046
+	set -A PKG_LIST -- $(pkg_info -z)
+
+	set -A complete_pkg_delete -- "${PKG_LIST[@]}"
+	set -A complete_pkg_info -- "${PKG_LIST[@]}"
+
+	set -A PKG_LIST
+}
