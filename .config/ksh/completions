@@ -1,0 +1,13 @@
+# shellcheck shell=ksh
+export MANPAGE_COMPLETIONS='/tmp/completions/manpages'
+
+mkdir -p -m 700 "${MANPAGE_COMPLETIONS%/*}"
+
+if ! [ -f "${MANPAGE_COMPLETIONS}" ]; then
+	apropos . | generate-completions -t man > "${MANPAGE_COMPLETIONS}"
+fi
+
+# Leave command substitution unquoted so it will be interpreted as a list
+# (otherwise it will only be one item in a big, long string).
+# shellcheck disable=SC2046
+set -A complete_man_1 -- $(< "${MANPAGE_COMPLETIONS}")

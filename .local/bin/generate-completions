@@ -1,0 +1,68 @@
+#!/usr/bin/env perl
+# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+use v5.32;
+use strict;
+use warnings;
+use autodie;
+
+use File::Basename qw(fileparse);
+
+use Getopt::Std;
+
+our ( $opt_h, $opt_t );
+
+sub usage {
+	my $program_name = fileparse $0;
+	die <<EOF;
+$program_name [-h] [-t completion_type]
+EOF
+}
+
+getopts('ht:');
+
+usage if $opt_h;
+
+my $completion_type = $opt_t;
+my %completions;
+
+sub generate_man_completions;
+
+if ( $completion_type eq 'man' ) {
+	generate_man_completions
+}
+
+say join "\n", sort keys %completions;
+
+# Input must be in apropos(1) format.
+sub generate_man_completions {
+	while ( my $line = <STDIN> ) {
+		chomp $line;
+
+		# We only need up to before the first parenthesis, as we only care about the
+		# names of the man pages.
+		$line = substr $line, 0, index( $line, '(' );
+
+		# Every name that is present for a given man page is added to an array that
+		# will be looped through.
+		$line =~ tr/,//d;
+		my @man_pages_in_line = split ' ', $line;
+
+		# Each name is added as a new key the first time it is encountered.
+		while ( my $man_page = shift @man_pages_in_line ) {
+			$completions{$man_page}++;
+		}
+	}
+}

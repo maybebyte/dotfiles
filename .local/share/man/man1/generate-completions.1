@@ -1,0 +1,57 @@
+.\" Copyright (c) 2022 Ashlen <eurydice@riseup.net>
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.Dd December 26, 2022
+.Dt GENERATE-COMPLETIONS 1
+.Sh NAME
+.Nm generate-completions
+.Nd create ksh completion output from input
+.Sh SYNOPSIS
+.Nm generate-completions
+.Op Fl h
+.Op Fl t Ar type
+.Sh DESCRIPTION
+.Nm
+is a text filter that reads from STDIN. It parses and converts input from given
+formats to output that
+.Xr ksh 1
+can interpret and use to create tab completions.
+.Pp
+Options:
+.Bl -tag -width Ds
+.It Fl h
+Print basic usage information and exit.
+.It Fl t Ar type
+Select what type of input
+.Nm
+will parse and create output for. Current types are:
+.Pp
+.Bl -tag -width Ds -compact
+.It Cm man
+Expects lines in the format that
+.Xr apropos 1
+creates.
+.El
+.El
+.Sh EXAMPLES
+To create tab completion output for man pages from
+.Xr apropos 1
+output:
+.Pp
+.\" Not sure why this needs to be escaped. I'll figure it out later.
+.Dl $ apropos\ . | generate-completions -t man
+.Sh SEE ALSO
+.Xr apropos 1
+.Sh AUTHORS
+Written and maintained by
+.An Ashlen Aq Mt eurydice@riseup.net .
