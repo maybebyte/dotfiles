@@ -335,6 +335,20 @@ randvids [directory with videos]' >&2
 	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
 }
 
+# Function wrapper for rcctl ls, for completions.
+# Is there a way to use doas(1) with completions without doing this?
+rcctl_ls() {
+	case "$1" in
+		'failed' | 'rogue' | 'started' | 'stopped')
+			CMD="doas rcctl ls"
+			;;
+		*)
+			CMD="rcctl ls"
+			;;
+	esac
+	${CMD} "$1"
+}
+
 # choose a book with fzf and read it.
 readabook() { fzf-open "${READER}" "${HOME}/books"; }
 
