@@ -1,12 +1,12 @@
-# shellcheck shell=ksh
+#!/usr/bin/env ksh
 export MANPAGE_COMPLETIONS='/tmp/completions/manpages'
 
 # shellcheck disable=SC2174
 mkdir -p -m 700 "${MANPAGE_COMPLETIONS%/*}"
 
-if ! [ -f "${MANPAGE_COMPLETIONS}" ]; then
+[ -f "${MANPAGE_COMPLETIONS}" ] || {
 	apropos . | generate-completions -t man > "${MANPAGE_COMPLETIONS}"
-fi
+}
 
 # Leave command substitution unquoted so it will be interpreted as a list
 # (otherwise it will only be one item in a big, long string).
@@ -29,8 +29,10 @@ set -A complete_rcctl_1 -- \
 	stop \
 	reload \
 	restart
+
 # shellcheck disable=SC2046
 set -A complete_rcctl_2 -- $(rcctl ls all)
+
 set -A complete_rcctl_ls_1 -- \
 	all \
 	failed \
