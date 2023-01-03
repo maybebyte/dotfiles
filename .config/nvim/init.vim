@@ -56,6 +56,11 @@ noremap : ;
 " plugin bindings
 let mapleader = ","
 
+" delete all trailing whitespace.
+nnoremap <leader>w :%s/\s\+$//e<CR>
+" delete all trailing newlines.
+nnoremap <leader>e :%s/\n\+\%$//e<CR>
+
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>g :Goyo<CR>
 nnoremap <leader>d :r !date '+\%F'<CR>
@@ -77,11 +82,6 @@ autocmd Filetype perl vnoremap <leader>t :%!perltidy -q<CR>
 
 autocmd Filetype sh nnoremap <leader>s :%!shfmt -s -i 0 -ci -sr -bn<CR>
 autocmd Filetype sh vnoremap <leader>s :%!shfmt -s -i 0 -ci -sr -bn<CR>
-
-" automatically deletes all trailing whitespace and newlines at end of
-" file on save.
-autocmd BufWritePre * %s/\s\+$//e
-autocmd BufWritePre * %s/\n\+\%$//e
 
 " automatically reload configs
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
