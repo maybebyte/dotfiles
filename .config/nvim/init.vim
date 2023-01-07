@@ -1,29 +1,4 @@
-set autochdir
-set backup
-set backupdir =$XDG_DATA_HOME/nvim/backup
-set conceallevel =2
-set diffexpr =
-set diffopt +=iwhiteall
-set noexpandtab
-set foldlevelstart =1   " Force myself to use folds
-set ignorecase
-set laststatus =0
-set lazyredraw
-set linebreak
-" https://security.stackexchange.com/questions/36001/vim-modeline-vulnerabilities
-set modelines =0
-set nomodeline
-set number
-set relativenumber
-set shiftwidth =4
-set smartcase
-set splitbelow
-set splitright
-set tabstop =4
-set textwidth =80
-set undofile
-set wrap
-set wrapscan
+lua require('settings')
 
 " https://github.com/jamessan/vim-gnupg/issues/119
 " https://github.com/jamessan/vim-gnupg/issues/32
