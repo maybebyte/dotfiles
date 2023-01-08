@@ -1,24 +1,6 @@
-lua require('settings')
-
-" https://github.com/jamessan/vim-gnupg/issues/119
-" https://github.com/jamessan/vim-gnupg/issues/32
-let g:GPGUsePipes = 1
-let g:GPGDefaultRecipients=["90965AE120F8E848979DEA4853670DEBCF375780"]
-
-" VimTeX should use zathura as the viewer
-let g:vimtex_view_method = 'zathura'
-
-" allow Markdown folds
-let g:markdown_folding = 1
-
-" run linters/syntax checks on open, but not on close
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-" add proselint to tex and markdown checkers
-" http://proselint.com/
-let g:syntastic_tex_checkers = [ "lacheck", "chktex", "proselint" ]
-let g:syntastic_markdown_checkers = [ "proselint" ]
+lua require('vim_env')
+lua require('vim_opt')
+lua require('vim_g')
 
 " copy and paste to CLIPBOARD selection
 vnoremap <C-c> "+y
@@ -27,9 +9,6 @@ nnoremap <C-p> "+P
 " to protecc my left pinky finger
 noremap ; :
 noremap : ;
-
-" plugin bindings
-let mapleader = ","
 
 " delete all trailing whitespace.
 nnoremap <leader>w :%s/\s\+$//e<CR>
