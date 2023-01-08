@@ -1,29 +1,17 @@
 lua require('vim_env')
 lua require('vim_opt')
 lua require('vim_g')
-
-" copy and paste to CLIPBOARD selection
-vnoremap <C-c> "+y
-nnoremap <C-p> "+P
-
-" to protecc my left pinky finger
-noremap ; :
-noremap : ;
+lua require('keybindings')
 
 " delete all trailing whitespace.
 nnoremap <leader>w :%s/\s\+$//e<CR>
 " delete all trailing newlines.
 nnoremap <leader>e :%s/\n\+\%$//e<CR>
 
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>g :Goyo<CR>
 nnoremap <leader>d :r !date '+\%F'<CR>
 
 " spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :set spell! spelllang=en_us<CR>
-
-" Replace all is aliased to S.
-nnoremap S :%s//g<Left><Left>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
