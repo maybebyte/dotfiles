@@ -3,15 +3,7 @@ lua require('vim_opt')
 lua require('vim_g')
 lua require('keybindings')
 
-" delete all trailing whitespace.
-nnoremap <leader>w :%s/\s\+$//e<CR>
-" delete all trailing newlines.
-nnoremap <leader>e :%s/\n\+\%$//e<CR>
-
 nnoremap <leader>d :r !date '+\%F'<CR>
-
-" spell-check set to <leader>o, 'o' for 'orthography':
-nnoremap <leader>o :set spell! spelllang=en_us<CR>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
