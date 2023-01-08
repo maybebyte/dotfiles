@@ -18,8 +18,8 @@ vim.keymap.set('n', '<leader>e', ':%s/\\n\\+\\%$//e<CR>')
 -- Toggle spell check ('o' for orthography).
 vim.keymap.set('n', '<leader>o', ':set spell! spelllang=en_us<CR>')
 
--- Toggle Goyo
+-- Toggle Goyo.
 vim.keymap.set('n', '<leader>g', ':Goyo<CR>')
 
--- Toggle NERD Tree
+-- Toggle NERD Tree.
 vim.keymap.set('n', '<leader>n', ':NERDTreeToggle<CR>')
