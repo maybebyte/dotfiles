@@ -10,11 +10,11 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	'n', ';', ':',
+	{ 'n', 'v', 'o' }, ';', ':',
 	{ desc = 'Semicolon swapped with colon to protect pinky.' }
 )
 vim.keymap.set(
-	'n', ':', ';',
+	{ 'n', 'v', 'o' }, ':', ';',
 	{ desc = 'Colon swapped with semicolon to protect pinky.' }
 )
 
@@ -47,19 +47,3 @@ vim.keymap.set(
 	'n', '<leader>n', ':NERDTreeToggle<CR>',
 	{ desc = "Toggle NERD Tree." }
 )
-
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'perl',
-	callback = function()
-		vim.keymap.set({'n', 'v'}, '<leader>t', ':%!perltidy -q<CR>')
-	end,
-	desc = "Format perl scripts using perltidy(1)"
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'sh',
-	callback = function()
-		vim.keymap.set({'n', 'v'}, '<leader>s', ':%!shfmt -s -i 0 -ci -sr -bn<CR>')
-	end,
-	desc = "Format shell scripts using shfmt(1)"
-})
