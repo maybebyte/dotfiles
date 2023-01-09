@@ -1,3 +1,4 @@
+-- luacheck: globals vim
 -- Global editor variables.
 
 vim.g.mapleader = ','
@@ -17,7 +18,6 @@ vim.g.markdown_folding = 1
 vim.g.syntastic_check_on_open = 1
 vim.g.syntastic_check_on_wg = 0
 
--- add proselint to tex and markdown checkers
--- http://proselint.com/
-vim.g.syntastic_tex_checkers = 'chktex', 'lacheck', 'proselint' 
-vim.g.syntastic_markdown_checkers = 'proselint'
+vim.g.syntastic_lua_checkers = { 'luacheck', 'luac53' }
+vim.g.syntastic_markdown_checkers = { 'proselint' }
+vim.g.syntastic_tex_checkers = { 'chktex', 'lacheck', 'proselint' }

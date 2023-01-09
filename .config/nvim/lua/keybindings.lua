@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 -- Copy and paste from CLIPBOARD.
 vim.keymap.set('v', '<C-c>', '"+y')
 vim.keymap.set('n', '<C-p>', '"+P')

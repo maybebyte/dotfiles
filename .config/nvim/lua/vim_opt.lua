@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 -- Make a backup of a file before writing, and leave it present in backupdir.
 vim.opt.backup = true
 vim.opt.backupdir = os.getenv("XDG_STATE_HOME") .. '/nvim/backup'
