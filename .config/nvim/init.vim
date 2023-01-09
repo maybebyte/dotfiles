@@ -2,6 +2,7 @@ lua require('vim_env')
 lua require('vim_opt')
 lua require('vim_g')
 lua require('keybindings')
+lua require('autocmds')
 
 nnoremap <leader>d :r !date '+\%F'<CR>
 
