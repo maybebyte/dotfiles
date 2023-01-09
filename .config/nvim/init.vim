@@ -11,12 +11,6 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-autocmd Filetype perl nnoremap <leader>t :%!perltidy -q<CR>
-autocmd Filetype perl vnoremap <leader>t :%!perltidy -q<CR>
-
-autocmd Filetype sh nnoremap <leader>s :%!shfmt -s -i 0 -ci -sr -bn<CR>
-autocmd Filetype sh vnoremap <leader>s :%!shfmt -s -i 0 -ci -sr -bn<CR>
-
 " automatically reload configs
 autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
 autocmd BufWritePost $XDG_CONFIG_HOME/ksh/kshrc !. %
