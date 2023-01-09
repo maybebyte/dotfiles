@@ -40,10 +40,10 @@ vim.keymap.set(
 
 vim.keymap.set(
 	'n', '<leader>g', ':Goyo<CR>',
-	{ desc = "Toggle Goyo." }
+	{ desc = 'Toggle Goyo.' }
 )
 
 vim.keymap.set(
 	'n', '<leader>n', ':NERDTreeToggle<CR>',
-	{ desc = "Toggle NERD Tree." }
+	{ desc = 'Toggle NERD Tree.' }
 )
