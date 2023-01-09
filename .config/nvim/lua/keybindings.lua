@@ -10,11 +10,11 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	{ 'n', 'v', 'o' }, ';', ':',
+	'', ';', ':',
 	{ desc = 'Semicolon swapped with colon to protect pinky.' }
 )
 vim.keymap.set(
-	{ 'n', 'v', 'o' }, ':', ';',
+	'', ':', ';',
 	{ desc = 'Colon swapped with semicolon to protect pinky.' }
 )
 
