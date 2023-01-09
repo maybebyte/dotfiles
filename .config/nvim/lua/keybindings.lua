@@ -1,30 +1,52 @@
 -- luacheck: globals vim
 
--- Copy and paste from CLIPBOARD.
-vim.keymap.set('v', '<C-c>', '"+y')
-vim.keymap.set('n', '<C-p>', '"+P')
+vim.keymap.set(
+	'v', '<C-c>', '"+y',
+	{ desc = 'Copy to CLIPBOARD.' }
+)
+vim.keymap.set(
+	'n', '<C-p>', '"+P',
+	{ desc = 'Paste from CLIPBOARD.' }
+)
 
--- Protect my left pinky.
-vim.keymap.set('n', ';', ':')
-vim.keymap.set('n', ':', ';')
+vim.keymap.set(
+	'n', ';', ':',
+	{ desc = 'Semicolon swapped with colon to protect pinky.' }
+)
+vim.keymap.set(
+	'n', ':', ';',
+	{ desc = 'Colon swapped with semicolon to protect pinky.' }
+)
 
--- Replace all is aliased to S.
-vim.keymap.set('n', 'S', ':%s//g<Left><Left>')
+vim.keymap.set(
+	'n', 'S', ':%s//g<Left><Left>',
+	{ desc = 'Replace all.' }
+)
 
--- Delete all trailing whitespace.
-vim.keymap.set('n', '<leader>w', ':%s/\\s\\+$//e<CR>')
+vim.keymap.set(
+	'n', '<leader>w', ':%s/\\s\\+$//e<CR>',
+	{ desc = 'Delete all trailing whitespace.' }
+)
 
--- Delete all trailing newlines.
-vim.keymap.set('n', '<leader>e', ':%s/\\n\\+\\%$//e<CR>')
+vim.keymap.set(
+	'n', '<leader>e', ':%s/\\n\\+\\%$//e<CR>',
+	{ desc = 'Delete all trailing newlines.' }
+)
 
--- Toggle spell check ('o' for orthography).
-vim.keymap.set('n', '<leader>o', ':set spell! spelllang=en_us<CR>')
+vim.keymap.set(
+	'n', '<leader>o', ':set spell! spelllang=en_us<CR>',
+	{ desc = "Toggle spell check ('o' for orthography)." }
+)
 
--- Toggle Goyo.
-vim.keymap.set('n', '<leader>g', ':Goyo<CR>')
+vim.keymap.set(
+	'n', '<leader>g', ':Goyo<CR>',
+	{ desc = "Toggle Goyo." }
+)
 
--- Toggle NERD Tree.
-vim.keymap.set('n', '<leader>n', ':NERDTreeToggle<CR>')
+vim.keymap.set(
+	'n', '<leader>n', ':NERDTreeToggle<CR>',
+	{ desc = "Toggle NERD Tree." }
+)
 
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'perl',
