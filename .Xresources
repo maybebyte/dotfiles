@@ -1,13 +1,7 @@
 ! pywal
 #include ".cache/wal/colors.Xresources"
 
-! URxvt
-URxvt.font: xft:monospace:size=14, xft:Symbola:size=14
-URxvt.scrollBar: false
-! Disable printing the terminal contents when pressing PrintScreen.
-URxvt.print-pipe: "cat > /dev/null"
-! Reduce space between letters.
-URxvt.letterSpace: -1
+st.font: monospace:size=14
 
 ! eye candy for non-{GTK,QT} applications
 Xft.antialias: 1

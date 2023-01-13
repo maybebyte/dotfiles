@@ -15,7 +15,7 @@ export \
 	GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
 	QT_STYLE_OVERRIDE='Adwaita-dark' \
 	READER='zathura' \
-	TERMINAL='urxvt'
+	TERMINAL='st'
 
 command -v 'dbus-launch' > /dev/null 2>&1 \
 	&& [ -z "${DBUS_SESSION_BUS_ADDRESS}" ] \
