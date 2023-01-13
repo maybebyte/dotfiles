@@ -26,4 +26,4 @@ command -v 'xlock' > /dev/null 2>&1 || err 'xlock not found in PATH.'
 clear_clip || :
 pkill -q 'keepass' || :
 
-xlock
+exec xlock
