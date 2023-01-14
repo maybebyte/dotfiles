@@ -57,12 +57,15 @@ command -v pkg_info > /dev/null 2>&1 && {
 
 command -v task > /dev/null 2>&1 && {
 	# shellcheck disable=SC2046
-	set -A TASKWARRIOR_CMDS -- $(task _commands)
+	set -A complete_task -- $( {
+		task _commands &
+		task _projects &
+		{ task _columns | sed 's/$/:/'; } &
+		{ task _tags | sed 's/^/+/'; } &
+		{ task _tags | sed 's/^/-/'; } &
+		wait
+	} | sort -u )
+
 	# shellcheck disable=SC2046
-	set -A TASKWARRIOR_TAGS -- $(task _tags | sed 's/^/+/')
-
-	set -A complete_task -- "${TASKWARRIOR_CMDS[@]}" "${TASKWARRIOR_TAGS[@]}"
-
-	set -A TASKWARRIOR_CMDS
-	set -A TASKWARRIOR_TAGS
+	set -A complete_task_config -- $(task _config)
 }

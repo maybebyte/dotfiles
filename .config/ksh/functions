@@ -293,6 +293,11 @@ readmd [markdown document]' >&2
 	lowdown -T 'term' --term-no-colour "$1" | less
 }
 
+# Taskwarrior configuration function. For completion purposes.
+task_config() {
+	task config "$@"
+}
+
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to wttr.in with $1 as
 # the path. Then, send the results to STDOUT.
