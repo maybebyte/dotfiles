@@ -63,6 +63,7 @@ command -v task > /dev/null 2>&1 && {
 		{ task _columns | sed 's/$/:/'; } &
 		{ task _tags | sed 's/^/+/'; } &
 		{ task _tags | sed 's/^/-/'; } &
+		task _uuids &
 		wait
 	} | sort -u )
 
