@@ -1,3 +1,4 @@
+#!/usr/bin/env ksh
 # shellcheck disable=SC1090
 
 if command -v 'doas' > /dev/null 2>&1; then

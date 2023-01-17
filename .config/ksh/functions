@@ -1,3 +1,5 @@
+# #!/usr/bin/env ksh
+
 # essentially, anything too simple to warrant its own shell script
 #
 # note that some of these functions use aliases. if certain behavior for

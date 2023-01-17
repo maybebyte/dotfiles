@@ -1,3 +1,5 @@
+#!/usr/bin/env ksh
+
 case "${KSH_VERSION%%\ KSH*}" in
 	'@(#)PD')
 		# Note that these have swapped colors. It's to call attention to shells
