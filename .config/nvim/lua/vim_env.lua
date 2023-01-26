@@ -5,3 +5,7 @@
 vim.env.XDG_STATE_HOME =
 	os.getenv("XDG_STATE_HOME") or
 	os.getenv("HOME") .. '/.local/state'
+
+vim.env.XDG_DATA_HOME =
+	os.getenv("XDG_DATA_HOME") or
+	os.getenv("HOME") .. '/.local/share'

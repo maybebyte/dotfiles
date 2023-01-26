@@ -3,6 +3,7 @@ lua require('vim_opt')
 lua require('vim_g')
 lua require('keybindings')
 lua require('autocmds')
+lua require('plugins')
 
 nnoremap <leader>d :r !date '+\%F'<CR>
 
@@ -46,29 +47,4 @@ endif
 " creates backup directory
 if isdirectory(expand("$XDG_DATA_HOME/nvim/backup")) != 1
 	silent !mkdir -p $XDG_DATA_HOME/nvim/backup
-endif
-
-" plugins
-call plug#begin("$XDG_DATA_HOME/nvim/site/autoload/plugged")
-	Plug 'junegunn/goyo.vim'
-	Plug 'junegunn/vim-easy-align'
-	Plug 'scrooloose/nerdcommenter'
-	Plug 'scrooloose/nerdtree'
-	Plug 'scrooloose/syntastic'
-	Plug 'tpope/vim-surround'
-
-	if $DISPLAY != ''
-		Plug 'ap/vim-css-color'
-		Plug 'dylanaraps/wal.vim'
-		Plug 'kovetskiy/sxhkd-vim'
-		Plug 'plasticboy/vim-markdown'
-		Plug 'lervag/vimtex'
-		Plug 'jamessan/vim-gnupg'
-	endif
-
-call plug#end()
-
-" https://github.com/dylanaraps/pywal
-if $DISPLAY != ''
-	colorscheme wal
 endif
