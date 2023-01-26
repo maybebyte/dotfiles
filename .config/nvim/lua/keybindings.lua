@@ -47,3 +47,8 @@ vim.keymap.set(
 	'n', '<leader>n', ':NERDTreeToggle<CR>',
 	{ desc = 'Toggle NERD Tree.' }
 )
+
+vim.keymap.set(
+	{ 'x', 'n' }, 'ga', '<Plug>(EasyAlign)',
+	{ desc = 'Start interactive EasyAlign in visual mode and for motions/text objects (e.g. vipga, gaip)' }
+)
