@@ -11,7 +11,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-surround'
 
-if os.getenv("DISPLAY") then
+if os.getenv('DISPLAY') then
 	Plug 'ap/vim-css-color'
 	Plug 'dylanaraps/wal.vim'
 	Plug 'kovetskiy/sxhkd-vim'
@@ -23,6 +23,6 @@ end
 vim.call('plug#end')
 
 -- https://github.com/dylanaraps/pywal
-if os.getenv("DISPLAY") then
+if os.getenv('DISPLAY') then
 	vim.cmd.colorscheme('wal')
 end

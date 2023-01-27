@@ -5,7 +5,7 @@ vim.opt.backup = true
 vim.opt.backupdir = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
 -- Ignore white space changes when showing differences between files.
-vim.opt.diffopt:append("iwhiteall")
+vim.opt.diffopt:append('iwhiteall')
 
 -- Indentation settings.
 --
