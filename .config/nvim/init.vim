@@ -17,7 +17,7 @@ endif
 
 " creates backup directory
 :lua <<EOF
-local backup_directory = vim.env.XDG_DATA_HOME .. '/nvim/backup'
+local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
 if not os.rename(backup_directory, backup_directory) then
 	os.execute('mkdir -p ' .. backup_directory)
