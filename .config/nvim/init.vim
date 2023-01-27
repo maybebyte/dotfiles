@@ -34,6 +34,10 @@ if empty(glob("$XDG_DATA_HOME/nvim/site/autoload/plug.vim"))
 endif
 
 " creates backup directory
-if isdirectory(expand("$XDG_DATA_HOME/nvim/backup")) != 1
-	silent !mkdir -p $XDG_DATA_HOME/nvim/backup
-endif
+:lua <<EOF
+local backup_directory = os.getenv('XDG_DATA_HOME') .. '/nvim/backup'
+
+if not os.rename(backup_directory, backup_directory .. '/') then
+	os.execute('mkdir -p ' .. backup_directory)
+end
+EOF
