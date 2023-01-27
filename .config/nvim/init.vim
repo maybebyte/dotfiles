@@ -7,12 +7,11 @@ lua require('plugins')
 
 nnoremap <leader>d :r !date '+\%F'<CR>
 
-" Enable Goyo for help files
-"autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
-	"\$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* :Goyo
-
 " one ZQ fully exits when reading help files.
 " (ordinarily, one would need to ZQ twice).
+"
+" TODO: this is an ugly workaround. See this for details and reimplement in Lua.
+" https://github.com/junegunn/goyo.vim/issues/16
 autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
 	\$XDG_DATA_HOME/nvim/site/autoload/plugged/*/doc/* nnoremap ZQ :Goyo!\|q!<CR>
 
