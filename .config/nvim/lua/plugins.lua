@@ -2,7 +2,7 @@
 local Plug = vim.fn['plug#']
 
 -- plugins
-vim.call('plug#begin', os.getenv("XDG_DATA_HOME") .. '/nvim/site/autoload/plugged')
+vim.call('plug#begin', vim.env.XDG_DATA_HOME .. '/nvim/site/autoload/plugged')
 
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'

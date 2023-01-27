@@ -38,7 +38,7 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 })
 
 vim.api.nvim_create_autocmd('BufWritePost', {
-	pattern = os.getenv("XDG_CONFIG_HOME") .. '/sxhkd/sxhkdrc',
+	pattern = vim.env.XDG_CONFIG_HOME .. '/sxhkd/sxhkdrc',
 	callback = function()
 		if os.getenv("DISPLAY") then
 			os.execute('pkill -USR1 sxhkd')
@@ -85,7 +85,7 @@ vim.api.nvim_create_autocmd('QuitPre', {
 -- This doesn't seem to work, regardless of whether I use vimscript or lua, but
 -- it's kept around in case I ever figure that out.
 -- vim.api.nvim_create_autocmd('BufWritePost', {
--- 	pattern = os.getenv("XDG_CONFIG_HOME") .. '/ksh/*',
+-- 	pattern = vim.env.XDG_CONFIG_HOME .. '/ksh/*',
 -- 	callback = function()
 -- 		local filename = vim.fn.expand('%:p')
 -- 		os.execute('. ' .. filename)

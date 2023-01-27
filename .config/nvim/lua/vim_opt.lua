@@ -2,7 +2,7 @@
 
 -- Make a backup of a file before writing, and leave it present in backupdir.
 vim.opt.backup = true
-vim.opt.backupdir = os.getenv("XDG_STATE_HOME") .. '/nvim/backup'
+vim.opt.backupdir = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
 -- Ignore white space changes when showing differences between files.
 vim.opt.diffopt:append("iwhiteall")
