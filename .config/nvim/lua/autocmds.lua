@@ -1,7 +1,6 @@
 -- luacheck: globals vim
 
 vim.api.nvim_create_autocmd('VimEnter', {
-	pattern = '*',
 	callback = function()
 		vim.opt.formatoptions:remove( { 'c', 'r', 'o' } )
 	end,
@@ -49,7 +48,6 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 })
 
 vim.api.nvim_create_autocmd('BufReadPost', {
-	pattern = '*' ,
 	callback = function()
 		if not vim.opt.modifiable:get() then
 			vim.cmd('Goyo')
