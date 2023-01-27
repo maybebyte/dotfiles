@@ -7,14 +7,6 @@ lua require('plugins')
 
 nnoremap <leader>d :r !date '+\%F'<CR>
 
-" if vim-plug isn't installed, install it
-if empty(glob("$XDG_DATA_HOME/nvim/site/autoload/plug.vim"))
-	silent !curl -fLo "$XDG_DATA_HOME/nvim/site/autoload/plug.vim" --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-	autocmd VimEnter * PlugInstall --sync | source "$XDG_DATA_HOME/nvim/init.vim"
-endif
-
 " creates backup directory
 :lua <<EOF
 local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
