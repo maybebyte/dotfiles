@@ -48,12 +48,24 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 	desc = 'Reload sxhkd(1) keybindings'
 })
 
--- This doesn't seem to work using either the vim or neovim backend.
---vim.api.nvim_create_autocmd('BufWritePost', {
---	pattern = os.getenv("XDG_CONFIG_HOME") .. '/ksh/*',
---	callback = function()
---		local filename = vim.fn.expand('%:p')
---		os.execute('. ' .. filename)
---	end,
---	desc = 'Reload ksh configuration if edited'
---})
+-- Not currently used, but good to keep around in case I start transcribing
+-- music again.
+-- vim.api.nvim_create_autocmd('BufWritePost', {
+-- 	pattern = '*.ly',
+-- 	callback = function()
+-- 		local filename = vim.fn.expand('%:p')
+-- 		os.execute('lilypond ' .. filename)
+-- 	end,
+-- 	desc = 'Compile lilypond files (related to music transcription).'
+-- })
+
+-- This doesn't seem to work, regardless of whether I use vimscript or lua, but
+-- it's kept around in case I ever figure that out.
+-- vim.api.nvim_create_autocmd('BufWritePost', {
+-- 	pattern = os.getenv("XDG_CONFIG_HOME") .. '/ksh/*',
+-- 	callback = function()
+-- 		local filename = vim.fn.expand('%:p')
+-- 		os.execute('. ' .. filename)
+-- 	end,
+-- 	desc = 'Reload ksh configuration if edited'
+-- })
