@@ -1,5 +1,13 @@
 -- luacheck: globals vim
 
+vim.api.nvim_create_autocmd('VimEnter', {
+	pattern = '*',
+	callback = function()
+		vim.opt.formatoptions:remove( { 'c', 'r', 'o' } )
+	end,
+	desc = 'No automatic commenting on newlines.'
+})
+
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'perl',
 	callback = function()

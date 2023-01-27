@@ -22,9 +22,6 @@ autocmd BufReadPost /usr/local/share/nvim/runtime/doc/*,
 " shell script syntax for xsession and ksh files
 autocmd BufReadPost $HOME/.xsession,$XDG_CONFIG_HOME/ksh/* set filetype=sh
 
-" no more automatic commenting on newline
-autocmd VimEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
 " if vim-plug isn't installed, install it
 if empty(glob("$XDG_DATA_HOME/nvim/site/autoload/plug.vim"))
 	silent !curl -fLo "$XDG_DATA_HOME/nvim/site/autoload/plug.vim" --create-dirs
