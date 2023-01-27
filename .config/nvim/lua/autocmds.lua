@@ -48,6 +48,17 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 	desc = 'Reload sxhkd(1) keybindings'
 })
 
+vim.api.nvim_create_autocmd('BufReadPost', {
+	pattern = '*' ,
+	callback = function()
+		if not vim.opt.modifiable:get() then
+			vim.cmd('Goyo')
+		end
+	end,
+	desc = 'Goyo is enabled for help files.'
+})
+
+
 -- Not currently used, but good to keep around in case I start transcribing
 -- music again.
 -- vim.api.nvim_create_autocmd('BufWritePost', {
