@@ -55,5 +55,8 @@ vim.keymap.set(
 
 vim.keymap.set(
 	{ 'x', 'n' }, 'ga', '<Plug>(EasyAlign)',
-	{ desc = 'Start interactive EasyAlign in visual mode and for motions/text objects (e.g. vipga, gaip)' }
+	{
+		desc = 'Start interactive EasyAlign in visual mode and '
+			.. 'for motions/text objects (e.g. vipga, gaip)'
+	}
 )
