@@ -1,4 +1,4 @@
-# #!/usr/bin/env ksh
+#!/usr/bin/env ksh
 
 # essentially, anything too simple to warrant its own shell script
 #

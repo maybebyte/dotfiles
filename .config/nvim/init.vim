@@ -7,9 +7,6 @@ lua require('plugins')
 
 nnoremap <leader>d :r !date '+\%F'<CR>
 
-" shell script syntax for xsession and ksh files
-autocmd BufReadPost $HOME/.xsession,$XDG_CONFIG_HOME/ksh/* set filetype=sh
-
 " if vim-plug isn't installed, install it
 if empty(glob("$XDG_DATA_HOME/nvim/site/autoload/plug.vim"))
 	silent !curl -fLo "$XDG_DATA_HOME/nvim/site/autoload/plug.vim" --create-dirs
