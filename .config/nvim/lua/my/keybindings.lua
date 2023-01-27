@@ -24,7 +24,10 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	'n', '<leader>d', ':r !date +\\%F<CR>',
+	'n', '<leader>d',
+	function()
+		vim.api.nvim_put( { os.date('%F') }, 'l', true, true)
+	end,
 	{ desc = 'Insert current date.' }
 )
 
