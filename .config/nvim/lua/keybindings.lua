@@ -24,6 +24,11 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
+	'n', '<leader>d', ':r !date +\\%F<CR>',
+	{ desc = 'Insert current date.' }
+)
+
+vim.keymap.set(
 	'n', '<leader>w', ':%s/\\s\\+$//e<CR>',
 	{ desc = 'Delete all trailing whitespace.' }
 )
