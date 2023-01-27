@@ -7,11 +7,6 @@ lua require('plugins')
 
 nnoremap <leader>d :r !date '+\%F'<CR>
 
-" automatically reload configs
-autocmd BufWritePost $HOME/.Xresources,$HOME/.Xdefaults !xrdb %
-autocmd BufWritePost $XDG_CONFIG_HOME/ksh/kshrc !. %
-autocmd BufWritePost $XDG_CONFIG_HOME/sxhkd/sxhkdrc !pkill -USR1 sxhkd
-
 " compile lilypond files after writing
 autocmd BufWritePost *.ly !lilypond %
 
