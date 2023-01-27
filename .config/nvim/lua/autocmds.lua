@@ -56,6 +56,20 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 	desc = 'Goyo is enabled for help files.'
 })
 
+-- QuitPre takes place after writes to the buffer, so :wq is still safe.
+--
+-- Also see:
+-- https://github.com/junegunn/goyo.vim/issues/16
+-- https://github.com/junegunn/goyo.vim/wiki/Customization
+vim.api.nvim_create_autocmd('QuitPre', {
+	callback = function()
+		if vim.call('exists', '#goyo') then
+			vim.cmd('Goyo!|q!')
+		end
+	end,
+	desc = 'Instead of requiring two quits to exit a Goyo window, one will do.'
+})
+
 
 -- Not currently used, but good to keep around in case I start transcribing
 -- music again.
