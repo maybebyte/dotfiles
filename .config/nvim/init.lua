@@ -1,11 +1,11 @@
 -- luacheck: globals vim
 
-require('vim_env')
-require('vim_opt')
-require('vim_g')
-require('keybindings')
-require('autocmds')
-require('plugins')
+require('my.vim_env')
+require('my.vim_opt')
+require('my.vim_g')
+require('my.keybindings')
+require('my.autocmds')
+require('my.plugins')
 
 local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
