@@ -47,11 +47,12 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 	desc = 'Reload sxhkd(1) keybindings'
 })
 
-vim.api.nvim_create_autocmd('BufReadPost', {
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = 'help',
 	callback = function()
-		if not vim.opt.modifiable:get() then
+		vim.schedule(function()
 			vim.cmd('Goyo')
-		end
+		end)
 	end,
 	desc = 'Goyo is enabled for help files.'
 })
