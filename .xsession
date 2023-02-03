@@ -47,7 +47,7 @@ sct 3500
 xset b off
 
 # daemons
-xcompmgr &
+picom -b
 xidle &
 unclutter -idle 3 &
 sxhkd &
