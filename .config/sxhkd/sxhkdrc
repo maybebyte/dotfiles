@@ -47,6 +47,7 @@ super + {greater,less,P}
 	mpc {next,prev,toggle}
 
 # seek to beginning, 5 sec {back,forward}, 1 min {back,forward}
+# TODO: these bindings conflict with spectrwm
 shift + super + {0,Left,Right,Down,Up}
 	mpc seek {0,-5,+5,-1:00,+1:00}
 
