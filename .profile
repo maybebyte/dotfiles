@@ -27,8 +27,9 @@ export \
 export \
 	DOMAIN="${SITE##*//}" \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
+	HTML_TIDY="${XDG_CONFIG_HOME}/tidy/tidy.conf" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
-	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidyrc"
+	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
 
 # shellcheck disable=SC1091
 [ -n "${DISPLAY}" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
