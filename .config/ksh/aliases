@@ -35,7 +35,7 @@ openbsd_aliases() {
 		sysnet='systat netstat' \
 		tailhttp='tail -f /var/www/logs/access.log' \
 		tailmail='tail -f /var/log/maillog' \
-		webtest="webtest \${DOMAIN} \${MARKDOWNDIR} \${WWWDIR}"
+		webtest="webtest -i index.html \${DOMAIN} \${MARKDOWNDIR} \${WWWDIR}"
 
 	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
