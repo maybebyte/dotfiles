@@ -6,60 +6,161 @@
 # smtp_{url,pass} aren't needed with a working smtpd.conf(5)
 # on OpenBSD :)
 
-source "gpg -dq ${HOME}/passwords/email_pass.gpg |"
+source "gpg -dq ${HOME}/passwords/emails/email_passwords.txt.gpg |"
+
+source "${XDG_CONFIG_HOME}/neomutt/riseup.txt"
+# Here we use the $folder variable that has just been set in the sourced file.
+#
+# We must set it right now otherwise the 'folder' variable will change in the
+# next sourced file.
+folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/riseup.txt"
+
+source "${XDG_CONFIG_HOME}/neomutt/personal.txt"
+folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/personal.txt"
 
 subscribe announcements@openbsd.org
 subscribe misc@openbsd.org
 subscribe ports@openbsd.org
 
+# Make a noise when an error occurs
 unset beep
+
+# Automatically PGP sign all outgoing mail
 unset crypt_auto_sign
+
+# Encrypt replies to encrypted messages
 set crypt_reply_encrypt
-unset crypt_reply_sign
-set crypt_reply_sign_encrypted
+
+# Sign replies to signed messages
+set crypt_reply_sign = no
+
+# Sign replies to encrypted messages
+set crypt_reply_sign_encrypted = yes
+
+# Use GPGME crypto backend
 set crypt_use_gpgme
-set date_format = "%y/%m/%d %H:%M"
+
+# strftime format string for the `%d` expando
+set date_format = "%F %R"
+
+# Really delete messages
 set delete
+
+# Don't prompt for the recipients and subject when replying/forwarding
 set fast_reply
-set folder = pops://mail.riseup.net:995
+
+# printf-like format string to control the subject when forwarding a message
 set forward_format = "Fwd: %s"
+
+# Automatically quote a forwarded message using `$indent_string`
 set forward_quote
-set from = eurydice@riseup.net
+
+# (hcache) Directory/file for the header cache database
 set header_cache = "${XDG_CACHE_HOME}/neomutt"
+
+# Don't use the hostname, just the domain, when generating the message id
 set hidden_host
+
+# Ignore the 'Reply-To' header when using `<reply>` on a mailing list
 set ignore_list_reply_to
+
+# (imap) When opening a mailbox, ask the server for a list of subscribed folders
+set imap_check_subscribed
+
+# (imap) Reuse an existing IMAP connection to check for new mail
+# NOTE: I don't know if this works with multi-account or not
+unset imap_passive
+
+# Include a copy of the email that's being replied to
 set include
+
+# Number of seconds before NeoMutt checks for new mail
 set mail_check = 600
+
+# Periodically calculate message statistics while polling for new mail
 set mail_check_stats
+
+# How often to calculate message statistics
 set mail_check_stats_interval = 600
+
+# Mark new emails as old when leaving the mailbox
 unset mark_old
+
+# Display a '+' at the beginning of wrapped lines in the pager
 unset markers
+
+# Folder that receives read emails (see Move)
 set mbox = "${HOME}/mail"
+
+# Default type for creating new mailboxes
 set mbox_type = "Maildir"
+
+# (imap/pop) Directory for the message cache
 set message_cachedir = "${XDG_CACHE_HOME}/neomutt"
+
+# Forward a message as a 'message/RFC822' MIME part
 set mime_forward
-set move
+
+# Move emails from `$spool_file` to `$mbox` when read
+# NOTE: This will mark emails as deleted if folder is remote and mbox is local
+unset move
+
+# Don't automatically open the next message when at the end of a message
+set pager_stop
+
+# Automatically decrypt PGP messages
 set pgp_auto_decode
+
+# Show non-usable keys in the key selection
 unset pgp_show_unusable
+
+# (pop) Interval between checks for new mail
 set pop_check_interval = 600
-set pop_delete
-set pop_host = "mail.riseup.net"
-set pop_pass = $my_pass
-set pop_user = "eurydice@riseup.net"
+
+# (pop) After downloading POP messages, delete them on the server
+unset pop_delete
+
+# Confirm before printing a message
 unset print
-set real_name = "Ashlen"
+
+# Folder to save 'sent' messages
 set record = "${HOME}/mail"
+
+# Maximum paragraph width for reformatting 'format=flowed' text
 set reflow_wrap = 80
+
+# Decode RFC2047-encoded MIME parameters
 set rfc2047_parameters
+
+# (sidebar) Wrap around when searching for the next mailbox with new mail
 set sidebar_next_new_wrap
+
+# (sidebar) Show the sidebar
+# Can be toggled on and off.
 unset sidebar_visible
+
+# (sidebar) Width of the sidebar
 set sidebar_width = 15
+
+# Time to pause after certain info messages
 set sleep_time = 0
-set sort = threads
-set spool_file = +INBOX
+
+# Sort method for the index
+set sort = last-date
+
+# (ssl) Require TLS encryption for all connections
 set ssl_force_tls
+
+# Thread messages using 'In-Reply-To' and 'References' headers
 set strict_threads
+
+# Whether to use threads for the index
+set use_threads = threads
+
+# Prompt to press a key after running external commands
 unset wait_key
+
+# Width to wrap text in the pager
 set wrap = 80
 
 mailboxes = +INBOX
@@ -112,6 +213,9 @@ bind pager k previous-line
 bind pager l view-attachments
 bind pager,attach h exit
 macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
+
+macro index,pager gp "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/personal.txt<enter><change-folder>!<enter>"
+macro index,pager ge "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/riseup.txt<enter><change-folder>!<enter>"
 
 # Colors
 color attachment white default
