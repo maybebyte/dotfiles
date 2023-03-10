@@ -1,11 +1,7 @@
-# stuck 'set my_pass=xxxx' in a file and encrypted it with GnuPG
-
-# it can then be referenced with $my_pass, all without leaving the
-# password in plain text on the computer.
-
-# smtp_{url,pass} aren't needed with a working smtpd.conf(5)
-# on OpenBSD :)
-
+# Grab passwords from GPG encrypted file. When decrypted, they're set to a
+# variable like so:
+#
+# set my_pass=xxx
 source "gpg -dq ${HOME}/passwords/emails/email_passwords.txt.gpg |"
 
 source "${XDG_CONFIG_HOME}/neomutt/riseup.txt"
@@ -17,6 +13,9 @@ folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/riseup.txt"
 
 source "${XDG_CONFIG_HOME}/neomutt/personal.txt"
 folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/personal.txt"
+
+source "${XDG_CONFIG_HOME}/neomutt/dev.txt"
+folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/dev.txt"
 
 subscribe announcements@openbsd.org
 subscribe misc@openbsd.org
@@ -76,6 +75,7 @@ bind pager,attach h exit
 macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
 
 macro index,pager gp "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/personal.txt<enter><change-folder>!<enter>"
+macro index,pager gd "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/dev.txt<enter><change-folder>!<enter>"
 macro index,pager ge "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/riseup.txt<enter><change-folder>!<enter>"
 
 # Colors

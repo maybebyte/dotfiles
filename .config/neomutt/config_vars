@@ -41,7 +41,8 @@ set hidden_host
 set ignore_list_reply_to
 
 # (imap) When opening a mailbox, ask the server for a list of subscribed folders
-set imap_check_subscribed
+# NOTE: This is done per profile.
+#set imap_check_subscribed
 
 # (imap) Reuse an existing IMAP connection to check for new mail
 # NOTE: I don't know if this works with multi-account or not
@@ -138,4 +139,3 @@ unset wait_key
 
 # Width to wrap text in the pager
 set wrap = 80
-
