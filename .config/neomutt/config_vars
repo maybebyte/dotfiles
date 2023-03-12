@@ -138,4 +138,4 @@ set use_threads = threads
 unset wait_key
 
 # Width to wrap text in the pager
-set wrap = 80
+set wrap = 72
