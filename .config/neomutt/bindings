@@ -1,0 +1,43 @@
+bind index \Cf noop
+bind index,pager i noop
+bind index,pager,attach g noop
+
+# General rebindings
+bind attach l view-text
+bind browser h goto-parent
+bind browser l select-entry
+bind editor <Tab> complete-query
+bind editor <space> noop
+bind index "^" fetch-mail
+bind index D purge-message
+bind index L list-reply
+bind index U undelete-message
+bind index h noop
+bind index j next-entry
+bind index k previous-entry
+bind index l display-message
+bind index,attach G last-entry
+bind index,attach gg first-entry
+bind index,pager \Cb previous-page
+bind index,pager \Cf next-page
+bind index,pager B sidebar-toggle-visible
+bind index,pager S sync-mailbox
+bind index,pager \Cj sidebar-next
+bind index,pager \Ck sidebar-prev
+bind index,pager \Cn sidebar-next-new
+bind index,pager \Co sidebar-open
+bind index,pager \Cp sidebar-prev-new
+bind index,pager p recall-message
+bind index,pager,attach R group-reply
+bind index,pager,browser d half-down
+bind index,pager,browser u half-up
+bind index,query <space> tag-entry
+bind pager j next-line
+bind pager k previous-line
+bind pager l view-attachments
+bind pager,attach h exit
+macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
+
+macro index,pager gp "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/personal.txt<enter><change-folder>!<enter>"
+macro index,pager gd "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/dev.txt<enter><change-folder>!<enter>"
+macro index,pager ge "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/riseup.txt<enter><change-folder>!<enter>"
