@@ -48,8 +48,8 @@ vim.opt.relativenumber = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- Lines are 80 characters long, and will be broken after that.
-vim.opt.textwidth = 80
+-- Lines are 72 characters long, and will be broken after that.
+vim.opt.textwidth = 72
 
 -- Save edit history to an undo file.
 vim.opt.undofile = true
