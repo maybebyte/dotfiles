@@ -88,8 +88,8 @@ my ( $background, $foreground, $color3 ) = do {
 my @dmenu_options = (
 	'-i',
 	'-l', 20,
+	'-fn', 'emoji-12',
 	'-fn', 'mono-12',
-	'-fn', 'Symbola-12',
 	'-nb', $background,
 	'-nf', $color3,
 	'-sb', $background,
