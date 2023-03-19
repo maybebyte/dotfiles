@@ -8,3 +8,4 @@
 --sub-langs en,en-orig,-live_chat
 --write-description
 --write-info-json
+--extractor-args 'youtube:lang=en'
