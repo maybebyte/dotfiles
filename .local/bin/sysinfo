@@ -109,9 +109,6 @@ command -v 'mpc' > /dev/null 2>&1 || err 'mpc not found in PATH.'
 BATTERY_STATUS="$(apm -b)"
 readonly BATTERY_STATUS
 
-HOSTNAME="$(hostname -s)"
-readonly HOSTNAME
-
 while true; do
 	sysinfo
 	sleep 30
