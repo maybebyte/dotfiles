@@ -29,7 +29,7 @@ mkdir -m 700 "${HOME}/Downloads"
 gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 
 # laptop adjustments
-if [ "$(hostname -s)" = 'lain' ]; then
+if [ "$(hostname -s)" = 'bluebell' ]; then
 	xset m 3/2 0
 	# trackpad scrolling with middle button
 	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
