@@ -244,8 +244,11 @@ command -v 'yt-dlp' > /dev/null 2>&1 \
 	&& alias cdmd="cd \${WEBSITE_SRC_DIR}"
 [ -n "${WEBSITE_DEST_DIR}" ] \
 	&& alias cdwww="cd \${WEBSITE_DEST_DIR}"
-[ -n "${WEBSITE_DOMAIN}" ] \
-	&& alias tnet="ping \${WEBSITE_DOMAIN}"
+[ -n "${WEBSITE_DOMAIN}" ] && {
+	alias \
+		tnet="ping \${WEBSITE_DOMAIN}" \
+		tnet6="ping6 \${WEBSITE_DOMAIN}"
+}
 
 OS="$(uname)"
 [ -z "${OS##*BSD}" ] && pf_aliases
