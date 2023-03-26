@@ -35,7 +35,7 @@ openbsd_aliases() {
 		sysnet='systat netstat' \
 		tailhttp='tail -f /var/www/logs/access.log' \
 		tailmail='tail -f /var/log/maillog' \
-		webtest="webtest -i index.html \${DOMAIN} \${MARKDOWNDIR} \${WWWDIR}"
+		webtest="webtest -i index.html \${WEBSITE_DOMAIN} \${WEBSITE_SRC_DIR} \${WEBSITE_DEST_DIR}"
 
 	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
 }
@@ -240,12 +240,12 @@ command -v 'yt-dlp' > /dev/null 2>&1 \
 		ytdesc='yt-dlp --get-description' \
 		ytlen='yt-dlp --get-duration'
 
-[ -n "${MARKDOWNDIR}" ] \
-	&& alias cdmd="cd \${MARKDOWNDIR}"
-[ -n "${WWWDIR}" ] \
-	&& alias cdwww="cd \${WWWDIR}"
-[ -n "${SITE}" ] \
-	&& alias tnet="ping \${DOMAIN}"
+[ -n "${WEBSITE_SRC_DIR}" ] \
+	&& alias cdmd="cd \${WEBSITE_SRC_DIR}"
+[ -n "${WEBSITE_DEST_DIR}" ] \
+	&& alias cdwww="cd \${WEBSITE_DEST_DIR}"
+[ -n "${WEBSITE_DOMAIN}" ] \
+	&& alias tnet="ping \${WEBSITE_DOMAIN}"
 
 OS="$(uname)"
 [ -z "${OS##*BSD}" ] && pf_aliases
