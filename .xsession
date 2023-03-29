@@ -5,6 +5,15 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
+# Load fonts so that tools incompatible with Xft can access them.
+# This includes things like xfontsel(1), xlock(1), etc.
+if [ -d '/usr/local/share/fonts' ]; then
+	for font in '/usr/local/share/fonts/'*; do
+		xset fp+ "${font}"
+	done
+	xset fp rehash
+fi
+
 # environment variables that either:
 #
 # a) don't make sense to put in ~/.profile
