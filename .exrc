@@ -1,7 +1,7 @@
 " indents intelligently based on context
 set autoindent
-" expand tabs as spaces
-set expandtab
+" tabs are tabs
+set noexpandtab
 " use extended regular expressions
 set extended
 " case-insensitive search, unless an uppercase letter is used
@@ -16,13 +16,13 @@ set report=1
 set ruler
 " incremental search
 set searchincr
-" autoindent width = 2 spaces
-set shiftwidth=2
+" autoindent width = 4 spaces
+set shiftwidth=4
 " show matching parens, braces, etc
 set showmatch
 " display current mode (insert/normal)
 set showmode
-" tab width = 2 spaces
-set tabstop=2
+" tab width = 4 spaces
+set tabstop=4
 " display all error messages
 set verbose
