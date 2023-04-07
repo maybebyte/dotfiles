@@ -21,15 +21,18 @@ export \
 	XDG_CONFIG_HOME="${HOME}/.config" \
 	XDG_DATA_HOME="${HOME}/.local/share" \
 	XDG_STATE_HOME="${HOME}/.local/state" \
-	SITE='https://www.anthes.is'
+	WEBSITE='https://www.anthes.is/'
 
 # These variables come after.
 export \
-	DOMAIN="${SITE##*//}" \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
 	HTML_TIDY="${XDG_CONFIG_HOME}/tidy/tidy.conf" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
 	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
+
+TMPVAR="${WEBSITE%/}"
+export WEBSITE_DOMAIN="${TMPVAR##*//}"
+unset TMPVAR
 
 # shellcheck disable=SC1091
 [ -n "${DISPLAY}" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
@@ -47,12 +50,12 @@ case "$(uname)" in
 esac
 
 [ -e "${HOME}/src/website_md" ] &&
-	export MARKDOWNDIR="${HOME}/src/website_md"
+	export WEBSITE_SRC_DIR="${HOME}/src/website_md"
 
-if [ -e "/var/www/htdocs/${DOMAIN}" ]; then
-	export WWWDIR="/var/www/htdocs/${DOMAIN}"
-elif [ -e "/var/www/htdocs/${DOMAIN##www.}" ]; then
-	export WWWDIR="/var/www/htdocs/${DOMAIN##www.}"
+if [ -e "/var/www/htdocs/${WEBSITE_DOMAIN}" ]; then
+	export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN}"
+elif [ -e "/var/www/htdocs/${WEBSITE_DOMAIN##www.}" ]; then
+	export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN##www.}"
 fi
 
 # Add XDG_BIN_HOME to PATH.

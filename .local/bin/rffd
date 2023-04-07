@@ -61,21 +61,21 @@ sub make_wanted {
 }
 
 sub randaudio {
-	return unless /\.(?:mp3|opus|flac|aac|ogg|wav)\z/;
+	return unless /\.(?:mp3|opus|flac|aac|ogg|wav)\z/i;
 	return unless mimetype($_) =~ m{\Aaudio/};
 
 	push @wanted_files, $File::Find::name;
 }
 
 sub randvids {
-	return unless /\.(?:mkv|mp4|webm)\z/;
+	return unless /\.(?:mkv|mp4|webm)\z/i;
 	return unless mimetype($_) =~ m{\Avideo/};
 
 	push @wanted_files, $File::Find::name;
 }
 
 sub randpics {
-	return unless /\.(?:jpe?g|png)\z/;
+	return unless /\.(?:jpe?g|png)\z/i;
 	return unless mimetype($_) =~ m{\Aimage/};
 
 	push @wanted_files, $File::Find::name;

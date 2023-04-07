@@ -47,6 +47,31 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 	desc = 'Reload sxhkd(1) keybindings'
 })
 
+vim.api.nvim_create_autocmd('BufWritePost', {
+	pattern = {
+		vim.env.WEBSITE_SRC_DIR .. '/*.html',
+		vim.env.WEBSITE_SRC_DIR .. '/*.css',
+		vim.env.WEBSITE_SRC_DIR .. '/*.txt',
+	},
+	callback = function()
+		local absolute_path = vim.fn.expand('%:p')
+		local filename_only = vim.fn.expand('%:t')
+
+		local relative_dirname =
+			string.gsub(vim.fn.expand('%:p:h'), vim.env.WEBSITE_SRC_DIR, '')
+
+		local destination_dir = vim.env.WEBSITE_DEST_DIR .. relative_dirname
+
+		os.execute('mkdir -p -- ' .. destination_dir)
+		if not os.execute('cp -- ' .. absolute_path .. ' ' .. destination_dir) then
+			vim.api.nvim_err_writeln(
+				'Failed to copy ' .. filename_only .. 'to ' .. destination_dir
+			)
+		end
+	end,
+	desc = 'Automatically copy website files to web directory'
+})
+
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'help',
 	callback = function()

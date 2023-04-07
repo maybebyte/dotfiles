@@ -5,6 +5,15 @@
 . "${HOME}/.profile"
 xrdb "${HOME}/.Xresources"
 
+# Load fonts so that tools incompatible with Xft can access them.
+# This includes things like xfontsel(1), xlock(1), etc.
+if [ -d '/usr/local/share/fonts' ]; then
+	for font in '/usr/local/share/fonts/'*; do
+		xset fp+ "${font}"
+	done
+	xset fp rehash
+fi
+
 # environment variables that either:
 #
 # a) don't make sense to put in ~/.profile
@@ -29,7 +38,7 @@ mkdir -m 700 "${HOME}/Downloads"
 gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 
 # laptop adjustments
-if [ "$(hostname -s)" = 'lain' ]; then
+if [ "$(hostname -s)" = 'bluebell' ]; then
 	xset m 3/2 0
 	# trackpad scrolling with middle button
 	xinput set-prop '/dev/wsmouse' 'WS Pointer Wheel Emulation' 1
@@ -47,7 +56,7 @@ sct 3500
 xset b off
 
 # daemons
-picom -b
+picom -b --log-file "${XDG_DATA_HOME}/picom/picom.log"
 xidle &
 unclutter -idle 3 &
 sxhkd &

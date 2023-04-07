@@ -1,7 +1,7 @@
 ! pywal
 #include ".cache/wal/colors.Xresources"
 
-st.font: monospace:size=14
+st.font: monospace:size=12
 
 ! eye candy for non-{GTK,QT} applications
 Xft.antialias: 1
@@ -18,6 +18,10 @@ XLock.dpmsstandby: 5
 XLock.dpmssuspend: 120
 ! 10 min after lock for DPMS off
 XLock.dpmsoff: 600
+
+! TODO: figure out why xset(1) and ~/.local/share/fonts clash with one another
+XLock.font: -xos4-terminus-medium-r-normal--24-240-72-72-c-120-iso10646-1
+XLock.planfont: -xos4-terminus-medium-r-normal--18-180-72-72-c-100-iso10646-1
 
 XLock.usefirst: True
 XLock.mono: True
