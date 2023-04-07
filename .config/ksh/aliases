@@ -82,9 +82,6 @@ command -v 'mimeopen' > /dev/null 2>&1 \
 command -v 'ncmpcpp' > /dev/null 2>&1 \
 	&& alias mus='ncmpcpp 2> /dev/null'
 
-command -v 'neomutt' > /dev/null 2>&1 \
-	&& alias m='neomutt'
-
 command -v 'newsboat' > /dev/null 2>&1 \
 	&& alias nb='newsboat'
 
@@ -115,11 +112,17 @@ command -v 'zathura' > /dev/null 2>&1 \
 command -v 'torsocks' > /dev/null 2>&1 && {
 	alias anonsh='torsocks --shell'
 
+	# An alias for ftp exists, so use `which` here.
 	which 'ftp' > /dev/null 2>&1 \
 		&& alias anonftp="torsocks ftp -nU ''"
 
 	command -v 'tuir' > /dev/null 2>&1 \
 		&& alias tuir='torsocks tuir'
+
+	command -v 'neomutt-tor' > /dev/null 2>&1 \
+		&& alias \
+			m='neomutt-tor' \
+			neomutt='neomutt-tor'
 }
 
 command -v 'proxychains4' > /dev/null 2>&1 \
