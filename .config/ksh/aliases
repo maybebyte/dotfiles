@@ -119,10 +119,13 @@ command -v 'torsocks' > /dev/null 2>&1 && {
 	command -v 'tuir' > /dev/null 2>&1 \
 		&& alias tuir='torsocks tuir'
 
-	command -v 'neomutt-tor' > /dev/null 2>&1 \
+	command -v 'neomutt' > /dev/null 2>&1 \
 		&& alias \
-			m='neomutt-tor' \
-			neomutt='neomutt-tor'
+			m='torsocks neomutt 2>/dev/null' \
+			neomutt='torsocks neomutt 2>/dev/null'
+
+	command -v 'profanity' > /dev/null 2>&1 \
+		&& alias profanity='torsocks profanity 2>/dev/null'
 }
 
 command -v 'proxychains4' > /dev/null 2>&1 \
