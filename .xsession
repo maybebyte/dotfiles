@@ -56,7 +56,7 @@ sct 3500
 xset b off
 
 # daemons
-picom -b --log-file "${XDG_DATA_HOME}/picom/picom.log"
+picom -b --log-file "${XDG_DATA_HOME}/picom/picom.log" --log-level DEBUG
 xidle &
 unclutter -idle 3 &
 sxhkd &
