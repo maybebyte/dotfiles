@@ -37,7 +37,8 @@ openbsd_aliases() {
 		tailmail='tail -f /var/log/maillog' \
 		webtest="webtest -i index.html \${WEBSITE_DOMAIN} \${WEBSITE_SRC_DIR} \${WEBSITE_DEST_DIR}"
 
-	[ -n "${GATEWAY}" ] && alias tlan="ping \${GATEWAY}"
+	[ -n "${IPV4_GATEWAY}" ] && alias tlan="ping \${IPV4_GATEWAY}"
+	[ -n "${IPV6_GATEWAY}" ] && alias tlan6="ping6 \${IPV6_GATEWAY}"
 }
 
 alias \

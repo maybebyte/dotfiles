@@ -41,8 +41,9 @@ unset TMPVAR
 # written so it can be expanded later if needed
 case "$(uname)" in
 	'OpenBSD')
-		GATEWAY="$(netstat -rn 2> /dev/null | awk '/^default/{print $2}')"
-		export GATEWAY
+		IPV4_GATEWAY="$(netstat -rn -f inet 2> /dev/null | awk '/^default/{print $2}')"
+		IPV6_GATEWAY="$(netstat -rn -f inet6 2> /dev/null | awk '/^default/{print $2}')"
+		export IPV4_GATEWAY IPV6_GATEWAY
 		;;
 
 	*) # if this isn't OpenBSD, do nothing
