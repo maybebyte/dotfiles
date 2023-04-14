@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Copyright (c) 2022 Ashlen <eurydice@riseup.net>
+# Copyright (c) 2022-2023 Ashlen <eurydice@riseup.net>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -13,12 +13,10 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-use v5.32;
+use v5.36;
 use autodie;
 use strict;
 use warnings;
-
-use experimental qw(switch);
 
 use File::Basename qw(fileparse);
 use File::Find;
@@ -30,80 +28,115 @@ use File::MimeInfo::Magic qw(mimetype);
 sub usage {
 	my $program_name = fileparse $0;
 	die <<EOF;
-$program_name [filetype] [directory]
-
-filetype can be:
-audio - mp3, opus, flac, aac, ogg, wav
-video - webm, mp4, mkv
-image - jpg, jpeg, png
-any - matches all files
+$program_name [file_category] [directory]
 EOF
 }
 
-my $filetype_to_look_for = shift or usage;
-my $directory_to_search_in = shift or usage;
-
--e $directory_to_search_in or die "'$directory_to_search_in' doesn't exist.\n";
--d _ or die "'$directory_to_search_in' isn't a directory.\n";
-
-my @wanted_files;
-
-# Takes a subroutine. Returns a closure that will call the subroutine.
-#
-# https://www.perlmonks.org/?node_id=109068
-#
-# NOTE: Still not sure if this is the best way to handle different
-# callback subroutines for File::Find, but it's a lot better than
-# checking the filetype on every invocation.
-sub make_wanted {
-	my $sub = shift;
-	return sub { $sub->(); };
+sub return_file_categories {
+	return qw(image audio video any);
 }
 
-sub randaudio {
-	return unless /\.(?:mp3|opus|flac|aac|ogg|wav)\z/i;
-	return unless mimetype($_) =~ m{\Aaudio/};
+sub return_file_extensions {
+	my $file_category = shift;
 
-	push @wanted_files, $File::Find::name;
-}
-
-sub randvids {
-	return unless /\.(?:mkv|mp4|webm)\z/i;
-	return unless mimetype($_) =~ m{\Avideo/};
-
-	push @wanted_files, $File::Find::name;
-}
-
-sub randpics {
-	return unless /\.(?:jpe?g|png)\z/i;
-	return unless mimetype($_) =~ m{\Aimage/};
-
-	push @wanted_files, $File::Find::name;
-}
-
-sub randfiles {
-	return unless -f;
-	push @wanted_files, $File::Find::name;
-}
-
-given ($filetype_to_look_for) {
-	when ('audio') {
-		find( make_wanted( \&randaudio ), $directory_to_search_in )
+	if ( $file_category eq 'image' ) {
+		return qw(jpg jpeg png);
 	}
-	when ('video') {
-		find( make_wanted( \&randvids ), $directory_to_search_in )
+	elsif ( $file_category eq 'audio' ) {
+		return qw(mp3 opus flac aac ogg wav);
 	}
-	when ('image') {
-		find( make_wanted( \&randpics ), $directory_to_search_in )
+	elsif ( $file_category eq 'video' ) {
+		return qw(mkv mp4 webm);
 	}
-	when ('any') {
-		find( make_wanted( \&randfiles ), $directory_to_search_in )
-	}
-	default {
-		die "'$filetype_to_look_for' isn't a supported filetype.\n" ;
+	else { return; }
+}
+
+sub return_extension_patterns {
+	my $file_category = shift or return;
+	return map { qr/\.$_\z/i } return_file_extensions($file_category);
+}
+
+# TODO: lazy and often incorrect. Should maintain a mapping of
+# extensions to expected mimetypes.
+sub return_mimetype_patterns {
+	my $file_category = shift or return;
+	return qr{\A$file_category/};
+}
+
+sub return_file_properties_hash {
+	my $file_category = shift or return;
+	my %file_properties_hash = ();
+
+	$file_properties_hash{$file_category}{extensions} =
+		[ return_file_extensions($file_category) ];
+
+	$file_properties_hash{$file_category}{extension_patterns} =
+		[ return_extension_patterns($file_category) ];
+
+	$file_properties_hash{$file_category}{mimetype_patterns} =
+		[ return_mimetype_patterns($file_category) ];
+
+	return %file_properties_hash;
+}
+
+sub program_sanity_checks {
+	my $file_category = shift or return;
+	my $directory = shift or return;
+
+	-e $directory or die "'$directory' doesn't exist.\n";
+	-d _ or die "'$directory' isn't a directory.\n";
+
+	if ( !grep { $_ eq $file_category } &return_file_categories ) {
+		my $file_category_output = join( "\n", &return_file_categories );
+
+		die <<EOF;
+Supported file categories:
+$file_category_output
+EOF
 	}
 }
 
-if (@wanted_files) {
-	say join( "\n", shuffle @wanted_files );
+my $provided_file_category = shift or usage;
+my $provided_directory = shift or usage;
+
+program_sanity_checks( $provided_file_category, $provided_directory );
+
+my %wanted_files;
+
+my %file_properties = &return_file_properties_hash($provided_file_category);
+
+if ( $provided_file_category eq 'any' ) {
+	find(
+		sub {
+			-f or return;
+			++$wanted_files{$File::Find::name};
+		},
+		$provided_directory,
+	);
+}
+else {
+	find(
+		sub {
+			grep { $File::Find::name =~ $_ }
+				#<<<
+				@{ $file_properties{$provided_file_category}{extension_patterns} }
+				#>>>
+				or return;
+
+			# Checking MIME type means we already know it's a file, so
+			# -f can be skipped.
+			grep { mimetype($File::Find::name) =~ $_ }
+				#<<<
+				@{ $file_properties{$provided_file_category}{mimetype_patterns} }
+				#>>>
+				or return;
+
+			++$wanted_files{$File::Find::name};
+		},
+		$provided_directory,
+	);
+}
+
+if (%wanted_files) {
+	say join( "\n", shuffle keys %wanted_files );
 }
