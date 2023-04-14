@@ -56,8 +56,10 @@ sub return_extension_patterns {
 	return map { qr/\.$_\z/i } return_file_extensions($file_category);
 }
 
-# TODO: lazy and often incorrect. Should maintain a mapping of
-# extensions to expected mimetypes.
+# TODO(?): This could match specific mimetype patterns that are
+# associated with a particular file extension. But it would be a lot to
+# put in this program---better done as a module, and someone's probably
+# already done it.
 sub return_mimetype_patterns {
 	my $file_category = shift or return;
 	return qr{\A$file_category/};
