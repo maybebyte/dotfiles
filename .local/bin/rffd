@@ -104,7 +104,6 @@ my $provided_directory = shift or usage;
 program_sanity_checks( $provided_file_category, $provided_directory );
 
 my %wanted_files;
-
 my %file_properties = &return_file_properties_hash($provided_file_category);
 
 if ( $provided_file_category eq 'any' ) {
