@@ -25,6 +25,12 @@ use List::Util qw(shuffle);
 # External modules.
 use File::MimeInfo::Magic qw(mimetype);
 
+if ( $^O eq 'openbsd' ) {
+	use OpenBSD::Pledge;
+	sub pledge_or_die { pledge(@_) or die "Pledge failed: $!"; }
+	pledge_or_die(qw(rpath));
+}
+
 sub usage {
 	my $program_name = fileparse $0;
 	die <<EOF;
