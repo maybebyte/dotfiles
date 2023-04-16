@@ -59,7 +59,7 @@ sub return_file_extensions {
 
 sub return_extension_patterns {
 	my $file_category = shift or return;
-	return map { qr/\.$_\z/i } return_file_extensions($file_category);
+	return map { qr/\.$_\z/i } return_file_extensions $file_category;
 }
 
 # TODO(?): This could match specific mimetype patterns that are
@@ -76,13 +76,13 @@ sub return_file_properties_hash {
 	my %file_properties_hash;
 
 	$file_properties_hash{$file_category}{extensions} =
-		[ return_file_extensions($file_category) ];
+		[ return_file_extensions $file_category ];
 
 	$file_properties_hash{$file_category}{extension_patterns} =
-		[ return_extension_patterns($file_category) ];
+		[ return_extension_patterns $file_category ];
 
 	$file_properties_hash{$file_category}{mimetype_patterns} =
-		[ return_mimetype_patterns($file_category) ];
+		[ return_mimetype_patterns $file_category ];
 
 	return %file_properties_hash;
 }
@@ -107,10 +107,10 @@ EOF
 my $provided_file_category = shift or usage;
 my $provided_directory = shift or usage;
 
-program_sanity_checks( $provided_file_category, $provided_directory );
+program_sanity_checks $provided_file_category, $provided_directory;
 
 my %wanted_files;
-my %file_properties = &return_file_properties_hash($provided_file_category);
+my %file_properties = return_file_properties_hash $provided_file_category;
 
 if ( $provided_file_category eq 'any' ) {
 	find(
