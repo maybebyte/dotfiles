@@ -73,7 +73,7 @@ sub return_mimetype_patterns {
 
 sub return_file_properties_hash {
 	my $file_category = shift or return;
-	my %file_properties_hash = ();
+	my %file_properties_hash;
 
 	$file_properties_hash{$file_category}{extensions} =
 		[ return_file_extensions($file_category) ];
