@@ -87,6 +87,45 @@ sub return_file_properties_hash {
 	return %file_properties_hash;
 }
 
+sub gather_every_file {
+	my %wanted_files;
+
+	return (
+		sub {
+			-f or return;
+			++$wanted_files{$File::Find::name};
+		},
+		sub {
+			return %wanted_files;
+		},
+	);
+}
+
+sub gather_type_of_file {
+	my $file_category = shift or return;
+	my $file_properties_ref = shift or return;
+	my %wanted_files;
+
+	return (
+		sub {
+			grep { $File::Find::name =~ $_ }
+				@{ $file_properties_ref->{$file_category}{extension_patterns} }
+				or return;
+
+			# Checking MIME type means we already know it's a file, so
+			# -f can be skipped.
+			grep { mimetype($File::Find::name) =~ $_ }
+				@{ $file_properties_ref->{$file_category}{mimetype_patterns} }
+				or return;
+
+			++$wanted_files{$File::Find::name};
+		},
+		sub {
+			return %wanted_files;
+		},
+	);
+}
+
 sub program_sanity_checks {
 	my $file_category = shift or return;
 	my $directory = shift or return;
@@ -109,40 +148,15 @@ my $provided_directory = shift or usage;
 
 program_sanity_checks $provided_file_category, $provided_directory;
 
-my %wanted_files;
 my %file_properties = return_file_properties_hash $provided_file_category;
 
-if ( $provided_file_category eq 'any' ) {
-	find(
-		sub {
-			-f or return;
-			++$wanted_files{$File::Find::name};
-		},
-		$provided_directory,
-	);
-}
-else {
-	find(
-		sub {
-			grep { $File::Find::name =~ $_ }
-				#<<<
-				@{ $file_properties{$provided_file_category}{extension_patterns} }
-				#>>>
-				or return;
+my ( $gather, $yield ) =
+	( $provided_file_category eq 'any' )
+	? gather_every_file()
+	: gather_type_of_file( $provided_file_category, \%file_properties );
 
-			# Checking MIME type means we already know it's a file, so
-			# -f can be skipped.
-			grep { mimetype($File::Find::name) =~ $_ }
-				#<<<
-				@{ $file_properties{$provided_file_category}{mimetype_patterns} }
-				#>>>
-				or return;
-
-			++$wanted_files{$File::Find::name};
-		},
-		$provided_directory,
-	);
-}
+find( $gather, $provided_directory );
+my %wanted_files = $yield->();
 
 if (%wanted_files) {
 	say join( "\n", shuffle keys %wanted_files );
