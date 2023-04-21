@@ -20,7 +20,7 @@ use warnings;
 
 use File::Basename qw(fileparse);
 use File::Find;
-use List::Util qw(shuffle);
+use List::Util qw(first shuffle);
 
 # External modules.
 use File::MimeInfo::Magic qw(mimetype);
@@ -108,13 +108,13 @@ sub gather_type_of_file {
 
 	return (
 		sub {
-			grep { $File::Find::name =~ $_ }
+			first { $File::Find::name =~ $_ }
 				@{ $file_properties_ref->{$file_category}{extension_patterns} }
 				or return;
 
 			# Checking MIME type means we already know it's a file, so
 			# -f can be skipped.
-			grep { mimetype($File::Find::name) =~ $_ }
+			first { mimetype($File::Find::name) =~ $_ }
 				@{ $file_properties_ref->{$file_category}{mimetype_patterns} }
 				or return;
 
@@ -133,7 +133,7 @@ sub program_sanity_checks {
 	-e $directory or die "'$directory' doesn't exist.\n";
 	-d _ or die "'$directory' isn't a directory.\n";
 
-	if ( !grep { $_ eq $file_category } &return_file_categories ) {
+	if ( !first { $_ eq $file_category } &return_file_categories ) {
 		my $file_category_output = join( "\n", &return_file_categories );
 
 		die <<EOF;
