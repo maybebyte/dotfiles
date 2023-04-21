@@ -14,6 +14,9 @@ folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/riseup.txt"
 source "${XDG_CONFIG_HOME}/neomutt/personal.txt"
 folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/personal.txt"
 
+source "${XDG_CONFIG_HOME}/neomutt/mlists.txt"
+folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/mlists.txt"
+
 source "${XDG_CONFIG_HOME}/neomutt/dev.txt"
 folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/dev.txt"
 

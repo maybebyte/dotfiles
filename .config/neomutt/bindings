@@ -40,4 +40,5 @@ macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
 
 macro index,pager gp "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/personal.txt<enter><change-folder>!<enter>"
 macro index,pager gd "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/dev.txt<enter><change-folder>!<enter>"
+macro index,pager gm "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/mlists.txt<enter><change-folder>!<enter>"
 macro index,pager ge "<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/neomutt/riseup.txt<enter><change-folder>!<enter>"
