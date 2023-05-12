@@ -24,7 +24,6 @@ XLock.font: -xos4-terminus-medium-r-normal--24-240-72-72-c-120-iso10646-1
 XLock.planfont: -xos4-terminus-medium-r-normal--18-180-72-72-c-100-iso10646-1
 
 XLock.usefirst: True
-XLock.mono: True
 XLock.mode: blank
 XLock.erasemode: no_fade
 XLock.description:
@@ -37,6 +36,8 @@ XLock.sound: False
 XLock.timeelapsed: True
 XLock.username:
 XLock.password: password:
+XLock.foreground: gray82
+XLock.background: gray10
 
 ! sets up xidle to execute lockscreen script after 90 seconds
 XIdle.program: .local/bin/lockscreen
