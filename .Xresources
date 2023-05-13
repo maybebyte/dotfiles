@@ -36,7 +36,7 @@ XLock.sound: False
 XLock.timeelapsed: True
 XLock.username:
 XLock.password: password:
-XLock.foreground: gray82
+XLock.foreground: gray75
 XLock.background: gray10
 
 ! sets up xidle to execute lockscreen script after 90 seconds
