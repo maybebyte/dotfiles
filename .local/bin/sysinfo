@@ -55,8 +55,8 @@ sub battery_hours_and_minutes {
 
 		check_if_number $total_battery_minutes or return;
 		return (
-			( $total_battery_minutes / 60 ),   # hours
-			( $total_battery_minutes % 60 ),   # minutes
+			$total_battery_minutes / 60,   # hours
+			$total_battery_minutes % 60,   # minutes
 		);
 	}
 
