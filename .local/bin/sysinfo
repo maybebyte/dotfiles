@@ -189,6 +189,8 @@ my $cpu_temperature_sysctl = 'hw.sensors.cpu0.temp0';
 # Some of the weird format stuff in printf is used by the status bar.
 # See bar_format in spectrwm(1).
 while (1) {
+	## If the battery status is absent or unknown, skip printing battery
+	## info.
 	if ( $battery_status == 4 or $battery_status == 255 ) {
 		printf "temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; %s: %s\n",
 			cpu_temperature($cpu_temperature_sysctl), current_mpd_track,
