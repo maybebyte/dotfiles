@@ -62,6 +62,35 @@ my $home = ( getpwuid $> )[7];
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
 my $colors_wal = catfile $xdg_cache_home, qw(wal colors.json);
 
+if ( $^O eq 'openbsd' ) {
+	use OpenBSD::Pledge;
+	use OpenBSD::Unveil;
+
+	sub pledge_or_die { pledge(@_) or die "Pledge failed: $!"; }
+
+	sub unveil_or_die {
+		my $file = shift or die "Unveil failed: $!";
+		my $perms = shift or die "Unveil failed: $!";
+		unveil( $file, $perms ) or die "Unveil failed: $!";
+	}
+
+	pledge_or_die(qw(stdio rpath proc exec unveil));
+
+	my @needed_executables = capturex(qw(which -- which dmenu notify-send xclip));
+
+	while ( my $executable = shift @needed_executables ) {
+		chomp $executable;
+		unveil_or_die( $executable, 'rx' );
+	}
+
+	my %unveils = map { $_, 'r' } @INC, $colors_wal, @ARGV;
+	while ( my ( $path, $perms ) = each %unveils ) {
+		unveil_or_die( $path, $perms );
+	}
+
+	pledge_or_die(qw(stdio rpath proc exec));
+}
+
 my ( $background, $foreground, $color3 ) = do {
 	my $decoded_json;
 	unless ( eval {
