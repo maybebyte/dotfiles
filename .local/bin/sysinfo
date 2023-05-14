@@ -137,7 +137,7 @@ sub current_mpd_track {
 	# inactive, but we don't want an undef to cause a bunch of errors).
 	#
 	# TODO: is there a better way to suppress warnings?
-	return '' if !grep { /\b mpd \b/x } @process_lines;
+	return '' if !grep { /mpd/ } @process_lines;
 
 	my @mpc_lines = capturex qw(mpc);
 	return '' if grep { /paused/i } @mpc_lines;
