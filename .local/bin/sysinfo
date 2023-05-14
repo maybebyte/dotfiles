@@ -134,7 +134,7 @@ sub current_mpd_track {
 	my @process_lines = capturex qw(ps -ax);
 
 	# Uses the empty string to avoid problems with printf (maybe mpd is
-	# inactive, but we don't an undef to cause a bunch of errors).
+	# inactive, but we don't want an undef to cause a bunch of errors).
 	#
 	# TODO: is there a better way to suppress warnings?
 	return '' if !grep { /\b mpd \b/x } @process_lines;
@@ -190,8 +190,9 @@ my $cpu_temperature_sysctl = 'hw.sensors.cpu0.temp0';
 # See bar_format in spectrwm(1).
 while (1) {
 	if ( $battery_status == 4 or $battery_status == 255 ) {
-		printf "temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; /home: %s\n",
+		printf "temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; %s: %s\n",
 			cpu_temperature($cpu_temperature_sysctl), current_mpd_track,
+			$partition_to_monitor,
 			free_space_on_partition($partition_to_monitor);
 	}
 	else {
@@ -201,18 +202,20 @@ while (1) {
 		# battery isn't fully charged.
 		if ( defined $battery_hours and defined $battery_minutes ) {
 			printf
-				"%s: ~%dh and %dm, at %d%% +< temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; /home: %s\n",
+				"%s: ~%dh and %dm, at %d%% +< temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; %s: %s\n",
 				adapter_status_to_string, $battery_hours, $battery_minutes,
 				battery_percent, cpu_temperature($cpu_temperature_sysctl),
 				current_mpd_track,
+				$partition_to_monitor,
 				free_space_on_partition($partition_to_monitor);
 		}
 		else {
 			printf
-				"%s: at %d%% +< temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; /home: %s\n",
+				"%s: at %d%% +< temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; %s: %s\n",
 				adapter_status_to_string,
 				battery_percent, cpu_temperature($cpu_temperature_sysctl),
 				current_mpd_track,
+				$partition_to_monitor,
 				free_space_on_partition($partition_to_monitor);
 		}
 	}
