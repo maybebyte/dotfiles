@@ -15,7 +15,6 @@
 
 # TODO:
 # - spectrwm bar is initially empty unlike the other script. Why?
-# - audit code, fix any obvious ways problems could crop up
 # - individual refresh timers
 # - man page
 # - modular/object-oriented approach?
@@ -33,6 +32,7 @@ use IPC::System::Simple qw(capturex);
 sub check_dependencies {
 	my $which_output = capturex qw(which --), @_;
 	$which_output = undef;
+	return;
 }
 
 sub check_if_number {
@@ -50,7 +50,9 @@ sub battery_hours_and_minutes {
 	my $total_battery_minutes = capturex qw(apm -m);
 
 	if ( defined $total_battery_minutes ) {
+		## TODO: can this be a simple 'return' instead?
 		return ( undef, undef ) if $total_battery_minutes eq "unknown\n";
+
 		check_if_number $total_battery_minutes or return;
 		return (
 			( $total_battery_minutes / 60 ),   # hours
@@ -130,6 +132,11 @@ sub cpu_temperature {
 
 sub current_mpd_track {
 	my @process_lines = capturex qw(ps -ax);
+
+	# Uses the empty string to avoid problems with printf (maybe mpd is
+	# inactive, but we don't an undef to cause a bunch of errors).
+	#
+	# TODO: is there a better way to suppress warnings?
 	return '' if !grep { /\b mpd \b/x } @process_lines;
 
 	my @mpc_lines = capturex qw(mpc);
@@ -172,10 +179,15 @@ if ( $^O eq 'openbsd' ) {
 my @dependencies = qw(apm mpc);
 check_dependencies @dependencies;
 
+# Battery status is unlikely to change during runtime. Set it once and
+# reference it for the rest of the program's execution.
 my $battery_status = battery_status;
+
 my $partition_to_monitor = '/home';
 my $cpu_temperature_sysctl = 'hw.sensors.cpu0.temp0';
 
+# Some of the weird format stuff in printf is used by the status bar.
+# See bar_format in spectrwm(1).
 while (1) {
 	if ( $battery_status == 4 or $battery_status == 255 ) {
 		printf "temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; /home: %s\n",
@@ -185,6 +197,8 @@ while (1) {
 	else {
 		my ( $battery_hours, $battery_minutes ) = battery_hours_and_minutes;
 
+		# It only makes sense to display hours and minutes if the
+		# battery isn't fully charged.
 		if ( defined $battery_hours and defined $battery_minutes ) {
 			printf
 				"%s: ~%dh and %dm, at %d%% +< temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; /home: %s\n",
@@ -193,8 +207,6 @@ while (1) {
 				current_mpd_track,
 				free_space_on_partition($partition_to_monitor);
 		}
-		## No point in displaying hours and minutes if the battery is
-		## fully charged.
 		else {
 			printf
 				"%s: at %d%% +< temp: %d °C +|C +\@fn=1; %s +|R +\@fn=0; /home: %s\n",
