@@ -15,7 +15,6 @@
 
 # TODO:
 # - spectrwm bar is initially empty unlike the other script. Why?
-# - battery_percent, battery_status, and adapter_status could be refactored.
 # - man page
 # - individual refresh timers
 # - modular/object-oriented approach?
@@ -36,7 +35,7 @@ sub check_dependencies {
 	return;
 }
 
-sub check_if_number {
+sub check_num_return_int {
 	my $number = shift or return;
 
 	if ( !looks_like_number $number ) {
@@ -48,54 +47,20 @@ sub check_if_number {
 }
 
 sub battery_hours_and_minutes {
-	my $total_battery_minutes = capturex qw(apm -m);
+	my $total_battery_minutes = check_num_return_int( capturex qw(apm -m) )
+		or return;
 
-	if ( defined $total_battery_minutes ) {
-		## TODO: can this be a simple 'return' instead?
-		return ( undef, undef ) if $total_battery_minutes eq "unknown\n";
+	chomp $total_battery_minutes;
+	return if $total_battery_minutes eq 'unknown';
 
-		check_if_number $total_battery_minutes or return;
-		return (
-			sprintf( '%d', $total_battery_minutes / 60 ),   # hours
-			sprintf( '%d', $total_battery_minutes % 60 ),   # minutes
-		);
-	}
-
-	return;
-}
-
-sub battery_percent {
-	my $estimated_battery_percent = capturex qw(apm -l);
-
-	if ( defined $estimated_battery_percent ) {
-		return check_if_number $estimated_battery_percent;
-	}
-
-	return;
-}
-
-sub battery_status {
-	my $battery_status = capturex qw(apm -b);
-
-	if ( defined $battery_status ) {
-		return check_if_number $battery_status;
-	}
-
-	return;
-}
-
-sub adapter_status {
-	my $adapter_status = capturex qw(apm -a);
-
-	if ( defined $adapter_status ) {
-		return check_if_number $adapter_status;
-	}
-
-	return;
+	return (
+		check_num_return_int( $total_battery_minutes / 60 ),   # hours
+		check_num_return_int( $total_battery_minutes % 60 ),   # minutes
+	);
 }
 
 sub adapter_status_to_string {
-	my $adapter_status = adapter_status;
+	my $adapter_status = check_num_return_int( capturex(qw(apm -a)) );
 
 	my %adapter_status_codes = (
 		0 => 'bat',
@@ -121,8 +86,7 @@ sub cpu_temperature {
 	my $temperature = capturex qw(sysctl -n), $sysctl_name;
 	$temperature = ( split ' ', $temperature )[0];
 
-	check_if_number $temperature or return;
-	return sprintf( '%d', $temperature );
+	return check_num_return_int $temperature;
 }
 
 sub current_mpd_track {
@@ -176,12 +140,12 @@ check_dependencies @dependencies;
 
 # Battery status is unlikely to change during runtime. Set it once and
 # reference it for the rest of the program's execution.
-my $battery_status = battery_status;
+my $battery_status = check_num_return_int( capturex(qw(apm -b)) );
 
 my $partition_to_monitor = '/home';
 my $cpu_temperature_sysctl = 'hw.sensors.cpu0.temp0';
 
-# Some of the weird format stuff in printf is used by the status bar.
+# Some of the weird format stuff is used by the status bar.
 # See bar_format in spectrwm(1).
 while (1) {
 	my $status_line;
@@ -194,8 +158,10 @@ while (1) {
 		# It only makes sense to display hours and minutes if the
 		# battery isn't fully charged.
 		if ( defined $battery_hours and defined $battery_minutes ) {
+			my $battery_percent = check_num_return_int( capturex(qw(apm -l)) );
+
 			$status_line .= "~${battery_hours}h and ${battery_minutes}m, ";
-			$status_line .= 'at ' . battery_percent . '% +< ';
+			$status_line .= 'at ' . $battery_percent . '% +< ';
 		}
 	}
 
