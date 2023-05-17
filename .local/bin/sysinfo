@@ -60,7 +60,7 @@ sub battery_hours_and_minutes {
 }
 
 sub adapter_status_to_string {
-	my $adapter_status = check_num_return_int( capturex(qw(apm -a)) );
+	my $adapter_status = check_num_return_int( capturex qw(apm -a) );
 
 	my %adapter_status_codes = (
 		0 => 'bat',
@@ -118,21 +118,21 @@ if ( $^O eq 'openbsd' ) {
 		unveil( $file, $perms ) or die "Unveil failed: $!";
 	}
 
-	pledge_or_die(qw(stdio rpath proc exec unveil));
+	pledge_or_die qw(stdio rpath proc exec unveil);
 
-	my @needed_executables = capturex(qw(which -- which apm mpc df sysctl ps));
+	my @needed_executables = capturex qw(which -- which apm mpc df sysctl ps);
 
 	while ( my $executable = shift @needed_executables ) {
 		chomp $executable;
-		unveil_or_die( $executable, 'rx' );
+		unveil_or_die $executable, 'rx';
 	}
 
 	my %unveils = map { $_, 'r' } @INC;
 	while ( my ( $path, $perms ) = each %unveils ) {
-		unveil_or_die( $path, $perms );
+		unveil_or_die $path, $perms;
 	}
 
-	pledge_or_die(qw(stdio rpath proc exec));
+	pledge_or_die qw(stdio rpath proc exec);
 }
 
 my @dependencies = qw(apm mpc);
@@ -140,7 +140,7 @@ check_dependencies @dependencies;
 
 # Battery status is unlikely to change during runtime. Set it once and
 # reference it for the rest of the program's execution.
-my $battery_status = check_num_return_int( capturex(qw(apm -b)) );
+my $battery_status = check_num_return_int( capturex qw(apm -b) );
 
 my $partition_to_monitor = '/home';
 my $cpu_temperature_sysctl = 'hw.sensors.cpu0.temp0';
@@ -158,7 +158,7 @@ while (1) {
 		# It only makes sense to display hours and minutes if the
 		# battery isn't fully charged.
 		if ( defined $battery_hours and defined $battery_minutes ) {
-			my $battery_percent = check_num_return_int( capturex(qw(apm -l)) );
+			my $battery_percent = check_num_return_int( capturex qw(apm -l) );
 
 			$status_line .= "~${battery_hours}h and ${battery_minutes}m, ";
 			$status_line .= 'at ' . $battery_percent . '% +< ';
@@ -175,7 +175,7 @@ while (1) {
 	# Right justify this section and use the first bar font.
 	$status_line .= '+|R +@fn=0; ';
 	$status_line .= "${partition_to_monitor}: "
-		. free_space_on_partition($partition_to_monitor);
+		. free_space_on_partition $partition_to_monitor;
 
 	say $status_line;
 
