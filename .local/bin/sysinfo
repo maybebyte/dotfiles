@@ -170,7 +170,7 @@ while (1) {
 
 	# Center this section and use the second bar font.
 	$status_line .= '+|C +@fn=1; ';
-	$status_line .= current_mpd_track;
+	$status_line .= current_mpd_track . ' ';
 
 	# Right justify this section and use the first bar font.
 	$status_line .= '+|R +@fn=0; ';
