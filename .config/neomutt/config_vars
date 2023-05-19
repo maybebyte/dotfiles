@@ -1,3 +1,6 @@
+# Message to start a reply, 'On DATE, PERSON wrote:'
+set attribution_intro = "On %{!%a, %e %b %Y %H:%M %z}, %n wrote:"
+
 # Make a noise when an error occurs
 unset beep
 
@@ -15,9 +18,6 @@ set crypt_reply_sign_encrypted = yes
 
 # Use GPGME crypto backend
 set crypt_use_gpgme
-
-# strftime format string for the `%d` expando
-set date_format = "%F %R"
 
 # Really delete messages
 set delete
