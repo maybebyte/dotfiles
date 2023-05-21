@@ -47,8 +47,7 @@ sub check_num_return_int {
 }
 
 sub battery_hours_and_minutes {
-	my $total_battery_minutes = check_num_return_int( capturex qw(apm -m) )
-		or return;
+	my $total_battery_minutes = capturex qw(apm -m) or return;
 
 	chomp $total_battery_minutes;
 	return if $total_battery_minutes eq 'unknown';
@@ -154,15 +153,14 @@ while (1) {
 	if ( $battery_status != 4 and $battery_status != 255 ) {
 		$status_line .= adapter_status_to_string . ': ';
 		my ( $battery_hours, $battery_minutes ) = battery_hours_and_minutes;
+		my $battery_percent = check_num_return_int( capturex qw(apm -l) );
 
 		# It only makes sense to display hours and minutes if the
 		# battery isn't fully charged.
 		if ( defined $battery_hours and defined $battery_minutes ) {
-			my $battery_percent = check_num_return_int( capturex qw(apm -l) );
-
 			$status_line .= "~${battery_hours}h and ${battery_minutes}m, ";
-			$status_line .= 'at ' . $battery_percent . '% +< ';
 		}
+		$status_line .= 'at ' . $battery_percent . '% +< ';
 	}
 
 	$status_line .=
