@@ -34,9 +34,11 @@ use experimental qw(switch);
 use File::Basename qw(fileparse);
 use File::Spec::Functions qw(catdir catfile rel2abs);
 use IPC::Open2;
+
+# External.
 use IPC::System::Simple;
 use JSON::MaybeXS qw(decode_json);
-use Image::Magick;
+use Graphics::Magick;
 
 sub yank {
 	chomp( my $stuff_to_copy = shift // die "yank needs something to copy!\n" );
@@ -111,24 +113,24 @@ while ( my $file = <STDIN> ) {
 		when ('m') { system qw(filehandler move), $file; }
 		when ('n') { system qw(filehandler rename), $file; }
 		when ('r') {
-			my $image_magick = Image::Magick->new;
-			$image_magick->Read($file);
-			$image_magick->Rotate(90);
-			$image_magick->Write($file);
+			my $gm = Graphics::Magick->new;
+			$gm->Read($file);
+			$gm->Rotate(90);
+			$gm->Write($file);
 		}
 
 		when ('R') {
-			my $image_magick = Image::Magick->new;
-			$image_magick->Read($file);
-			$image_magick->Rotate(-90);
-			$image_magick->Write($file);
+			my $gm = Graphics::Magick->new;
+			$gm->Read($file);
+			$gm->Rotate(-90);
+			$gm->Write($file);
 		}
 
 		when ('f') {
-			my $image_magick = Image::Magick->new;
-			$image_magick->Read($file);
-			$image_magick->Flop();
-			$image_magick->Write($file);
+			my $gm = Graphics::Magick->new;
+			$gm->Read($file);
+			$gm->Flop();
+			$gm->Write($file);
 		}
 
 		when ('y') {
