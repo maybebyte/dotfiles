@@ -34,10 +34,6 @@ super + s
 super + c
 	${XDG_BIN_HOME}/clear_clip notify
 
-# full screenshot
-Print
-	maim -uq ${HOME}/screenshots/full-$(date '+%Y%m%d-%H%M%S').png
-
 # screenshot menu
 shift + Print
 	${XDG_BIN_HOME}/maimpick
