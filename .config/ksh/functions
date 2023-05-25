@@ -269,10 +269,10 @@ randvids [directory with videos]' >&2
 rcctl_ls() {
 	case "$1" in
 		'failed' | 'rogue' | 'started' | 'stopped')
-			CMD="doas rcctl ls"
+			CMD='doas rcctl ls'
 			;;
 		*)
-			CMD="rcctl ls"
+			CMD='rcctl ls'
 			;;
 	esac
 	${CMD} "$1"
