@@ -20,8 +20,10 @@ use Number::Bytes::Human qw(format_bytes);
 
 BEGIN {
 	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD;
-		Anthesis::OpenBSD->import(qw(pledge_or_die unveil_or_die));
+		require Anthesis::OpenBSD::Pledge;
+		require Anthesis::OpenBSD::Unveil;
+		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
+		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
 	}
 };
 

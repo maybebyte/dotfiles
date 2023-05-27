@@ -27,8 +27,8 @@ use File::MimeInfo::Magic qw(mimetype);
 
 BEGIN {
 	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD;
-		Anthesis::OpenBSD->import(qw(pledge_or_die));
+		require Anthesis::OpenBSD::Pledge;
+		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
 	}
 };
 
