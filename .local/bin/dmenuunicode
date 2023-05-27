@@ -35,6 +35,13 @@ use IPC::Open2;
 use IPC::System::Simple qw(capturex);
 use JSON::MaybeXS;
 
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD;
+		Anthesis::OpenBSD->import(qw(pledge_or_die unveil_or_die));
+	}
+};
+
 our ( $opt_h, $opt_n );
 my $program_name = fileparse $0;
 
@@ -63,17 +70,6 @@ my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
 my $colors_wal = catfile $xdg_cache_home, qw(wal colors.json);
 
 if ( $^O eq 'openbsd' ) {
-	use OpenBSD::Pledge;
-	use OpenBSD::Unveil;
-
-	sub pledge_or_die { pledge(@_) or die "Pledge failed: $!"; }
-
-	sub unveil_or_die {
-		my $file = shift or die "Unveil failed: $!";
-		my $perms = shift or die "Unveil failed: $!";
-		unveil( $file, $perms ) or die "Unveil failed: $!";
-	}
-
 	pledge_or_die(qw(stdio rpath proc exec unveil));
 
 	my @needed_executables = capturex(qw(which -- which dmenu notify-send xclip));

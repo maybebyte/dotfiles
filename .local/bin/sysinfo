@@ -29,6 +29,15 @@ use Scalar::Util qw(looks_like_number);
 # External modules.
 use IPC::System::Simple qw(capturex);
 
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD;
+		Anthesis::OpenBSD->import(qw(pledge_or_die unveil_or_die));
+	}
+};
+
+pledge_or_die(qw(stdio rpath proc exec unveil)) if $^O eq 'openbsd';
+
 sub check_dependencies {
 	my $which_output = capturex qw(which --), @_;
 	$which_output = undef;
@@ -106,32 +115,19 @@ sub current_mpd_track {
 }
 
 if ( $^O eq 'openbsd' ) {
-	use OpenBSD::Pledge;
-	use OpenBSD::Unveil;
-
-	sub pledge_or_die { pledge(@_) or die "Pledge failed: $!"; }
-
-	sub unveil_or_die {
-		my $file = shift or die "Unveil failed: $!";
-		my $perms = shift or die "Unveil failed: $!";
-		unveil( $file, $perms ) or die "Unveil failed: $!";
-	}
-
-	pledge_or_die qw(stdio rpath proc exec unveil);
-
 	my @needed_executables = capturex qw(which -- which apm mpc df sysctl ps);
 
 	while ( my $executable = shift @needed_executables ) {
 		chomp $executable;
-		unveil_or_die $executable, 'rx';
+		unveil_or_die( $executable, 'rx' );
 	}
 
 	my %unveils = map { $_, 'r' } @INC;
 	while ( my ( $path, $perms ) = each %unveils ) {
-		unveil_or_die $path, $perms;
+		unveil_or_die( $path, $perms );
 	}
 
-	pledge_or_die qw(stdio rpath proc exec);
+	pledge_or_die(qw(stdio rpath proc exec));
 }
 
 my @dependencies = qw(apm mpc);

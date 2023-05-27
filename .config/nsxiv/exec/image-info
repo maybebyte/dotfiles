@@ -18,20 +18,20 @@ use warnings;
 use File::Basename qw(fileparse);
 use Number::Bytes::Human qw(format_bytes);
 
-my $operating_system = $^O;
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD;
+		Anthesis::OpenBSD->import(qw(pledge_or_die unveil_or_die));
+	}
+};
 
-if ( $operating_system eq 'openbsd' ) {
-	use OpenBSD::Pledge;
-	use OpenBSD::Unveil;
-
-	pledge(qw(rpath unveil)) or die "Pledge failed: $!\n";
-}
+pledge_or_die(qw(rpath unveil)) if $^O eq 'openbsd';
 
 my $filename = shift or die "Need a file name.\n";
 
-if ( $operating_system eq 'openbsd' ) {
-	unveil( $filename, 'r' ) or die "Unveil failed: $!\n";
-	pledge(qw(rpath)) or die "Pledge failed: $!\n";
+if ( $^O eq 'openbsd' ) {
+	unveil_or_die( $filename, 'r' );
+	pledge_or_die(qw(rpath));
 }
 
 my $basename = fileparse $filename;

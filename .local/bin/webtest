@@ -29,7 +29,16 @@ use IPC::Open2;
 # External modules.
 use IPC::System::Simple qw(systemx);
 
-our ( $opt_h, $opt_i );
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD;
+		Anthesis::OpenBSD->import(qw(pledge_or_die unveil_or_die));
+	}
+}
+
+pledge_or_die(qw(rpath wpath cpath fattr tmppath proc exec unveil))
+	if $^O eq 'openbsd';
+
 my $program_name = fileparse $0;
 
 sub usage {
@@ -43,36 +52,18 @@ $program_name [-i indexfile] [domain] [markdown directory] [server directory]
 EOF
 }
 
+our ( $opt_h, $opt_i );
 getopts 'hi:';
+
+usage if $opt_h;
+my $index_file = $opt_i // 'index.md';
 
 my $domain_without_schema = shift or usage;
 my $markdown_dir = shift or usage;
 my $server_dir = shift or usage;
-my $index_file = $opt_i // 'index.md';
-
-my $operating_system = $^O;
-if ( $operating_system eq 'openbsd' ) {
-	use OpenBSD::Pledge;
-	use OpenBSD::Unveil;
-
-	pledge(qw(rpath wpath cpath fattr tmppath proc exec unveil))
-		or die "Pledge failed: $!\n";
-
-	unveil( '/etc/pwd.db' => 'r' ) or die "Unveil failed: $!\n";
-	unveil( '/tmp' => 'rc' ) or die "Unveil failed: $!\n";
-}
 
 my ( $username, $home ) = ( getpwuid $> )[ 0, 7 ];
 my $html_dir = tempdir( CLEANUP => 1, );
-
-if ( $operating_system eq 'openbsd' ) {
-	unveil( '/etc/pwd.db' => '' ) or die "Unveil failed: $!\n";
-	unveil( '/tmp' => 'r' ) or die "Unveil failed: $!\n";
-
-	# Drop fattr.
-	pledge(qw(rpath wpath cpath tmppath proc exec unveil))
-		or die "Pledge failed: $!\n";
-}
 
 my $xdg_bin_home = $ENV{'XDG_BIN_HOME'} // catfile $home, qw(.local bin);
 
@@ -82,8 +73,9 @@ $xdg_bin_home =~ /\A$home/ or die "XDG_BIN_HOME does not start with $home!\n";
 my $ssg = catfile $xdg_bin_home, qw(ssg6);
 my $rssg = catfile $xdg_bin_home, qw(rssg);
 
-if ( $operating_system eq 'openbsd' ) {
+if ( $^O eq 'openbsd' ) {
 	my %unveil_perms = (
+		'/tmp' => 'r',
 		'/usr/libdata/perl5' => 'r',   # modules
 		$ssg => 'x',   # static site generator
 		$rssg => 'x',   # rss feed
@@ -94,12 +86,11 @@ if ( $operating_system eq 'openbsd' ) {
 	);
 
 	while ( my ( $path, $permissions ) = each %unveil_perms ) {
-		unveil( $path => $permissions ) or die "Unveil failed: $!\n";
+		unveil_or_die( $path => $permissions );
 	}
 
-	# Drop unveil.
-	pledge(qw(rpath wpath cpath tmppath proc exec))
-		or die "Pledge failed: $!\n";
+	# Drop fattr and unveil.
+	pledge_or_die(qw(rpath wpath cpath tmppath proc exec));
 }
 
 chdir $html_dir;

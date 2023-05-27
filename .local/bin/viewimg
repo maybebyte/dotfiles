@@ -21,16 +21,22 @@ use warnings;
 use File::Basename qw(fileparse);
 use File::Temp qw(tempfile);
 use HTTP::Tiny;
+
+# External modules.
 use IPC::System::Simple;
 use URI;
 
-my $operating_system = $^O;
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD;
+		Anthesis::OpenBSD->import(qw(pledge_or_die unveil_or_die));
+	}
+};
 
-my $sxiv = $operating_system eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
+my $sxiv = $^O eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
 
-if ( $operating_system eq 'openbsd' ) {
-	use OpenBSD::Pledge;
-	use OpenBSD::Unveil;
+if ( $^O eq 'openbsd' ) {
+	pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec dns inet unveil));
 
 	my %unveiled_paths = (
 		'/etc/ssl/cert.pem' => 'r',   # TLS
@@ -42,12 +48,11 @@ if ( $operating_system eq 'openbsd' ) {
 	);
 
 	while ( my ( $path, $permissions ) = each %unveiled_paths ) {
-		unveil( $path, $permissions ) or die "Unveil failed: $!\n";
+		unveil_or_die( $path, $permissions );
 	}
 
 	# No need for unveil anymore.
-	pledge(qw(rpath tmppath fattr proc exec prot_exec dns inet))
-		or die "Pledge failed: $!\n";
+	pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec dns inet));
 }
 
 my $program_name = fileparse $0;
@@ -67,11 +72,8 @@ $http->can_ssl or die "No TLS support: $!\n";
 
 my $response = $http->get($url);
 
-if ( $operating_system eq 'openbsd' ) {
-	## No need for dns or inet anymore, as the request is stored.
-	pledge(qw(rpath tmppath fattr proc exec prot_exec))
-		or die "Pledge failed: $!\n";
-}
+# No need for dns or inet anymore, as the request is stored.
+pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec)) if $^O eq 'openbsd';
 
 $response->{success} or die "$response->{status} $response->{reason}\n";
 
@@ -83,7 +85,4 @@ close $tmp_fh;
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system $sxiv, '--', $tmpfile;
 
-if ( $operating_system eq 'openbsd' ) {
-	## No need for exec, proc, or prot_exec anymore.
-	pledge(qw(rpath tmppath fattr)) or die "Pledge failed: $!\n";
-}
+pledge_or_die(qw(rpath tmppath fattr)) if $^O eq 'openbsd';

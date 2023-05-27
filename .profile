@@ -28,7 +28,8 @@ export \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
 	HTML_TIDY="${XDG_CONFIG_HOME}/tidy/tidy.conf" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
-	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
+	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf" \
+	PERL5LIB="${XDG_DATA_HOME}/perl5"
 
 TMPVAR="${WEBSITE%/}"
 export WEBSITE_DOMAIN="${TMPVAR##*//}"
