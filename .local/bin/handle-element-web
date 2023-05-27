@@ -24,17 +24,13 @@ use Archive::Tar;
 # Create temporary directories.
 use File::Temp qw(tempdir);
 
-# Needed for HTTP compression.
-use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
-
 # Run commands simply, with detailed diagnostics
 use IPC::System::Simple qw(capturex);
 
 # Decode JSON and manipulate it with Perl.
 use JSON::MaybeXS qw(decode_json);
 
-# Make an API request and download the release + detached signature.
-use HTTP::Tiny;
+use Anthesis::Dotfiles::HTTP qw(decompress_response gzipped_http regular_http);
 
 sub make_github_api_url {
 	my $username = shift or die '$username is undefined';
@@ -48,40 +44,6 @@ sub make_github_release_url {
 	my $version = shift or die '$version is undefined';
 	return
 		"https://github.com/$username/$repository/releases/download/$version";
-}
-
-sub decompress {
-	my $response = shift or die "decompress needs a response";
-
-	if ( exists $response->{headers}
-		&& exists $response->{headers}{'content-encoding'}
-		&& $response->{headers}{'content-encoding'} eq 'gzip' )
-	{
-		my $content = $response->{content};
-		my $decompressed_content;
-
-		gunzip \$content => \$decompressed_content,
-			MultiStream => 1
-			or die "gunzip: $GunzipError\n";
-
-		$response->{content} = $decompressed_content;
-	}
-
-	return $response;
-}
-
-sub fetch_response {
-	my $fetch_url = shift or die "fetch_response needs a URL.\n";
-	my $http = HTTP::Tiny->new(
-		verify_SSL => 1,
-		default_headers => { 'Accept-Encoding' => 'gzip' }
-	);
-	$http->can_ssl or die "TLS is unsupported: $!\n";
-
-	my $response = $http->get($fetch_url);
-	$response->{success} or die "$response->{status} $response->{reason}";
-
-	return decompress $response;
 }
 
 sub check_dependencies {
@@ -102,8 +64,10 @@ my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'}
 	// '/var/www/htdocs/element-web';
 chdir "$element_web_ui_dir";
 
-my $api_response =
-	fetch_response( make_github_api_url(qw(vector-im element-web)) );
+my $gzipped_http = gzipped_http();
+my $api_response = $gzipped_http->get( make_github_api_url(qw(vector-im element-web)) );
+$api_response->{success} or die "$api_response->{status} $api_response->{reason}";
+$api_response = decompress_response $api_response;
 
 my $decoded_json = decode_json $api_response->{content};
 chomp( my $remote_version = $decoded_json->{'name'} );
@@ -128,7 +92,7 @@ my $release_url = make_github_release_url qw(vector-im element-web),
 	$remote_version;
 my $tmpdir = tempdir CLEANUP => 1;
 
-my $http = HTTP::Tiny->new( verify_SSL => 1, );
+my $http = regular_http();
 
 my $base_filename = "element-$remote_version";
 my %file_extensions = (

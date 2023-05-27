@@ -31,12 +31,12 @@ use File::Basename;
 use File::Path qw(make_path);
 use File::Spec::Functions qw(catdir);
 use IPC::Open2;
-use HTTP::Tiny;
-use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 
 # External modules.
 use IPC::System::Simple qw(capturex);
 use URI;
+
+use Anthesis::Dotfiles::HTTP qw(decompress_response gzipped_http);
 
 my $program_name = fileparse $0;
 
@@ -62,40 +62,6 @@ sub copy_to_clipboard {
 	close $xclip_fh;
 
 	return length $stuff_to_copy;
-}
-
-sub decompress {
-	my $response = shift or die "decompress needs a response";
-
-	if ( exists $response->{headers}
-		&& exists $response->{headers}{'content-encoding'}
-		&& $response->{headers}{'content-encoding'} eq 'gzip' )
-	{
-		my $content = $response->{content};
-		my $decompressed_content;
-
-		gunzip \$content => \$decompressed_content,
-			MultiStream => 1
-			or die "gunzip: $GunzipError\n";
-
-		$response->{content} = $decompressed_content;
-	}
-
-	return $response;
-}
-
-sub fetch_response {
-	my $fetch_url = shift or die "fetch_response needs a URL.\n";
-	my $http = HTTP::Tiny->new(
-		verify_SSL => 1,
-		default_headers => { 'Accept-Encoding' => 'gzip' }
-	);
-	$http->can_ssl or die "TLS is unsupported: $!\n";
-
-	my $response = $http->get($fetch_url);
-	$response->{success} or die "$response->{status} $response->{reason}";
-
-	return decompress $response;
 }
 
 sub check_dependencies {
@@ -156,7 +122,11 @@ given ($option) {
 	when ('download file') {
 		chdir;
 
-		my $response = fetch_response $url;
+		my $http = gzipped_http();
+		my $response = $http->get($url);
+		$response->{success} or die "$response->{status} $response->{reason}";
+		$response = decompress_response $response;
+
 		my $content = $response->{content};
 		my $filename = ( $url->path_segments )[-1];
 		my $host = $url->authority;
@@ -197,7 +167,11 @@ given ($option) {
 	}
 
 	when ('read') {
-		my $response = fetch_response $url;
+		my $http = gzipped_http();
+		my $response = $http->get($url);
+		$response->{success} or die "$response->{status} $response->{reason}";
+		$response = decompress_response $response;
+		
 		my $content = $response->{content};
 		open my $zathura_fh, '|-', qw(zathura -);
 		print $zathura_fh $content;
