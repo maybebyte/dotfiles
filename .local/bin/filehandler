@@ -17,9 +17,6 @@
 # Explore a configuration file for fallback colors, preload directories,
 # and so forth.
 #
-# The import colors process could be packaged and imported to ease
-# cognitive load (I don't know how to package things yet).
-#
 # pledge (and maybe unveil too).
 
 use v5.32;
@@ -39,7 +36,8 @@ use IPC::Open2;
 # External modules.
 use File::MimeInfo::Magic;
 use IPC::System::Simple;
-use JSON::MaybeXS qw(decode_json);
+
+use Anthesis::Dotfiles qw(import_pywal_colors);
 
 # Variables used in subroutines.
 my $home = $ENV{'HOME'} // ( getpwuid $> )[7]
@@ -99,38 +97,18 @@ usage if $operation eq 'help';
 my $file_path = shift or usage;
 
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
-my $colors_wal = catfile $xdg_cache_home, qw(wal colors.json);
+my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
 
-my ( $background, $foreground, $color3 ) = do {
-	my $decoded_json;
-	unless ( eval {
-		my $json = do {
-			local $/;
-			open my $json_fh, '<', $colors_wal;
-			<$json_fh>;
-		};
-
-		$decoded_json = decode_json $json;
-	} )
-	{
-		print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
-	}
-
-	(
-		$decoded_json->{'special'}{'background'} // '#040516',
-		$decoded_json->{'special'}{'foreground'} // '#e0cef3',
-		$decoded_json->{'colors'}{'color3'} // '#9974e7',
-	);
-};
+my $colors_hashref = import_pywal_colors $colors_wal;
 
 #<<<
 my @dmenu_options = (
 	'-i',
 	'-fn', 'mono-12',
-	'-nb', $background,
-	'-nf', $color3,
-	'-sb', $background,
-	'-sf', $foreground,
+	'-nb', $colors_hashref->{background},
+	'-nf', $colors_hashref->{color3},
+	'-sb', $colors_hashref->{background},
+	'-sf', $colors_hashref->{foreground},
 );
 #>>>
 

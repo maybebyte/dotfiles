@@ -37,8 +37,9 @@ use IPC::Open2;
 
 # External.
 use IPC::System::Simple;
-use JSON::MaybeXS qw(decode_json);
 use Graphics::Magick;
+
+use Anthesis::Dotfiles qw(import_pywal_colors);
 
 sub yank {
 	chomp( my $stuff_to_copy = shift // die "yank needs something to copy!\n" );
@@ -49,38 +50,18 @@ sub yank {
 }
 
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $ENV{'HOME'}, '.cache';
-my $colors_wal = catfile $xdg_cache_home, qw(wal colors.json);
+my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
 
-my ( $background, $foreground, $color3 ) = do {
-	my $decoded_json;
-	unless ( eval {
-		my $json = do {
-			local $/;
-			open my $json_fh, '<', $colors_wal;
-			<$json_fh>;
-		};
-
-		$decoded_json = decode_json $json;
-	} )
-	{
-		print STDERR "Couldn't import colors from '$colors_wal': $@" if $@;
-	}
-
-	(
-		$decoded_json->{'special'}{'background'} // '#040516',
-		$decoded_json->{'special'}{'foreground'} // '#e0cef3',
-		$decoded_json->{'colors'}{'color3'} // '#9974e7',
-	);
-};
+my $colors_hashref = import_pywal_colors $colors_wal;
 
 #<<<
 my @dmenu_options = (
 	'-i',
 	'-fn', 'mono-12',
-	'-nb', $background,
-	'-nf', $color3,
-	'-sb', $background,
-	'-sf', $foreground,
+	'-nb', $colors_hashref->{background},
+	'-nf', $colors_hashref->{color3},
+	'-sb', $colors_hashref->{background},
+	'-sf', $colors_hashref->{foreground},
 );
 #>>>
 
