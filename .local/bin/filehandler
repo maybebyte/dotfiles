@@ -37,7 +37,7 @@ use IPC::Open2;
 use File::MimeInfo::Magic;
 use IPC::System::Simple;
 
-use Anthesis::Dotfiles qw(import_pywal_colors);
+use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
 # Variables used in subroutines.
 my $home = $ENV{'HOME'} // ( getpwuid $> )[7]

@@ -2,7 +2,7 @@ use v5.36;
 use strict;
 use warnings;
 
-package Anthesis::Dotfiles;
+package Anthesis::Dotfiles::Pywal;
 use Carp;
 use Exporter qw(import);
 

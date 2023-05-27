@@ -41,7 +41,7 @@ BEGIN {
 	}
 };
 
-use Anthesis::Dotfiles qw(import_pywal_colors);
+use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
 our ( $opt_h, $opt_n );
 my $program_name = fileparse $0;
