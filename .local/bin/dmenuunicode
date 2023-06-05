@@ -41,7 +41,7 @@ BEGIN {
 		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
 		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
 	}
-};
+}
 
 use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
@@ -68,6 +68,8 @@ usage if $opt_h;
 
 my $notify_user = $opt_n // 0;
 
+$ENV{'DISPLAY'} // die "$program_name requires a graphical environment";
+
 my $home = ( getpwuid $> )[7];
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
 my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
@@ -75,7 +77,8 @@ my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
 if ( $^O eq 'openbsd' ) {
 	pledge_or_die(qw(stdio rpath proc exec unveil));
 
-	my @needed_executables = capturex(qw(which -- which dmenu notify-send xclip));
+	my @needed_executables =
+		capturex(qw(which -- which dmenu notify-send xclip));
 
 	while ( my $executable = shift @needed_executables ) {
 		chomp $executable;
@@ -88,6 +91,47 @@ if ( $^O eq 'openbsd' ) {
 	}
 
 	pledge_or_die(qw(stdio rpath proc exec));
+}
+
+my %emoji_hash;
+
+while ( <<>> ) {
+	chomp;
+
+	# Sanity check each line as a way to prevent bogus contents from
+	# getting copied into the clipboard.
+	m/
+	\A
+
+	\p{Emoji}+
+	\p{Emoji_Component}*
+
+	\p{Blank}+
+
+	(
+	\p{Upper} |
+	\p{Lower} |
+	\p{Digit} |
+	\p{Punct} |
+	\p{Blank}
+	)+
+	;
+
+	\p{Blank}+
+
+	(
+	\p{Blank}*
+	\p{ASCII_Hex_Digit}+
+	)+
+	;
+
+	\z
+	/xn
+		or die 'Malformed input, see emoji(5)';
+
+	my $emoji_and_description = ( split /;/ )[0];
+
+	$emoji_hash{$emoji_and_description}++;
 }
 
 my $colors_hashref = import_pywal_colors $colors_wal;
@@ -104,15 +148,12 @@ my @dmenu_options = (
 );
 #>>>
 
-$ENV{'DISPLAY'} // die "$program_name requires a graphical environment";
-
 my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
 binmode $dmenu_out, 'encoding(UTF-8)';
 binmode $dmenu_in, 'encoding(UTF-8)';
 
-while ( <<>> ) {
-	my $emoji_and_description = ( split /;/ )[0];
-	say $dmenu_in $emoji_and_description;
+for my $key ( sort keys %emoji_hash ) {
+	say $dmenu_in $key;
 }
 
 close $dmenu_in;
@@ -120,11 +161,6 @@ close $dmenu_in;
 chomp( my $user_input = <$dmenu_out> // die "$program_name needs an emoji!\n" );
 close $dmenu_out;
 waitpid $dmenu_pid, 0;
-
-# Check that the line starts with an emoji. This is both a sanity check and a
-# way to prevent bogus contents from getting copied into the clipboard.
-$user_input =~ /\A \p{Emoji}+ \p{Emoji_Component}* [ \t]/x
-	or die "Malformed input: $user_input";
 
 my $emoji = ( split ' ', $user_input )[0];
 
