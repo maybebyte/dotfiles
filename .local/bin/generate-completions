@@ -19,10 +19,14 @@ use warnings;
 use autodie;
 
 use File::Basename qw(fileparse);
-
 use Getopt::Std;
 
-our ( $opt_h, $opt_t );
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD::Pledge;
+		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
+	}
+}
 
 sub usage {
 	my $program_name = fileparse $0;
@@ -31,9 +35,14 @@ $program_name [-h] [-t completion_type]
 EOF
 }
 
+our ( $opt_h, $opt_t );
 getopts('ht:');
 
 usage if $opt_h;
+
+if ( $^O eq 'openbsd' ) {
+	pledge_or_die(qw(stdio));
+}
 
 my $completion_type = $opt_t;
 my %completions;
