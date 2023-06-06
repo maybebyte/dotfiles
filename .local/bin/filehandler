@@ -39,6 +39,13 @@ use IPC::System::Simple;
 
 use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
+BEGIN {
+	if ( $^O eq 'openbsd' ) {
+		require Anthesis::OpenBSD::Pledge;
+		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
+	}
+}
+
 # Variables used in subroutines.
 my $home = $ENV{'HOME'} // ( getpwuid $> )[7]
 	or die "No home directory found!\n";
@@ -94,6 +101,12 @@ sub build_filetree {
 
 my $operation = shift or usage;
 usage if $operation eq 'help';
+
+
+if ( $^O eq 'openbsd' ) {
+	pledge_or_die(qw(stdio rpath cpath proc exec));
+}
+
 my $file_path = shift or usage;
 
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
