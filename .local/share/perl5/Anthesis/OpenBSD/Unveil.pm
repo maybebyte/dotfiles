@@ -17,7 +17,7 @@ sub unveil_error {
 
 sub unveil_or_die {
 	my $file = shift or unveil_error 'missing file';
-	my $perms = shift or unveil_error 'missing permissions';
+	my $perms = shift // '';
 	unveil( $file, $perms ) or unveil_error $!;
 }
 
