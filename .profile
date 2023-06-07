@@ -9,27 +9,27 @@ command -v 'colorls' > /dev/null 2>&1 && export LS='colorls'
 export \
 	CLICOLOR=1 \
 	FCEDIT="${EDITOR}" \
-	VISUAL="${EDITOR}" \
 	HISTFILE="${HOME}/.history" \
 	HISTSIZE=10000 \
 	LC_CTYPE='en_US.UTF-8' \
 	LESS='-iMRx 4' \
 	LESSSECURE=1 \
 	PAGER='less' \
+	VISUAL="${EDITOR}" \
+	WEBSITE='https://www.anthes.is/'
 	XDG_BIN_HOME="${HOME}/.local/bin" \
 	XDG_CACHE_HOME="${HOME}/.cache" \
 	XDG_CONFIG_HOME="${HOME}/.config" \
 	XDG_DATA_HOME="${HOME}/.local/share" \
 	XDG_STATE_HOME="${HOME}/.local/state" \
-	WEBSITE='https://www.anthes.is/'
 
 # These variables come after.
 export \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
 	HTML_TIDY="${XDG_CONFIG_HOME}/tidy/tidy.conf" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
-	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf" \
 	PERL5LIB="${XDG_DATA_HOME}/perl5"
+	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf" \
 
 TMPVAR="${WEBSITE%/}"
 export WEBSITE_DOMAIN="${TMPVAR##*//}"
