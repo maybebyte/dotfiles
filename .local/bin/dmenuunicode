@@ -140,26 +140,21 @@ PLEDGE_AND_UNVEIL: {
 }
 
 SELECT_AND_COPY_EMOJI: {
-	my @dmenu_options = do {
-		if ( -e -f -r $wal_colors_file ) {
-			my $colors_hash_ref = import_pywal_colors $wal_colors_file;
+	my @dmenu_options = qw(-i -l 20 -fn mono-12);
 
-			#<<<
-			(
-				'-i',
-				'-l', 20,
-				'-fn', 'mono-12',
-				'-nb', $colors_hash_ref->{background},
-				'-nf', $colors_hash_ref->{color3},
-				'-sb', $colors_hash_ref->{background},
-				'-sf', $colors_hash_ref->{foreground},
-			);
-			#>>>
-		}
-		else {
-			qw(-i -l 20 -fn mono-12);
-		}
-	};
+	if ( -e -f -r $wal_colors_file ) {
+		my $colors_hash_ref = import_pywal_colors $wal_colors_file;
+
+		#<<<
+		push @dmenu_options,
+		(
+			'-nb', $colors_hash_ref->{background},
+			'-nf', $colors_hash_ref->{color3},
+			'-sb', $colors_hash_ref->{background},
+			'-sf', $colors_hash_ref->{foreground},
+		);
+		#>>>
+	}
 
 	my $emoji_hash_ref = &create_emoji_hash_ref_from_input;
 
