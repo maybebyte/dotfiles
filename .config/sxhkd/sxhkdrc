@@ -7,8 +7,9 @@ super + d
 	${XDG_BIN_HOME}/launcher
 
 # dmenuunicode (pick an emoji and copy it to clipboard)
+# Uses STDIN so that unveil can be used in the program.
 super + u
-	${XDG_BIN_HOME}/dmenuunicode -n "${XDG_DATA_HOME}/emoji"
+	${XDG_BIN_HOME}/dmenuunicode -n < "${XDG_DATA_HOME}/emoji"
 
 # web browser
 super + B
