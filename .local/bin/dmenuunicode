@@ -150,7 +150,7 @@ PLEDGE_AND_UNVEIL: {
 SELECT_AND_COPY_EMOJI: {
 	my @dmenu_options = qw(-i -l 20 -fn mono-12);
 
-	if ( -e -f -r $wal_colors_file ) {
+	eval {
 		my $colors_hash_ref = import_pywal_colors $wal_colors_file;
 
 		#<<<
@@ -162,7 +162,8 @@ SELECT_AND_COPY_EMOJI: {
 			'-sf', $colors_hash_ref->{foreground},
 		);
 		#>>>
-	}
+	};
+	warn $@ if $@;
 
 	my $emoji_hash_ref = &create_emoji_hash_ref_from_input;
 

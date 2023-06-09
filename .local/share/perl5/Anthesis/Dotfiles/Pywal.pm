@@ -13,12 +13,16 @@ sub import_pywal_colors {
 	my $colors_file = shift or croak 'import_pywal_colors needs a colors file';
 	my $colors_hashref;
 
-	-e $colors_file or croak "pywal colors file ($colors_file) doesn't exist";
-	-f _ or croak "pywal colors file ($colors_file) isn't a file";
-	-r _ or croak "pywal colors file ($colors_file) isn't readable";
-
 	open my $colors_fh, '<', $colors_file
 		or croak "pywal colors file ($colors_file) couldn't be opened: $!";
+
+	# Put a file check after use to avoid potential TOCTOU bugs
+	# (time-of-check to time-of-use).
+	#
+	# NOTE: For whatever reason, the ioctl error emitted by open when
+	# it's pointed at a directory doesn't kill the program outright, so
+	# that's why this is here.
+	-f $colors_file or croak "pywal colors file ($colors_file) isn't a file";
 
 	my $color_num = 0;
 	while ( my $color = readline $colors_fh ) {
