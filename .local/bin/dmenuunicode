@@ -120,9 +120,15 @@ my $wal_colors_file = do {
 };
 
 PLEDGE_AND_UNVEIL: {
-	## Leave this outside of the if conditional since we are implicitly
-	# checking dependencies here.
-	my @needed_executables = capturex qw(which -- dmenu notify-send xclip);
+	## Leave this outside of the OpenBSD conditional since we are
+	# implicitly checking dependencies here.
+	my @needed_executables = do {
+		my @execs = qw(dmenu xclip);
+		if ($opt_n) { 
+			push @execs, 'notify-send';
+		}
+		capturex qw(which --), @execs;
+	};
 
 	if ( $^O eq 'openbsd' ) {
 		while ( my $executable = shift @needed_executables ) {
