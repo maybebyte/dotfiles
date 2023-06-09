@@ -11,7 +11,7 @@
 .\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 .\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-.Dd December 1, 2022
+.Dd June 9, 2023
 .Dt DMENUUNICODE 1
 .Sh NAME
 .Nm dmenuunicode
@@ -58,9 +58,8 @@ successfully exit. This is to provide visual feedback.
 .El
 .Sh FILES
 .Bl -tag width Ds -compact
-.It Pa ~/.cache/wal/colors.json
-An optional file created by Pywal
-that is parsed by
+.It Pa ~/.cache/wal/colors
+A file created by Pywal that is parsed by
 .Nm
 when available, so that
 .Xr dmenu 1
@@ -82,7 +81,7 @@ file and display a desktop notification on success:
 .Lk https://github.com/dylanaraps/pywal "Pywal"
 .Sh AUTHORS
 This version is written and maintained by
-.An Ashlen Aq Mt eurydice@riseup.net ,
+.An Ashlen Aq Mt dev@anthes.is ,
 and was inspired by a shell script of the same name that
 .An Luke Smith Aq Mt luke@lukesmith.xyz
 wrote.
