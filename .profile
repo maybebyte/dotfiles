@@ -51,14 +51,8 @@ case "$(uname)" in
 		;;
 esac
 
-[ -e "${HOME}/src/website_md" ] &&
-	export WEBSITE_SRC_DIR="${HOME}/src/website_md"
-
-if [ -e "/var/www/htdocs/${WEBSITE_DOMAIN}" ]; then
-	export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN}"
-elif [ -e "/var/www/htdocs/${WEBSITE_DOMAIN##www.}" ]; then
-	export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN##www.}"
-fi
+export WEBSITE_SRC_DIR="${HOME}/src/website_md"
+export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN}"
 
 # Add XDG_BIN_HOME to PATH.
 #
@@ -74,8 +68,4 @@ export MANPATH=":${XDG_DATA_HOME}/man"
 # this should come last in .profile so that one can assume
 # that any variables exported in .profile will carry over to
 # ksh(1).
-if [ -r "${XDG_CONFIG_HOME}/ksh/kshrc" ]; then
-	export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
-else
-	echo "${XDG_CONFIG_HOME}/ksh/kshrc not readable."
-fi
+export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"

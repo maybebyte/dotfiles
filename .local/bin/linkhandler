@@ -133,11 +133,8 @@ given ($option) {
 
 		my $dir_to_write_to = catdir 'Downloads', $host;
 
-		unless ( -e $dir_to_write_to ) {
-			make_path($dir_to_write_to)
-				or die "Could not create directory named "
-				. "'$dir_to_write_to': $!\n";
-		}
+		make_path($dir_to_write_to)
+			or die "Cannot create directory named '$dir_to_write_to':$!\n";
 
 		chdir $dir_to_write_to;
 
