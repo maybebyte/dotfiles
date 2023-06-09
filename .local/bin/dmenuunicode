@@ -127,7 +127,7 @@ PLEDGE_AND_UNVEIL: {
 	if ( $^O eq 'openbsd' ) {
 		while ( my $executable = shift @needed_executables ) {
 			chomp $executable;
-			unveil_or_die( $executable, 'rx' );
+			unveil_or_die $executable, 'rx';
 		}
 
 		my %unveils = map { $_, 'r' } $wal_colors_file, @INC, @ARGV;
@@ -164,7 +164,7 @@ SELECT_AND_COPY_EMOJI: {
 	my $emoji_hash_ref = &create_emoji_hash_ref_from_input;
 
 	my $dmenu_pid =
-		open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
+		open2 my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options;
 	binmode $dmenu_out, 'encoding(UTF-8)';
 	binmode $dmenu_in, 'encoding(UTF-8)';
 
