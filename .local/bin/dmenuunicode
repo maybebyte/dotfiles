@@ -18,7 +18,6 @@
 
 # TODO:
 # Add a flag to clear clipboard after a specified timeout period.
-# How can I restructure this to remove the dependency on pywal?
 
 use v5.32;
 use autodie qw(:all);
@@ -111,6 +110,9 @@ $opt_n = $opt_n // 0;
 
 $ENV{'DISPLAY'} // program_err "DISPLAY variable must be defined.\n";
 
+# We shouldn't depend on Pywal, but this variable does need to be
+# declared in a broader scope (for unveil + potentially importing Pywal
+# colors later).
 my $wal_colors_file = do {
 	my $home = ( getpwuid $> )[7];
 	my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
@@ -118,6 +120,8 @@ my $wal_colors_file = do {
 };
 
 PLEDGE_AND_UNVEIL: {
+	## Leave this outside of the if conditional since we are implicitly
+	# checking dependencies here.
 	my @needed_executables = capturex qw(which -- dmenu notify-send xclip);
 
 	if ( $^O eq 'openbsd' ) {
@@ -136,22 +140,31 @@ PLEDGE_AND_UNVEIL: {
 }
 
 SELECT_AND_COPY_EMOJI: {
-	my $colors_hash_ref = import_pywal_colors $wal_colors_file;
+	my @dmenu_options = do {
+		if ( -e -f -r $wal_colors_file ) {
+			my $colors_hash_ref = import_pywal_colors $wal_colors_file;
+
+			#<<<
+			(
+				'-i',
+				'-l', 20,
+				'-fn', 'mono-12',
+				'-nb', $colors_hash_ref->{background},
+				'-nf', $colors_hash_ref->{color3},
+				'-sb', $colors_hash_ref->{background},
+				'-sf', $colors_hash_ref->{foreground},
+			);
+			#>>>
+		}
+		else {
+			qw(-i -l 20 -fn mono-12);
+		}
+	};
+
 	my $emoji_hash_ref = &create_emoji_hash_ref_from_input;
 
-	#<<<
-	my @dmenu_options = (
-		'-i',
-		'-l', 20,
-		'-fn', 'mono-12',
-		'-nb', $colors_hash_ref->{background},
-		'-nf', $colors_hash_ref->{color3},
-		'-sb', $colors_hash_ref->{background},
-		'-sf', $colors_hash_ref->{foreground},
-	);
-	#>>>
-
-	my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
+	my $dmenu_pid =
+		open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
 	binmode $dmenu_out, 'encoding(UTF-8)';
 	binmode $dmenu_in, 'encoding(UTF-8)';
 
