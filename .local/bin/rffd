@@ -28,11 +28,11 @@ use File::MimeInfo::Magic qw(mimetype);
 BEGIN {
 	if ( $^O eq 'openbsd' ) {
 		require Anthesis::OpenBSD::Pledge;
+		require Anthesis::OpenBSD::Unveil;
 		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
+		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
 	}
-};
-
-pledge_or_die(qw(rpath)) if $^O eq 'openbsd';
+}
 
 sub usage {
 	my $program_name = fileparse $0;
@@ -148,6 +148,22 @@ EOF
 
 my $provided_file_category = shift or usage;
 my $provided_directory = shift or usage;
+
+if ( $^O eq 'openbsd' ) {
+	pledge_or_die qw(rpath unveil);
+
+	my %unveils = map { $_, 'r' }
+		@INC,
+		$provided_directory,
+		'/usr/local/share/mime/globs',
+		'/usr/local/share/mime/globs2';
+
+	while ( my ( $path, $perms ) = each %unveils ) {
+		unveil_or_die $path, $perms;
+	}
+
+	pledge_or_die qw(rpath);
+}
 
 program_sanity_checks $provided_file_category, $provided_directory;
 
