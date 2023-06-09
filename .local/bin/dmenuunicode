@@ -45,127 +45,128 @@ BEGIN {
 
 use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
-our ( $opt_h, $opt_n );
-my $program_name = fileparse $0;
-
 sub usage {
+	my $program_name = fileparse $0;
 	die <<EOF;
 $program_name [-hn] [file]
 See $program_name(1) for more details.
 EOF
 }
 
-sub check_dependencies {
-	my $which_output = capturex qw(which --), @_;
-	$which_output = undef;
+sub program_err {
+	my $program_name = fileparse $0;
+	die "[$program_name]: ", @_;
 }
 
-my @dependencies = qw(dmenu notify-send xclip);
-check_dependencies @dependencies;
+sub create_emoji_hash_ref_from_input {
+	my $emoji_hash_ref;
 
+	while ( <<>> ) {
+		chomp;
+
+		# Sanity check each line as a way to prevent bogus contents from
+		# getting copied into the clipboard.
+		m/
+		\A
+
+		\p{Emoji}+
+		\p{Emoji_Component}*
+
+		\p{Blank}+
+
+		(
+		\p{Upper} |
+		\p{Lower} |
+		\p{Digit} |
+		\p{Punct} |
+		\p{Blank}
+		)+
+		;
+
+		\p{Blank}+
+
+		(
+		\p{Blank}*
+		\p{ASCII_Hex_Digit}+
+		)+
+		;
+
+		\z
+		/xn
+			or program_err 'Malformed input, see emoji(5)';
+
+		my $emoji_and_description = ( split /;/ )[0];
+
+		$emoji_hash_ref->{$emoji_and_description}++;
+	}
+
+	return $emoji_hash_ref;
+}
+
+our ( $opt_h, $opt_n );
 getopts 'hn';
 usage if $opt_h;
+$opt_n = $opt_n // 0;
 
-my $notify_user = $opt_n // 0;
+$ENV{'DISPLAY'} // program_err "DISPLAY variable must be defined.\n";
 
-$ENV{'DISPLAY'} // die "$program_name requires a graphical environment";
+my $wal_colors_file = do {
+	my $home = ( getpwuid $> )[7];
+	my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
+	catfile $xdg_cache_home, qw(wal colors);
+};
 
-my $home = ( getpwuid $> )[7];
-my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
-my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
+PLEDGE_AND_UNVEIL: {
+	my @needed_executables = capturex qw(which -- dmenu notify-send xclip);
 
-if ( $^O eq 'openbsd' ) {
-	pledge_or_die(qw(stdio rpath proc exec unveil));
+	if ( $^O eq 'openbsd' ) {
+		while ( my $executable = shift @needed_executables ) {
+			chomp $executable;
+			unveil_or_die( $executable, 'rx' );
+		}
 
-	my @needed_executables =
-		capturex(qw(which -- which dmenu notify-send xclip));
+		my %unveils = map { $_, 'r' } $wal_colors_file, @INC, @ARGV,;
+		while ( my ( $path, $perms ) = each %unveils ) {
+			unveil_or_die $path, $perms;
+		}
 
-	while ( my $executable = shift @needed_executables ) {
-		chomp $executable;
-		unveil_or_die( $executable, 'rx' );
+		pledge_or_die qw(stdio rpath proc exec);
+	}
+}
+
+SELECT_AND_COPY_EMOJI: {
+	my $colors_hash_ref = import_pywal_colors $wal_colors_file;
+	my $emoji_hash_ref = &create_emoji_hash_ref_from_input;
+
+	#<<<
+	my @dmenu_options = (
+		'-i',
+		'-l', 20,
+		'-fn', 'mono-12',
+		'-nb', $colors_hash_ref->{background},
+		'-nf', $colors_hash_ref->{color3},
+		'-sb', $colors_hash_ref->{background},
+		'-sf', $colors_hash_ref->{foreground},
+	);
+	#>>>
+
+	my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
+	binmode $dmenu_out, 'encoding(UTF-8)';
+	binmode $dmenu_in, 'encoding(UTF-8)';
+
+	for my $key ( sort keys %$emoji_hash_ref ) {
+		say $dmenu_in $key;
 	}
 
-	my %unveils = map { $_, 'r' } @INC, $colors_wal, @ARGV;
-	while ( my ( $path, $perms ) = each %unveils ) {
-		unveil_or_die( $path, $perms );
-	}
+	close $dmenu_in;
 
-	pledge_or_die(qw(stdio rpath proc exec));
+	chomp( my $user_input = <$dmenu_out> // program_err "needs an emoji!\n" );
+	close $dmenu_out;
+	waitpid $dmenu_pid, 0;
+
+	my $emoji = ( split ' ', $user_input )[0];
+	open my $xclip_fh, '|-', qw(xclip -i -selection clipboard);
+	print $xclip_fh $emoji;
 }
 
-my %emoji_hash;
-
-while ( <<>> ) {
-	chomp;
-
-	# Sanity check each line as a way to prevent bogus contents from
-	# getting copied into the clipboard.
-	m/
-	\A
-
-	\p{Emoji}+
-	\p{Emoji_Component}*
-
-	\p{Blank}+
-
-	(
-	\p{Upper} |
-	\p{Lower} |
-	\p{Digit} |
-	\p{Punct} |
-	\p{Blank}
-	)+
-	;
-
-	\p{Blank}+
-
-	(
-	\p{Blank}*
-	\p{ASCII_Hex_Digit}+
-	)+
-	;
-
-	\z
-	/xn
-		or die 'Malformed input, see emoji(5)';
-
-	my $emoji_and_description = ( split /;/ )[0];
-
-	$emoji_hash{$emoji_and_description}++;
-}
-
-my $colors_hashref = import_pywal_colors $colors_wal;
-
-#<<<
-my @dmenu_options = (
-	'-i',
-	'-l', 20,
-	'-fn', 'mono-12',
-	'-nb', $colors_hashref->{background},
-	'-nf', $colors_hashref->{color3},
-	'-sb', $colors_hashref->{background},
-	'-sf', $colors_hashref->{foreground},
-);
-#>>>
-
-my $dmenu_pid = open2( my $dmenu_out, my $dmenu_in, 'dmenu', @dmenu_options );
-binmode $dmenu_out, 'encoding(UTF-8)';
-binmode $dmenu_in, 'encoding(UTF-8)';
-
-for my $key ( sort keys %emoji_hash ) {
-	say $dmenu_in $key;
-}
-
-close $dmenu_in;
-
-chomp( my $user_input = <$dmenu_out> // die "$program_name needs an emoji!\n" );
-close $dmenu_out;
-waitpid $dmenu_pid, 0;
-
-my $emoji = ( split ' ', $user_input )[0];
-
-open my $xclip_fh, '|-', qw(xclip -i -selection clipboard);
-print $xclip_fh $emoji;
-close $xclip_fh;
-
-if ($notify_user) { exec qw(notify-send --), 'Emoji copied to clipboard'; }
+if ($opt_n) { exec qw(notify-send --), 'Emoji copied to clipboard'; }
