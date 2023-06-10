@@ -18,13 +18,9 @@ use autodie qw(:all);
 use strict;
 use warnings;
 
-# Get the basename of the program we're running.
 use File::Basename qw(fileparse);
 
-# Run commands simply, with detailed diagnostics.
-use IPC::System::Simple qw(capturex);
-
-# Decode JSON and manipulate it with Perl.
+# External.
 use JSON::MaybeXS qw(decode_json);
 
 use Anthesis::Dotfiles::HTTP qw(decompress_response gzipped_http);
@@ -32,7 +28,9 @@ use Anthesis::Dotfiles::HTTP qw(decompress_response gzipped_http);
 BEGIN {
 	if ( $^O eq 'openbsd' ) {
 		require Anthesis::OpenBSD::Pledge;
+		require Anthesis::OpenBSD::Unveil;
 		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
+		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
 	}
 }
 
@@ -49,21 +47,14 @@ sub make_federation_api_url {
 		. "/report?server_name=$server_name";
 }
 
-sub check_dependencies {
-	my $which_output = capturex qw(which --), @_;
-	$which_output = undef;
-}
+# prot_exec needed for Net::SSLeay
+if ( $^O eq 'openbsd' ) {
+	pledge_or_die qw(stdio rpath inet dns prot_exec unveil);
+};
 
 my $program_name = fileparse $0;
 my $matrix_server = shift
 	or die "$program_name needs a domain name to check.\n";
-
-if ( $^O eq 'openbsd' ) {
-	pledge_or_die(qw(stdio rpath proc exec prot_exec inet dns));
-}
-
-my @dependencies = qw(notify-send);
-check_dependencies @dependencies;
 
 my $http = gzipped_http();
 
@@ -71,7 +62,24 @@ my $github_api_response =
 	$http->get( make_github_api_url qw(matrix-org synapse) );
 $github_api_response->{success}
 	or die "$github_api_response->{status} $github_api_response->{reason}";
+
+my $federation_api_response =
+	$http->get( make_federation_api_url $matrix_server );
+$federation_api_response->{success}
+	or die
+	"$federation_api_response->{status} $federation_api_response->{reason}";
+
+if ( $^O eq 'openbsd' ) {
+	my %unveils = map { $_, 'r' } @INC;
+	while ( my ( $path, $perms ) = each %unveils ) {
+		unveil_or_die $path, $perms;
+	}
+
+	pledge_or_die qw(stdio rpath);
+}
+
 $github_api_response = decompress_response $github_api_response;
+$federation_api_response = decompress_response $federation_api_response;
 
 my $decoded_github_api_response = decode_json $github_api_response->{content};
 chomp( my $remote_synapse_version = $decoded_github_api_response->{'name'} );
@@ -79,18 +87,6 @@ chomp( my $remote_synapse_version = $decoded_github_api_response->{'name'} );
 # Exclude release candidates and catch unknown release schemes.
 $remote_synapse_version =~ /\A v \d+\. \d+\. \d+ \z/ax
 	or die "Release version did not match expected release scheme.\n";
-
-my $federation_api_response =
-	$http->get( make_federation_api_url $matrix_server );
-
-if ( $^O eq 'openbsd' ) {
-	pledge_or_die(qw(stdio rpath proc exec));
-}
-
-$federation_api_response->{success}
-	or die
-	"$federation_api_response->{status} $federation_api_response->{reason}";
-$federation_api_response = decompress_response $federation_api_response;
 
 my $decoded_federation_api_response =
 	decode_json $federation_api_response->{content};
@@ -100,6 +96,7 @@ chomp( my $current_synapse_version =
 	'v' . $decoded_federation_api_response->{'Version'}{'version'} );
 #>>>
 
-$remote_synapse_version gt $current_synapse_version
-	? exec 'notify-send', "Time to upgrade to synapse $remote_synapse_version"
-	: exit;
+if ( $remote_synapse_version gt $current_synapse_version ) {
+	say "Outdated version: $current_synapse_version";
+	say "New version: $remote_synapse_version";
+}
