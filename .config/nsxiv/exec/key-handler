@@ -67,7 +67,7 @@ while ( my $file = <STDIN> ) {
 	chomp $file;
 
 	for ($key) {
-		if ( $_ eq 'c') { system qw(filehandler copy ), $file; }
+		if ( $_ eq 'c') { system qw(filehandler copy), $file; }
 
 		elsif ( $_ eq 'd' ) {
 			my $menu_pid =
