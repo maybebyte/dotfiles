@@ -96,6 +96,17 @@ vim.api.nvim_create_autocmd('QuitPre', {
 	desc = 'Instead of requiring two quits to exit a Goyo window, one will do.'
 })
 
+vim.api.nvim_create_autocmd('BufNewFile', {
+	pattern = '*.pl',
+	callback = function()
+		local skeleton = vim.env.XDG_DATA_HOME .. '/nvim' .. '/skel' .. '/skel.pl'
+		local f = assert(io.open(skeleton, 'r'))
+		local t = f:read('a')
+		f:close()
+		vim.api.nvim_paste(t, false, -1)
+	end,
+	desc = 'Insert Perl boilerplate into files ending with ".pl"'
+})
 
 -- Not currently used, but good to keep around in case I start transcribing
 -- music again.
