@@ -125,7 +125,7 @@ if ( $operation eq 'move' || $operation eq 'copy' ) {
 	build_filetree $file_path;
 
 	my $menu_pid = open2( my $menu_out, my $menu_in, qw(dmenu -l 10),
-		@dmenu_options, '-p', "Where should $base_file be placed?" );
+		@dmenu_options, '-p', "Where should the file be placed?" );
 
 	say $menu_in "exit\n", join( "\n", sort @found_directories );
 	close $menu_in;
@@ -147,17 +147,17 @@ if ( $operation eq 'move' || $operation eq 'copy' ) {
 	$user_input =~ s/\A$home/~/;
 
 	if ( $operation eq 'move' ) {
-		move $file_path, $destination or die "'$base_file' not moved: $!\n";
-		system qw(notify-send --), "Moved '$base_file' to '$user_input'";
+		move $file_path, $destination or die "File not moved: $!\n";
+		system qw(notify-send --), "Moved to '$user_input'";
 	}
 	elsif ( $operation eq 'copy' ) {
-		copy $file_path, $destination or die "'$base_file' not copied: $!\n";
-		system qw(notify-send --), "Copied '$base_file' to '$user_input'";
+		copy $file_path, $destination or die "File not copied: $!\n";
+		system qw(notify-send --), "Copied to '$user_input'";
 	}
 }
 elsif ( $operation eq 'rename' ) {
 	my $menu_pid = open2( my $menu_out, my $menu_in, qw(dmenu -l 10),
-		@dmenu_options, '-p', "Rename $base_file to what?" );
+		@dmenu_options, '-p', "What should the file be renamed to?" );
 
 	say $menu_in "exit\n";
 	close $menu_in;
@@ -169,7 +169,7 @@ elsif ( $operation eq 'rename' ) {
 	exit if $user_input eq 'exit';
 
 	rename $file_path, catfile( $dirs, $user_input );
-	system qw(notify-send --), "Renamed '$base_file' to '$user_input'";
+	system qw(notify-send --), "Renamed to '$user_input'";
 }
 else {
 	die "$operation isn't a supported operation!\n";
