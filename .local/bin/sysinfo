@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Copyright (c) 2023 Ashlen <dev@anthes.is>
+# Copyright (c) 2022-2023 Ashlen <dev@anthes.is>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -20,8 +20,6 @@
 # - modular/object-oriented approach?
 
 use v5.36;
-use strict;
-use warnings;
 use autodie qw(:all);
 
 use Scalar::Util qw(looks_like_number);
