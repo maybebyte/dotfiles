@@ -32,15 +32,11 @@ BEGIN {
 	}
 }
 
-sub make_github_api_url {
-	my $username = shift or die '$username is undefined';
-	my $repository = shift or die '$repository is undefined';
-
+sub make_github_api_url ( $username, $repository ) {
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
 
-sub make_federation_api_url {
-	my $server_name = shift or die '$server_name is undefined';
+sub make_federation_api_url ($server_name) {
 	return 'https://federationtester.matrix.org/api'
 		. "/report?server_name=$server_name";
 }

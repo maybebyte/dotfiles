@@ -39,8 +39,8 @@ use Graphics::Magick;
 
 use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
-sub yank {
-	chomp( my $stuff_to_copy = shift // die "yank needs something to copy!\n" );
+sub yank ($stuff_to_copy) {
+	chomp $stuff_to_copy;
 	open my $xclip_fh, '|-', qw(xclip -selection clipboard);
 
 	print $xclip_fh $stuff_to_copy;

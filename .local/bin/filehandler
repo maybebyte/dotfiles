@@ -62,8 +62,7 @@ rename - rename file
 EOF
 }
 
-sub get_preload_dir {
-	my $file_to_examine = shift or die "No file for get_preload_dir given.\n";
+sub get_preload_dir ($file_to_examine) {
 	my $mimetype = mimetype $file_to_examine;
 	my $preload_dir = do {
 		given ($mimetype) {
@@ -86,10 +85,7 @@ sub wanted {
 	-d && push @found_directories, $File::Find::name =~ s/\A$home/~/ar;
 }
 
-sub build_filetree {
-	my $file_without_destination = shift
-		or die "No file for build_filetree given.\n";
-
+sub build_filetree ($file_without_destination) {
 	my ( $preload_dir, $mimetype ) = get_preload_dir $file_without_destination;
 	-e $preload_dir or die "'$preload_dir' doesn't exist.\n";
 	-d _ or die "'$preload_dir' isn't a directory.\n";

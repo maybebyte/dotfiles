@@ -30,16 +30,11 @@ use JSON::MaybeXS qw(decode_json);
 
 use Anthesis::Dotfiles::HTTP qw(decompress_response gzipped_http regular_http);
 
-sub make_github_api_url {
-	my $username = shift or die '$username is undefined';
-	my $repository = shift or die '$repository is undefined';
+sub make_github_api_url ( $username, $repository ) {
 	return "https://api.github.com/repos/$username/$repository/releases/latest";
 }
 
-sub make_github_release_url {
-	my $username = shift or die '$username is undefined';
-	my $repository = shift or die '$repository is undefined';
-	my $version = shift or die '$version is undefined';
+sub make_github_release_url ( $username, $repository, $version ) {
 	return
 		"https://github.com/$username/$repository/releases/download/$version";
 }

@@ -43,9 +43,7 @@ sub return_file_categories {
 	return qw(image audio video any);
 }
 
-sub return_file_extensions {
-	my $file_category = shift;
-
+sub return_file_extensions ($file_category) {
 	if ( $file_category eq 'image' ) {
 		return qw(jpg jpeg png);
 	}
@@ -58,8 +56,7 @@ sub return_file_extensions {
 	else { return; }
 }
 
-sub return_extension_patterns {
-	my $file_category = shift or return;
+sub return_extension_patterns ($file_category) {
 	return map { qr/\.$_\z/i } return_file_extensions $file_category;
 }
 
@@ -67,13 +64,11 @@ sub return_extension_patterns {
 # associated with a particular file extension. But it would be a lot to
 # put in this program---better done as a module, and someone's probably
 # already done it.
-sub return_mimetype_patterns {
-	my $file_category = shift or return;
+sub return_mimetype_patterns ($file_category) {
 	return qr{\A$file_category/};
 }
 
-sub return_file_properties_hash {
-	my $file_category = shift or return;
+sub return_file_properties_hash ($file_category) {
 	my %file_properties_hash;
 
 	$file_properties_hash{$file_category}{extensions} =
@@ -102,9 +97,7 @@ sub gather_every_file {
 	);
 }
 
-sub gather_type_of_file {
-	my $file_category = shift or return;
-	my $file_properties_ref = shift or return;
+sub gather_type_of_file ( $file_category, $file_properties_ref ) {
 	my %wanted_files;
 
 	return (
@@ -127,10 +120,7 @@ sub gather_type_of_file {
 	);
 }
 
-sub program_sanity_checks {
-	my $file_category = shift or return;
-	my $directory = shift or return;
-
+sub program_sanity_checks ( $file_category, $directory ) {
 	-e $directory or die "'$directory' doesn't exist.\n";
 	-d _ or die "'$directory' isn't a directory.\n";
 
