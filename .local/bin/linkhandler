@@ -22,8 +22,6 @@
 use v5.36;
 use autodie qw(:all);
 
-use experimental qw(switch);
-
 # Base modules.
 use File::Basename;
 use File::Path qw(make_path);
@@ -96,24 +94,24 @@ chomp( my $option = <$fzf_out> // die "Option must be defined.\n" );
 close $fzf_out;
 waitpid $fzf_pid, 0;
 
-given ($option) {
-	when ('copy duration') {
+for ($option) {
+	if ( $_ eq 'copy duration' ) {
 		my $duration = get_duration $url;
 		copy_to_clipboard $duration;
 		exec qw(notify-send --), "Copied video duration: ($duration).";
 	}
 
-	when ('copy title') {
+	elsif ( $_ eq 'copy title' ) {
 		my $title = get_title $url;
 		copy_to_clipboard $title;
 		exec qw(notify-send --), "Copied video title: ($title).";
 	}
 
-	when ('download audio') {
+	elsif ( $_ eq 'download audio' ) {
 		exec qw(tmux -- new-window yt-dlp -xf bestaudio/best --), $url;
 	}
 
-	when ('download file') {
+	elsif ( $_ eq 'download file' ) {
 		chdir;
 
 		my $http = gzipped_http();
@@ -137,27 +135,27 @@ given ($option) {
 		close $download_fh;
 	}
 
-	when ('download video') {
+	elsif ( $_ eq 'download video' ) {
 		exec qw(tmux -- new-window yt-dlp --), $url;
 	}
 
-	when ('listen') {
+	elsif ( $_ eq 'listen' ) {
 		exec qw(tmux -- new-window mpv
 			--no-resume-playback --no-keep-open
 			--no-pause --no-video --), $url;
 	}
 
-	when ('print duration') {
+	elsif ( $_ eq 'print duration' ) {
 		my $duration = get_duration $url;
 		exec qw(notify-send --), "Video duration: ($duration).";
 	}
 
-	when ('print title') {
+	elsif ( $_ eq 'print title' ) {
 		my $title = get_title $url;
 		exec qw(notify-send --), "Video title: ($title).";
 	}
 
-	when ('read') {
+	elsif ( $_ eq 'read' ) {
 		my $http = gzipped_http();
 		my $response = $http->get($url);
 		$response->{success} or die "$response->{status} $response->{reason}";
@@ -171,12 +169,12 @@ given ($option) {
 		die "zathura: non-zero exit of $?\n" if $?;
 	}
 
-	when ('view image') { exec qw(viewimg), $url; }
-	when ('watch') { exec qw(tmux -- new-window mpv --), $url; }
+	elsif ( $_ eq 'view image' ) { exec qw(viewimg), $url; }
+	elsif ( $_ eq 'watch' ) { exec qw(tmux -- new-window mpv --), $url; }
 
-	when ('watch (loop)') {
+	elsif ( $_ eq 'watch (loop)') {
 		exec qw(tmux -- new-window mpv --loop --), $url;
 	}
 
-	default { die "$program_name doesn't support that option.\n"; }
+	else { die "$program_name doesn't support that option.\n"; }
 }

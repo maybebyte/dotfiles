@@ -27,8 +27,6 @@
 use v5.36;
 use autodie qw(:all);
 
-use experimental qw(switch);
-
 use File::Basename qw(fileparse);
 use File::Spec::Functions qw(catdir catfile rel2abs);
 use IPC::Open2;
@@ -68,10 +66,10 @@ my $key = shift or die "Need a key.\n";
 while ( my $file = <STDIN> ) {
 	chomp $file;
 
-	given ($key) {
-		when ('c') { system qw(filehandler copy), $file; }
+	for ($key) {
+		if ( $_ eq 'c') { system qw(filehandler copy ), $file; }
 
-		when ('d') {
+		elsif ( $_ eq 'd' ) {
 			my $menu_pid =
 				open2( my $menu_out, my $menu_in, 'dmenu', @dmenu_options,
 					'-p', "Really delete $file?" );
@@ -89,43 +87,43 @@ while ( my $file = <STDIN> ) {
 			}
 		}
 
-		when ('m') { system qw(filehandler move), $file; }
-		when ('n') { system qw(filehandler rename), $file; }
-		when ('r') {
+		elsif ( $_ eq 'm') { system qw(filehandler move ), $file; }
+		elsif ( $_ eq 'n') { system qw(filehandler rename ), $file; }
+		elsif ( $_ eq 'r' ) {
 			my $gm = Graphics::Magick->new;
 			$gm->Read($file);
 			$gm->Rotate(90);
 			$gm->Write($file);
 		}
 
-		when ('R') {
+		elsif ( $_ eq 'R' ) {
 			my $gm = Graphics::Magick->new;
 			$gm->Read($file);
 			$gm->Rotate(-90);
 			$gm->Write($file);
 		}
 
-		when ('f') {
+		elsif ( $_ eq 'f' ) {
 			my $gm = Graphics::Magick->new;
 			$gm->Read($file);
 			$gm->Flop();
 			$gm->Write($file);
 		}
 
-		when ('y') {
+		elsif ( $_ eq 'y' ) {
 			my $basename = fileparse $file;
 			yank $basename;
 			system qw(notify-send --),
 				"File name ($basename) copied to clipboard.";
 		}
 
-		when ('Y') {
+		elsif ( $_ eq 'Y' ) {
 			my $absolute_path = rel2abs $file or die "Need an absolute path!\n";
 			yank $absolute_path;
 			system qw(notify-send --),
 				"File path ($absolute_path) copied to clipboard.";
 		}
 
-		default { die "Key not bound!\n"; }
+		else { die "Key not bound!\n"; }
 	}
 }
