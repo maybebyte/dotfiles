@@ -28,6 +28,7 @@ use File::Basename qw(fileparse);
 use File::Spec::Functions qw(catdir catfile);
 use Getopt::Std;
 use IPC::Open2;
+use Unicode::Normalize qw(normalize);
 
 # External modules.
 use IPC::System::Simple qw(capturex);
@@ -60,6 +61,7 @@ sub create_emoji_hash_ref_from_input {
 	my $emoji_hash_ref;
 
 	while ( <<>> ) {
+		$_ = normalize 'D', $_;
 		chomp;
 
 		# Sanity check each line as a way to prevent bogus contents from
@@ -70,30 +72,31 @@ sub create_emoji_hash_ref_from_input {
 		\p{Emoji}+
 		\p{Emoji_Component}*
 
-		\p{Blank}+
+		\p{Space_Separator}+
 
 		(
-		\p{Upper} |
-		\p{Lower} |
-		\p{Digit} |
+		\p{Lowercase_Letter} |
+		\p{Uppercase_Letter} |
+		\p{Decimal_Number} |
+		\p{Space_Separator} |
+		\p{Nonspacing_Mark} |
 		\p{Punct} |
-		\p{Blank}
 		)+
 		;
 
-		\p{Blank}+
+		\p{Space_Separator}+
 
 		(
-		\p{Blank}*
+		\p{Space_Separator}*
 		\p{ASCII_Hex_Digit}+
 		)+
 		;
 
 		\z
-		/xn
-			or program_err 'Malformed input, see emoji(5)';
+		/xn or program_err 'Malformed input, see emoji(5)';
 
 		my $emoji_and_description = ( split /;/ )[0];
+		$emoji_and_description = normalize 'C', $emoji_and_description;
 
 		$emoji_hash_ref->{$emoji_and_description}++;
 	}
