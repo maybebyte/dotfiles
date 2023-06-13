@@ -31,15 +31,10 @@ use Anthesis::OpenBSD qw(pledge_or_die unveil_or_die);
 
 my $sxiv = $OSNAME eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
 
-# TODO: clean this up
-unveil_or_die (
-	'/etc/ssl/cert.pem' => 'r',   # TLS
-	'/tmp' => 'rwc',   # tmpfile
-	'/usr/lib' => 'r',   # libcrypto, libssl
-	'/usr/libdata/perl5' => 'r',   # modules
-	'/usr/local/bin/sxiv' => 'rx',   # image viewer
-	'/usr/local/libdata/perl5/site_perl' => 'r',   # modules
-);
+# /etc/ssl/cert.pem and /usr/lib are needed for TLS.
+unveil_or_die map { $ARG, 'r' } @INC, '/etc/ssl/cert.pem', '/usr/lib';
+unveil_or_die '/tmp' => 'rwc';
+unveil_or_die '/usr/local/bin/sxiv' => 'rx';
 pledge_or_die qw(rpath tmppath fattr proc exec prot_exec dns inet);
 
 my $program_name = fileparse $PROGRAM_NAME;
