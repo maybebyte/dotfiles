@@ -22,7 +22,7 @@
 use v5.36;
 use autodie qw(:all);
 
-# Base modules.
+# Core.
 use English;
 use File::Basename qw(fileparse);
 use File::Copy qw(copy move);
@@ -30,25 +30,13 @@ use File::Find qw(find);
 use File::Spec::Functions qw(catdir catfile);
 use IPC::Open2;
 
-# External modules.
+# External.
 use File::MimeInfo::Magic;
 use IPC::System::Simple;
 
+# Personal.
+use Anthesis::OpenBSD qw(pledge_or_die);
 use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
-
-BEGIN {
-	if ( $OSNAME eq 'openbsd' ) {
-		require OpenBSD::Pledge;
-		OpenBSD::Pledge->import('pledge');
-	}
-	else {
-		sub pledge { return 1; }
-	}
-}
-
-sub pledge_or_die (@syscalls) {
-	pledge @syscalls or die "Pledge failed: $OS_ERROR";
-}
 
 # Variables used in subroutines.
 my $home = $ENV{'HOME'} // ( getpwuid $EUID )[7]

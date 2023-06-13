@@ -16,36 +16,17 @@
 use v5.36;
 use autodie;
 
+# Core.
 use English;
 use File::Basename qw(fileparse);
 use File::Find;
 use List::Util qw(first shuffle);
 
-# External modules.
+# External.
 use File::MimeInfo::Magic qw(mimetype);
 
-BEGIN {
-	if ( $OSNAME eq 'openbsd' ) {
-		require OpenBSD::Pledge;
-		require OpenBSD::Unveil;
-		OpenBSD::Pledge->import('pledge');
-		OpenBSD::Unveil->import('unveil');
-	}
-	else {
-		sub pledge { return 1; }
-		sub unveil { return 1; }
-	}
-}
-
-sub pledge_or_die (@syscalls) {
-	pledge @syscalls or die "Pledge failed: $OS_ERROR";
-}
-
-sub unveil_or_die (%file_perms) {
-	while ( my ( $file, $file_perms ) = each %file_perms ) {
-		unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
-	}
-}
+# Personal.
+use Anthesis::OpenBSD qw(pledge_or_die unveil_or_die);
 
 sub usage {
 	my $program_name = fileparse $PROGRAM_NAME;
