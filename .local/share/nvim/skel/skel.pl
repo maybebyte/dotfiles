@@ -27,6 +27,7 @@ use warnings qw(FATAL utf8);
 use English;
 use Unicode::Normalize qw(normalize);
 
+# Personal modules.
 use Anthesis::OpenBSD qw(pledge_or_die unveil_or_die);
 
 unveil_or_die map { $ARG, 'r' } @INC;
