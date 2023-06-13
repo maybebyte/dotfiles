@@ -32,17 +32,17 @@ if ( $OSNAME eq 'openbsd' ) {
 	use OpenBSD::Unveil;
 
 	sub pledge_or_die (@syscalls) {
-		pledge @syscalls or die "Pledge failed: $!";
+		pledge @syscalls or die "Pledge failed: $OS_ERROR";
 	}
 
 	sub unveil_or_die (%file_perms) {
 		while ( my ( $file, $file_perms ) = each %file_perms ) {
-			unveil $file, $file_perms or die "Unveil failed: $!";
+			unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
 		}
 	}
 }
 
 if ( $OSNAME eq 'openbsd' ) {
-	unveil_or_die map { $_, 'r' } @INC;
+	unveil_or_die map { $ARG, 'r' } @INC;
 	pledge_or_die qw(rpath);
 }
