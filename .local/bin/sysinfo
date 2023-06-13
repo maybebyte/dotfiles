@@ -22,24 +22,37 @@
 use v5.36;
 use autodie qw(:all);
 
+use English;
 use Scalar::Util qw(looks_like_number);
 
 # External modules.
 use IPC::System::Simple qw(capturex);
 
 BEGIN {
-	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD::Pledge;
-		require Anthesis::OpenBSD::Unveil;
-		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
-		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
+	if ( $OSNAME eq 'openbsd' ) {
+		require OpenBSD::Pledge;
+		require OpenBSD::Unveil;
+		OpenBSD::Pledge->import('pledge');
+		OpenBSD::Unveil->import('unveil');
 	}
-};
+	else {
+		sub pledge { return 1; }
+		sub unveil { return 1; }
+	}
+}
 
-pledge_or_die(qw(stdio rpath proc exec unveil)) if $^O eq 'openbsd';
+sub pledge_or_die (@syscalls) {
+	pledge @syscalls or die "Pledge failed: $OS_ERROR";
+}
+
+sub unveil_or_die (%file_perms) {
+	while ( my ( $file, $file_perms ) = each %file_perms ) {
+		unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
+	}
+}
 
 sub check_dependencies {
-	my $which_output = capturex qw(which --), @_;
+	my $which_output = capturex qw(which --), @ARG;
 	$which_output = undef;
 	return;
 }
@@ -110,24 +123,10 @@ sub current_mpd_track {
 	return $current_track;
 }
 
-if ( $^O eq 'openbsd' ) {
-	my @needed_executables = capturex qw(which -- which apm mpc df sysctl ps);
-
-	while ( my $executable = shift @needed_executables ) {
-		chomp $executable;
-		unveil_or_die( $executable, 'rx' );
-	}
-
-	my %unveils = map { $_, 'r' } @INC;
-	while ( my ( $path, $perms ) = each %unveils ) {
-		unveil_or_die( $path, $perms );
-	}
-
-	pledge_or_die(qw(stdio rpath proc exec));
-}
-
-my @dependencies = qw(apm mpc);
-check_dependencies @dependencies;
+unveil_or_die map { chomp; $ARG, 'rx' }
+	capturex qw(which -- apm mpc df sysctl ps);
+unveil_or_die map { $ARG, 'r' } @INC;
+pledge_or_die qw(stdio rpath proc exec);
 
 # Battery status is unlikely to change during runtime. Set it once and
 # reference it for the rest of the program's execution.

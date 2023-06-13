@@ -16,6 +16,7 @@
 use v5.36;
 use autodie;
 
+use English;
 use File::Basename qw(fileparse);
 use File::Find;
 use List::Util qw(first shuffle);
@@ -24,16 +25,30 @@ use List::Util qw(first shuffle);
 use File::MimeInfo::Magic qw(mimetype);
 
 BEGIN {
-	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD::Pledge;
-		require Anthesis::OpenBSD::Unveil;
-		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
-		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
+	if ( $OSNAME eq 'openbsd' ) {
+		require OpenBSD::Pledge;
+		require OpenBSD::Unveil;
+		OpenBSD::Pledge->import('pledge');
+		OpenBSD::Unveil->import('unveil');
+	}
+	else {
+		sub pledge { return 1; }
+		sub unveil { return 1; }
+	}
+}
+
+sub pledge_or_die (@syscalls) {
+	pledge @syscalls or die "Pledge failed: $OS_ERROR";
+}
+
+sub unveil_or_die (%file_perms) {
+	while ( my ( $file, $file_perms ) = each %file_perms ) {
+		unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
 	}
 }
 
 sub usage {
-	my $program_name = fileparse $0;
+	my $program_name = fileparse $PROGRAM_NAME;
 	die <<EOF;
 $program_name [file_category] [directory]
 EOF
@@ -57,7 +72,7 @@ sub return_file_extensions ($file_category) {
 }
 
 sub return_extension_patterns ($file_category) {
-	return map { qr/\.$_\z/i } return_file_extensions $file_category;
+	return map { qr/\.$ARG\z/i } return_file_extensions $file_category;
 }
 
 # TODO(?): This could match specific mimetype patterns that are
@@ -102,13 +117,13 @@ sub gather_type_of_file ( $file_category, $file_properties_ref ) {
 
 	return (
 		sub {
-			first { $File::Find::name =~ $_ }
+			first { $File::Find::name =~ $ARG }
 				@{ $file_properties_ref->{$file_category}{extension_patterns} }
 				or return;
 
 			# Checking MIME type means we already know it's a file, so
 			# -f can be skipped.
-			first { mimetype($File::Find::name) =~ $_ }
+			first { mimetype($File::Find::name) =~ $ARG }
 				@{ $file_properties_ref->{$file_category}{mimetype_patterns} }
 				or return;
 
@@ -124,7 +139,9 @@ sub program_sanity_checks ( $file_category, $directory ) {
 	-e $directory or die "'$directory' doesn't exist.\n";
 	-d _ or die "'$directory' isn't a directory.\n";
 
-	if ( !first { $_ eq $file_category } &return_file_categories ) {
+	# TODO: Implicit use of @_ in subroutine entry with signatured
+	# subroutine is experimental?
+	if ( !first { $ARG eq $file_category } &return_file_categories ) {
 		my $file_category_output = join( "\n", &return_file_categories );
 
 		die <<EOF;
@@ -137,21 +154,13 @@ EOF
 my $provided_file_category = shift or usage;
 my $provided_directory = shift or usage;
 
-if ( $^O eq 'openbsd' ) {
-	pledge_or_die qw(rpath unveil);
+unveil_or_die map { $ARG, 'r' }
+	@INC,
+	$provided_directory,
+	'/usr/local/share/mime/globs',
+	'/usr/local/share/mime/globs2';
 
-	my %unveils = map { $_, 'r' }
-		@INC,
-		$provided_directory,
-		'/usr/local/share/mime/globs',
-		'/usr/local/share/mime/globs2';
-
-	while ( my ( $path, $perms ) = each %unveils ) {
-		unveil_or_die $path, $perms;
-	}
-
-	pledge_or_die qw(rpath);
-}
+pledge_or_die qw(rpath);
 
 program_sanity_checks $provided_file_category, $provided_directory;
 

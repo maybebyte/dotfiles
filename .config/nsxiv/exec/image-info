@@ -13,28 +13,39 @@
 use v5.36;
 use autodie;
 
+use English;
 use File::Basename qw(fileparse);
 
 # External.
 use Number::Bytes::Human qw(format_bytes);
 
 BEGIN {
-	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD::Pledge;
-		require Anthesis::OpenBSD::Unveil;
-		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
-		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
+	if ( $OSNAME eq 'openbsd' ) {
+		require OpenBSD::Pledge;
+		require OpenBSD::Unveil;
+		OpenBSD::Pledge->import('pledge');
+		OpenBSD::Unveil->import('unveil');
 	}
-};
+	else {
+		sub pledge { return 1; }
+		sub unveil { return 1; }
+	}
+}
 
-pledge_or_die(qw(rpath unveil)) if $^O eq 'openbsd';
+sub pledge_or_die (@syscalls) {
+	pledge @syscalls or die "Pledge failed: $OS_ERROR";
+}
+
+sub unveil_or_die (%file_perms) {
+	while ( my ( $file, $file_perms ) = each %file_perms ) {
+		unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
+	}
+}
 
 my $filename = shift or die "Need a file name.\n";
 
-if ( $^O eq 'openbsd' ) {
-	unveil_or_die( $filename, 'r' );
-	pledge_or_die(qw(rpath));
-}
+unveil_or_die map { $ARG, 'r' } @INC, $filename;
+pledge_or_die qw(rpath);
 
 my $basename = fileparse $filename;
 

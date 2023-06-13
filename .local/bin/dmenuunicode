@@ -27,6 +27,7 @@ use utf8;
 use warnings qw(FATAL utf8);
 
 # Core modules.
+use English;
 use File::Basename qw(fileparse);
 use File::Spec::Functions qw(catdir catfile);
 use Getopt::Std;
@@ -35,20 +36,33 @@ use Unicode::Normalize qw(normalize);
 
 # External modules.
 use IPC::System::Simple qw(capturex);
+use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
 BEGIN {
-	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD::Pledge;
-		require Anthesis::OpenBSD::Unveil;
-		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
-		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
+	if ( $OSNAME eq 'openbsd' ) {
+		require OpenBSD::Pledge;
+		require OpenBSD::Unveil;
+		OpenBSD::Pledge->import('pledge');
+		OpenBSD::Unveil->import('unveil');
+	}
+	else {
+		sub pledge { return 1; }
+		sub unveil { return 1; }
 	}
 }
 
-use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
+sub pledge_or_die (@syscalls) {
+	pledge @syscalls or die "Pledge failed: $OS_ERROR";
+}
+
+sub unveil_or_die (%file_perms) {
+	while ( my ( $file, $file_perms ) = each %file_perms ) {
+		unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
+	}
+}
 
 sub usage {
-	my $program_name = fileparse $0;
+	my $program_name = fileparse $PROGRAM_NAME;
 	die <<EOF;
 $program_name [-hn] [file ...]
 See $program_name(1) for more details.
@@ -56,15 +70,15 @@ EOF
 }
 
 sub program_err {
-	my $program_name = fileparse $0;
-	die "[$program_name]: ", @_;
+	my $program_name = fileparse $PROGRAM_NAME;
+	die "[$program_name]: ", @ARG;
 }
 
 sub create_emoji_hash_ref_from_input {
 	my $emoji_hash_ref;
 
 	while ( <<>> ) {
-		$_ = normalize 'D', $_;
+		$ARG = normalize 'D', $ARG;
 		chomp;
 
 		# Sanity check each line as a way to prevent bogus contents from
@@ -118,37 +132,27 @@ $ENV{'DISPLAY'} // program_err "DISPLAY variable must be defined.\n";
 # declared in a broader scope (for unveil + potentially importing Pywal
 # colors later).
 my $wal_colors_file = do {
-	my $home = ( getpwuid $> )[7];
+	my $home = ( getpwuid $EUID )[7];
 	my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
 	catfile $xdg_cache_home, qw(wal colors);
 };
 
 PLEDGE_AND_UNVEIL: {
-	## Leave this outside of the OpenBSD conditional since we are
-	# implicitly checking dependencies here.
-	my @needed_executables = do {
+	## This is also an implicit dependency check.
+	my %needed_executables = do {
 		my @execs = qw(dmenu xclip);
 		if ($opt_n) {
 			push @execs, 'notify-send';
 		}
-		capturex qw(which --), @execs;
+		map { chomp; $ARG, 'rx' } capturex qw(which --), @execs;
 	};
 
-	if ( $^O eq 'openbsd' ) {
-		## Not much point in unveiling if the user can supply an arbitrary file.
-		if ( !@ARGV ) {
-			while ( my $executable = shift @needed_executables ) {
-				chomp $executable;
-				unveil_or_die $executable, 'rx';
-			}
-
-			my %unveils = map { $_, 'r' } $wal_colors_file, @INC;
-			while ( my ( $path, $perms ) = each %unveils ) {
-				unveil_or_die $path, $perms;
-			}
-		}
-		pledge_or_die qw(stdio rpath proc exec);
+	# Not much point in unveiling if the user can supply an arbitrary file.
+	if ( !@ARGV ) {
+		unveil_or_die %needed_executables;
+		unveil_or_die map { $ARG, 'r' } $wal_colors_file, @INC;
 	}
+	pledge_or_die qw(stdio rpath proc exec);
 }
 
 SELECT_AND_COPY_EMOJI: {
@@ -167,7 +171,7 @@ SELECT_AND_COPY_EMOJI: {
 		);
 		#>>>
 	};
-	warn $@ if $@;
+	warn $EVAL_ERROR if $EVAL_ERROR;
 
 	my $emoji_hash_ref = &create_emoji_hash_ref_from_input;
 

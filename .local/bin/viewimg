@@ -16,6 +16,7 @@
 use v5.36;
 use autodie qw(:all);
 
+use English;
 use File::Basename qw(fileparse);
 use File::Temp qw(tempfile);
 use HTTP::Tiny;
@@ -25,37 +26,42 @@ use IPC::System::Simple;
 use URI;
 
 BEGIN {
-	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD::Pledge;
-		require Anthesis::OpenBSD::Unveil;
-		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
-		Anthesis::OpenBSD::Unveil->import(qw(unveil_or_die));
+	if ( $OSNAME eq 'openbsd' ) {
+		require OpenBSD::Pledge;
+		require OpenBSD::Unveil;
+		OpenBSD::Pledge->import('pledge');
+		OpenBSD::Unveil->import('unveil');
 	}
-};
-
-my $sxiv = $^O eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
-
-if ( $^O eq 'openbsd' ) {
-	pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec dns inet unveil));
-
-	my %unveiled_paths = (
-		'/etc/ssl/cert.pem' => 'r',   # TLS
-		'/tmp' => 'rwc',   # tmpfile
-		'/usr/lib' => 'r',   # libcrypto, libssl
-		'/usr/libdata/perl5' => 'r',   # modules
-		'/usr/local/bin/sxiv' => 'rx',   # image viewer
-		'/usr/local/libdata/perl5/site_perl' => 'r',   # modules
-	);
-
-	while ( my ( $path, $permissions ) = each %unveiled_paths ) {
-		unveil_or_die( $path, $permissions );
+	else {
+		sub pledge { return 1; }
+		sub unveil { return 1; }
 	}
-
-	# No need for unveil anymore.
-	pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec dns inet));
 }
 
-my $program_name = fileparse $0;
+sub pledge_or_die (@syscalls) {
+	pledge @syscalls or die "Pledge failed: $OS_ERROR";
+}
+
+sub unveil_or_die (%file_perms) {
+	while ( my ( $file, $file_perms ) = each %file_perms ) {
+		unveil $file, $file_perms or die "Unveil failed: $OS_ERROR";
+	}
+}
+
+my $sxiv = $OSNAME eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
+
+# TODO: clean this up
+unveil_or_die (
+	'/etc/ssl/cert.pem' => 'r',   # TLS
+	'/tmp' => 'rwc',   # tmpfile
+	'/usr/lib' => 'r',   # libcrypto, libssl
+	'/usr/libdata/perl5' => 'r',   # modules
+	'/usr/local/bin/sxiv' => 'rx',   # image viewer
+	'/usr/local/libdata/perl5/site_perl' => 'r',   # modules
+);
+pledge_or_die qw(rpath tmppath fattr proc exec prot_exec dns inet);
+
+my $program_name = fileparse $PROGRAM_NAME;
 
 my $url = shift or die "$program_name needs a URL.\n";
 $url =~ s/\Ahttp:/https:/;
@@ -68,12 +74,12 @@ $ENV{'DISPLAY'} // die "$program_name needs a graphical environment!\n";
 chdir '/tmp';
 
 my $http = HTTP::Tiny->new( verify_SSL => 1, );
-$http->can_ssl or die "No TLS support: $!\n";
+$http->can_ssl or die "No TLS support: $OS_ERROR\n";
 
 my $response = $http->get($url);
 
 # No need for dns or inet anymore, as the request is stored.
-pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec)) if $^O eq 'openbsd';
+pledge_or_die(qw(rpath tmppath fattr proc exec prot_exec)) if $OSNAME eq 'openbsd';
 
 $response->{success} or die "$response->{status} $response->{reason}\n";
 
@@ -85,4 +91,4 @@ close $tmp_fh;
 # Cannot be exec, since the temporary file needs to be cleaned up.
 system $sxiv, '--', $tmpfile;
 
-pledge_or_die(qw(rpath tmppath fattr)) if $^O eq 'openbsd';
+pledge_or_die qw(rpath tmppath fattr) if $OSNAME eq 'openbsd';

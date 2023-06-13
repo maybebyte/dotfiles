@@ -23,6 +23,7 @@ use v5.36;
 use autodie qw(:all);
 
 # Base modules.
+use English;
 use File::Basename qw(fileparse);
 use File::Copy qw(copy move);
 use File::Find qw(find);
@@ -36,16 +37,23 @@ use IPC::System::Simple;
 use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
 
 BEGIN {
-	if ( $^O eq 'openbsd' ) {
-		require Anthesis::OpenBSD::Pledge;
-		Anthesis::OpenBSD::Pledge->import(qw(pledge_or_die));
+	if ( $OSNAME eq 'openbsd' ) {
+		require OpenBSD::Pledge;
+		OpenBSD::Pledge->import('pledge');
+	}
+	else {
+		sub pledge { return 1; }
 	}
 }
 
+sub pledge_or_die (@syscalls) {
+	pledge @syscalls or die "Pledge failed: $OS_ERROR";
+}
+
 # Variables used in subroutines.
-my $home = $ENV{'HOME'} // ( getpwuid $> )[7]
+my $home = $ENV{'HOME'} // ( getpwuid $EUID )[7]
 	or die "No home directory found!\n";
-my $program_name = fileparse $0;
+my $program_name = fileparse $PROGRAM_NAME;
 my @found_directories;
 
 sub usage {
@@ -104,10 +112,7 @@ sub build_filetree ($file_without_destination) {
 my $operation = shift or usage;
 usage if $operation eq 'help';
 
-
-if ( $^O eq 'openbsd' ) {
-	pledge_or_die(qw(stdio rpath cpath proc exec));
-}
+pledge_or_die qw(stdio rpath cpath proc exec);
 
 my $file_path = shift or usage;
 
