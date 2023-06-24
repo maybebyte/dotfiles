@@ -70,3 +70,7 @@ command -v task > /dev/null 2>&1 && {
 	# shellcheck disable=SC2046
 	set -A complete_task_config -- $(task _config)
 }
+
+command -v got > /dev/null 2>&1 && {
+	set -A complete_got_1 -- $(got -h 2>&1 | sed -n s/commands://p)
+}
