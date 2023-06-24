@@ -123,6 +123,21 @@ vim.api.nvim_create_autocmd('BufNewFile', {
 	desc = 'Insert HTML boilerplate into files ending with ".html"'
 })
 
+vim.api.nvim_create_autocmd('BufNewFile', {
+	pattern = {
+		'*.[0-9]',
+		'*.3p',
+	},
+	callback = function()
+		local skeleton = vim.env.XDG_DATA_HOME .. '/nvim' .. '/skel' .. '/skel.man'
+		local f = assert(io.open(skeleton, 'r'))
+		local t = f:read('a')
+		f:close()
+		vim.api.nvim_paste(t, false, -1)
+	end,
+	desc = 'Insert man page boilerplate into files ending with ".\\d"'
+})
+
 -- Not currently used, but good to keep around in case I start transcribing
 -- music again.
 -- vim.api.nvim_create_autocmd('BufWritePost', {
