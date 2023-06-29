@@ -20,7 +20,7 @@ fi
 # b) only make sense with a graphical environment
 # c) should be overridden in a graphical environment
 export \
-	BROWSER='firefox' \
+	BROWSER='ungoogled-chromium' \
 	GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
 	QT_STYLE_OVERRIDE='Adwaita-dark' \
 	READER='zathura' \
