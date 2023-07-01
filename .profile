@@ -52,7 +52,7 @@ case "$(uname)" in
 		;;
 esac
 
-export WEBSITE_SRC_DIR="${HOME}/src/website_md"
+export WEBSITE_SRC_DIR="${HOME}/src/anthesis"
 export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN}"
 
 # Add XDG_BIN_HOME to PATH.
