@@ -9,11 +9,8 @@ Xft.autohint: 0
 Xft.embeddedbitmap: 0
 Xft.hinting: 1
 Xft.hintstyle: hintslight
+Xft.rgba: rgb
 Xft.scalable: 1
-
-! commented due to:
-! https://gitlab.freedesktop.org/mesa/mesa/-/issues/2183
-!Xft.rgba: rgb
 
 ! 5 seconds after lock for DPMS standby
 XLock.dpmsstandby: 5
