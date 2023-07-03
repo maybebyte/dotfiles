@@ -3,8 +3,7 @@
 	enable_recursive_icon_lookup = true
 	font = Monospace 12
 	format = "<b>%s</b>\n%b"
-	frame_color = "#e0cef3"
-	frame_width = 2
+	frame_width = 0
 	height = 300
 	width = (0, 300)
 	hide_duplicate_count = true
@@ -15,16 +14,16 @@
 	show_age_threshold = 120
 
 [urgency_low]
-	background = "#698CEC"
-	foreground = "#ffffff"
+	background = "#928374"
+	foreground = "#fbf1c7"
 	timeout = 5
 
 [urgency_normal]
-	background = "#5B6BDB"
-	foreground = "#ffffff"
+	background = "#689d6a"
+	foreground = "#fbf1c7"
 	timeout = 5
 
 [urgency_critical]
-	background = "#9974E7"
-	foreground = "#ffffff"
+	background = "#9d0006"
+	foreground = "#fbf1c7"
 	timeout = 0
