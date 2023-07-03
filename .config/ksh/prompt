@@ -9,7 +9,7 @@ case "${KSH_VERSION%%\ KSH*}" in
 		_doas_ps1_user='\[\033[1;33m\]'
 		_doas_ps1_path='\[\033[1;35m\]'
 
-		_ps1_bracket='\[\033[36m\]'
+		_ps1_bracket='\[\033[34m\]'
 		_ps1_hostname='\[\033[32m\]'
 		_ps1_clear='\[\033[0m\]'
 
