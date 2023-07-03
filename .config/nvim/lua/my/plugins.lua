@@ -16,8 +16,8 @@ if os.rename(plugin_file, plugin_file) then
 	Plug 'tpope/vim-surround'
 
 	if os.getenv('DISPLAY') then
+		Plug 'ellisonleao/gruvbox.nvim'
 		Plug 'ap/vim-css-color'
-		Plug 'dylanaraps/wal.vim'
 		Plug 'kovetskiy/sxhkd-vim'
 		Plug 'plasticboy/vim-markdown'
 		Plug 'lervag/vimtex'
@@ -26,9 +26,9 @@ if os.rename(plugin_file, plugin_file) then
 
 	vim.call('plug#end')
 
-	-- https://github.com/dylanaraps/pywal
 	if os.getenv('DISPLAY') then
-		vim.cmd.colorscheme('wal')
+		vim.opt.background = 'light'
+		vim.cmd.colorscheme('gruvbox')
 	end
 else
 	vim.api.nvim_err_writeln(plugin_file .. ' not found. Plugins are disabled.')

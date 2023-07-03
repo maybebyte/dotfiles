@@ -48,6 +48,9 @@ vim.opt.relativenumber = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
+-- Enable TrueColor.
+vim.opt.termguicolors = true;
+
 -- Lines are 72 characters long, and will be broken after that.
 vim.opt.textwidth = 72
 
