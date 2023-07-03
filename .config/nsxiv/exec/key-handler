@@ -55,9 +55,9 @@ my @dmenu_options = (
 	'-i',
 	'-fn', 'mono-12',
 	'-nb', $colors_hashref->{background},
-	'-nf', $colors_hashref->{color3},
-	'-sb', $colors_hashref->{background},
-	'-sf', $colors_hashref->{foreground},
+	'-nf', $colors_hashref->{foreground},
+	'-sb', $colors_hashref->{foreground},
+	'-sf', $colors_hashref->{color3},
 );
 #>>>
 
