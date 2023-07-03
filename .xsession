@@ -51,7 +51,7 @@ fi
 xinput set-prop '/dev/wsmouse' 'Device Accel Profile' -1
 
 # look and feel
-"${XDG_BIN_HOME}/wal" -R -a 85
+xwallpaper --center "${HOME}/pics/wallpapers/wallpaper-1920x1080.jpg"
 sct 3500
 xset b off
 
