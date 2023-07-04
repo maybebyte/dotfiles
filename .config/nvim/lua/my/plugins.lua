@@ -25,10 +25,6 @@ if os.rename(plugin_file, plugin_file) then
 	end
 
 	vim.call('plug#end')
-
-	if os.getenv('DISPLAY') then
-		vim.opt.background = 'light'
-	end
 else
 	vim.api.nvim_err_writeln(plugin_file .. ' not found. Plugins are disabled.')
 end

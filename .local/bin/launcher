@@ -28,7 +28,7 @@ readonly COLORS_SH="${XDG_CACHE_HOME:=${HOME}/.cache}/wal/colors.sh"
 command -v 'dmenu_run' > /dev/null 2>&1 || err 'dmenu_run not found in PATH.'
 
 dmenu_run -i -fn 'mono-12' \
-	-nb "${background:-#fbf1c7}" \
-	-nf "${foreground:-#282828}" \
-	-sb "${foreground:-#282828}" \
-	-sf "${color3:-#d79921}"
+	-nb "${foreground:-#657b83}" \
+	-nf "${color11:-#839496}" \
+	-sb "${color7:-#073642}" \
+	-sf "${color6:-#2aa198}"

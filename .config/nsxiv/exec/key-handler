@@ -54,10 +54,10 @@ my $colors_hashref = import_pywal_colors $colors_wal;
 my @dmenu_options = (
 	'-i',
 	'-fn', 'mono-12',
-	'-nb', $colors_hashref->{background},
-	'-nf', $colors_hashref->{foreground},
-	'-sb', $colors_hashref->{foreground},
-	'-sf', $colors_hashref->{color3},
+	'-nb', $colors_hashref->{foreground},
+	'-nf', $colors_hashref->{color11},
+	'-sb', $colors_hashref->{color7},
+	'-sf', $colors_hashref->{color6},
 );
 #>>>
 
