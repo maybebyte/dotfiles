@@ -4,13 +4,13 @@ case "${KSH_VERSION%%\ KSH*}" in
 	'@(#)PD')
 		# Note that these have swapped colors. It's to call attention to shells
 		# running under a different user.
-		_unpriv_ps1_user='\[\033[1;35m\]'
-		_unpriv_ps1_path='\[\033[1;33m\]'
-		_doas_ps1_user='\[\033[1;33m\]'
-		_doas_ps1_path='\[\033[1;35m\]'
+		_unpriv_ps1_user='\[\033[36m\]'
+		_unpriv_ps1_path='\[\033[31m\]'
+		_doas_ps1_user='\[\033[1;35m\]'
+		_doas_ps1_path='\[\033[31m\]'
 
 		_ps1_bracket='\[\033[34m\]'
-		_ps1_hostname='\[\033[32m\]'
+		_ps1_hostname='\[\033[35m\]'
 		_ps1_clear='\[\033[0m\]'
 
 		export PS1="${_ps1_bracket}[${_ps1_clear}${_unpriv_ps1_user}\u\
