@@ -49,6 +49,6 @@ save-path "~/books/newsboat/"
 text-width 72
 
 proxy 127.0.0.1:9050
-proxy-type socks5
+proxy-type socks5h
 use-proxy yes
 download-timeout 60
