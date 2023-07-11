@@ -1,7 +1,7 @@
 # General colors
 color attachment color5 default
 color error color1 default
-color hdrdefault color4 default
+color hdrdefault color6 default
 color search color5 default 
 color signature color11 default
 color status color12 color0
