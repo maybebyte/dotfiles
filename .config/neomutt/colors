@@ -33,7 +33,7 @@ color body underline color1 default "(BAD signature)"
 
 # URLs and email
 color body color4 default "[[:<:]](https?|ftp)://[[:alnum:]-]+([.][[:alnum:]-]+)+([/?][[:graph:]]*)?[[:>:]]" # URLs
-color body color4 default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+"        # Email addresses
+color body color4 default "[[:<:]][[:alnum:].+_-]+@[[:alnum:].-]+[[:>:]]" # Email addresses
 
 color body color13 default "[ ]?[*][^*]*[*][ ]" # more emoticon?
 color body color13 default "[ ][*][^*]*[*][ ]?" # more emoticon?
