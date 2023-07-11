@@ -1,7 +1,39 @@
-lyrics_directory = ~/.config/ncmpcpp/lyrics
+display_bitrate = yes
+ignore_leading_the = yes
+lyrics_directory = ~/.local/share/lyrics
 mouse_support = no
 mpd_connection_timeout = 5
 mpd_host = /var/run/mpd/socket
 mpd_music_dir = /mnt/music
-ncmpcpp_directory = ~/.config/ncmpcpp
+playlist_shorten_total_times = yes
 user_interface = alternative
+
+# Formats
+alternative_header_first_line_format = $5$aqqu$/a $9$8{%t}|{%f}$9 $5$atqq$/a$9
+alternative_header_second_line_format = {{$7%a$9}{ $7-$9 $7%b$9}{ $7(%y)$9}}|{%D}
+current_item_inactive_column_prefix = $(cyan)$r
+current_item_inactive_column_suffix = $/r$(end)
+current_item_prefix = $(yellow)$r
+current_item_suffix = $/r$(end)
+selected_item_prefix = $3
+selected_item_suffix = $9
+song_columns_list_format = (20)[cyan]{a} (6f)[blue]{NE} (50)[white]{t|f:Title} (20)[cyan]{b} (7f)[blue]{l}
+song_list_format = {%a - }{%t}|{$8%f$9}$R{%l}
+
+# Color scheme
+active_window_border = yellow
+alternative_ui_separator_color = blue
+color1 = cyan
+color2 = blue
+empty_tag_color = yellow
+header_window_color = blue
+main_window_color = cyan
+player_state_color = green
+progressbar_color = black
+progressbar_elapsed_color = yellow
+state_flags_color = green
+state_line_color = blue
+statusbar_color = magenta
+statusbar_time_color = yellow
+volume_color = yellow
+window_border_color = yellow
