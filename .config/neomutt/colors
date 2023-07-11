@@ -23,6 +23,10 @@ color tree color10 default
 # Quote colors
 color quoted color11 default
 
+# URLs and email
+color body color4 default "[[:<:]](https?|ftp)://[[:alnum:]-]+([.][[:alnum:]-]+)+([/?][[:graph:]]*)?[[:>:]]" # URLs
+color body color4 default "[[:<:]][[:alnum:].+_-]+@[[:alnum:].-]+[[:>:]]" # Email addresses
+
 ## TODO: verify and/or rework everything below this...
 
 # GPG
@@ -30,10 +34,6 @@ color body color2 default "^gpg: Good signature .*"
 color body color2 default "(Good signature)"
 color body underline color1 default "^gpg: BAD signature from.*"
 color body underline color1 default "(BAD signature)"
-
-# URLs and email
-color body color4 default "[[:<:]](https?|ftp)://[[:alnum:]-]+([.][[:alnum:]-]+)+([/?][[:graph:]]*)?[[:>:]]" # URLs
-color body color4 default "[[:<:]][[:alnum:].+_-]+@[[:alnum:].-]+[[:>:]]" # Email addresses
 
 color body color13 default "[ ]?[*][^*]*[*][ ]" # more emoticon?
 color body color13 default "[ ][*][^*]*[*][ ]?" # more emoticon?
