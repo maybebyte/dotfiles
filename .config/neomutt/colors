@@ -17,7 +17,7 @@ color index color5 default '!~Q~p'  # sent to me and others; hasn't been replied
 color index color1 default '~D'     # deleted messages
 color index color1 default '~D~N'   # deleted messages (new)
 color index color9 default '~D~R'   # deleted messages (read)
-color indicator bold color12 default
+color indicator bold standout color12 default
 color tree color10 default
 
 # Quote colors
