@@ -28,8 +28,8 @@ cleanup-on-quit yes
 color article default default
 color title color12 color0
 color info color12 color0
-color listfocus color12 default standout
-color listfocus_unread color12 default bold standout
+color listfocus color12 default
+color listfocus_unread color12 default bold
 color listnormal color10 default
 color listnormal_unread cyan default
 
