@@ -113,8 +113,7 @@ command -v 'zathura' > /dev/null 2>&1 \
 command -v 'torsocks' > /dev/null 2>&1 && {
 	alias anonsh='torsocks --shell'
 
-	# An alias for ftp exists, so use `which` here.
-	which 'ftp' > /dev/null 2>&1 \
+	command -v 'ftp' > /dev/null 2>&1 \
 		&& alias anonftp="torsocks ftp -nU ''"
 
 	command -v 'tuir' > /dev/null 2>&1 \
