@@ -256,6 +256,10 @@ command -v 'yt-dlp' > /dev/null 2>&1 \
 		tnet6="ping6 \${WEBSITE_DOMAIN}"
 }
 
+# Good default flags for the compiler.
+# https://learnxinyminutes.com/docs/c/
+alias cc='cc -Wall -Wextra -Werror -O2 -std=c99 -pedantic'
+
 OS="$(uname)"
 [ -z "${OS##*BSD}" ] && pf_aliases
 [ "${OS}" = 'OpenBSD' ] && openbsd_aliases
