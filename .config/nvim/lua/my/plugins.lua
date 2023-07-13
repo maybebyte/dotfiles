@@ -14,6 +14,7 @@ if os.rename(plugin_file, plugin_file) then
 	Plug 'scrooloose/nerdtree'
 	Plug 'scrooloose/syntastic'
 	Plug 'tpope/vim-surround'
+	Plug('neoclide/coc.nvim', { branch = 'release' })
 
 	if os.getenv('DISPLAY') then
 		Plug 'altercation/solarized'
