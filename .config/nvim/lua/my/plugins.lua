@@ -18,7 +18,6 @@ if os.rename(plugin_file, plugin_file) then
 
 	if os.getenv('DISPLAY') then
 		Plug 'altercation/solarized'
-		Plug 'ap/vim-css-color'
 		Plug 'kovetskiy/sxhkd-vim'
 		Plug 'plasticboy/vim-markdown'
 		Plug 'lervag/vimtex'
