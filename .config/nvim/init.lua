@@ -7,6 +7,7 @@ require('my.keybindings')
 require('my.autocmds')
 require('my.plugins')
 require('my.coc')
+require('my.vim_b')
 
 local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
