@@ -1,5 +1,9 @@
 -- luacheck: globals vim
 
+-- Autocommands are used to execute commands automatically in response
+-- to certain events. This file configures various autocommands for
+-- different scenarios.
+
 vim.api.nvim_create_autocmd('VimEnter', {
 	callback = function()
 		vim.opt.formatoptions:remove( { 'c', 'r', 'o' } )
@@ -82,7 +86,9 @@ vim.api.nvim_create_autocmd('FileType', {
 	desc = 'Goyo is enabled for help files.'
 })
 
--- QuitPre takes place after writes to the buffer, so :wq is still safe.
+-- QuitPre autocmd
+-- This autocmd triggers before vim exits.
+-- It is used to exit from Goyo mode before quitting vim.
 --
 -- Also see:
 -- https://github.com/junegunn/goyo.vim/issues/16
@@ -94,38 +100,42 @@ vim.api.nvim_create_autocmd('QuitPre', {
 			-- default of "dark"
 			-- https://github.com/junegunn/goyo.vim/issues/78
 			local previous_background = vim.o.background
+
+			-- If Goyo mode is enabled, disable it and then quit vim
 			vim.cmd('Goyo!|q!')
+
 			vim.opt.background = previous_background
 		end
 	end,
-	desc = 'Instead of requiring two quits to exit a Goyo window, one will do.'
+	desc = 'Automatically exit Goyo mode before quitting vim'
 })
 
-
--- TODO: there may be a way to refactor these BufNewFile autocmds to
--- reduce duplicated code.
-vim.api.nvim_create_autocmd('BufNewFile', {
-	pattern = '*.pl',
+-- FileType autocmd
+-- This autocmd triggers when the filetype of the buffer changes.
+-- It is used to automatically load filetype-specific skeletons into new
+-- files.
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = {
+		'perl',
+		'nroff',
+		'html',
+	},
 	callback = function()
-		local skeleton = vim.env.XDG_DATA_HOME .. '/nvim' .. '/skel' .. '/skel.pl'
-		local f = assert(io.open(skeleton, 'r'))
-		local t = f:read('a')
-		f:close()
-		vim.api.nvim_paste(t, false, -1)
+		-- Validate if current buffer is empty
+		if vim.api.nvim_buf_line_count(0) == 1 then
+			if vim.api.nvim_get_current_line() == '' then
+				-- Read skeleton file based on the filetype
+				-- and paste its content into the buffer
+				local skeleton_file = os.getenv('HOME')
+					.. '/.local/share/nvim/skel/'
+					.. vim.bo.filetype
+				print(skeleton_file)
+				vim.api.nvim_buf_set_lines(0, 0, -1, false,
+					vim.fn.readfile(skeleton_file))
+			end
+		end
 	end,
-	desc = 'Insert Perl boilerplate into files ending with ".pl"'
-})
-
-vim.api.nvim_create_autocmd('BufNewFile', {
-	pattern = '*.html',
-	callback = function()
-		local skeleton = vim.env.XDG_DATA_HOME .. '/nvim' .. '/skel' .. '/skel.html'
-		local f = assert(io.open(skeleton, 'r'))
-		local t = f:read('a')
-		f:close()
-		vim.api.nvim_paste(t, false, -1)
-	end,
-	desc = 'Insert HTML boilerplate into files ending with ".html"'
+	desc = 'Load filetype-specific skeleton for new files'
 })
 
 vim.api.nvim_create_autocmd('BufNewFile', {
@@ -134,13 +144,9 @@ vim.api.nvim_create_autocmd('BufNewFile', {
 		'*.3p',
 	},
 	callback = function()
-		local skeleton = vim.env.XDG_DATA_HOME .. '/nvim' .. '/skel' .. '/skel.man'
-		local f = assert(io.open(skeleton, 'r'))
-		local t = f:read('a')
-		f:close()
-		vim.api.nvim_paste(t, false, -1)
+		vim.opt.filetype = 'nroff'
 	end,
-	desc = 'Insert man page boilerplate into files ending with ".\\d"'
+	desc = 'Set "nroff" filetype for man pages with file names that end in 0-9 or 3p'
 })
 
 -- Not currently used, but good to keep around in case I start transcribing
