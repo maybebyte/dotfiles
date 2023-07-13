@@ -65,7 +65,12 @@ vim.keymap.set(
 vim.keymap.set(
 	'n', '<leader>g',
 	function()
+		-- Preserve original background rather than neovim's global
+		-- default of "dark"
+		-- https://github.com/junegunn/goyo.vim/issues/78
+		local previous_background = vim.o.background
 		vim.cmd('Goyo')
+		vim.opt.background = previous_background
 	end,
 	{ desc = 'Toggle Goyo.' }
 )

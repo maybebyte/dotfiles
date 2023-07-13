@@ -90,7 +90,12 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('QuitPre', {
 	callback = function()
 		if vim.call('exists', '#goyo') then
+			-- Preserve original background rather than neovim's global
+			-- default of "dark"
+			-- https://github.com/junegunn/goyo.vim/issues/78
+			local previous_background = vim.o.background
 			vim.cmd('Goyo!|q!')
+			vim.opt.background = previous_background
 		end
 	end,
 	desc = 'Instead of requiring two quits to exit a Goyo window, one will do.'
