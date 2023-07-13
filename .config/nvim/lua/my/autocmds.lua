@@ -95,7 +95,7 @@ vim.api.nvim_create_autocmd('FileType', {
 -- https://github.com/junegunn/goyo.vim/wiki/Customization
 vim.api.nvim_create_autocmd('QuitPre', {
 	callback = function()
-		if vim.call('exists', '#goyo') then
+		if vim.fn.exists('#goyo') == 1 then
 			-- Preserve original background rather than neovim's global
 			-- default of "dark"
 			-- https://github.com/junegunn/goyo.vim/issues/78
@@ -122,17 +122,15 @@ vim.api.nvim_create_autocmd('FileType', {
 	},
 	callback = function()
 		-- Validate if current buffer is empty
-		if vim.api.nvim_buf_line_count(0) == 1 then
-			if vim.api.nvim_get_current_line() == '' then
-				-- Read skeleton file based on the filetype
-				-- and paste its content into the buffer
-				local skeleton_file = os.getenv('HOME')
-					.. '/.local/share/nvim/skel/'
-					.. vim.bo.filetype
-				print(skeleton_file)
-				vim.api.nvim_buf_set_lines(0, 0, -1, false,
-					vim.fn.readfile(skeleton_file))
-			end
+		if vim.api.nvim_buf_line_count(0) == 1 and vim.api.nvim_get_current_line() == '' then
+			-- Read skeleton file based on the filetype
+			-- and paste its content into the buffer
+			local skeleton_file = os.getenv('HOME')
+				.. '/.local/share/nvim/skel/'
+				.. vim.bo.filetype
+
+			local lines = vim.fn.readfile(skeleton_file)
+			vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
 		end
 	end,
 	desc = 'Load filetype-specific skeleton for new files'
