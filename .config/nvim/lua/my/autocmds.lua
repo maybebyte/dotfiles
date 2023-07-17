@@ -11,22 +11,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
 	desc = 'No automatic commenting on newlines.'
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'perl',
-	callback = function()
-		vim.keymap.set({ 'n', 'v' }, '<leader>t', ':%!perltidy -q<CR>')
-	end,
-	desc = 'Format perl scripts using perltidy(1)'
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'sh',
-	callback = function()
-		vim.keymap.set({ 'n', 'v' }, '<leader>s', ':%!shfmt -s -i 0 -ci -sr -bn<CR>')
-	end,
-	desc = 'Format shell scripts using shfmt(1)'
-})
-
 vim.api.nvim_create_autocmd('BufWritePost', {
 	pattern = {
 		os.getenv('HOME') .. '/.Xresources',
@@ -145,6 +129,14 @@ vim.api.nvim_create_autocmd('BufNewFile', {
 		vim.opt.filetype = 'nroff'
 	end,
 	desc = 'Set "nroff" filetype for man pages with file names that end in 0-9 or 3p'
+})
+
+vim.api.nvim_create_autocmd('BufEnter', {
+	pattern = '*sxhkdrc',
+	callback = function()
+		vim.opt.filetype = 'sxhkdrc'
+	end,
+	desc = 'Set sxhkdrc to the sxhkdrc file type so it has syntax highlighting'
 })
 
 -- Not currently used, but good to keep around in case I start transcribing

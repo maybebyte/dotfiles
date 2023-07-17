@@ -9,6 +9,8 @@ require('my.plugins')
 require('my.coc')
 require('my.vim_b')
 
+vim.cmd('colorscheme solarized')
+
 local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
 -- Make sure the backup directory is present and really a directory.

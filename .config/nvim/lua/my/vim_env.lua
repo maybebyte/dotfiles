@@ -4,7 +4,7 @@
 -- will know what to do with them.
 vim.env.XDG_CONFIG_HOME =
 	vim.env.XDG_CONFIG_HOME or
-	os.getenv('HOME') .. '/.local/config'
+	os.getenv('HOME') .. '/.config'
 
 vim.env.XDG_DATA_HOME =
 	vim.env.XDG_DATA_HOME or

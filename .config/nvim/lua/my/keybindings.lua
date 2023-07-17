@@ -24,6 +24,30 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
+	{ 'n', 'v' }, '<leader>pt',
+	function()
+		vim.cmd('%!perltidy -q')
+	end,
+	{ desc = 'Format perl scripts using perltidy(1)' }
+)
+
+vim.keymap.set(
+	{ 'n', 'v' }, '<leader>sf',
+	function()
+		vim.cmd('%!shfmt -s -i 0 -ci -sr -bn')
+	end,
+	{ desc = 'Format shell scripts using shfmt(1)' }
+)
+
+vim.keymap.set(
+	'n', '<leader>ts',
+	function()
+		vim.cmd('Telescope')
+	end,
+	{ desc = 'Run Telescope.'}
+)
+
+vim.keymap.set(
 	'n', '<leader>d',
 	function()
 		vim.api.nvim_put( { os.date('%F') }, 'l', true, false)

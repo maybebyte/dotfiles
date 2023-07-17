@@ -17,16 +17,28 @@ if os.rename(plugin_file, plugin_file) then
 	Plug('neoclide/coc.nvim', { branch = 'release' })
 
 	if os.getenv('DISPLAY') then
-		Plug 'altercation/solarized'
-		Plug 'kovetskiy/sxhkd-vim'
+		Plug 'altercation/vim-colors-solarized'
 		Plug 'plasticboy/vim-markdown'
 		Plug 'lervag/vimtex'
 		Plug 'jamessan/vim-gnupg'
 		Plug 'jackMort/ChatGPT.nvim'
+
 		-- Dependencies of ChatGPT.nvim
 		Plug 'MunifTanjim/nui.nvim'
 		Plug 'nvim-lua/plenary.nvim'
 		Plug('nvim-telescope/telescope.nvim', { tag = '0.1.2'})
+
+		-- Dependencies of telescope.nvim
+		Plug('nvim-treesitter/nvim-treesitter', {
+			['do'] = function()
+				vim.cmd('TSUpdate')
+			end
+		})
+		Plug('nvim-telescope/telescope-fzf-native.nvim', {
+			['do'] = function()
+				vim.cmd('!gmake')
+			end
+		})
 	end
 
 	vim.call('plug#end')
@@ -34,6 +46,42 @@ else
 	vim.api.nvim_err_writeln(plugin_file .. ' not found. Plugins are disabled.')
 end
 
-require("chatgpt").setup({
-    api_key_cmd = "gpg --decrypt " .. vim.fn.expand("$HOME") .. "/passwords/api/chatgpt.txt.gpg"
+require('chatgpt').setup({
+	openai_params = {
+		max_tokens = 500,
+	},
+	api_key_cmd = "gpg --decrypt " .. vim.env.HOME .. "/passwords/api/chatgpt.txt.gpg"
+})
+
+-- Begin nvim-treesitter section
+require('nvim-treesitter.configs').setup({
+	ensure_installed = {
+		'c',
+		'css',
+		'html',
+		'lua',
+		'make',
+		'query',
+		'sxhkdrc',
+		'vim',
+		'vimdoc',
+	},
+	sync_install = false,
+	auto_install = false,
+
+	highlight = {
+		enable = true,
+
+		-- Setting this to true will run `:h syntax` and tree-sitter at
+		-- the same time.
+		--
+		-- Set this to `true` if you depend on 'syntax' being enabled
+		-- (like for indentation).
+		--
+		-- Using this option may slow down your editor, and you may see
+		-- some duplicate highlights.
+		--
+		-- Instead of true it can also be a list of languages.
+		additional_vim_regex_highlighting = false,
+	}
 })

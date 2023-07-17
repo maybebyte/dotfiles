@@ -22,7 +22,7 @@ fi
 export \
 	BROWSER='ungoogled-chromium' \
 	GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0" \
-	QT_STYLE_OVERRIDE='Adwaita' \
+	QT_STYLE_OVERRIDE='Adwaita-dark' \
 	READER='zathura' \
 	TERMINAL='st'
 
