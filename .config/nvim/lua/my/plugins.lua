@@ -61,6 +61,7 @@ require('nvim-treesitter.configs').setup({
 		'html',
 		'lua',
 		'make',
+		'python',
 		'query',
 		'sxhkdrc',
 		'vim',
