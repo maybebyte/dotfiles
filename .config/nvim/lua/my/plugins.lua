@@ -58,6 +58,7 @@ require('nvim-treesitter.configs').setup({
 	ensure_installed = {
 		'c',
 		'css',
+		--'diff', -- this assumes git, so disable for now
 		'html',
 		'lua',
 		'make',
