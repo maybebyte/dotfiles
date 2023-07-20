@@ -11,9 +11,9 @@ user_interface = alternative
 # Formats
 alternative_header_first_line_format = $5$aqqu$/a $9$8{%t}|{%f}$9 $5$atqq$/a$9
 alternative_header_second_line_format = {{$7%a$9}{ $7-$9 $7%b$9}{ $7(%y)$9}}|{%D}
-current_item_inactive_column_prefix = $(cyan)$r
-current_item_inactive_column_suffix = $/r$(end)
-current_item_prefix = $(yellow)$r
+current_item_inactive_column_prefix = $b$(green)$r
+current_item_inactive_column_suffix = $/r$(end)$/b
+current_item_prefix = $(cyan)$r
 current_item_suffix = $/r$(end)
 selected_item_prefix = $3
 selected_item_suffix = $9
