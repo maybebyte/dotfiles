@@ -1,15 +1,15 @@
 -- luacheck: globals vim
 
 require('my.vim_env')
-require('my.vim_opt')
-require('my.vim_g')
-require('my.keybindings')
-require('my.autocmds')
 require('my.plugins')
 require('my.coc')
+require('my.keybindings')
+require('my.autocmds')
+require('my.vim_opt')
+require('my.vim_g')
 require('my.vim_b')
 
-vim.cmd('colorscheme solarized')
+vim.cmd('colorscheme selenized')
 
 local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 

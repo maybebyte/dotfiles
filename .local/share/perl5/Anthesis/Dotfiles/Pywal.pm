@@ -30,8 +30,8 @@ sub import_pywal_colors {
 		next unless $color =~ /\A \# [0-9a-f]{6} \z/ix;
 
 		$colors_hashref->{'color' . $color_num} = $color;
-		$colors_hashref->{background} = $color if $color_num == 0;
-		$colors_hashref->{foreground} = $color if $color_num == 15;
+		$colors_hashref->{background} = $color if $color_num == 16;
+		$colors_hashref->{foreground} = $color if $color_num == 17;
 		++$color_num;
 	}
 

@@ -26,14 +26,14 @@ cache-file "~/.cache/newsboat/cache.db"
 cleanup-on-quit yes
 
 color article default default
-color title color12 color0
-color info color12 color0
-color listfocus color12 default
-color listfocus_unread color12 default bold
-color listnormal color10 default
-color listnormal_unread cyan default
+color title white color0
+color info white color0
+color listfocus cyan default
+color listfocus_unread color14 default
+color listnormal white default
+color listnormal_unread blue default
 
-highlight feedlist "===.*===" default default dim
+highlight feedlist "===.*===" white default dim
 
 macro , open-in-browser
 macro h set browser "linkhandler %u"; open-in-browser; set browser "${BROWSER}"

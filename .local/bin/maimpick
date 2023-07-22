@@ -14,10 +14,10 @@ err() {
 
 menu() {
 	dmenu -i -fn 'mono-12' \
-		-nb "${foreground:-#657b83}" \
-		-nf "${color11:-#839496}" \
-		-sb "${color7:-#073642}" \
-		-sf "${color6:-#2aa198}" \
+		-nb "${background:-#103c48}" \
+		-nf "${foreground:-#adbcbc}" \
+		-sb "${color0:-#174956}" \
+		-sf "${color6:-#41c7b9}" \
 		"$@"
 }
 

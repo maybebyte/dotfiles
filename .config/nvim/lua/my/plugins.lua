@@ -17,7 +17,6 @@ if os.rename(plugin_file, plugin_file) then
 	Plug('neoclide/coc.nvim', { branch = 'release' })
 
 	if os.getenv('DISPLAY') then
-		Plug 'altercation/vim-colors-solarized'
 		Plug 'plasticboy/vim-markdown'
 		Plug 'lervag/vimtex'
 		Plug 'jamessan/vim-gnupg'

@@ -3,25 +3,23 @@ color attachment color5 default
 color error color1 default
 color hdrdefault color6 default
 color search color5 default 
-color signature color11 default
-color status color12 color0
+color signature color7 default
+color status color7 color0
 
 # Index colors
-color index color4 default "~N"
-color index color6 default "~l~N"
-color index color10 default "~R"
-color index color10 default "~Q"
-color index color13 default '~P'    # from me
+color index color6 default "!~l~N"
+color index color4 default "~l~N"
+color index color7 default "~R"
+color index color7 default "~Q"
+color index color5 default '~P'    # from me
 color index color5 default '!~Q^~p' # sent only to me; hasn't been replied to
 color index color5 default '!~Q~p'  # sent to me and others; hasn't been replied to
 color index color1 default '~D'     # deleted messages
-color index color1 default '~D~N'   # deleted messages (new)
-color index color9 default '~D~R'   # deleted messages (read)
-color indicator bold color12 default
-color tree color10 default
+color indicator color14 default
+color tree color7 default
 
 # Quote colors
-color quoted color11 default
+color quoted color7 default
 
 # URLs and email
 color body color4 default "[[:<:]](https?|ftp)://[[:alnum:]-]+([.][[:alnum:]-]+)+([/?][[:graph:]]*)?[[:>:]]" # URLs
@@ -35,10 +33,10 @@ color body color2 default "(Good signature)"
 color body underline color1 default "^gpg: BAD signature from.*"
 color body underline color1 default "(BAD signature)"
 
-color body color13 default "[ ]?[*][^*]*[*][ ]" # more emoticon?
-color body color13 default "[ ][*][^*]*[*][ ]?" # more emoticon?
-color body color13 default "[;:][)(|]" # emoticons
-color body color13 default "[;:][-o][)/(|]" # emoticons
+color body color5 default "[ ]?[*][^*]*[*][ ]" # more emoticon?
+color body color5 default "[ ][*][^*]*[*][ ]?" # more emoticon?
+color body color5 default "[;:][)(|]" # emoticons
+color body color5 default "[;:][-o][)/(|]" # emoticons
 
 # Code highlighting
 color body color5 default "\`[^\`]*\`"

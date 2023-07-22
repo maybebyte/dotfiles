@@ -9,10 +9,10 @@ playlist_shorten_total_times = yes
 user_interface = alternative
 
 # Formats
-alternative_header_first_line_format = $5$aqqu$/a $9$8{%t}|{%f}$9 $5$atqq$/a$9
+alternative_header_first_line_format = $5$aqqu$/a $9{$b$8%t$/b}|{%f}$9 $5$atqq$/a$9
 alternative_header_second_line_format = {{$7%a$9}{ $7-$9 $7%b$9}{ $7(%y)$9}}|{%D}
-current_item_inactive_column_prefix = $b$(green)$r
-current_item_inactive_column_suffix = $/r$(end)$/b
+current_item_inactive_column_prefix = $(white)$r
+current_item_inactive_column_suffix = $/r$(end)
 current_item_prefix = $(cyan)$r
 current_item_suffix = $/r$(end)
 selected_item_prefix = $3
@@ -23,10 +23,10 @@ song_list_format = {%a - }{%t}|{$8%f$9}$R{%l}
 # Color scheme
 active_window_border = yellow
 alternative_ui_separator_color = blue
-color1 = cyan
-color2 = blue
+color1 = white
+color2 = green
 empty_tag_color = yellow
-header_window_color = blue
+header_window_color = white
 main_window_color = cyan
 player_state_color = green
 progressbar_color = black

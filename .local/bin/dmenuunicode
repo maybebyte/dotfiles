@@ -144,9 +144,9 @@ SELECT_AND_COPY_EMOJI: {
 		#<<<
 		push @dmenu_options,
 		(
-			'-nb', $colors_hash_ref->{foreground},
-			'-nf', $colors_hash_ref->{color11},
-			'-sb', $colors_hash_ref->{color7},
+			'-nb', $colors_hash_ref->{background},
+			'-nf', $colors_hash_ref->{foreground},
+			'-sb', $colors_hash_ref->{color0},
 			'-sf', $colors_hash_ref->{color6},
 		);
 		#>>>
