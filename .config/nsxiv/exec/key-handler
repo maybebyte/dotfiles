@@ -48,7 +48,7 @@ sub yank ($stuff_to_copy) {
 my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $ENV{'HOME'}, '.cache';
 my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
 
-my $colors_hashref = import_pywal_colors $colors_wal;
+my $colors_hash_ref = import_pywal_colors $colors_wal;
 
 #<<<
 my @dmenu_options = (
