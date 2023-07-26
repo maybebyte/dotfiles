@@ -21,3 +21,15 @@ vim.g.syntastic_check_on_wg = 0
 vim.g.syntastic_lua_checkers = { 'luacheck', 'luac53' }
 vim.g.syntastic_markdown_checkers = { 'proselint' }
 vim.g.syntastic_tex_checkers = { 'chktex', 'lacheck', 'proselint' }
+
+vim.g.coc_global_extensions = {
+	'coc-html',
+	'coc-css',
+	'coc-json',
+	'coc-pairs',
+	'coc-lists',
+	'coc-highlight',
+	'coc-snippets',
+	'coc-perl',
+	'coc-jedi',
+}
