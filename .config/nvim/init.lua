@@ -5,7 +5,6 @@ require('my.vim_opt')
 require('my.vim_g')
 require('my.vim_b')
 require('my.plugins')
-require('my.coc')
 require('my.keybindings')
 require('my.autocmds')
 
