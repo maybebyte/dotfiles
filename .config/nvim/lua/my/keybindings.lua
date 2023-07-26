@@ -85,32 +85,3 @@ vim.keymap.set(
 	end,
 	{ desc = "Toggle spell check ('o' for orthography)." }
 )
-
-vim.keymap.set(
-	'n', '<leader>g',
-	function()
-		-- Preserve original background rather than neovim's global
-		-- default of "dark"
-		-- https://github.com/junegunn/goyo.vim/issues/78
-		local previous_background = vim.o.background
-		vim.cmd('Goyo')
-		vim.opt.background = previous_background
-	end,
-	{ desc = 'Toggle Goyo.' }
-)
-
-vim.keymap.set(
-	'n', '<leader>n',
-	function()
-		vim.cmd('NERDTreeToggle')
-	end,
-	{ desc = 'Toggle NERD Tree.' }
-)
-
-vim.keymap.set(
-	{ 'x', 'n' }, 'ga', '<Plug>(EasyAlign)',
-	{
-		desc = 'Start interactive EasyAlign in visual mode and '
-			.. 'for motions/text objects (e.g. vipga, gaip)'
-	}
-)
