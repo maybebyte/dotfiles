@@ -40,14 +40,6 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	'n', '<leader>ts',
-	function()
-		vim.cmd('Telescope')
-	end,
-	{ desc = 'Run Telescope.'}
-)
-
-vim.keymap.set(
 	'n', '<leader>d',
 	function()
 		vim.api.nvim_put( { os.date('%F') }, 'l', true, false)
