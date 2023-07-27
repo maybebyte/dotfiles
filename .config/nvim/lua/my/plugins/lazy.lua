@@ -26,4 +26,6 @@ require("lazy").setup({
 	require('my.plugins.vim-markdown'),
 	require('my.plugins.chatgpt'),
 	require('my.plugins.telescope'),
+	require('my.plugins.harpoon'),
+	require('my.plugins.undotree'),
 })

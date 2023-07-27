@@ -12,9 +12,29 @@ return {
 	},
 	keys = {
 		{
-			'<leader>ts',
+			'<leader>tsc',
 			function()
 				vim.cmd('Telescope')
+			end,
+		},
+		{
+			'<leader>tsff',
+			function()
+				require('telescope.builtin').find_files()
+			end,
+		},
+		{
+			'<leader>tsgf',
+			function()
+				require('telescope.builtin').git_files()
+			end,
+		},
+		{
+			'<leader>tsgr',
+			function()
+				require('telescope.builtin').grep_string({
+					search = vim.fn.input("Grep > ")
+				})
 			end,
 		},
 	},

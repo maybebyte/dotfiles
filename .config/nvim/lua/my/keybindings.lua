@@ -24,22 +24,6 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	{ 'n', 'v' }, '<leader>pt',
-	function()
-		vim.cmd('%!perltidy -q')
-	end,
-	{ desc = 'Format perl scripts using perltidy(1)' }
-)
-
-vim.keymap.set(
-	{ 'n', 'v' }, '<leader>sf',
-	function()
-		vim.cmd('%!shfmt -s -i 0 -ci -sr -bn')
-	end,
-	{ desc = 'Format shell scripts using shfmt(1)' }
-)
-
-vim.keymap.set(
 	'n', '<leader>d',
 	function()
 		vim.api.nvim_put( { os.date('%F') }, 'l', true, false)
@@ -76,4 +60,26 @@ vim.keymap.set(
 		vim.opt.spelllang = 'en_us'
 	end,
 	{ desc = "Toggle spell check ('o' for orthography)." }
+)
+
+vim.keymap.set(
+	'n', '<leader>fm',
+	function()
+		vim.cmd.Explore()
+	end,
+	{ desc = "NetRW (file manager)" }
+)
+
+vim.keymap.set(
+	'v', 'J', ":m '>+1<CR>gv",
+	{ desc = 'Move selection down a line.' }
+)
+vim.keymap.set(
+	'v', 'K', ":m '<-2<CR>gv",
+	{ desc = 'Move selection up a line.' }
+)
+
+vim.keymap.set(
+	'n', 'J', 'mzJ`z',
+	{ desc = 'Keep cursor in the same place when joining lines.' }
 )
