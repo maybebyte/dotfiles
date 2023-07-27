@@ -1,12 +1,21 @@
 -- luacheck: globals vim
 
 vim.keymap.set(
-	'v', '<C-c>', '"+y',
+	{'v', 'n'}, '<leader>y', '"+y',
 	{ desc = 'Copy to CLIPBOARD.' }
 )
 vim.keymap.set(
-	'n', '<C-p>', '"+P',
-	{ desc = 'Paste from CLIPBOARD.' }
+	'n', '<leader>Y', '"+Y',
+	{ desc = 'Copy lines to CLIPBOARD.' }
+)
+
+vim.keymap.set(
+	'n', '<leader>p', '"+p',
+	{ desc = 'Paste from CLIPBOARD (after cursor).' }
+)
+vim.keymap.set(
+	'n', '<leader>P', '"+P',
+	{ desc = 'Paste from CLIPBOARD (before cursor).' }
 )
 
 vim.keymap.set(
