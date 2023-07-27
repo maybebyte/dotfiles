@@ -48,7 +48,7 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	'n', '<leader>w',
+	'n', '<leader>dtws',
 	function()
 		vim.cmd('%s/\\s\\+$//e')
 	end,
@@ -56,7 +56,7 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
-	'n', '<leader>e',
+	'n', '<leader>dtnl',
 	function()
 		vim.cmd('%s/\\n\\+\\%$//e')
 	end,
