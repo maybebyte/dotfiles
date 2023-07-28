@@ -11,7 +11,7 @@ return {
 	config = function()
 		require('chatgpt').setup({
 			openai_params = {
-				max_tokens = 500,
+				max_tokens = 1000,
 			},
 			api_key_cmd = "gpg --decrypt "
 				.. vim.env.HOME
