@@ -4,11 +4,13 @@ require('my.vim_env')
 require('my.vim_opt')
 require('my.vim_g')
 require('my.vim_b')
+
+-- Load the colorscheme before plugins due to lazy.nvim quirks.
+vim.cmd('colorscheme selenized')
+
 require('my.plugins')
 require('my.keybindings')
 require('my.autocmds')
-
-vim.cmd('colorscheme selenized')
 
 local backup_directory = vim.env.XDG_STATE_HOME .. '/nvim/backup'
 
