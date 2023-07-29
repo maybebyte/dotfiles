@@ -80,6 +80,14 @@ vim.keymap.set(
 )
 
 vim.keymap.set(
+	'n', '<leader>frm',
+	function()
+		vim.cmd.Format()
+	end,
+	{ desc = "Format files using formatter.nvim" }
+)
+
+vim.keymap.set(
 	'v', 'J', ":m '>+1<CR>gv",
 	{ desc = 'Move selection down a line.' }
 )
