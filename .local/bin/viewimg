@@ -32,7 +32,7 @@ use Anthesis::OpenBSD qw(pledge_or_die unveil_or_die);
 my $sxiv = $OSNAME eq 'openbsd' ? '/usr/local/bin/sxiv' : 'sxiv';
 
 # /etc/ssl/cert.pem and /usr/lib are needed for TLS.
-unveil_or_die map { $ARG, 'r' } @INC, '/etc/ssl/cert.pem', '/usr/lib';
+unveil_or_die map { ( $ARG, 'r' ) } @INC, '/etc/ssl/cert.pem', '/usr/lib';
 unveil_or_die '/tmp' => 'rwc';
 unveil_or_die '/usr/local/bin/sxiv' => 'rx';
 pledge_or_die qw(rpath tmppath fattr proc exec prot_exec dns inet);

@@ -25,7 +25,7 @@ use Anthesis::OpenBSD qw(pledge_or_die unveil_or_die);
 
 my $filename = shift or die "Need a file name.\n";
 
-unveil_or_die map { $ARG, 'r' } @INC, $filename;
+unveil_or_die map { ( $ARG, 'r' ) } @INC, $filename;
 pledge_or_die qw(rpath);
 
 my $basename = fileparse $filename;

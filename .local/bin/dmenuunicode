@@ -124,13 +124,13 @@ PLEDGE_AND_UNVEIL: {
 		if ($opt_n) {
 			push @execs, 'notify-send';
 		}
-		map { chomp; $ARG, 'rx' } capturex qw(which --), @execs;
+		map { chomp; ( $ARG, 'rx' ) } capturex qw(which --), @execs;
 	};
 
 	# Not much point in unveiling if the user can supply an arbitrary file.
 	if ( !@ARGV ) {
 		unveil_or_die %needed_executables;
-		unveil_or_die map { $ARG, 'r' } $wal_colors_file, @INC;
+		unveil_or_die map { ( $ARG, 'r' ) } $wal_colors_file, @INC;
 	}
 	pledge_or_die qw(stdio rpath proc exec);
 }
@@ -172,6 +172,7 @@ SELECT_AND_COPY_EMOJI: {
 	my $emoji = ( split ' ', $user_input )[0];
 	open my $xclip_fh, '|-', qw(xclip -i -selection clipboard);
 	print $xclip_fh $emoji;
+	close $xclip_fh;
 }
 
 if ($opt_n) { exec qw(notify-send --), 'Emoji copied to clipboard'; }

@@ -120,10 +120,9 @@ sub program_sanity_checks ( $file_category, $directory ) {
 	-e $directory or die "'$directory' doesn't exist.\n";
 	-d _ or die "'$directory' isn't a directory.\n";
 
-	# TODO: Implicit use of @_ in subroutine entry with signatured
-	# subroutine is experimental?
-	if ( !first { $ARG eq $file_category } &return_file_categories ) {
-		my $file_category_output = join( "\n", &return_file_categories );
+	my @file_categories = return_file_categories();
+	if ( !first { $ARG eq $file_category } @file_categories ) {
+		my $file_category_output = join( "\n", @file_categories );
 
 		die <<EOF;
 Supported file categories:
@@ -135,7 +134,7 @@ EOF
 my $provided_file_category = shift or usage;
 my $provided_directory = shift or usage;
 
-unveil_or_die map { $ARG, 'r' }
+unveil_or_die map { ( $ARG, 'r' ) }
 	@INC,
 	$provided_directory,
 	'/usr/local/share/mime/globs',

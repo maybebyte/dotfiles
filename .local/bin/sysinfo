@@ -104,9 +104,9 @@ sub current_mpd_track {
 	return $current_track;
 }
 
-unveil_or_die map { chomp; $ARG, 'rx' }
+unveil_or_die map { chomp; ( $ARG, 'rx' ) }
 	capturex qw(which -- apm mpc df sysctl ps);
-unveil_or_die map { $ARG, 'r' } @INC;
+unveil_or_die map { ( $ARG, 'r' ) } @INC;
 pledge_or_die qw(stdio rpath proc exec);
 
 # Battery status is unlikely to change during runtime. Set it once and

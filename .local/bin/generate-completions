@@ -51,7 +51,7 @@ say join "\n", sort keys %completions;
 
 # Input must be in apropos(1) format.
 sub generate_man_completions {
-	while ( my $line = <STDIN> ) {
+	while ( my $line = <<>> ) {
 		chomp $line;
 
 		# We only need up to before the first parenthesis, as we only care about the

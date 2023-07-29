@@ -56,7 +56,7 @@ $federation_api_response->{success}
 	or die
 	"$federation_api_response->{status} $federation_api_response->{reason}";
 
-unveil_or_die map { $ARG, 'r' } @INC;
+unveil_or_die map { ( $ARG, 'r' ) } @INC;
 pledge_or_die qw(stdio rpath);
 
 $github_api_response = decompress_response $github_api_response;
