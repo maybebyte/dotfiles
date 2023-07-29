@@ -17,7 +17,7 @@ require("lazy").setup({
 	require('my.plugins.vim-gnupg'),
 	require('my.plugins.treesitter'),
 	require('my.plugins.nerdcommenter'),
-	require('my.plugins.coc'),
+	require('my.plugins.lsp-zero'),
 	require('my.plugins.vim-surround'),
 	require('my.plugins.nerdtree'),
 	require('my.plugins.vim-easy-align'),

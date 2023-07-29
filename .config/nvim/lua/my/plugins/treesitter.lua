@@ -3,7 +3,7 @@ return {
 	build = function()
 		vim.cmd('TSUpdate')
 	end,
-	config = function()
+	init = function()
 		require('nvim-treesitter.configs').setup({
 			ensure_installed = {
 				'c',

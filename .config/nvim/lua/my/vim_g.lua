@@ -1,7 +1,7 @@
 -- luacheck: globals vim
 -- Global editor variables.
 
-vim.g.mapleader = ','
+vim.g.mapleader = ' '
 
 -- https://github.com/jamessan/vim-gnupg/issues/119
 -- https://github.com/jamessan/vim-gnupg/issues/32
