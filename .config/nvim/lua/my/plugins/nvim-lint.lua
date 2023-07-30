@@ -6,7 +6,6 @@ return {
 		require('lint').linters_by_ft = {
 			lua = { 'luacheck', },
 			html = { 'erb_lint', },
-			sh = { 'shellcheck', },
 			markdown = { 'proselint', 'markdownlint', },
 			text = { 'proselint', },
 		}
@@ -27,7 +26,6 @@ return {
 
 		vim.api.nvim_create_autocmd({ "FileType", "InsertLeave" }, {
 			pattern = {
-				'sh',
 				'lua',
 			},
 			callback = function()
