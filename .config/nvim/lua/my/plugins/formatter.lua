@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 return {
 	'mhartington/formatter.nvim',
 	init = function()
@@ -15,8 +17,43 @@ return {
 				markdown = {
 					require('formatter.filetypes.markdown').prettier
 				},
+				perl = {
+					function()
+						return {
+							exe = "perltidy",
+							args = {
+								"--no-warning-output",
+								"--quiet",
+							},
+							stdin = true,
+						}
+					end,
+				},
 				python = {
-					require('formatter.filetypes.python').yapf
+					require('formatter.filetypes.python').black
+				},
+				sh = {
+					function()
+						local shiftwidth = vim.opt.shiftwidth:get()
+						local expandtab = vim.opt.expandtab:get()
+
+						if not expandtab then
+							shiftwidth = 0
+						end
+
+						return {
+							exe = "shfmt",
+							args = {
+								"--simplify",
+								"--case-indent",
+								"--binary-next-line",
+								"--space-redirects",
+								"--indent",
+								shiftwidth,
+							},
+							stdin = true,
+						}
+					end
 				},
 				yaml = {
 					require('formatter.filetypes.yaml').prettier

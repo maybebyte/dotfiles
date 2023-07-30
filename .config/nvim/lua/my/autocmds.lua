@@ -139,22 +139,6 @@ vim.api.nvim_create_autocmd('BufEnter', {
 	desc = 'Set sxhkdrc to the sxhkdrc file type so it has syntax highlighting'
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'perl',
-	callback = function()
-		vim.opt.equalprg = 'perltidy -q'
-	end,
-	desc = 'Run perltidy as formatter for Perl files'
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'sh',
-	callback = function()
-		vim.opt.equalprg = 'shfmt -s -i 0 -ci -sr -bn'
-	end,
-	desc = 'Run shfmt as formatter for shell scripts'
-})
-
 -- Not currently used, but good to keep around in case I start transcribing
 -- music again.
 -- vim.api.nvim_create_autocmd('BufWritePost', {
