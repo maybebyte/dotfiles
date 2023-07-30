@@ -29,4 +29,5 @@ require("lazy").setup({
 	require('my.plugins.harpoon'),
 	require('my.plugins.undotree'),
 	require('my.plugins.formatter'),
+	require('my.plugins.nvim-lint'),
 })
