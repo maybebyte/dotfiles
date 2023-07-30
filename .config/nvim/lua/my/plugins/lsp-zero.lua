@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 -- TODO: Adjust for future changes/deprecation notice and breaking
 -- changes
 -- https://github.com/VonHeikemen/lsp-zero.nvim

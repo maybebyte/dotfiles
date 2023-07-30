@@ -7,7 +7,7 @@ return {
 			lua = { 'luacheck', },
 			html = { 'erb_lint', },
 			sh = { 'shellcheck', },
-			markdown = { 'proselint', },
+			markdown = { 'proselint', 'markdownlint', },
 			text = { 'proselint', },
 		}
 
