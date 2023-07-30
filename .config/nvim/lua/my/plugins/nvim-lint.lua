@@ -5,9 +5,8 @@ return {
 	config = function()
 		require('lint').linters_by_ft = {
 			lua = { 'luacheck', },
-			css = { 'stylelint', },
 			html = { 'erb_lint', },
-			-- sh = { 'shellcheck', }, -- Illegal instruction (core dumped) on OpenBSD-current
+			sh = { 'shellcheck', },
 			markdown = { 'proselint', },
 			text = { 'proselint', },
 		}
@@ -21,6 +20,16 @@ return {
 		require('lint').linters.erb_lint.args = { '--format', 'compact' }
 
 		vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+			callback = function()
+				require("lint").try_lint()
+			end,
+		})
+
+		vim.api.nvim_create_autocmd({ "FileType", "InsertLeave" }, {
+			pattern = {
+				'sh',
+				'lua',
+			},
 			callback = function()
 				require("lint").try_lint()
 			end,

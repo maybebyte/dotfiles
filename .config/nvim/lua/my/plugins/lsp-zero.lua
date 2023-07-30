@@ -23,6 +23,7 @@ return {
 						'perlnavigator',
 						'html',
 						'pylsp',
+						'stylelint_lsp',
 					},
 				})
 			end,
