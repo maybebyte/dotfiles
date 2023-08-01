@@ -8,6 +8,7 @@ return {
 			html = { 'erb_lint', },
 			markdown = { 'proselint', 'markdownlint', },
 			text = { 'proselint', },
+			python = { 'mypy', 'pylint', 'ruff', },
 		}
 
 		-- NOTE: by default, erb_lint cmd and args are expecting a

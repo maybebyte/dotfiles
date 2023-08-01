@@ -22,7 +22,6 @@ return {
 						return {
 							exe = "perltidy",
 							args = {
-								"--no-warning-output",
 								"--quiet",
 							},
 							stdin = true,
