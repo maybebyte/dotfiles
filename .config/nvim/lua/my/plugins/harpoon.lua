@@ -1,54 +1,54 @@
 return {
-	'ThePrimeagen/harpoon',
+	"ThePrimeagen/harpoon",
 	lazy = true,
 	keys = {
 		{
-			'<leader>haf',
+			"<leader>haf",
 			function()
-				require('harpoon.mark').add_file()
+				require("harpoon.mark").add_file()
 			end,
 		},
 		{
-			'<leader>hqm',
+			"<leader>hqm",
 			function()
-				require('harpoon.ui').toggle_quick_menu()
+				require("harpoon.ui").toggle_quick_menu()
 			end,
 		},
 		{
-			'<leader>h1',
+			"<leader>h1",
 			function()
-				require('harpoon.ui').nav_file(1)
+				require("harpoon.ui").nav_file(1)
 			end,
 		},
 		{
-			'<leader>h2',
+			"<leader>h2",
 			function()
-				require('harpoon.ui').nav_file(2)
+				require("harpoon.ui").nav_file(2)
 			end,
 		},
 		{
-			'<leader>h3',
+			"<leader>h3",
 			function()
-				require('harpoon.ui').nav_file(3)
+				require("harpoon.ui").nav_file(3)
 			end,
 		},
 		{
-			'<leader>h4',
+			"<leader>h4",
 			function()
-				require('harpoon.ui').nav_file(4)
+				require("harpoon.ui").nav_file(4)
 			end,
 		},
 		{
-			'<leader>hn',
+			"<leader>hn",
 			function()
-				require('harpoon.ui').nav_next()
+				require("harpoon.ui").nav_next()
 			end,
 		},
 		{
-			'<leader>hp',
+			"<leader>hp",
 			function()
-				require('harpoon.ui').nav_prev()
+				require("harpoon.ui").nav_prev()
 			end,
 		},
-	}
+	},
 }

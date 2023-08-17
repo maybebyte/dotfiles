@@ -1,24 +1,24 @@
 -- luacheck: globals vim
 
 return {
-	'mhartington/formatter.nvim',
+	"mhartington/formatter.nvim",
 	init = function()
-		require('formatter').setup({
+		require("formatter").setup({
 			filetype = {
 				css = {
-					require('formatter.filetypes.css').prettier
+					require("formatter.filetypes.css").prettier,
 				},
 				html = {
-					require('formatter.filetypes.html').prettier
+					require("formatter.filetypes.html").prettier,
 				},
 				json = {
-					require('formatter.filetypes.json').prettier
+					require("formatter.filetypes.json").prettier,
 				},
 				lua = {
-					require('formatter.filetypes.lua').stylua,
+					require("formatter.filetypes.lua").stylua,
 				},
 				markdown = {
-					require('formatter.filetypes.markdown').prettier
+					require("formatter.filetypes.markdown").prettier,
 				},
 				perl = {
 					function()
@@ -32,7 +32,7 @@ return {
 					end,
 				},
 				python = {
-					require('formatter.filetypes.python').black
+					require("formatter.filetypes.python").black,
 				},
 				sh = {
 					function()
@@ -55,12 +55,12 @@ return {
 							},
 							stdin = true,
 						}
-					end
+					end,
 				},
 				yaml = {
-					require('formatter.filetypes.yaml').prettier
+					require("formatter.filetypes.yaml").prettier,
 				},
-			}
+			},
 		})
-	end
+	end,
 }

@@ -1,14 +1,14 @@
 -- luacheck: globals vim
 
 return {
-	'mfussenegger/nvim-lint',
+	"mfussenegger/nvim-lint",
 	config = function()
-		require('lint').linters_by_ft = {
-			lua = { 'luacheck', 'selene', },
-			html = { 'erb_lint', },
-			markdown = { 'proselint', 'markdownlint', },
-			text = { 'proselint', },
-			python = { 'mypy', 'pylint', 'ruff', },
+		require("lint").linters_by_ft = {
+			lua = { "luacheck", "selene" },
+			html = { "erb_lint" },
+			markdown = { "proselint", "markdownlint" },
+			text = { "proselint" },
+			python = { "mypy", "pylint", "ruff" },
 		}
 
 		-- NOTE: by default, erb_lint cmd and args are expecting a
@@ -16,8 +16,8 @@ return {
 		--
 		-- Unsure whether to mention this to
 		-- https://github.com/williamboman/mason.nvim/issues
-		require('lint').linters.erb_lint.cmd = 'erblint'
-		require('lint').linters.erb_lint.args = { '--format', 'compact' }
+		require("lint").linters.erb_lint.cmd = "erblint"
+		require("lint").linters.erb_lint.args = { "--format", "compact" }
 
 		vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 			callback = function()
@@ -27,11 +27,11 @@ return {
 
 		vim.api.nvim_create_autocmd({ "FileType", "InsertLeave" }, {
 			pattern = {
-				'lua',
+				"lua",
 			},
 			callback = function()
 				require("lint").try_lint()
 			end,
 		})
-	end
+	end,
 }

@@ -1,39 +1,40 @@
 return {
-	'nvim-telescope/telescope.nvim',
+	"nvim-telescope/telescope.nvim",
 	lazy = true,
-	tag = '0.1.2',
+	tag = "0.1.2",
 	dependencies = {
-		'nvim-lua/plenary.nvim',
-		{ 'nvim-telescope/telescope-fzf-native.nvim',
+		"nvim-lua/plenary.nvim",
+		{
+			"nvim-telescope/telescope-fzf-native.nvim",
 			build = function()
-				vim.cmd('!gmake')
-			end
+				vim.cmd("!gmake")
+			end,
 		},
 	},
 	keys = {
 		{
-			'<leader>tsc',
+			"<leader>tsc",
 			function()
-				vim.cmd('Telescope')
+				vim.cmd("Telescope")
 			end,
 		},
 		{
-			'<leader>tsff',
+			"<leader>tsff",
 			function()
-				require('telescope.builtin').find_files()
+				require("telescope.builtin").find_files()
 			end,
 		},
 		{
-			'<leader>tsgf',
+			"<leader>tsgf",
 			function()
-				require('telescope.builtin').git_files()
+				require("telescope.builtin").git_files()
 			end,
 		},
 		{
-			'<leader>tsgr',
+			"<leader>tsgr",
 			function()
-				require('telescope.builtin').grep_string({
-					search = vim.fn.input("Grep > ")
+				require("telescope.builtin").grep_string({
+					search = vim.fn.input("Grep > "),
 				})
 			end,
 		},

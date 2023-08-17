@@ -1,5 +1,5 @@
 return {
-	'plasticboy/vim-markdown',
+	"plasticboy/vim-markdown",
 	lazy = true,
-	ft = 'markdown',
+	ft = "markdown",
 }

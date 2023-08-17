@@ -2,10 +2,10 @@
 
 -- Make a backup of a file before writing, and leave it present in backupdir.
 vim.opt.backup = true
-vim.opt.backupdir = vim.env.XDG_STATE_HOME .. '/nvim/backup'
+vim.opt.backupdir = vim.env.XDG_STATE_HOME .. "/nvim/backup"
 
 -- Ignore white space changes when showing differences between files.
-vim.opt.diffopt:append('iwhiteall')
+vim.opt.diffopt:append("iwhiteall")
 
 -- Indentation settings.
 --
@@ -49,7 +49,7 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 
 -- Enable TrueColor.
-vim.opt.termguicolors = true;
+vim.opt.termguicolors = true
 
 -- Lines are 72 characters long, and will be broken after that.
 vim.opt.textwidth = 72

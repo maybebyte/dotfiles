@@ -1,4 +1,4 @@
 return {
-	'scrooloose/nerdcommenter',
-	event = 'VeryLazy',
+	"scrooloose/nerdcommenter",
+	event = "VeryLazy",
 }

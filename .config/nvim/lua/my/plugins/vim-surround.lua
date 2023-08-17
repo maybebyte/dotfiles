@@ -1,4 +1,4 @@
 return {
-	'tpope/vim-surround',
-	event = 'VeryLazy',
+	"tpope/vim-surround",
+	event = "VeryLazy",
 }

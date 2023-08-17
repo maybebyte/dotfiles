@@ -1,1 +1,1 @@
-return 'jamessan/vim-gnupg'
+return "jamessan/vim-gnupg"

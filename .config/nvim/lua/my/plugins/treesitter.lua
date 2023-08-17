@@ -1,22 +1,22 @@
 return {
-	'nvim-treesitter/nvim-treesitter',
+	"nvim-treesitter/nvim-treesitter",
 	build = function()
-		vim.cmd('TSUpdate')
+		vim.cmd("TSUpdate")
 	end,
 	init = function()
-		require('nvim-treesitter.configs').setup({
+		require("nvim-treesitter.configs").setup({
 			ensure_installed = {
-				'c',
-				'css',
+				"c",
+				"css",
 				--'diff', -- this assumes git, so disable for now
-				'html',
-				'lua',
-				'make',
-				'python',
-				'query',
-				'sxhkdrc',
-				'vim',
-				'vimdoc',
+				"html",
+				"lua",
+				"make",
+				"python",
+				"query",
+				"sxhkdrc",
+				"vim",
+				"vimdoc",
 			},
 			sync_install = false,
 			auto_install = false,
@@ -35,7 +35,7 @@ return {
 				--
 				-- Instead of true it can also be a list of languages.
 				additional_vim_regex_highlighting = false,
-			}
+			},
 		})
 	end,
 }

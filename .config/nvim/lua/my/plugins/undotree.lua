@@ -1,12 +1,12 @@
 return {
-	'mbbill/undotree',
+	"mbbill/undotree",
 	lazy = true,
 	keys = {
 		{
-			'<leader>u',
+			"<leader>u",
 			function()
 				vim.cmd.UndotreeToggle()
-			end
-		}
+			end,
+		},
 	},
 }

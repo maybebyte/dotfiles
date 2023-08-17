@@ -1,5 +1,5 @@
 return {
-	'lervag/vimtex',
+	"lervag/vimtex",
 	lazy = true,
-	ft = 'tex',
+	ft = "tex",
 }

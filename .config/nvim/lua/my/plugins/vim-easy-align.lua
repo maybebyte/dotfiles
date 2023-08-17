@@ -1,12 +1,12 @@
 return {
-	'junegunn/vim-easy-align',
+	"junegunn/vim-easy-align",
 	lazy = true,
-	cmd = 'EasyAlign',
+	cmd = "EasyAlign",
 	keys = {
 		{
-			'ga',
-			'<Plug>(EasyAlign)',
-			mode = { 'x', 'n' },
+			"ga",
+			"<Plug>(EasyAlign)",
+			mode = { "x", "n" },
 		},
 	},
 }
