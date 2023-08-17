@@ -134,6 +134,21 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	desc = "Set sxhkdrc to the sxhkdrc file type so it has syntax highlighting",
 })
 
+vim.api.nvim_create_autocmd("BufEnter", {
+	pattern = {
+		"/usr/ports/*",
+		"/usr/src/*",
+		"/usr/www/*",
+		"/usr/xenocara/*",
+	},
+	callback = function()
+		vim.opt.shiftwidth = 8
+		vim.opt.tabstop = 8
+		vim.opt.expandtab = false
+	end,
+	desc = "OpenBSD developers use 8 column tabs",
+})
+
 -- Not currently used, but good to keep around in case I start transcribing
 -- music again.
 -- vim.api.nvim_create_autocmd('BufWritePost', {
