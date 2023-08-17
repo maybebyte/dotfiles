@@ -14,6 +14,9 @@ return {
 				json = {
 					require('formatter.filetypes.json').prettier
 				},
+				lua = {
+					require('formatter.filetypes.lua').stylua,
+				},
 				markdown = {
 					require('formatter.filetypes.markdown').prettier
 				},
