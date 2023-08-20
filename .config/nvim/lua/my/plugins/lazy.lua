@@ -33,4 +33,7 @@ require("lazy").setup({
 	require("my.plugins.which-key"),
 	require("my.plugins.indent-blankline"),
 	require("my.plugins.vim-sleuth"),
+	require("my.plugins.vim-fugitive"),
+	require("my.plugins.vim-rhubarb"),
+	require("my.plugins.gitsigns"),
 })
