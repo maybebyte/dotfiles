@@ -42,7 +42,7 @@ vim.keymap.set("n", "<leader>frm", function()
 	vim.cmd.Format()
 end, { desc = "Format files using formatter.nvim" })
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv", { desc = "Move selection down a line." })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv", { desc = "Move selection up a line." })
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down a line." })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up a line." })
 
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Keep cursor in the same place when joining lines." })

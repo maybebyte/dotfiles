@@ -13,30 +13,55 @@ return {
 	},
 	keys = {
 		{
-			"<leader>tsc",
+			"<leader>ts",
 			function()
 				vim.cmd("Telescope")
 			end,
+			{ desc = "[T]ele[S]cope" },
 		},
 		{
-			"<leader>tsff",
+			"<leader>sf",
 			function()
 				require("telescope.builtin").find_files()
 			end,
+			{ desc = "[S]earch [F]iles" },
 		},
 		{
-			"<leader>tsgf",
+			"<leader>gf",
 			function()
 				require("telescope.builtin").git_files()
 			end,
+			{ desc = "Search [G]it [F]iles" },
 		},
 		{
-			"<leader>tsgr",
+			"<leader>sh",
+			function()
+				require("telescope.builtin").help_tags()
+			end,
+			{ desc = "[S]earch [H]elp" },
+		},
+		{
+			"<leader>sw",
 			function()
 				require("telescope.builtin").grep_string({
 					search = vim.fn.input("Grep > "),
 				})
 			end,
+			{ desc = "[S]earch current [W]ord" },
+		},
+		{
+			"<leader>sg",
+			function()
+				require("telescope.builtin").live_grep()
+			end,
+			{ desc = "[S]earch by [G]rep" },
+		},
+		{
+			"<leader>sd",
+			function()
+				require("telescope.builtin").diagnostics()
+			end,
+			{ desc = "[S]earch [D]iagnostics" },
 		},
 	},
 }

@@ -34,9 +34,20 @@ return {
 		},
 
 		-- Autocompletion
-		{ "hrsh7th/nvim-cmp" }, -- Required
-		{ "hrsh7th/cmp-nvim-lsp" }, -- Required
-		{ "L3MON4D3/LuaSnip" }, -- Required
+		{
+			"hrsh7th/nvim-cmp",
+			dependencies = {
+				{ "hrsh7th/cmp-nvim-lsp" },
+				{
+					"L3MON4D3/LuaSnip",
+					version = "2.*",
+					dependencies = {
+						{ "saadparwaiz1/cmp_luasnip" },
+						{ "rafamadriz/friendly-snippets" },
+					},
+				},
+			},
+		},
 	},
 	init = function()
 		local lsp = require("lsp-zero")
@@ -62,6 +73,22 @@ return {
 			["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
 			["<C-y>"] = cmp.mapping.confirm({ select = true }),
 			["<C-Space>"] = cmp.mapping.complete(),
+		})
+
+		-- Make sure you setup `cmp` after lsp-zero
+		local cmp_action = require("lsp-zero").cmp_action()
+
+		require("luasnip.loaders.from_vscode").lazy_load()
+
+		cmp.setup({
+			sources = {
+				{ name = "nvim_lsp" },
+				{ name = "luasnip" },
+			},
+			mapping = {
+				["<C-f>"] = cmp_action.luasnip_jump_forward(),
+				["<C-b>"] = cmp_action.luasnip_jump_backward(),
+			},
 		})
 
 		cmp_mappings["<Tab>"] = nil

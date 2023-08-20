@@ -30,4 +30,6 @@ require("lazy").setup({
 	require("my.plugins.undotree"),
 	require("my.plugins.formatter"),
 	require("my.plugins.nvim-lint"),
+	require("my.plugins.which-key"),
+	require("my.plugins.indent-blankline"),
 })

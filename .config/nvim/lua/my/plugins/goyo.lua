@@ -7,7 +7,7 @@ return {
 	cmd = "Goyo",
 	keys = {
 		{
-			"<leader>g",
+			"<leader>gy",
 			function()
 				-- Preserve previous background rather than neovim's global
 				-- default of "dark"

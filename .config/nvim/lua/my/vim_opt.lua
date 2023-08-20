@@ -18,6 +18,8 @@ vim.opt.tabstop = 4
 -- Force myself to use folds, by opening a file with some of the folds closed.
 vim.opt.foldlevelstart = 1
 
+vim.opt.hlsearch = false
+
 -- Search settings.
 --
 -- When searching, do so case insensitively unless the search starts with an
