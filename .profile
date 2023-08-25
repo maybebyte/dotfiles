@@ -25,6 +25,7 @@ export \
 
 # These variables come after.
 export \
+	GOBIN="${XDG_BIN_HOME}" \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
 	HTML_TIDY="${XDG_CONFIG_HOME}/tidy/tidy.conf" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \

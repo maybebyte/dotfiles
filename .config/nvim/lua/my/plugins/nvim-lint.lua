@@ -4,6 +4,7 @@ return {
 	"mfussenegger/nvim-lint",
 	config = function()
 		require("lint").linters_by_ft = {
+			go = { "revive" },
 			lua = { "luacheck", "selene" },
 			html = { "erb_lint" },
 			markdown = { "proselint", "markdownlint" },

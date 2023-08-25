@@ -25,9 +25,9 @@ return {
 			)
 			vim.keymap.set(
 				"n",
-				"<leader>ph",
+				"<leader>vh",
 				require("gitsigns").preview_hunk,
-				{ buffer = bufnr, desc = "[P]review [H]unk" }
+				{ buffer = bufnr, desc = "[V]iew [H]unk" }
 			)
 		end,
 	},

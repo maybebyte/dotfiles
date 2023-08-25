@@ -8,6 +8,7 @@ return {
 			ensure_installed = {
 				"c",
 				"css",
+				"go",
 				--'diff', -- this assumes git, so disable for now
 				"html",
 				"lua",

@@ -8,6 +8,9 @@ return {
 				css = {
 					require("formatter.filetypes.css").prettier,
 				},
+				go = {
+					require("formatter.filetypes.go").gofumpt,
+				},
 				html = {
 					require("formatter.filetypes.html").prettier,
 				},
