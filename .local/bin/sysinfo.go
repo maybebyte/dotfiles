@@ -37,7 +37,7 @@ const (
  */
 func main() {
 	resourceMap := make(map[string]string)
-	refreshBar := make(chan int, 1)
+	refreshBar := make(chan int)
 
 	go func() {
 		for {
