@@ -21,7 +21,7 @@ err() {
 	exit 1
 }
 
-command -v go \
+command -v go > /dev/null 2>&1 \
 	|| err "${0##*/} needs a Go installation present. Run \`pkg_add go\`"
 
 exec go run "${XDG_BIN_HOME}/sysinfo.go"
