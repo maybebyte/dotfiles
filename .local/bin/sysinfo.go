@@ -13,6 +13,9 @@
  *ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+
+// TODO: write a man page for this program
+
 package main
 
 import (
@@ -136,8 +139,9 @@ func getBatteryPercentage() (int, error) {
 
 func getBatteryHourAndMin() (int, int, error) {
 	var (
-		out          strings.Builder
-		remainingMin int
+		out                strings.Builder
+		remainingMinString string
+		remainingMinInt    int
 	)
 	cmd := exec.Command("apm", "-m")
 	cmd.Stdout = &out
@@ -147,13 +151,17 @@ func getBatteryHourAndMin() (int, int, error) {
 		return -1, -1, err
 	}
 
-	remainingMin, err = strconv.Atoi(strings.TrimRight(out.String(), "\n"))
+	remainingMinString = strings.TrimRight(out.String(), "\n")
+	if remainingMinString == "unknown" {
+		return 0, 0, nil
+	}
+	remainingMinInt, err = strconv.Atoi(remainingMinString)
 	if err != nil {
 		return -1, -1, err
 	}
 
-	hours := remainingMin / 60
-	minutes := remainingMin % 60
+	hours := remainingMinInt / 60
+	minutes := remainingMinInt % 60
 	return hours, minutes, nil
 }
 
