@@ -16,6 +16,7 @@ return {
 				vim.cmd("Goyo")
 				vim.opt.background = previous_background
 			end,
+			{ desc = "Toggle [g]o[y]o" },
 		},
 	},
 }
