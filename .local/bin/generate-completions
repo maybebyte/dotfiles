@@ -24,6 +24,8 @@ use Getopt::Std;
 # Personal.
 use Anthesis::OpenBSD qw(pledge_or_die);
 
+my ( %completions, $completion_type );
+
 sub usage {
 	my $program_name = fileparse $PROGRAM_NAME;
 	die <<EOF;
@@ -38,19 +40,9 @@ usage if $opt_h;
 
 pledge_or_die qw(stdio);
 
-my $completion_type = $opt_t;
-my %completions;
-
-sub generate_man_completions;
+$completion_type = $opt_t;
 
 if ( $completion_type eq 'man' ) {
-	generate_man_completions
-}
-
-say join "\n", sort keys %completions;
-
-# Input must be in apropos(1) format.
-sub generate_man_completions {
 	while ( my $line = <<>> ) {
 		chomp $line;
 
@@ -69,3 +61,5 @@ sub generate_man_completions {
 		}
 	}
 }
+
+say join "\n", sort keys %completions;
