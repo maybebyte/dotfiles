@@ -1,9 +1,5 @@
 -- luacheck: globals vim
 
--- Autocommands are used to execute commands automatically in response
--- to certain events. This file configures various autocommands for
--- different scenarios.
-
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		vim.opt.formatoptions:remove({ "c", "r", "o" })
@@ -90,10 +86,6 @@ vim.api.nvim_create_autocmd("QuitPre", {
 	desc = "Automatically exit Goyo mode before quitting vim",
 })
 
--- FileType autocmd
--- This autocmd triggers when the filetype of the buffer changes.
--- It is used to automatically load filetype-specific skeletons into new
--- files.
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = {
 		"perl",
@@ -103,10 +95,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		-- Validate if current buffer is empty
 		if vim.api.nvim_buf_line_count(0) == 1 and vim.api.nvim_get_current_line() == "" then
-			-- Read skeleton file based on the filetype
-			-- and paste its content into the buffer
 			local skeleton_file = os.getenv("HOME") .. "/.local/share/nvim/skel/" .. vim.bo.filetype
-
 			local lines = vim.fn.readfile(skeleton_file)
 			vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
 		end
@@ -147,25 +136,3 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 	desc = "OpenBSD developers use 8 column tabs",
 })
-
--- Not currently used, but good to keep around in case I start transcribing
--- music again.
--- vim.api.nvim_create_autocmd('BufWritePost', {
--- 	pattern = '*.ly',
--- 	callback = function()
--- 		local filename = vim.fn.expand('%:p')
--- 		os.execute('lilypond ' .. filename)
--- 	end,
--- 	desc = 'Compile lilypond files (related to music transcription).'
--- })
-
--- This doesn't seem to work, regardless of whether I use vimscript or lua, but
--- it's kept around in case I ever figure that out.
--- vim.api.nvim_create_autocmd('BufWritePost', {
--- 	pattern = vim.env.XDG_CONFIG_HOME .. '/ksh/*',
--- 	callback = function()
--- 		local filename = vim.fn.expand('%:p')
--- 		os.execute('. ' .. filename)
--- 	end,
--- 	desc = 'Reload ksh configuration if edited'
--- })
