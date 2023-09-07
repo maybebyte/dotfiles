@@ -67,9 +67,8 @@ vim.api.nvim_create_autocmd("FileType", {
 	desc = "Goyo is enabled for help files.",
 })
 
--- QuitPre autocmd
--- This autocmd triggers before vim exits.
--- It is used to exit from Goyo mode before quitting vim.
+
+-- If Goyo mode is enabled, disable it and then quit
 --
 -- Also see:
 -- https://github.com/junegunn/goyo.vim/issues/16
@@ -79,10 +78,10 @@ vim.api.nvim_create_autocmd("QuitPre", {
 		if vim.fn.exists("#goyo") == 1 then
 			-- Preserve original background rather than neovim's global
 			-- default of "dark"
+			--
 			-- https://github.com/junegunn/goyo.vim/issues/78
 			local previous_background = vim.o.background
 
-			-- If Goyo mode is enabled, disable it and then quit vim
 			vim.cmd("Goyo!|q!")
 
 			vim.opt.background = previous_background
