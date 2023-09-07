@@ -28,6 +28,7 @@ return {
 						"perlnavigator",
 						"html",
 						"pylsp",
+						"pyright",
 						"stylelint_lsp",
 					},
 				})
@@ -55,17 +56,13 @@ return {
 
 		lsp.preset({})
 
-		-- NOTE: lua_ls doesn't work on OpenBSD yet ('Unsupported platform').
-		-- Fix Undefined global 'vim'
-		--lsp.configure('lua-language-server', {
-		--settings = {
-		--Lua = {
-		--diagnostics = {
-		--globals = { 'vim' }
-		--}
-		--}
-		--}
-		--})
+		lsp.configure('pyright', {
+			settings = {
+				pyright = {
+					disableLanguageServices = true,
+				}
+			}
+		})
 
 		local cmp = require("cmp")
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
