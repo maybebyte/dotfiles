@@ -40,6 +40,9 @@ return {
 			"hrsh7th/nvim-cmp",
 			dependencies = {
 				{ "hrsh7th/cmp-nvim-lsp" },
+				{ "hrsh7th/cmp-buffer" },
+				{ "hrsh7th/cmp-path" },
+				{ "hrsh7th/cmp-nvim-lua" },
 				{
 					"L3MON4D3/LuaSnip",
 					version = "2.*",
@@ -56,12 +59,12 @@ return {
 
 		lsp.preset({})
 
-		lsp.configure('pyright', {
+		lsp.configure("pyright", {
 			settings = {
 				pyright = {
 					disableLanguageServices = true,
-				}
-			}
+				},
+			},
 		})
 
 		local cmp = require("cmp")
@@ -80,8 +83,11 @@ return {
 
 		cmp.setup({
 			sources = {
-				{ name = "nvim_lsp" },
+				{ name = "buffer" },
 				{ name = "luasnip" },
+				{ name = "nvim_lsp" },
+				{ name = "nvim_lua" },
+				{ name = "path" },
 			},
 			mapping = {
 				["<C-f>"] = cmp_action.luasnip_jump_forward(),
