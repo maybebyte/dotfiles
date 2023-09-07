@@ -24,8 +24,6 @@ vim.keymap.set("n", "<leader>dtnl", function()
 end, { desc = "Delete all trailing newlines." })
 
 vim.keymap.set("n", "<leader>o", function()
-	-- There's probably a better way to do this in Lua, but I don't know it
-	-- right now.
 	if vim.o.spell == true then
 		vim.o.spell = false
 	else
