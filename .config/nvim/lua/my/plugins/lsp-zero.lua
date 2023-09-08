@@ -43,6 +43,7 @@ return {
 				{ "hrsh7th/cmp-buffer" },
 				{ "hrsh7th/cmp-path" },
 				{ "hrsh7th/cmp-nvim-lua" },
+				{ "hrsh7th/cmp-cmdline" },
 				{
 					"L3MON4D3/LuaSnip",
 					version = "2.*",
@@ -93,6 +94,22 @@ return {
 				["<C-f>"] = cmp_action.luasnip_jump_forward(),
 				["<C-b>"] = cmp_action.luasnip_jump_backward(),
 			},
+		})
+		cmp.setup.cmdline("/", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = {
+				{ name = "buffer" },
+			},
+		})
+		cmp.setup.cmdline(":", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = cmp.config.sources({
+				{ name = "path" },
+			}, {
+				{
+					name = "cmdline",
+				},
+			}),
 		})
 
 		cmp_mappings["<Tab>"] = nil
