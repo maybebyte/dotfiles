@@ -40,7 +40,7 @@ const (
  */
 func main() {
 	resourceMap := make(map[string]string)
-	refreshBar := make(chan int)
+	refreshBar := make(chan bool)
 
 	go func() {
 		for {
@@ -49,7 +49,7 @@ func main() {
 				log.Fatal(err)
 			}
 			resourceMap["battery"] = batteryString
-			refreshBar <- 1
+			refreshBar <- true
 			time.Sleep(time.Second * 30)
 		}
 	}()
@@ -61,7 +61,7 @@ func main() {
 				log.Fatal(err)
 			}
 			resourceMap["temperature"] = temperatureString
-			refreshBar <- 1
+			refreshBar <- true
 			time.Sleep(time.Second * 2)
 		}
 	}()
@@ -73,7 +73,7 @@ func main() {
 				log.Fatal(err)
 			}
 			resourceMap["space"] = spaceFree
-			refreshBar <- 1
+			refreshBar <- true
 			time.Sleep(time.Minute * 30)
 		}
 	}()
