@@ -2,7 +2,6 @@
 
 return {
 	"mhartington/formatter.nvim",
-	lazy = true,
 	ft = {
 		"css",
 		"go",

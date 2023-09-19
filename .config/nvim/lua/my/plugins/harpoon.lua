@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 return {
 	"ThePrimeagen/harpoon",
 	lazy = true,

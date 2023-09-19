@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 return {
 	"folke/which-key.nvim",
 	event = "VeryLazy",
