@@ -25,7 +25,7 @@ return {
 		"MunifTanjim/nui.nvim",
 		require("my.plugins.telescope"),
 	},
-	config = function()
+	config = function(_, opts)
 		vim.keymap.set("n", "<leader>aic", function()
 			vim.cmd.ChatGPTCompleteCode()
 		end, { desc = "[AI] [C]omplete" })
@@ -41,6 +41,6 @@ return {
 		vim.keymap.set("n", "<leader>aig", function()
 			vim.cmd.ChatGPT()
 		end, { desc = "[AI] [G]eneric" })
-		require("chatgpt").setup()
+		require("chatgpt").setup(opts)
 	end,
 }
