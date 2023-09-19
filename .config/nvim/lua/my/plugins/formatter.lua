@@ -2,7 +2,20 @@
 
 return {
 	"mhartington/formatter.nvim",
-	init = function()
+	lazy = true,
+	ft = {
+		"css",
+		"go",
+		"html",
+		"json",
+		"lua",
+		"markdown",
+		"perl",
+		"python",
+		"sh",
+		"yaml",
+	},
+	config = function()
 		require("formatter").setup({
 			filetype = {
 				css = {
