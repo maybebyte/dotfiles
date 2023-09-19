@@ -2,6 +2,15 @@
 
 return {
 	"mfussenegger/nvim-lint",
+	lazy = true,
+	ft = {
+		"go",
+		"lua",
+		"html",
+		"markdown",
+		"text",
+		"python",
+	},
 	config = function()
 		require("lint").linters_by_ft = {
 			go = { "revive" },
