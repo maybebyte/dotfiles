@@ -7,14 +7,25 @@ return {
 		"ChatGPTEditWithInstructions",
 		"ChatGPTRun",
 	},
+	keys = {
+		{ "<leader>aic" },
+		{ "<leader>aie" },
+		{ "<leader>air" },
+		{ "<leader>aia" },
+		{ "<leader>aig" },
+	},
+	opts = {
+		openai_params = {
+			model = "gpt-4",
+			max_tokens = 1000,
+		},
+		api_key_cmd = "gpg --decrypt " .. vim.env.HOME .. "/passwords/api/chatgpt.txt.gpg",
+	},
+	dependencies = {
+		"MunifTanjim/nui.nvim",
+		require("my.plugins.telescope"),
+	},
 	config = function()
-		require("chatgpt").setup({
-			openai_params = {
-				model = "gpt-4",
-				max_tokens = 1000,
-			},
-			api_key_cmd = "gpg --decrypt " .. vim.env.HOME .. "/passwords/api/chatgpt.txt.gpg",
-		})
 		vim.keymap.set("n", "<leader>aic", function()
 			vim.cmd.ChatGPTCompleteCode()
 		end, { desc = "[AI] [C]omplete" })
@@ -30,9 +41,6 @@ return {
 		vim.keymap.set("n", "<leader>aig", function()
 			vim.cmd.ChatGPT()
 		end, { desc = "[AI] [G]eneric" })
+		require("chatgpt").setup()
 	end,
-	dependencies = {
-		"MunifTanjim/nui.nvim",
-		require("my.plugins.telescope"),
-	},
 }
