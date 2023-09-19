@@ -1,8 +1,6 @@
 -- luacheck: globals vim
 
-require("my.vim_env")
-require("my.vim_opt")
-require("my.vim_g")
+require("my.settings")
 
 -- Load the colorscheme before plugins due to lazy.nvim quirks.
 vim.cmd("colorscheme selenized")
