@@ -15,7 +15,7 @@ return {
 			dependencies = {
 				{ "williamboman/mason.nvim" },
 			},
-			init = function()
+			config = function()
 				--require('mason').setup()
 				require("mason").setup({
 					log_level = vim.log.levels.DEBUG,
@@ -55,7 +55,7 @@ return {
 			},
 		},
 	},
-	init = function()
+	config = function()
 		local lsp = require("lsp-zero")
 
 		lsp.preset({})
