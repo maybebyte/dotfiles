@@ -9,7 +9,7 @@ vim.keymap.set("n", "<leader>P", '"+P', { desc = "Paste from CLIPBOARD (before c
 vim.keymap.set("", ";", ":", { desc = "Semicolon swapped with colon to protect pinky." })
 vim.keymap.set("", ":", ";", { desc = "Colon swapped with semicolon to protect pinky." })
 
-vim.keymap.set("n", "S", ":%s//g<Left><Left>", { desc = "Replace all." })
+vim.keymap.set("n", "<leader>S", ":%s//g<Left><Left>", { desc = "Replace all." })
 
 vim.keymap.set("n", "<leader>d", function()
 	vim.api.nvim_put({ os.date("%F") }, "l", true, false)

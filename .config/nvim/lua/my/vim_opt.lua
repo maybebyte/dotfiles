@@ -36,3 +36,5 @@ vim.opt.termguicolors = true
 vim.opt.textwidth = 72
 
 vim.opt.undofile = true
+
+vim.opt.updatetime = 300
