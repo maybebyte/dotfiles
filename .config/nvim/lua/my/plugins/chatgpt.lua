@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 return {
 	"jackMort/ChatGPT.nvim",
 	lazy = true,
