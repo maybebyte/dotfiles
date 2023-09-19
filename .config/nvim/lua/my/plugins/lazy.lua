@@ -19,7 +19,6 @@ require("lazy").setup({
 	require("my.plugins.nerdcommenter"),
 	require("my.plugins.lsp-zero"),
 	require("my.plugins.vim-surround"),
-	require("my.plugins.nerdtree"),
 	require("my.plugins.vim-easy-align"),
 	require("my.plugins.goyo"),
 	require("my.plugins.vimtex"),
