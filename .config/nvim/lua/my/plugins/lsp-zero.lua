@@ -64,56 +64,6 @@ return {
 			},
 		})
 
-		local cmp = require("cmp")
-		local cmp_select = { behavior = cmp.SelectBehavior.Select }
-		local cmp_mappings = lsp.defaults.cmp_mappings({
-			["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-			["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-			["<C-y>"] = cmp.mapping.confirm({ select = true }),
-			["<C-Space>"] = cmp.mapping.complete(),
-		})
-
-		-- Make sure you setup `cmp` after lsp-zero
-		local cmp_action = require("lsp-zero").cmp_action()
-
-		require("luasnip.loaders.from_vscode").lazy_load()
-
-		cmp.setup({
-			sources = {
-				{ name = "buffer" },
-				{ name = "luasnip" },
-				{ name = "nvim_lsp" },
-				{ name = "nvim_lua" },
-				{ name = "path" },
-			},
-			mapping = {
-				["<C-f>"] = cmp_action.luasnip_jump_forward(),
-				["<C-b>"] = cmp_action.luasnip_jump_backward(),
-			},
-		})
-		cmp.setup.cmdline("/", {
-			mapping = cmp.mapping.preset.cmdline(),
-			sources = {
-				{ name = "buffer" },
-			},
-		})
-		cmp.setup.cmdline(":", {
-			mapping = cmp.mapping.preset.cmdline(),
-			sources = cmp.config.sources({
-				{ name = "path" },
-			}, {
-				{
-					name = "cmdline",
-				},
-			}),
-		})
-
-		cmp_mappings["<Tab>"] = nil
-		cmp_mappings["<S-Tab>"] = nil
-
-		lsp.setup_nvim_cmp({
-			mapping = cmp_mappings,
-		})
 		lsp.set_sign_icons = {
 			error = "E",
 			warn = "W",
@@ -158,6 +108,56 @@ return {
 				vim.lsp.buf.format()
 			end, opts)
 		end)
+
+		local cmp = require("cmp")
+		local cmp_action = lsp.cmp_action()
+		local cmp_select = { behavior = cmp.SelectBehavior.Select }
+		local cmp_mappings = lsp.defaults.cmp_mappings({
+			["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+			["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+			["<C-y>"] = cmp.mapping.confirm({ select = true }),
+			["<C-Space>"] = cmp.mapping.complete(),
+		})
+
+		-- Needs to be separate from above, otherwise <Tab> completes.
+		cmp_mappings["<Tab>"] = nil
+		cmp_mappings["<S-Tab>"] = nil
+
+		lsp.setup_nvim_cmp({
+			mapping = cmp_mappings,
+		})
+
+		require("luasnip.loaders.from_vscode").lazy_load()
+
+		cmp.setup({
+			sources = {
+				{ name = "buffer" },
+				{ name = "luasnip" },
+				{ name = "nvim_lsp" },
+				{ name = "nvim_lua" },
+				{ name = "path" },
+			},
+			mapping = {
+				["<C-f>"] = cmp_action.luasnip_jump_forward(),
+				["<C-b>"] = cmp_action.luasnip_jump_backward(),
+			},
+		})
+		cmp.setup.cmdline("/", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = {
+				{ name = "buffer" },
+			},
+		})
+		cmp.setup.cmdline(":", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = cmp.config.sources({
+				{ name = "path" },
+			}, {
+				{
+					name = "cmdline",
+				},
+			}),
+		})
 
 		lsp.setup()
 	end,
