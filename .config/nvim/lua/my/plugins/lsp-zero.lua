@@ -1,8 +1,6 @@
 -- luacheck: globals vim
 
--- TODO: Adjust for future changes/deprecation notice and breaking
--- changes
--- https://github.com/VonHeikemen/lsp-zero.nvim
+-- TODO: update to branch v3.x
 return {
 	"VonHeikemen/lsp-zero.nvim",
 	branch = "v2.x",
