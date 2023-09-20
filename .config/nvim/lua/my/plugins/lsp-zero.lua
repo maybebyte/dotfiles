@@ -8,33 +8,29 @@ return {
 	branch = "v2.x",
 	dependencies = {
 		-- LSP Support
-		{ "neovim/nvim-lspconfig" }, -- Required
-		{ "williamboman/mason.nvim" }, -- Optional
 		{
-			"williamboman/mason-lspconfig.nvim", -- Optional
+			"neovim/nvim-lspconfig",
 			dependencies = {
-				{ "williamboman/mason.nvim" },
-			},
-			config = function()
-				--require('mason').setup()
-				require("mason").setup({
-					log_level = vim.log.levels.DEBUG,
-				})
-				require("mason-lspconfig").setup({
-					ensure_installed = {
-						"bashls",
-						"cssls",
-						"gopls",
-						"perlnavigator",
-						"html",
-						"pylsp",
-						"pyright",
-						"stylelint_lsp",
+				{
+					"williamboman/mason-lspconfig.nvim",
+					dependencies = {
+						{ "williamboman/mason.nvim", config = true },
 					},
-				})
-			end,
+					opts = {
+						ensure_installed = {
+							"bashls",
+							"cssls",
+							"gopls",
+							"perlnavigator",
+							"html",
+							"pylsp",
+							"pyright",
+							"stylelint_lsp",
+						},
+					},
+				},
+			},
 		},
-
 		-- Autocompletion
 		{
 			"hrsh7th/nvim-cmp",
