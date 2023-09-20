@@ -25,7 +25,7 @@ return {
 	},
 	dependencies = {
 		"MunifTanjim/nui.nvim",
-		require("my.plugins.telescope"),
+		"nvim-telescope/telescope.nvim",
 	},
 	config = function(_, opts)
 		vim.keymap.set("n", "<leader>aic", function()
