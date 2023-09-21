@@ -1,5 +1,6 @@
 return {
-	"scrooloose/nerdcommenter",
+	"numToStr/Comment.nvim",
 	lazy = true,
 	event = "VeryLazy",
+	config = true,
 }
