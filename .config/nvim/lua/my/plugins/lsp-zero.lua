@@ -1,5 +1,7 @@
 -- luacheck: globals vim
 
+-- TODO: lazy loading
+-- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/lazy-loading-with-lazy-nvim.md
 return {
 	"VonHeikemen/lsp-zero.nvim",
 	branch = "v3.x",
