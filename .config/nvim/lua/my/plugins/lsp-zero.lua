@@ -3,7 +3,7 @@
 -- TODO: update to branch v3.x
 return {
 	"VonHeikemen/lsp-zero.nvim",
-	branch = "v2.x",
+	branch = "v3.x",
 	dependencies = {
 		-- LSP Support
 		{
@@ -13,18 +13,6 @@ return {
 					"williamboman/mason-lspconfig.nvim",
 					dependencies = {
 						{ "williamboman/mason.nvim", config = true },
-					},
-					opts = {
-						ensure_installed = {
-							"bashls",
-							"cssls",
-							"gopls",
-							"perlnavigator",
-							"html",
-							"pylsp",
-							"pyright",
-							"stylelint_lsp",
-						},
 					},
 				},
 			},
@@ -51,8 +39,30 @@ return {
 	},
 	config = function()
 		local lsp = require("lsp-zero")
-
-		lsp.preset({})
+		require("mason-lspconfig").setup({
+			ensure_installed = {
+				"bashls",
+				"cssls",
+				"gopls",
+				"perlnavigator",
+				"html",
+				"pylsp",
+				"pyright",
+				"stylelint_lsp",
+			},
+			handlers = {
+				lsp.default_setup,
+				pyright = function()
+					require("lspconfig").pyright.setup({
+						settings = {
+							pyright = {
+								disableLanguageServices = true,
+							},
+						},
+					})
+				end,
+			}
+		})
 
 		lsp.configure("pyright", {
 			settings = {
@@ -111,8 +121,8 @@ return {
 		local cmp_action = lsp.cmp_action()
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 		local cmp_mappings = lsp.defaults.cmp_mappings({
-			["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
 			["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+			["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
 			["<C-y>"] = cmp.mapping.confirm({ select = true }),
 			["<C-Space>"] = cmp.mapping.complete(),
 		})
@@ -120,10 +130,6 @@ return {
 		-- Needs to be separate from above, otherwise <Tab> completes.
 		cmp_mappings["<Tab>"] = nil
 		cmp_mappings["<S-Tab>"] = nil
-
-		lsp.setup_nvim_cmp({
-			mapping = cmp_mappings,
-		})
 
 		require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -138,6 +144,8 @@ return {
 			mapping = {
 				["<C-f>"] = cmp_action.luasnip_jump_forward(),
 				["<C-b>"] = cmp_action.luasnip_jump_backward(),
+				["<C-u>"] = cmp.mapping.scroll_docs(-4),
+				["<C-d>"] = cmp.mapping.scroll_docs(4),
 			},
 		})
 		cmp.setup.cmdline("/", {
