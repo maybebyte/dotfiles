@@ -1,6 +1,5 @@
 -- luacheck: globals vim
 
--- TODO: update to branch v3.x
 return {
 	"VonHeikemen/lsp-zero.nvim",
 	branch = "v3.x",
