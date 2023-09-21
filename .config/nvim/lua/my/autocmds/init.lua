@@ -53,37 +53,17 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	desc = "Automatically copy website files to web directory",
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "help",
+vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function()
-		vim.schedule(function()
-			vim.cmd("Goyo")
-		end)
-	end,
-	desc = "Goyo is enabled for help files.",
-})
-
-
--- If Goyo mode is enabled, disable it and then quit
---
--- Also see:
--- https://github.com/junegunn/goyo.vim/issues/16
--- https://github.com/junegunn/goyo.vim/wiki/Customization
-vim.api.nvim_create_autocmd("QuitPre", {
-	callback = function()
-		if vim.fn.exists("#goyo") == 1 then
-			-- Preserve original background rather than neovim's global
-			-- default of "dark"
-			--
-			-- https://github.com/junegunn/goyo.vim/issues/78
-			local previous_background = vim.o.background
-
-			vim.cmd("Goyo!|q!")
-
-			vim.opt.background = previous_background
+		if vim.bo.filetype == "help" then
+			require("zen-mode").toggle({
+				on_close = function()
+					vim.cmd("q")
+				end
+			})
 		end
 	end,
-	desc = "Automatically exit Goyo mode before quitting vim",
+	desc = "ZenMode is enabled for help files.",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
