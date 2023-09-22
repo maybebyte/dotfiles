@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 			require("zen-mode").toggle({
 				on_close = function()
 					vim.cmd("q")
-				end
+				end,
 			})
 		end
 	end,
@@ -100,6 +100,14 @@ vim.api.nvim_create_autocmd("BufEnter", {
 		vim.opt.filetype = "sxhkdrc"
 	end,
 	desc = "Set sxhkdrc to the sxhkdrc file type so it has syntax highlighting",
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	pattern = "/tmp/sh*",
+	callback = function()
+		vim.opt.filetype = "sh"
+	end,
+	desc = "Set command-line editing to sh filetype so it has syntax highlighting",
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
