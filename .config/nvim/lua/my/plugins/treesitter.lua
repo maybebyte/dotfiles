@@ -9,6 +9,7 @@ return {
 	end,
 	opts = {
 		ensure_installed = {
+			"bash",
 			"c",
 			"css",
 			"go",

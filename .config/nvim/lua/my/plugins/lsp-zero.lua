@@ -42,17 +42,6 @@ return {
 
 			local cmp = require("cmp")
 			local cmp_action = lsp.cmp_action()
-			local cmp_select = { behavior = cmp.SelectBehavior.Select }
-			local cmp_mappings = lsp.defaults.cmp_mappings({
-				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
-				["<C-Space>"] = cmp.mapping.complete(),
-			})
-
-			-- Needs to be separate from above, otherwise <Tab> completes.
-			cmp_mappings["<Tab>"] = nil
-			cmp_mappings["<S-Tab>"] = nil
 
 			require("luasnip.loaders.from_vscode").lazy_load()
 
