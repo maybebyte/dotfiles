@@ -12,6 +12,10 @@ return {
 				vim.cmd("!gmake")
 			end,
 		},
+		{
+			"nvim-telescope/telescope-dap.nvim",
+			dependencies = "mfussenegger/nvim-dap",
+		},
 	},
 	keys = {
 		{ "<leader>ts" },
@@ -21,8 +25,15 @@ return {
 		{ "<leader>sw" },
 		{ "<leader>sg" },
 		{ "<leader>sd" },
+		{ "<leader>dtb" },
+		{ "<leader>dtc" },
+		{ "<leader>dtf" },
+		-- { "<leader>dtv" },
 	},
 	config = function()
+		require("telescope").setup()
+		require("telescope").load_extension("dap")
+
 		vim.keymap.set("n", "<leader>ts", function()
 			vim.cmd("Telescope")
 		end, { desc = "[T]ele[S]cope" })
@@ -52,5 +63,22 @@ return {
 		vim.keymap.set("n", "<leader>sd", function()
 			require("telescope.builtin").diagnostics()
 		end, { desc = "[S]earch [D]iagnostics" })
+
+		vim.keymap.set("n", "<leader>dtb", function()
+			require("telescope").extensions.dap.list_breakpoints()
+		end, { desc = "[D]ebug [T]elescope [B]reakpoints" })
+
+		vim.keymap.set("n", "<leader>dtc", function()
+			require("telescope").extensions.dap.commands()
+		end, { desc = "[D]ebug [T]elescope [C]ommands" })
+
+		vim.keymap.set("n", "<leader>dtf", function()
+			require("telescope").extensions.dap.frames()
+		end, { desc = "[D]ebug [T]elescope [F]rames" })
+
+		-- https://github.com/nvim-telescope/telescope-dap.nvim/pull/17
+		-- vim.keymap.set("n", "<leader>dtv", function()
+		-- 	require("telescope").extensions.dap.variables()
+		-- end, { desc = "[D]ebug [T]elescope [V]ariables" })
 	end,
 }

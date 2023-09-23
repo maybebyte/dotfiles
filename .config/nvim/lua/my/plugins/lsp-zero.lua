@@ -35,6 +35,13 @@ return {
 					{ "rafamadriz/friendly-snippets" },
 				},
 			},
+			{
+				"rcarriga/cmp-dap",
+				dependencies = {
+					"mfussenegger/nvim-dap",
+					"rcarriga/nvim-dap-ui",
+				},
+			},
 		},
 		config = function()
 			local lsp = require("lsp-zero")
@@ -58,6 +65,15 @@ return {
 					["<C-b>"] = cmp_action.luasnip_jump_backward(),
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
+				},
+				enabled = function()
+					return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+						or require("cmp_dap").is_dap_buffer()
+				end,
+			})
+			cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+				sources = {
+					{ name = "dap" },
 				},
 			})
 			cmp.setup.cmdline("/", {

@@ -11,15 +11,11 @@ vim.keymap.set("", ":", ";", { desc = "Colon swapped with semicolon to protect p
 
 vim.keymap.set("n", "<leader>S", ":%s//g<Left><Left>", { desc = "Replace all." })
 
-vim.keymap.set("n", "<leader>d", function()
-	vim.api.nvim_put({ os.date("%F") }, "l", true, false)
-end, { desc = "Insert current date." })
-
-vim.keymap.set("n", "<leader>dtws", function()
+vim.keymap.set("n", "<leader>dws", function()
 	vim.cmd("%s/\\s\\+$//e")
 end, { desc = "Delete all trailing whitespace." })
 
-vim.keymap.set("n", "<leader>dtnl", function()
+vim.keymap.set("n", "<leader>dnl", function()
 	vim.cmd("%s/\\n\\+\\%$//e")
 end, { desc = "Delete all trailing newlines." })
 
