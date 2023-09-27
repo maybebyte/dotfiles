@@ -16,6 +16,7 @@ return {
 			"nvim-telescope/telescope-dap.nvim",
 			dependencies = "mfussenegger/nvim-dap",
 		},
+		"stevearc/aerial.nvim",
 	},
 	keys = {
 		{ "<leader>ts" },
@@ -29,10 +30,12 @@ return {
 		{ "<leader>dtc" },
 		{ "<leader>dtf" },
 		-- { "<leader>dtv" },
+		{ "<leader>as" },
 	},
 	config = function()
 		require("telescope").setup()
 		require("telescope").load_extension("dap")
+		require("telescope").load_extension("aerial")
 
 		vim.keymap.set("n", "<leader>ts", function()
 			vim.cmd("Telescope")
@@ -75,6 +78,10 @@ return {
 		vim.keymap.set("n", "<leader>dtf", function()
 			require("telescope").extensions.dap.frames()
 		end, { desc = "[D]ebug [T]elescope [F]rames" })
+
+		vim.keymap.set("n", "<leader>as", function()
+			require("telescope").extensions.aerial.aerial()
+		end, { desc = "[A]erial [S]earch" })
 
 		-- https://github.com/nvim-telescope/telescope-dap.nvim/pull/17
 		-- vim.keymap.set("n", "<leader>dtv", function()
