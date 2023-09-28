@@ -33,6 +33,10 @@ return {
 		{ "<leader>as" },
 		{ "<leader>/" },
 		{ "<leader>?" },
+		{ "gr" },
+		{ "gI" },
+		{ "<leader>ds" },
+		{ "<leader>ws" },
 	},
 	config = function()
 		require("telescope").setup()
@@ -103,6 +107,25 @@ return {
 			"<leader>?",
 			require("telescope.builtin").oldfiles,
 			{ desc = "[?] Find recently opened files" }
+		)
+		vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, { desc = "[G]oto [R]eferences" })
+		vim.keymap.set(
+			"n",
+			"gI",
+			require("telescope.builtin").lsp_implementations,
+			{ desc = "[G]oto [I]mplementation" }
+		)
+		vim.keymap.set(
+			"n",
+			"<leader>ds",
+			require("telescope.builtin").lsp_document_symbols,
+			{ desc = "[D]ocument [S]ymbols" }
+		)
+		vim.keymap.set(
+			"n",
+			"<leader>ws",
+			require("telescope.builtin").lsp_dynamic_workspace_symbols,
+			{ desc = "[W]orkspace [S]ymbols" }
 		)
 	end,
 }
