@@ -16,7 +16,6 @@ return {
 			"nvim-telescope/telescope-dap.nvim",
 			dependencies = "mfussenegger/nvim-dap",
 		},
-		"stevearc/aerial.nvim",
 	},
 	keys = {
 		{ "<leader>ts" },
@@ -41,7 +40,6 @@ return {
 	config = function()
 		require("telescope").setup()
 		require("telescope").load_extension("dap")
-		require("telescope").load_extension("aerial")
 
 		vim.keymap.set("n", "<leader>ts", function()
 			vim.cmd("Telescope")
@@ -89,10 +87,6 @@ return {
 		-- vim.keymap.set("n", "<leader>dtv", function()
 		-- 	require("telescope").extensions.dap.variables()
 		-- end, { desc = "[D]ebug [T]elescope [V]ariables" })
-
-		vim.keymap.set("n", "<leader>as", function()
-			require("telescope").extensions.aerial.aerial()
-		end, { desc = "[A]erial [S]earch" })
 
 		vim.keymap.set("n", "<leader>/", function()
 			-- You can pass additional configuration to telescope to change theme, layout, etc.
