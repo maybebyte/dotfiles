@@ -37,6 +37,7 @@ return {
 		{ "<leader>ds" },
 		{ "<leader>ws" },
 	},
+	cmd = { "Telescope" },
 	config = function()
 		require("telescope").setup()
 		require("telescope").load_extension("dap")
