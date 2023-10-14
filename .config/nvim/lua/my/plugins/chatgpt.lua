@@ -31,18 +31,23 @@ return {
 		vim.keymap.set("n", "<leader>aic", function()
 			vim.cmd.ChatGPTCompleteCode()
 		end, { desc = "[AI] [C]omplete" })
+
 		vim.keymap.set("n", "<leader>aie", function()
 			vim.cmd.ChatGPTEditWithInstructions()
 		end, { desc = "[AI] [E]dit" })
+
 		vim.keymap.set("n", "<leader>air", function()
 			vim.cmd.ChatGPTRun()
 		end, { desc = "[AI] [R]un" })
+
 		vim.keymap.set("n", "<leader>aia", function()
 			vim.cmd.ChatGPTActAs()
 		end, { desc = "[AI] [A]ct as" })
+
 		vim.keymap.set("n", "<leader>aig", function()
 			vim.cmd.ChatGPT()
 		end, { desc = "[AI] [G]eneric" })
+
 		require("chatgpt").setup(opts)
 	end,
 }
