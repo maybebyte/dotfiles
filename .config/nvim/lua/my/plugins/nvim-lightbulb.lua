@@ -1,3 +1,4 @@
+-- TODO: change so this lazy loads on LSP attach
 return {
 	"kosayoda/nvim-lightbulb",
 	opts = {
