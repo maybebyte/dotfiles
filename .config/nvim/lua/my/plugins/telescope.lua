@@ -103,7 +103,9 @@ return {
 			require("telescope.builtin").oldfiles,
 			{ desc = "[?] Find recently opened files" }
 		)
+
 		vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, { desc = "[G]oto [R]eferences" })
+
 		vim.keymap.set(
 			"n",
 			"gI",
