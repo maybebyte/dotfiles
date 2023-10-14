@@ -1,32 +1,148 @@
 #!/usr/bin/env ksh
 
+# Uses ANSI escape sequences and ksh escape sequences to set up PS1
+# and DOAS_PS1.
+
+err() {
+	printf "%s\n" "$*" >&2
+	printf "%s\n" "Custom PS1 not available." >&2
+	return
+}
+
+# Print out the ANSI escape sequence for a color, affecting either
+# the foreground or the background.
+#
+# $1 is either 'fg' or 'bg' (foreground; background).
+# $2 is one of eight color names.
+print_color_sequence() {
+	sequence="\[\033["
+
+	case "$1" in
+		"fg") sequence="${sequence}3" ;;
+		"bg") sequence="${sequence}4" ;;
+		*) err "print_color_sequence: need 'fg' or 'bg'" ;;
+	esac
+
+	case "$2" in
+		"black") sequence="${sequence}0m" ;;
+		"red") sequence="${sequence}1m" ;;
+		"green") sequence="${sequence}2m" ;;
+		"yellow") sequence="${sequence}3m" ;;
+		"blue") sequence="${sequence}4m" ;;
+		"magenta") sequence="${sequence}5m" ;;
+		"cyan") sequence="${sequence}6m" ;;
+		"white") sequence="${sequence}7m" ;;
+		*) err "print_color_sequence: need a color name" ;;
+	esac
+
+	sequence="${sequence}\]"
+
+	print "${sequence}"
+	unset sequence
+}
+
+# Print out the ANSI escape sequence for a style modifier.
+#
+# $1 is one of nine modifier names.
+print_modifier_sequence() {
+	sequence="\[\033["
+
+	case "$1" in
+		"reset") sequence="${sequence}0m" ;;
+		"bold") sequence="${sequence}1m" ;;
+		"dim") sequence="${sequence}2m" ;;
+		"italic") sequence="${sequence}3m" ;;
+		"underline") sequence="${sequence}4m" ;;
+		"blinking") sequence="${sequence}5m" ;;
+		"reverse") sequence="${sequence}7m" ;;
+		"hidden") sequence="${sequence}8m" ;;
+		"strikethrough") sequence="${sequence}9m" ;;
+		*) err "print_modifier_sequence: need a modifier name" ;;
+	esac
+
+	sequence="${sequence}\]"
+
+	print "${sequence}"
+	unset sequence
+}
+
+# Wrap a string with the ANSI escape sequence for the given color and
+# the ANSI sequence to reset colors.
+#
+# $1 is either 'fg' or 'bg' (foreground; background).
+# $2 is one of eight colors.
+# $3 is the string to wrap.
+wrap_with_color_sequence() {
+	fg_or_bg="$1"
+	color_name="$2"
+	string_to_wrap="$3"
+
+	[ -n "${fg_or_bg}" ] || err "wrap_with_color_sequence: need 'fg' or 'bg'"
+	[ -n "${color_name}" ] || err "wrap_with_color_sequence: need a color name"
+	[ -n "${string_to_wrap}" ] || err "wrap_with_color_sequence: need a string to wrap"
+
+	color_sequence="$(print_color_sequence "${fg_or_bg}" "${color_name}")"
+	reset_sequence="$(print_modifier_sequence 'reset')"
+
+	print "${color_sequence}${string_to_wrap}${reset_sequence}"
+
+	unset \
+		fg_or_bg \
+		color_name \
+		string_to_wrap \
+		color_sequence \
+		reset_sequence
+}
+
+# Wrap a string with the ANSI escape sequence for the given style
+# modifier and the ANSI sequence to reset styles.
+#
+# $1 is one of nine modifier names.
+# $2 is the string to wrap.
+wrap_with_modifier_sequence() {
+	modifier_name="$1"
+	string_to_wrap="$2"
+
+	[ -n "${modifier_name}" ] || err "wrap_with_modifier_sequence: need a modifier name"
+	[ -n "${string_to_wrap}" ] || err "wrap_with_modifier_sequence: need a string to wrap"
+
+	modifier_sequence="$(print_modifier_sequence "${modifier_name}" "${string_to_wrap}")"
+	reset_sequence="$(print_modifier_sequence 'reset')"
+
+	print "${modifier_sequence}${string_to_wrap}${reset_sequence}"
+
+	unset \
+		modifier_name \
+		string_to_wrap \
+		modifier_sequence \
+		reset_sequence
+}
+
 case "${KSH_VERSION%%\ KSH*}" in
-	'@(#)PD')
-		# Note that these have swapped colors. It's to call attention to shells
-		# running under a different user.
-		_unpriv_ps1_user='\[\033[36m\]'
-		_unpriv_ps1_path='\[\033[31m\]'
-		_doas_ps1_user='\[\033[1;35m\]'
-		_doas_ps1_path='\[\033[31m\]'
+	"@(#)PD")
+		_left_bracket="$(wrap_with_color_sequence "fg" "blue" "[")"
+		_right_bracket="$(wrap_with_color_sequence "fg" "blue" "]")"
 
-		_ps1_bracket='\[\033[34m\]'
-		_ps1_hostname='\[\033[35m\]'
-		_ps1_clear='\[\033[0m\]'
+		_hostname="$(wrap_with_color_sequence "fg" "magenta" "\h")"
+		_user="$(wrap_with_color_sequence "fg" "cyan" "\u")"
+		_path="$(wrap_with_color_sequence "fg" "red" "\w")"
 
-		export PS1="${_ps1_bracket}[${_ps1_clear}${_unpriv_ps1_user}\u\
-${_ps1_clear}@${_ps1_hostname}\h${_ps1_clear} \
-${_unpriv_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
+		_doas_user="$(wrap_with_color_sequence "fg" "magenta" "\u")"
+		_doas_user="$(wrap_with_modifier_sequence "bold" "${_doas_user}")"
 
-		# This variable is used in doas.conf(5).
-		export DOAS_PS1="${_ps1_bracket}[${_ps1_clear}${_doas_ps1_user}\u\
-${_ps1_clear}@${_ps1_hostname}\h${_ps1_clear} \
-${_doas_ps1_path}\w${_ps1_clear}${_ps1_bracket}]${_ps1_clear}\\$ "
+		export PS1="${_left_bracket}${_user}@${_hostname} ${_path}${_right_bracket}\\$ "
+		export DOAS_PS1="${_left_bracket}${_doas_user}@${_hostname} ${_path}${_right_bracket}\\$ "
 
-		# There's no need for these variables to remain defined afterward.
-		unset _ps1_{bracket,hostname,clear} _{unpriv,doas}_ps1_{user,path}
+		unset \
+			_left_bracket \
+			_right_bracket \
+			_hostname \
+			_user \
+			_path \
+			_doas_user
 		;;
 
 	*)
-		echo 'Custom PS1 not available.' >&2
+		echo "Custom PS1 not available." >&2
 		;;
 esac
