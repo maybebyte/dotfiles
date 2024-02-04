@@ -4,16 +4,16 @@ export MANPAGE_COMPLETIONS='/tmp/completions/manpages'
 # shellcheck disable=SC2174
 mkdir -p -m 700 "${MANPAGE_COMPLETIONS%/*}"
 
-[ -f "${MANPAGE_COMPLETIONS}" ] || {
+if ! [ -f "${MANPAGE_COMPLETIONS}" ]; then
 	apropos . | generate-completions -t man > "${MANPAGE_COMPLETIONS}"
-}
+fi
 
 # Leave command substitution unquoted so it will be interpreted as a list
 # (otherwise it will only be one item in a big, long string).
 # shellcheck disable=SC2046
 set -A complete_man_1 -- $(< "${MANPAGE_COMPLETIONS}")
 
-command -v rcctl > /dev/null 2>&1 && {
+if command -v rcctl > /dev/null 2>&1; then
 	# Is there any way to grab these programmatically instead of manually defining
 	# them?
 	set -A complete_rcctl_1 -- \
@@ -42,10 +42,10 @@ command -v rcctl > /dev/null 2>&1 && {
 		rogue \
 		started \
 		stopped
-}
+fi
 
 # OpenBSD pkg_*
-command -v pkg_info > /dev/null 2>&1 && {
+if command -v pkg_info > /dev/null 2>&1; then
 	# shellcheck disable=SC2046
 	set -A PKG_LIST -- $(pkg_info -z)
 
@@ -53,9 +53,9 @@ command -v pkg_info > /dev/null 2>&1 && {
 	set -A complete_pkg_info -- "${PKG_LIST[@]}"
 
 	set -A PKG_LIST
-}
+fi
 
-command -v task > /dev/null 2>&1 && {
+if command -v task > /dev/null 2>&1; then
 	# shellcheck disable=SC2046
 	set -A complete_task -- $( {
 		task _commands &
@@ -69,8 +69,8 @@ command -v task > /dev/null 2>&1 && {
 
 	# shellcheck disable=SC2046
 	set -A complete_task_config -- $(task _config)
-}
+fi
 
-command -v got > /dev/null 2>&1 && {
+if command -v got > /dev/null 2>&1; then
 	set -A complete_got_1 -- $(got -h 2>&1 | sed -n s/commands://p)
-}
+fi
