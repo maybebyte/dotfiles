@@ -24,7 +24,7 @@ subscribe announcements@openbsd.org
 subscribe misc@openbsd.org
 subscribe ports@openbsd.org
 
-source "${XDG_CONFIG_HOME}/neomutt/config_vars"
+source "${XDG_CONFIG_HOME}/neomutt/settings"
 
 mailboxes = +INBOX
 
