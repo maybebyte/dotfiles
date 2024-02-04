@@ -34,11 +34,7 @@ openbsd_aliases() {
 		renet='sh /etc/netstart' \
 		sysnet='systat netstat' \
 		tailhttp='tail -f /var/www/logs/access.log' \
-		tailmail='tail -f /var/log/maillog' \
-		webtest="webtest -i index.html \${WEBSITE_DOMAIN} \${WEBSITE_SRC_DIR} \${WEBSITE_DEST_DIR}"
-
-	[ -n "${IPV4_GATEWAY}" ] && alias tlan="ping \${IPV4_GATEWAY}"
-	[ -n "${IPV6_GATEWAY}" ] && alias tlan6="ping6 \${IPV6_GATEWAY}"
+		tailmail='tail -f /var/log/maillog'
 }
 
 alias \
@@ -245,16 +241,6 @@ command -v 'yt-dlp' > /dev/null 2>&1 \
 		yta='yt-dlp -xf bestaudio/best' \
 		ytdesc='yt-dlp --get-description' \
 		ytlen='yt-dlp --get-duration'
-
-[ -n "${WEBSITE_SRC_DIR}" ] \
-	&& alias cdmd="cd \${WEBSITE_SRC_DIR}"
-[ -n "${WEBSITE_DEST_DIR}" ] \
-	&& alias cdwww="cd \${WEBSITE_DEST_DIR}"
-[ -n "${WEBSITE_DOMAIN}" ] && {
-	alias \
-		tnet="ping \${WEBSITE_DOMAIN}" \
-		tnet6="ping6 \${WEBSITE_DOMAIN}"
-}
 
 # Good default flags for the compiler.
 # https://learnxinyminutes.com/docs/c/

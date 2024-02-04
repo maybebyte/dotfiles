@@ -16,7 +16,6 @@ export \
 	LESSSECURE=1 \
 	PAGER='less' \
 	VISUAL="${EDITOR}" \
-	WEBSITE='https://www.anthes.is/' \
 	XDG_BIN_HOME="${HOME}/.local/bin" \
 	XDG_CACHE_HOME="${HOME}/.cache" \
 	XDG_CONFIG_HOME="${HOME}/.config" \
@@ -33,28 +32,8 @@ export \
 	PERLCRITIC="${XDG_CONFIG_HOME}/config/perlcritic.conf" \
 	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
 
-TMPVAR="${WEBSITE%/}"
-export WEBSITE_DOMAIN="${TMPVAR##*//}"
-unset TMPVAR
-
 # shellcheck disable=SC1091
 [ -n "${DISPLAY}" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
-
-# OS specific actions
-# written so it can be expanded later if needed
-case "$(uname)" in
-	'OpenBSD')
-		IPV4_GATEWAY="$(netstat -rn -f inet 2> /dev/null | awk '/^default/{print $2}')"
-		IPV6_GATEWAY="$(netstat -rn -f inet6 2> /dev/null | awk '/^default/{print $2}')"
-		export IPV4_GATEWAY IPV6_GATEWAY
-		;;
-
-	*) # if this isn't OpenBSD, do nothing
-		;;
-esac
-
-export WEBSITE_SRC_DIR="${HOME}/src/anthesis"
-export WEBSITE_DEST_DIR="/var/www/htdocs/${WEBSITE_DOMAIN}"
 
 # Add XDG_BIN_HOME to PATH.
 #
