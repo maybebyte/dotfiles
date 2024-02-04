@@ -1,12 +1,6 @@
 #!/usr/bin/env ksh
 # shellcheck disable=SC1090
 
-if command -v 'doas' > /dev/null 2>&1; then
-	alias priv='doas '
-elif command -v 'sudo' > /dev/null 2>&1; then
-	alias priv='sudo '
-fi
-
 # if tmux is installed and not inside a tmux session, then try to attach.
 # if attachment fails, start a new session
 if [ -z "${TMUX}" ] && command -v tmux > /dev/null 2>&1; then
