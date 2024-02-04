@@ -33,10 +33,10 @@ local function setup_backup_directory()
 	end
 end
 
+require("my.settings")
+
 bootstrap_plugin_manager()
 setup_backup_directory()
-
-require("my.settings")
 
 -- Load the colorscheme before plugins due to lazy.nvim quirks.
 vim.cmd("colorscheme selenized")
