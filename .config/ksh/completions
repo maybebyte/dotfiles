@@ -5,7 +5,12 @@ export MANPAGE_COMPLETIONS='/tmp/completions/manpages'
 mkdir -p -m 700 "${MANPAGE_COMPLETIONS%/*}"
 
 if ! [ -f "${MANPAGE_COMPLETIONS}" ]; then
-	apropos . | generate-completions -t man > "${MANPAGE_COMPLETIONS}"
+	apropos . \
+		| cut -d '(' -f 1 \
+		| tr ',' '\n' \
+		| sed -e 's/^ //g' -e 's/ $//g' \
+		| sort -u \
+		> "${MANPAGE_COMPLETIONS}"
 fi
 
 # Leave command substitution unquoted so it will be interpreted as a list
@@ -57,7 +62,7 @@ fi
 
 if command -v task > /dev/null 2>&1; then
 	# shellcheck disable=SC2046
-	set -A complete_task -- $( {
+	set -A complete_task -- $({
 		task _commands &
 		task _projects &
 		{ task _columns | sed 's/$/:/'; } &
@@ -65,7 +70,7 @@ if command -v task > /dev/null 2>&1; then
 		{ task _tags | sed 's/^/-/'; } &
 		task _uuids &
 		wait
-	} | sort -u )
+	} | sort -u)
 
 	# shellcheck disable=SC2046
 	set -A complete_task_config -- $(task _config)
