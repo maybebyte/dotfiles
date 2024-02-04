@@ -7,6 +7,7 @@ command -v 'colorls' > /dev/null 2>&1 && export LS='colorls'
 [ -z "${LS}" ] && export LS='ls'
 
 export \
+	BROWSER="firefox" \
 	CLICOLOR=1 \
 	FCEDIT="${EDITOR}" \
 	HISTFILE="${HOME}/.history" \
