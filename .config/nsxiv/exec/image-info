@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/bin/sh
 
 # Called by sxiv(1) whenever an image gets loaded.
 # The output is displayed in sxiv's status bar.
@@ -7,34 +7,9 @@
 #   $2: image width
 #   $3: image height
 
-# TODO:
-# Review Number::Bytes::Human to see exactly how it does what it does.
+FILE_BASENAME="$(basename "$1")"
+FILE_SIZE="$(du -h "$1" | awk '{print $1}')"
+IMAGE_WIDTH="$2"
+IMAGE_HEIGHT="$3"
 
-use v5.36;
-use autodie;
-
-# Core.
-use English;
-use File::Basename qw(fileparse);
-
-# External.
-use Number::Bytes::Human qw(format_bytes);
-
-# Personal.
-use Anthesis::OpenBSD qw(pledge_or_die unveil_or_die);
-
-my $filename = shift or die "Need a file name.\n";
-
-unveil_or_die map { ( $ARG, 'r' ) } @INC, $filename;
-pledge_or_die qw(rpath);
-
-my $basename = fileparse $filename;
-
-my $width = shift or die "Need a width.\n";
-my $height = shift or die "Need a height.\n";
-my $geometry = $width . 'x' . $height;
-
-my $file_size = format_bytes( ( stat $filename )[7] );
-my $separator = ' | ';
-
-print $file_size . $separator . $geometry . $separator . $basename;
+echo "${FILE_SIZE} | ${IMAGE_WIDTH}x${IMAGE_HEIGHT} | ${FILE_BASENAME}"
