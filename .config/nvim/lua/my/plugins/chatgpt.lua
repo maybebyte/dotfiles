@@ -21,7 +21,6 @@ return {
 			model = "gpt-4",
 			max_tokens = 1000,
 		},
-		api_key_cmd = "gpg --decrypt " .. vim.env.HOME .. "/passwords/api/chatgpt.txt.gpg",
 	},
 	dependencies = {
 		"MunifTanjim/nui.nvim",
