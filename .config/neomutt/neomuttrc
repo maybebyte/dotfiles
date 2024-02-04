@@ -1,29 +1,3 @@
-# Grab passwords from GPG encrypted file. When decrypted, they're set to a
-# variable like so:
-#
-# set my_pass=xxx
-source "gpg -dq ${HOME}/passwords/emails/email_passwords.txt.gpg |"
-
-source "${XDG_CONFIG_HOME}/neomutt/riseup.txt"
-# Here we use the $folder variable that has just been set in the sourced file.
-#
-# We must set it right now otherwise the 'folder' variable will change in the
-# next sourced file.
-folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/riseup.txt"
-
-source "${XDG_CONFIG_HOME}/neomutt/personal.txt"
-folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/personal.txt"
-
-source "${XDG_CONFIG_HOME}/neomutt/mlists.txt"
-folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/mlists.txt"
-
-source "${XDG_CONFIG_HOME}/neomutt/dev.txt"
-folder-hook $folder "source ${XDG_CONFIG_HOME}/neomutt/dev.txt"
-
-subscribe announcements@openbsd.org
-subscribe misc@openbsd.org
-subscribe ports@openbsd.org
-
 source "${XDG_CONFIG_HOME}/neomutt/settings"
 
 mailboxes = +INBOX
