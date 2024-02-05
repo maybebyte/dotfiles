@@ -1,0 +1,11 @@
+#!/usr/bin/env ksh
+
+# cd into parent directories more easily.
+alias \
+	..='cd ..' \
+	...='cd ../..' \
+	....='cd ../../..' \
+	.....='cd ../../../..'
+
+# Manage dotfiles more easily.
+alias d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"
