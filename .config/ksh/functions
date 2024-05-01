@@ -23,6 +23,25 @@ otherwise, use it the same way you would use curl(1).' >&2
 	curl -x socks5://127.0.0.1:9050 "$@"
 }
 
+# using torsocks(1) and ftp(1) with no auto-login or user agent, send a
+# GET request to $1 and send the results to STDOUT. zathura(1) reads
+# from STDIN and displays the document.
+#
+# $1 is a URL linking to a type of document (PDF, EPUB, etc.) that
+# zathura(1) can open.
+anonread() {
+	case "$1" in
+		'' | '-h')
+			echo 'read PDFs with tor(1).
+anonread [URL linking to an ebook]' >&2
+
+			return
+			;;
+	esac
+
+	anonftp -o - -- "$1" | zathura -
+}
+
 # with a user agent of 'curl', no progress meter, no auto-login, and no
 # verbose mode, use ftp(1) to send a GET request to cht.sh with $1 as
 # the path and send the results to STDOUT.
@@ -69,6 +88,12 @@ cpbak [file]' >&2
 	esac
 }
 
+# choose files with fzf and edit them.
+ebin() { fzf-open "${EDITOR}" "${XDG_BIN_HOME}"; }
+econf() { fzf-open "${EDITOR}" "${XDG_CONFIG_HOME}"; }
+eman() { fzf-open "${EDITOR}" "${XDG_DATA_HOME}/man"; }
+enotes() { fzf-open "${EDITOR}" "${HOME}/notes"; }
+
 fzf_hist() {
 	RES="$(fzf --tac --no-sort -e < "${HISTFILE}")"
 	[ -n "${RES}" ] || return 0
@@ -91,6 +116,36 @@ ipinf [IP address]' >&2
 	esac
 
 	ftp -VMo - -- "https://ipinfo.io/$1"
+}
+
+# journal
+jrnl() {
+	case "$@" in
+		'') # being used as intended
+			;;
+
+		'-h' | *)
+			echo "jrnl (for journaling) takes no arguments.
+
+It creates ${HOME}/notes/journal/$(date '+%F').txt.gpg (including the directory
+tree, if it doesn't exist) and then opens up the file in ${EDITOR:-EDITOR}." >&2
+
+			return
+			;;
+	esac
+
+	[ -z "${EDITOR}" ] && {
+		echo 'jrnl() needs EDITOR to be defined.' >&2
+		return 1
+	}
+
+	TODAY="$(date '+%F')"
+	JRNL_ENTRY="${HOME}/notes/journal/${TODAY}.txt.gpg"
+
+	# easier to just create the directory than error
+	mkdir -p "${JRNL_ENTRY%/*}"
+
+	"${EDITOR}" "${JRNL_ENTRY}"
 }
 
 # read a markdown document with man(1).
@@ -149,6 +204,66 @@ otherwise, use it the same way you would use nc(1).' >&2
 	nc -X 5 -x 127.0.0.1:9050 "$@"
 }
 
+# with rffd, open up random videos with mpv(1).
+randlisten_audio() {
+	case "$1" in
+		'' | '-h')
+			echo 'with rffd, listen to random audio files with mpv(1).
+
+randvids [directory with audio files]' >&2
+
+			return
+			;;
+	esac
+
+	rffd audio "$1" | tr '\n' '\0' | xargs -0 -- mpv \
+		--no-resume-playback --no-keep-open --no-pause --no-video --
+}
+
+# with rffd, open up random videos with mpv(1).
+randlisten_vids() {
+	case "$1" in
+		'' | '-h')
+			echo 'with rffd, listen to random videos with mpv(1).
+
+randvids [directory with videos]' >&2
+
+			return
+			;;
+	esac
+
+	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv \
+		--no-resume-playback --no-keep-open --no-pause --no-video --
+}
+
+# with rffd, open up random pics with sxiv(1).
+randpics() {
+	case "$1" in
+		'' | '-h')
+			echo 'with rffd, open up random pics with sxiv(1).
+randpics [directory with pics]' >&2
+
+			return
+			;;
+	esac
+
+	rffd image "$1" | tr '\n' '\0' | xargs -0 -- sxiv --
+}
+
+# with rffd, open up random videos with mpv(1).
+randvids() {
+	case "$1" in
+		'' | '-h')
+			echo 'with rffd, open up random videos with mpv(1).
+randvids [directory with videos]' >&2
+
+			return
+			;;
+	esac
+
+	rffd video "$1" | tr '\n' '\0' | xargs -0 -- mpv --no-resume-playback --
+}
+
 # Function wrapper for rcctl ls, for completions.
 # Is there a way to use doas(1) with completions without doing this?
 rcctl_ls() {
@@ -162,6 +277,9 @@ rcctl_ls() {
 	esac
 	${CMD} "$1"
 }
+
+# choose a book with fzf and read it.
+readabook() { fzf-open "${READER}" "${HOME}/books"; }
 
 # read a markdown document with less(1).
 readmd() {
