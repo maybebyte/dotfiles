@@ -1,0 +1,55 @@
+#!/bin/sh
+# Copyright (c) 2020-2022 Ashlen <dev@anthes.is>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+set -e
+
+readonly PROGRAM_NAME="${0##*/}"
+
+err() {
+	printf '%s\n' "$*" >&2
+	exit 1
+}
+
+usage() {
+	cat >&2 << EOF
+usage:
+${PROGRAM_NAME} [image]
+EOF
+	exit 1
+}
+
+genfavi() {
+	convert "$1" -background white \
+		\( -clone 0 -resize 16x16 -extent 16x16 \) \
+		\( -clone 0 -resize 32x32 -extent 32x32 \) \
+		\( -clone 0 -resize 48x48 -extent 48x48 \) \
+		\( -clone 0 -resize 64x64 -extent 64x64 \) \
+		-delete 0 -alpha off -colors 256 favicon.ico
+}
+
+[ -n "$1" ] || usage
+
+set -u
+
+command -v 'convert' > /dev/null 2>&1 || err 'convert not found in PATH.'
+
+case "$(file -ib -- "$1")" in
+	image/*) : ;; # images are OK to process
+	*) err "$1 isn't an image." ;;
+esac
+
+genfavi "$1" && exec cp 'favicon.ico' 'favicon.png'
+
+err 'Unable to generate favicon.'

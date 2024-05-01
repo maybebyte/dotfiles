@@ -1,0 +1,93 @@
+#!/bin/sh
+# Copyright (c) 2020-2022 Ashlen <dev@anthes.is>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+set -e
+
+err() {
+	printf '%s\n' "$*" >&2
+	exit 1
+}
+
+usage() {
+	err "usage:
+${0##*/} [inc|dec|mute]"
+}
+
+# Increase, decrease, or mute the volume given the appropriate argument.
+adjust_volume() {
+	case "$1" in
+		'inc') is_muted || sndioctl output.level=+0.05 > /dev/null 2>&1 ;;
+		'dec') is_muted || sndioctl output.level=-0.05 > /dev/null 2>&1 ;;
+		'mute') sndioctl output.mute=! > /dev/null 2>&1 ;;
+		*) usage ;;
+	esac
+}
+
+print_volume() {
+	case "${MUTED}" in
+		true) echo 'MUTED' ;;
+		*) echo "$@" ;;
+	esac
+}
+
+# If muted, succeed.
+# If not muted, fail.
+is_muted() {
+	case "$(sndioctl -n output.mute 2> /dev/null)" in
+		1) return 0 ;;
+		0) return 1 ;;
+		*) err 'Failed to check output.mute with sndioctl(1).' ;;
+	esac
+}
+
+# Get raw output level and convert it to something more parsable.
+get_volume() {
+	RAW_VOLUME="$(sndioctl -n output.level 2> /dev/null)"
+	readonly RAW_VOLUME
+
+	case "${RAW_VOLUME}" in
+		1.000) echo 100 ;;
+		0.000) echo 0 ;;
+		# Dividing by one is to truncate the floating point number.
+		*) printf '(%.2f * %s) / 1\n' "${RAW_VOLUME}" 100 | bc ;;
+	esac
+}
+
+[ -n "$1" ] || usage
+[ -n "${DISPLAY}" ] || err "${0##*/} requires a graphical environment."
+
+set -u
+
+readonly DEPENDENCIES='bc
+dunstify
+sndioctl'
+
+echo "${DEPENDENCIES}" | while read -r dependency; do
+	command -v -- "${dependency}" > /dev/null 2>&1 \
+		|| err "${dependency} not found in PATH."
+done
+
+adjust_volume "$1"
+
+VOLUME="$(get_volume)"
+readonly VOLUME
+
+is_muted && readonly MUTED='true'
+: "${MUTED:='false'}"
+
+# Arbitrary ID for dunstify to track, so it doesn't send stacked
+# notifications.
+readonly MESSAGE_ID='25231'
+dunstify -u low -r "${MESSAGE_ID}" -- "$(print_volume "${VOLUME}%")"

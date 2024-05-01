@@ -1,0 +1,177 @@
+#!/usr/bin/env perl
+# Copyright (c) 2022-2023 Ashlen <dev@anthes.is>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# TODO:
+# Explore a configuration file for fallback colors, preload directories,
+# and so forth.
+#
+# pledge (and maybe unveil too).
+
+use v5.36;
+use autodie qw(:all);
+
+# Core.
+use English;
+use File::Basename qw(fileparse);
+use File::Copy qw(copy move);
+use File::Find qw(find);
+use File::Spec::Functions qw(catdir catfile);
+use IPC::Open2;
+
+# External.
+use File::MimeInfo::Magic;
+use IPC::System::Simple;
+
+# Personal.
+use Anthesis::OpenBSD qw(pledge_or_die);
+use Anthesis::Dotfiles::Pywal qw(import_pywal_colors);
+
+# Variables used in subroutines.
+my $home = $ENV{'HOME'} // ( getpwuid $EUID )[7]
+	or die "No home directory found!\n";
+my $program_name = fileparse $PROGRAM_NAME;
+my @found_directories;
+
+sub usage {
+	die <<EOF;
+usage: $program_name [operation] [file]
+
+operations:
+help - display help
+copy - copy file
+move - move file
+rename - rename file
+EOF
+}
+
+sub get_preload_dir ($file_to_examine) {
+	my $mimetype = mimetype $file_to_examine;
+	my $preload_dir;
+
+	for ($mimetype) {
+		$preload_dir = do {
+			if ( m{ \A application/(?:epub|pdf) }ax ) {
+				catfile $home, 'books';
+			}
+			elsif ( m{ \A image/.*djvu }ax ) {
+				catfile $home, 'books';
+			}
+			elsif ( m{ \A image/ }ax ) {
+				catfile $home, 'pics';
+			}
+			elsif ( m{ \A video/ }ax ) {
+				catfile $home, 'videos';
+			}
+			else {
+				die "$mimetype isn't a supported mimetype!";
+			}
+		};
+	}
+
+	return ( $preload_dir, $mimetype );
+}
+
+sub wanted {
+	## To conserve space in the dmenu prompt, $home is replaced with a
+	## tilde for each entry.
+	-d && push @found_directories, $File::Find::name =~ s/\A$home/~/ar;
+}
+
+sub build_filetree ($file_without_destination) {
+	my ( $preload_dir, $mimetype ) = get_preload_dir $file_without_destination;
+	-e $preload_dir or die "'$preload_dir' doesn't exist.\n";
+	-d _ or die "'$preload_dir' isn't a directory.\n";
+
+	return find( { wanted => \&wanted }, $preload_dir );
+}
+
+my $operation = shift or usage;
+usage if $operation eq 'help';
+
+pledge_or_die qw(stdio rpath cpath proc exec);
+
+my $file_path = shift or usage;
+
+my $xdg_cache_home = $ENV{'XDG_CACHE_HOME'} // catdir $home, '.cache';
+my $colors_wal = catfile $xdg_cache_home, qw(wal colors);
+
+my $colors_hash_ref = import_pywal_colors $colors_wal;
+
+#<<<
+my @dmenu_options = (
+	'-i',
+	'-fn', 'mono-12',
+	'-nb', $colors_hash_ref->{background},
+	'-nf', $colors_hash_ref->{foreground},
+	'-sb', $colors_hash_ref->{color0},
+	'-sf', $colors_hash_ref->{color6},
+);
+#>>>
+
+my ( $base_file, $dirs ) = fileparse $file_path;
+if ( $operation eq 'move' || $operation eq 'copy' ) {
+	## Used for its side-effects (populating @found_directories).
+	build_filetree $file_path;
+
+	my $menu_pid = open2( my $menu_out, my $menu_in, qw(dmenu -l 10),
+		@dmenu_options, '-p', "Where should the file be placed?" );
+
+	say $menu_in "exit\n", join( "\n", sort @found_directories );
+	close $menu_in;
+
+	chomp( my $user_input = <$menu_out> // 'exit' );
+	close $menu_out;
+
+	waitpid $menu_pid, 0;
+	exit if $user_input eq 'exit';
+
+	# Tilde reverted since we need to do some checks.
+	$user_input =~ s/\A~/$home/;
+	-e $user_input or die "'$user_input' doesn't exist.\n";
+	-d _ or die "'$user_input' isn't a directory.\n";
+
+	my $destination = catfile $user_input, $base_file;
+
+	# Tilde added again to conserve space in notify-send output.
+	$user_input =~ s/\A$home/~/;
+
+	if ( $operation eq 'move' ) {
+		move $file_path, $destination or die "File not moved: $!\n";
+		system qw(notify-send --), "Moved to '$user_input'";
+	}
+	elsif ( $operation eq 'copy' ) {
+		copy $file_path, $destination or die "File not copied: $!\n";
+		system qw(notify-send --), "Copied to '$user_input'";
+	}
+}
+elsif ( $operation eq 'rename' ) {
+	my $menu_pid = open2( my $menu_out, my $menu_in, qw(dmenu -l 10),
+		@dmenu_options, '-p', "What should the file be renamed to?" );
+
+	say $menu_in "exit\n";
+	close $menu_in;
+
+	chomp( my $user_input = <$menu_out> // 'exit' );
+	close $menu_out;
+
+	waitpid $menu_pid, 0;
+	exit if $user_input eq 'exit';
+
+	rename $file_path, catfile( $dirs, $user_input );
+	system qw(notify-send --), "Renamed to '$user_input'";
+}
+else {
+	die "$operation isn't a supported operation!\n";
+}

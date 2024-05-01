@@ -1,0 +1,117 @@
+#!/usr/bin/env perl
+# Copyright (c) 2022-2023 Ashlen <dev@anthes.is>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+use v5.36;
+use autodie qw(:all);
+
+# Extract the release tarball.
+use Archive::Tar;
+
+# Create temporary directories.
+use File::Temp qw(tempdir);
+
+# Run commands simply, with detailed diagnostics
+use IPC::System::Simple qw(capturex);
+
+# Decode JSON and manipulate it with Perl.
+use JSON::MaybeXS qw(decode_json);
+
+use Anthesis::Dotfiles::HTTP qw(decompress_response gzipped_http regular_http);
+
+sub make_github_api_url ( $username, $repository ) {
+	return "https://api.github.com/repos/$username/$repository/releases/latest";
+}
+
+sub make_github_release_url ( $username, $repository, $version ) {
+	return
+		"https://github.com/$username/$repository/releases/download/$version";
+}
+
+sub check_dependencies {
+	my $which_output = capturex qw(which --), @_;
+	$which_output = undef;
+}
+
+# GnuPG is required to cryptographically verify element-web.
+#
+# There is not a good way to verify signatures in Perl as far as I can
+# tell. The Crypt::OpenPGP and GnuPG modules from CPAN both had issues.
+my @dependencies = qw(gpg);
+check_dependencies @dependencies;
+
+# $element_web_ui_dir can be changed by modifying it in the environment:
+# ELEMENT_WEB_UI_DIR=/path/to/dir handle-element-web
+my $element_web_ui_dir = $ENV{'ELEMENT_WEB_UI_DIR'}
+	// '/var/www/htdocs/element-web';
+chdir "$element_web_ui_dir";
+
+my $gzipped_http = gzipped_http();
+my $api_response = $gzipped_http->get( make_github_api_url(qw(vector-im element-web)) );
+$api_response->{success} or die "$api_response->{status} $api_response->{reason}";
+$api_response = decompress_response $api_response;
+
+my $decoded_json = decode_json $api_response->{content};
+chomp( my $remote_version = $decoded_json->{'name'} );
+
+# Exclude release candidates and catch unknown release schemes.
+$remote_version =~ /\A v \d+\. \d+\. \d+ \z/ax
+	or die "Release version did not match expected release scheme.\n";
+
+chomp(
+	my $local_version = do {
+		local $/;
+		open my $local_version_fh, '<',
+			"$element_web_ui_dir/element/version";
+		'v' . <$local_version_fh>;
+	}
+);
+
+$remote_version gt $local_version
+	or die "Remote version of element-web is not newer than local version.\n";
+
+my $release_url = make_github_release_url qw(vector-im element-web),
+	$remote_version;
+my $tmpdir = tempdir CLEANUP => 1;
+
+my $http = regular_http();
+
+my $base_filename = "element-$remote_version";
+my %file_extensions = (
+	tarfile => '.tar.gz',
+	sigfile => '.tar.gz.asc',
+);
+for my $file_type ( keys %file_extensions ) {
+	$http->mirror(
+		"$release_url/$base_filename" . $file_extensions{$file_type},
+		"$tmpdir/$base_filename" . $file_extensions{$file_type},
+	);
+}
+
+#<<<
+system "gpg --verify"
+	. " $tmpdir/$base_filename" . $file_extensions{'sigfile'}
+	. " $tmpdir/$base_filename" . $file_extensions{'tarfile'}
+	. " > /dev/null 2>&1";
+#>>>
+
+my $tar = Archive::Tar->new;
+$tar->extract_archive( "$tmpdir/$base_filename" . $file_extensions{'tarfile'} );
+
+unlink "$element_web_ui_dir/element";
+
+# Symbolic link has to made with a relative path. Otherwise httpd(8)
+# will return a 404, because it cannot see anything outside of
+# /var/www.
+symlink "./element-$remote_version", "./element";

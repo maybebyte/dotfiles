@@ -1,0 +1,65 @@
+#!/usr/bin/env perl
+# Copyright (c) 2022-2023 Ashlen <dev@anthes.is>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+use v5.36;
+use autodie;
+
+# Core.
+use English;
+use File::Basename qw(fileparse);
+use Getopt::Std;
+
+# Personal.
+use Anthesis::OpenBSD qw(pledge_or_die);
+
+my ( %completions, $completion_type );
+
+sub usage {
+	my $program_name = fileparse $PROGRAM_NAME;
+	die <<EOF;
+$program_name [-h] [-t completion_type]
+EOF
+}
+
+our ( $opt_h, $opt_t );
+getopts('ht:');
+
+usage if $opt_h;
+
+pledge_or_die qw(stdio);
+
+$completion_type = $opt_t;
+
+if ( $completion_type eq 'man' ) {
+	while ( my $line = <<>> ) {
+		chomp $line;
+
+		# We only need up to before the first parenthesis, as we only care about the
+		# names of the man pages.
+		$line = substr $line, 0, index( $line, '(' );
+
+		# Every name that is present for a given man page is added to an array that
+		# will be looped through.
+		$line =~ tr/,//d;
+		my @man_pages_in_line = split ' ', $line;
+
+		# Each name is added as a new key the first time it is encountered.
+		while ( my $man_page = shift @man_pages_in_line ) {
+			$completions{$man_page}++;
+		}
+	}
+}
+
+say join "\n", sort keys %completions;
