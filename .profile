@@ -42,6 +42,9 @@ export \
 # https://unix.stackexchange.com/a/415028
 export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 
+# Add local man page directory.
+export MANPATH=":${XDG_DATA_HOME}/man"
+
 # sh/ksh initialization
 #
 # this should come last in .profile so that one can assume
