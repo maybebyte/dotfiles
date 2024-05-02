@@ -29,7 +29,7 @@ super + p
 
 # screen lock
 super + s
-	pkill -USR1 xidle
+	if [ "$(uname)" = 'OpenBSD' ]; then pkill -USR1 xidle; else "${HOME}/.local/bin/lockscreen"; fi
 
 # clear the clipboard and notify the user about it
 super + c
