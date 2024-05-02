@@ -20,10 +20,16 @@ err() {
 	exit 1
 }
 
-command -v 'xlock' > /dev/null 2>&1 || err 'xlock not found in PATH.'
+if command -v 'slock' > /dev/null 2>&1; then
+	LOCKER='slock'
+elif command -v 'xlock' > /dev/null 2>&1; then
+	LOCKER='xlock'
+else
+	err 'Neither slock nor xlock were found in PATH.'
+fi
 
 # Must lock the screen even if these fail.
 clear_clip || :
 pkill -q 'keepass' || :
 
-exec xlock
+exec "${LOCKER}"

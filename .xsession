@@ -57,7 +57,15 @@ xset b off
 
 # daemons
 picom -b --log-file "${XDG_DATA_HOME}/picom/picom.log"
-xidle &
+
+# OpenBSD has xidle in the base system, so using xautolock there is
+# unnecessary.
+if [ "$(uname)" = 'OpenBSD' ]; then
+	xidle &
+else
+	xautolock -secure &
+fi
+
 unclutter -idle 3 &
 sxhkd &
 dunst &

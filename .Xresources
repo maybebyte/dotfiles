@@ -96,3 +96,6 @@ XLock.background: bg_0
 XIdle.program: .local/bin/lockscreen
 XIdle.timeout: 90
 XIdle.position: no
+
+Xautolock.time: 1
+Xautolock.locker: .local/bin/lockscreen
