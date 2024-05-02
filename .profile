@@ -1,6 +1,10 @@
-# use nvim if it's installed, vi otherwise
-command -v 'nvim' > /dev/null 2>&1 && export EDITOR='nvim'
-[ -z "${EDITOR}" ] && export EDITOR='vi'
+if command -v 'nvim' > /dev/null 2>&1; then
+	export EDITOR='nvim'
+elif command -v 'vim' > /dev/null 2>&1; then
+	export EDITOR='vim'
+else
+	export EDITOR='vi'
+fi
 
 # use colorls if it's installed, ls otherwise
 command -v 'colorls' > /dev/null 2>&1 && export LS='colorls'
