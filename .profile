@@ -6,9 +6,11 @@ else
 	export EDITOR='vi'
 fi
 
-# use colorls if it's installed, ls otherwise
-command -v 'colorls' > /dev/null 2>&1 && export LS='colorls'
-[ -z "${LS}" ] && export LS='ls'
+if command -v 'colorls' > /dev/null 2>&1; then
+	export LS='colorls'
+else
+	export LS='ls'
+fi
 
 export \
 	BROWSER="firefox" \
