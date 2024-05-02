@@ -1,3 +1,4 @@
+# determines what EDITOR will be based on what's available
 if command -v 'nvim' > /dev/null 2>&1; then
 	export EDITOR='nvim'
 elif command -v 'vim' > /dev/null 2>&1; then
@@ -6,30 +7,38 @@ else
 	export EDITOR='vi'
 fi
 
+# determines what LS will be based on what's available
 if command -v 'colorls' > /dev/null 2>&1; then
 	export LS='colorls'
 else
 	export LS='ls'
 fi
 
+# History variables
 export \
-	BROWSER="firefox" \
-	CLICOLOR=1 \
-	FCEDIT="${EDITOR}" \
 	HISTFILE="${HOME}/.history" \
-	HISTSIZE=10000 \
-	LC_CTYPE='en_US.UTF-8' \
+	HISTSIZE=10000
+
+# Pager variables
+export \
 	LESS='-iMRx 4' \
 	LESSSECURE=1 \
-	PAGER='less' \
-	VISUAL="${EDITOR}" \
+	PAGER='less'
+
+# variables that depend on EDITOR being defined
+export \
+	FCEDIT="${EDITOR}" \
+	VISUAL="${EDITOR}"
+
+# XDG variables
+export \
 	XDG_BIN_HOME="${HOME}/.local/bin" \
 	XDG_CACHE_HOME="${HOME}/.cache" \
 	XDG_CONFIG_HOME="${HOME}/.config" \
 	XDG_DATA_HOME="${HOME}/.local/share" \
 	XDG_STATE_HOME="${HOME}/.local/state"
 
-# These variables come after.
+# Variables that depend on XDG_* being defined
 export \
 	GOBIN="${XDG_BIN_HOME}" \
 	GNUPGHOME="${XDG_CONFIG_HOME}/gnupg" \
@@ -38,6 +47,13 @@ export \
 	PERL5LIB="${XDG_DATA_HOME}/perl5" \
 	PERLCRITIC="${XDG_CONFIG_HOME}/config/perlcritic.conf" \
 	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
+
+
+# Other miscellaneous variables
+export \
+	BROWSER='firefox' \
+	CLICOLOR=1 \
+	LC_CTYPE='en_US.UTF-8'
 
 # shellcheck disable=SC1091
 [ -n "${DISPLAY}" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
