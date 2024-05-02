@@ -69,7 +69,7 @@ if [ -n "${DISPLAY}" ]; then
 	. "${XDG_CACHE_HOME}/wal/colors.sh"
 fi
 
-# Add XDG_BIN_HOME to PATH.
+# Append XDG_BIN_HOME to PATH.
 #
 # PATH parameter expansion explanation:
 # https://unix.stackexchange.com/a/415028
