@@ -1,0 +1,6 @@
+include ~/.config/sway/vars
+include ~/.config/sway/devices
+include ~/.config/sway/settings
+include ~/.config/sway/bindings
+include ~/.config/sway/bar
+include ~/.config/sway/startup_apps

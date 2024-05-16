@@ -1,0 +1,6 @@
+exec swayidle -w
+exec gentoo-pipewire-launcher
+exec dunst
+exec easyeffects --gapplication-service
+exec gammastep
+exec_always test -f ~/.Xresources && xrdb -merge ~/.Xresources

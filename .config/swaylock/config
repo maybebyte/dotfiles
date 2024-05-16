@@ -1,0 +1,35 @@
+show-failed-attempts
+ignore-empty-password
+line-uses-ring
+indicator-caps-lock
+daemonize
+
+### default colors ###
+color=103c48
+inside-color=184956
+ring-color=103c48
+text-color=adbcbc
+key-hl-color=72898f
+bs-hl-color=72898f
+
+### clear colors ###
+inside-clear-color=103c48
+ring-clear-color=103c48
+text-clear-color=adbcbc
+
+### caps lock colors ###
+inside-caps-lock-color=184956
+ring-caps-lock-color=103c48
+caps-lock-bs-hl-color=72898f
+caps-lock-key-hl-color=72898f
+text-caps-lock-color=fa5750
+
+### verification colors ###
+inside-ver-color=103c48
+ring-ver-color=103c48
+text-ver-color=adbcbc
+
+### wrong colors ###
+inside-wrong-color=103c48
+ring-wrong-color=103c48
+text-wrong-color=fa5750

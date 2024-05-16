@@ -1,0 +1,40 @@
+set $bright_black #2d5b69
+set $bright_blue #58a3ff
+set $bright_cyan #53d6c7
+set $bright_green #84c747
+set $bright_magenta #ff84cd
+set $bright_red #ff665c
+set $bright_white #cad8d9
+set $bright_yellow #ebc13d
+
+set $normal_black #184956
+set $normal_blue #4695f7
+set $normal_cyan #41c7b9
+set $normal_green #75b938
+set $normal_magenta #f275be
+set $normal_red #fa5750
+set $normal_white #72898f
+set $normal_yellow #dbb32d
+
+set $background #103c48
+set $foreground #adbcbc
+
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Your preferred terminal emulator
+set $term alacritty
+
+# Browser
+set $browser chromium
+
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+set $menu dmenu_path | bemenu | xargs swaymsg exec --
