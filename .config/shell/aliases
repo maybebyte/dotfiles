@@ -7,3 +7,6 @@ alias \
 
 # Manage dotfiles more easily.
 alias d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"
+
+# Play audio with mpv more easily.
+alias mpva='mpv --no-keep-open --no-resume-playback --no-pause --no-video'
