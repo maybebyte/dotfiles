@@ -1,0 +1,46 @@
+cpbak() {
+	if [ -z "$1" ] || [ "$1" = '-h' ]; then
+		cat >&2 <<-EOF
+			If the given file ends in ".bak", create a copy of that file
+			without ".bak" at the end. Otherwise, create a copy of
+			that file with ".bak" at the end.
+
+			cpbak [file]
+		EOF
+
+		return
+	fi
+
+	CPBAK_FILE="$1"
+
+	if [ -n "${CPBAK_FILE##*.bak}" ]; then
+		cp -- "${CPBAK_FILE}" "${CPBAK_FILE}.bak"
+	else
+		cp -- "${CPBAK_FILE}" "${CPBAK_FILE%.bak}"
+	fi
+
+	unset CPBAK_FILE
+}
+
+mvbak() {
+	if [ -z "$1" ] || [ "$1" = '-h' ]; then
+		cat >&2 <<-EOF
+			If the given file ends in ".bak", remove ".bak" from the
+			filename. Otherwise, append ".bak" to the filename.
+
+			mvbak [file]
+		EOF
+
+		return
+	fi
+
+	MVBAK_FILE="$1"
+
+	if [ -n "${MVBAK_FILE##*.bak}" ]; then
+		mv -- "${MVBAK_FILE}" "${MVBAK_FILE}.bak"
+	else
+		mv -- "${MVBAK_FILE}" "${MVBAK_FILE%.bak}"
+	fi
+
+	unset MVBAK_FILE
+}
