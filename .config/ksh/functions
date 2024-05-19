@@ -2,9 +2,8 @@ cpbak() {
 	if [ -z "$1" ] || [ "$1" = '-h' ]; then
 		cat >&2 <<-EOF
 			If the given file ends in ".bak", create a copy of that file
-			without ".bak" at the end.
-
-			Otherwise, create a copy of that file with ".bak" at the end.
+			without ".bak" at the end. Otherwise, create a copy of
+			that file with ".bak" at the end.
 
 			cpbak [file]
 		EOF
