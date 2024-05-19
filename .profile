@@ -78,9 +78,12 @@ export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 # Add local man page directory.
 export MANPATH=":${XDG_DATA_HOME}/man"
 
-# sh/ksh initialization
-#
-# this should come last in .profile so that one can assume
-# that any variables exported in .profile will carry over to
-# ksh(1).
-export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
+# Shell initialization.
+# TODO: clean this up and make it shell agnostic.
+if [ -n "${KSH_VERSION}" ]; then
+	export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
+elif [ -n "${BASH_VERSION}" ]; then
+	if [ -f "${HOME}/.bashrc" ]; then
+		. "${HOME}/.bashrc"
+	fi
+fi
