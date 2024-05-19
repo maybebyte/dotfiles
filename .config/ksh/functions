@@ -60,13 +60,6 @@ cht [command name]' >&2
 	ftp -U 'curl' -VMo - -- "https://cht.sh/$1"
 }
 
-# if $1 ends in '.bak', copy $1 to an identically named file except the
-# new file omits '.bak'.
-#
-# otherwise, copy $1 to an identically named file except the new file
-# ends in '.bak'.
-#
-# $1 is a file.
 cpbak() {
 	if [ -z "$1" ] || [ "$1" = '-h' ]; then
 		cat >&2 <<-EOF
@@ -82,13 +75,6 @@ cpbak() {
 	fi
 
 	CPBAK_FILE="$1"
-
-	# If we were provided with a file or directory that has trailing
-	# slash(es), don't try to copy it.
-	if [ "${CPBAK_FILE}" != "${1##*/}" ]; then
-		echo 'cpbak does not support filenames that contain trailing slashes.' >&2
-		return
-	fi
 
 	if [ -n "${CPBAK_FILE##*.bak}" ]; then
 		cp -- "${CPBAK_FILE}" "${CPBAK_FILE}.bak"
@@ -173,10 +159,6 @@ manmd [markdown document]' >&2
 	lowdown -T 'man' "$1" | mandoc -a
 }
 
-# if $1 ends in '.bak', remove '.bak' from the filename.
-# otherwise, append '.bak' to the filename.
-#
-# $1 is a file.
 mvbak() {
 	if [ -z "$1" ] || [ "$1" = '-h' ]; then
 		cat >&2 <<-EOF
@@ -190,17 +172,6 @@ mvbak() {
 	fi
 
 	MVBAK_FILE="$1"
-
-	# If we were provided with a file or directory that has a trailing
-	# slash, remove it. Otherwise, something similar to these errors
-	# will happen depending on whether MVBAK_FILE was a file or
-	# directory:
-	#
-	# mv: cannot stat 'foo/': Not a directory
-	# mv: cannot move 'foo/' to a subdirectory of itself, 'foo/.bak'
-	if [ -z "${1##*/}" ]; then
-		MVBAK_FILE="${MVBAK_FILE%/}"
-	fi
 
 	if [ -n "${MVBAK_FILE##*.bak}" ]; then
 		mv -- "${MVBAK_FILE}" "${MVBAK_FILE}.bak"
