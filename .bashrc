@@ -17,8 +17,8 @@ fi
 
 # Put your fun stuff here.
 
-# if tmux is installed and not inside a tmux session, then try to attach.
-# if attachment fails, start a new session
+# If tmux is installed and not inside a tmux session, then try to attach.
+# If attachment fails, start a new session.
 if [ -z "${TMUX}" ] && command -v tmux > /dev/null 2>&1; then
 		{ tmux attach || tmux; } > /dev/null 2>&1
 fi
