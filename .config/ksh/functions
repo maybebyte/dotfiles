@@ -68,24 +68,35 @@ cht [command name]' >&2
 #
 # $1 is a file.
 cpbak() {
-	case "$1" in
-		'' | '-h')
-			echo 'if the given file ends in ".bak", copy to an identically
-named file except the new file omits ".bak".
+	if [ -z "$1" ] || [ "$1" = '-h' ]; then
+		cat >&2 <<-EOF
+			If the given file ends in ".bak", create a copy of that file
+			without ".bak" at the end.
 
-otherwise, copy the given file to an identically named file except the
-new file ends in ".bak".
+			Otherwise, create a copy of that file with ".bak" at the end.
 
-cpbak [file]' >&2
+			cpbak [file]
+		EOF
 
-			return
-			;;
-	esac
+		return
+	fi
 
-	case "${1##*.bak}" in
-		'') cp -- "$1" "${1%.bak}" ;;
-		*) cp -- "$1" "$1.bak" ;;
-	esac
+	CPBAK_FILE="$1"
+
+	# If we were provided with a file or directory that has trailing
+	# slash(es), don't try to copy it.
+	if [ "${CPBAK_FILE}" != "${1##*/}" ]; then
+		echo 'cpbak does not support filenames that contain trailing slashes.' >&2
+		return
+	fi
+
+	if [ -n "${CPBAK_FILE##*.bak}" ]; then
+		cp -- "${CPBAK_FILE}" "${CPBAK_FILE}.bak"
+	else
+		cp -- "${CPBAK_FILE}" "${CPBAK_FILE%.bak}"
+	fi
+
+	unset CPBAK_FILE
 }
 
 # choose files with fzf and edit them.
