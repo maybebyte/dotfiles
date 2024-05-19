@@ -167,27 +167,37 @@ manmd [markdown document]' >&2
 #
 # $1 is a file.
 mvbak() {
-	case "$1" in
-		'' | '-h')
-			echo 'if the given file ends in ".bak", remove ".bak" from the filename.
-otherwise, append ".bak" to the filename.
+	if [ -z "$1" ] || [ "$1" = '-h' ]; then
+		cat >&2 <<-EOF
+			If the given file ends in ".bak", remove ".bak" from the
+			filename. Otherwise, append ".bak" to the filename.
 
-mvbak [file]' >&2
+			mvbak [file]
+		EOF
 
-			return
-			;;
-	esac
-
-	if [ -z "${1##*/}" ]; then
-		MVBAK_FILE="${1%/}"
-	else
-		MVBAK_FILE="$1"
+		return
 	fi
 
-	case "${MVBAK_FILE##*.bak}" in
-		'') mv -- "${MVBAK_FILE}" "${MVBAK_FILE%.bak}" ;;
-		*) mv -- "${MVBAK_FILE}" "${MVBAK_FILE}.bak" ;;
-	esac
+	MVBAK_FILE="$1"
+
+	# If we were provided with a file or directory that has a trailing
+	# slash, remove it. Otherwise, something similar to these errors
+	# will happen depending on whether MVBAK_FILE was a file or
+	# directory:
+	#
+	# mv: cannot stat 'foo/': Not a directory
+	# mv: cannot move 'foo/' to a subdirectory of itself, 'foo/.bak'
+	if [ -z "${1##*/}" ]; then
+		MVBAK_FILE="${MVBAK_FILE%/}"
+	fi
+
+	if [ -n "${MVBAK_FILE##*.bak}" ]; then
+		mv -- "${MVBAK_FILE}" "${MVBAK_FILE}.bak"
+	else
+		mv -- "${MVBAK_FILE}" "${MVBAK_FILE%.bak}"
+	fi
+
+	unset MVBAK_FILE
 }
 
 # nc(1) + tor(1) = fun.
