@@ -1,7 +1,4 @@
-#!/usr/bin/env ksh
-
-# Uses ANSI escape sequences and ksh escape sequences to set up PS1
-# and DOAS_PS1.
+# Uses ANSI escape sequences to set up PS1.
 
 err() {
 	printf "%s\n" "$*" >&2
@@ -37,7 +34,7 @@ print_color_sequence() {
 
 	sequence="${sequence}\]"
 
-	print "${sequence}"
+	printf '%s' "${sequence}"
 	unset sequence
 }
 
@@ -62,7 +59,7 @@ print_modifier_sequence() {
 
 	sequence="${sequence}\]"
 
-	print "${sequence}"
+	printf '%s' "${sequence}"
 	unset sequence
 }
 
@@ -84,7 +81,7 @@ wrap_with_color_sequence() {
 	color_sequence="$(print_color_sequence "${fg_or_bg}" "${color_name}")"
 	reset_sequence="$(print_modifier_sequence 'reset')"
 
-	print "${color_sequence}${string_to_wrap}${reset_sequence}"
+	printf '%s%s%s' "${color_sequence}" "${string_to_wrap}" "${reset_sequence}"
 
 	unset \
 		fg_or_bg \
@@ -109,7 +106,7 @@ wrap_with_modifier_sequence() {
 	modifier_sequence="$(print_modifier_sequence "${modifier_name}" "${string_to_wrap}")"
 	reset_sequence="$(print_modifier_sequence 'reset')"
 
-	print "${modifier_sequence}${string_to_wrap}${reset_sequence}"
+	printf '%s%s%s' "${modifier_sequence}" "${string_to_wrap}" "${reset_sequence}"
 
 	unset \
 		modifier_name \
@@ -118,31 +115,18 @@ wrap_with_modifier_sequence() {
 		reset_sequence
 }
 
-case "${KSH_VERSION%%\ KSH*}" in
-	"@(#)PD")
-		_left_bracket="$(wrap_with_color_sequence "fg" "blue" "[")"
-		_right_bracket="$(wrap_with_color_sequence "fg" "blue" "]")"
+_left_bracket="$(wrap_with_color_sequence "fg" "blue" "[")"
+_right_bracket="$(wrap_with_color_sequence "fg" "blue" "]")"
 
-		_hostname="$(wrap_with_color_sequence "fg" "magenta" "\h")"
-		_user="$(wrap_with_color_sequence "fg" "cyan" "\u")"
-		_path="$(wrap_with_color_sequence "fg" "red" "\w")"
+_hostname="$(wrap_with_color_sequence "fg" "magenta" "\h")"
+_user="$(wrap_with_color_sequence "fg" "cyan" "\u")"
+_path="$(wrap_with_color_sequence "fg" "red" "\w")"
 
-		_doas_user="$(wrap_with_color_sequence "fg" "magenta" "\u")"
-		_doas_user="$(wrap_with_modifier_sequence "bold" "${_doas_user}")"
+export PS1="${_left_bracket}${_user}@${_hostname} ${_path}${_right_bracket}\\$ "
 
-		export PS1="${_left_bracket}${_user}@${_hostname} ${_path}${_right_bracket}\\$ "
-		export DOAS_PS1="${_left_bracket}${_doas_user}@${_hostname} ${_path}${_right_bracket}\\$ "
-
-		unset \
-			_left_bracket \
-			_right_bracket \
-			_hostname \
-			_user \
-			_path \
-			_doas_user
-		;;
-
-	*)
-		echo "Custom PS1 not available." >&2
-		;;
-esac
+unset \
+	_left_bracket \
+	_right_bracket \
+	_hostname \
+	_user \
+	_path
