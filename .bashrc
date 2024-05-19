@@ -24,3 +24,5 @@ if [ -z "${TMUX}" ] && command -v tmux > /dev/null 2>&1; then
 fi
 
 set -o vi
+
+. "${XDG_CONFIG_HOME:="${HOME}/.config"}/shell/aliases"
