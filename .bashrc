@@ -26,3 +26,4 @@ fi
 set -o vi
 
 . "${XDG_CONFIG_HOME:="${HOME}/.config"}/shell/aliases"
+. "${XDG_CONFIG_HOME:="${HOME}/.config"}/shell/prompt"
