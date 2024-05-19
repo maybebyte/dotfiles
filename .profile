@@ -79,4 +79,4 @@ export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 export MANPATH=":${XDG_DATA_HOME}/man"
 
 # Shell initialization.
-. "${XDG_CONFIG_HOME}/shell/init"
+. "${XDG_CONFIG_HOME}/shell/rc"

@@ -1,1 +1,1 @@
-/home/sylvia/.config/shell/init
+/home/sylvia/.config/shell/rc
