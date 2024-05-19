@@ -79,11 +79,4 @@ export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 export MANPATH=":${XDG_DATA_HOME}/man"
 
 # Shell initialization.
-# TODO: clean this up and make it shell agnostic.
-if [ -n "${KSH_VERSION}" ]; then
-	export ENV="${XDG_CONFIG_HOME}/ksh/kshrc"
-elif [ -n "${BASH_VERSION}" ]; then
-	if [ -f "${HOME}/.bashrc" ]; then
-		. "${HOME}/.bashrc"
-	fi
-fi
+. "${XDG_CONFIG_HOME}/shell/init"
