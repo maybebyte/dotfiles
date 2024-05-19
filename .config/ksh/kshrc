@@ -8,7 +8,9 @@ if [ -z "${TMUX}" ] && command -v tmux > /dev/null 2>&1; then
 fi
 
 # enable ^T for status, useful for dd(1)
-stty status "^T"
+case "$(uname)" in
+	*'BSD') stty status "^T" ;;
+esac
 
 # ksh options
 set -o vi
