@@ -51,7 +51,7 @@ export \
 
 # Other miscellaneous variables
 export \
-	BROWSER='firefox' \
+	BROWSER='chromium' \
 	CLICOLOR=1 \
 	LC_CTYPE='en_US.UTF-8'
 
