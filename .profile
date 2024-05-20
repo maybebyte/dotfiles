@@ -79,4 +79,8 @@ export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 export MANPATH=":${XDG_DATA_HOME}/man"
 
 # Shell initialization.
-. "${XDG_CONFIG_HOME}/shell/rc"
+if [ -n "${KSH_VERSION}" ]; then
+	export ENV="${XDG_CONFIG_HOME}/shell/rc"
+else
+	. "${XDG_CONFIG_HOME}/shell/rc"
+fi
