@@ -22,8 +22,8 @@ color tree color7 default
 color quoted color7 default
 
 # URLs and email
-color body color4 default "[[:<:]](https?|ftp)://[[:alnum:]-]+([.][[:alnum:]-]+)+([/?][[:graph:]]*)?[[:>:]]" # URLs
-color body color4 default "[[:<:]][[:alnum:].+_-]+@[[:alnum:].-]+[[:>:]]" # Email addresses
+color body color4 default "(https?|ftp)://[[:alnum:]-]+([.][[:alnum:]-]+)+([/?][[:graph:]]*)?" # URLs
+color body color4 default "[[:alnum:].+_-]+@[[:alnum:].-]+" # Email addresses
 
 ## TODO: verify and/or rework everything below this...
 
