@@ -10,3 +10,10 @@ alias d="git --git-dir=\${HOME}/.dotfiles/ --work-tree=\${HOME}/"
 
 # Play audio with mpv more easily.
 alias mpva='mpv --no-keep-open --no-resume-playback --no-pause --no-video'
+
+# Generate diffs between kernel configurations that can be used in
+# /etc/kernel/config.d
+#
+# See also:
+# https://wiki.gentoo.org/wiki/Project:Distribution_Kernel#Using_.2Fetc.2Fkernel.2Fconfig.d
+alias diffkernel='diff --changed-group-format="%>" --unchanged-group-format=""'
