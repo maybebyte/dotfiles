@@ -54,8 +54,6 @@
 *color14:    br_cyan
 *color15:    fg_1
 
-st.font: monospace:size=12
-
 ! eye candy for non-{GTK,QT} applications
 Xft.antialias: 1
 Xft.autohint: 0
@@ -64,38 +62,3 @@ Xft.hinting: 1
 Xft.hintstyle: hintslight
 Xft.rgba: rgb
 Xft.scalable: 1
-
-! 5 seconds after lock for DPMS standby
-XLock.dpmsstandby: 5
-! 2 min after lock for DPMS suspend
-XLock.dpmssuspend: 120
-! 10 min after lock for DPMS off
-XLock.dpmsoff: 600
-
-! TODO: figure out why xset(1) and ~/.local/share/fonts clash with one another
-XLock.font: -xos4-terminus-medium-r-normal--24-240-72-72-c-120-iso10646-1
-XLock.planfont: -xos4-terminus-medium-r-normal--18-180-72-72-c-100-iso10646-1
-
-XLock.usefirst: True
-XLock.mode: blank
-XLock.erasemode: no_fade
-XLock.description:
-XLock.info:
-XLock.validate:
-XLock.invalid:
-XLock.echokeys: True
-XLock.echokey: *
-XLock.sound: False
-XLock.timeelapsed: True
-XLock.username:
-XLock.password: password:
-XLock.foreground: fg_0
-XLock.background: bg_0
-
-! sets up xidle to execute lockscreen script after 90 seconds
-XIdle.program: .local/bin/lockscreen
-XIdle.timeout: 90
-XIdle.position: no
-
-Xautolock.time: 1
-Xautolock.locker: .local/bin/lockscreen
