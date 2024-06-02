@@ -53,7 +53,8 @@ export \
 export \
 	BROWSER='chromium' \
 	CLICOLOR=1 \
-	LC_CTYPE='en_US.UTF-8'
+	LC_CTYPE='en_US.UTF-8' \
+	MANWIDTH=80
 
 # If running Xorg, source the pywal colors.sh file.
 #
@@ -78,9 +79,5 @@ export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 # Add local man page directory.
 export MANPATH=":${XDG_DATA_HOME}/man"
 
-# Shell initialization.
-if [ -n "${KSH_VERSION}" ]; then
-	export ENV="${XDG_CONFIG_HOME}/shell/rc"
-else
-	. "${XDG_CONFIG_HOME}/shell/rc"
-fi
+# Shell initialization. Currently, bash and OpenBSD ksh are supported.
+. "${XDG_CONFIG_HOME}/shell/rc"
