@@ -8,10 +8,10 @@ bar {
     status_command while true; do echo "$(cat /sys/class/power_supply/BAT0/status):" "$(cat /sys/class/power_supply/BAT0/capacity)%" \| $(date +'%F %R'); sleep 60; done
 
     colors {
-        statusline $foreground
+        statusline $normal_white
         background $background
-        focused_workspace $normal_cyan $normal_black $foreground
-        active_workspace $background $background $foreground
-        inactive_workspace $background $background $foreground
+        focused_workspace $background $normal_black $foreground
+        active_workspace $background $background $normal_white
+        inactive_workspace $background $background $normal_white
     }
 }
