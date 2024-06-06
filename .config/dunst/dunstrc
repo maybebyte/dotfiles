@@ -15,14 +15,14 @@
 
 [urgency_low]
 	background = "#103c48"
-	foreground = "#adbcbc"
+	foreground = "#72898f"
 	frame_color = "#adbcbc"
 	timeout = 5
 
 [urgency_normal]
 	background = "#103c48"
-	foreground = "#4695f7"
-	frame_color = "#4695f7"
+	foreground = "#72898f"
+	frame_color = "#adbcbc"
 	timeout = 5
 
 [urgency_critical]
