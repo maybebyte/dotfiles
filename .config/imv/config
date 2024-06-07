@@ -1,0 +1,37 @@
+[options]
+overlay_font = Monospace:12
+overlay_position_bottom = true
+suppress_default_binds = true
+
+[binds]
+# General binds
+q = quit
+x = close
+<Ctrl+r> = reset
+f = fullscreen
+d = overlay
+
+# Image rotation
+r = rotate by 90
+<Shift+R> = rotate by -90
+
+# Image navigation
+n = next
+p = prev
+gg = goto 1
+<Shift+G> = goto -1
+
+# Panning
+j = pan 0 -50
+k = pan 0 50
+h = pan 50 0
+l = pan -50 0
+
+# Zooming
+zi = zoom 3
+zo = zoom -3
+zz = zoom actual
+
+# Gif playback
+<period> = next_frame
+<space> = toggle_playing
