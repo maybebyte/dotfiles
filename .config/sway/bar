@@ -7,11 +7,15 @@ bar {
     # The default just shows the current date and time.
     status_command while true; do echo "$(cat /sys/class/power_supply/BAT0/status):" "$(cat /sys/class/power_supply/BAT0/capacity)%" \| $(date +'%a %m-%d %R'); sleep 60; done
 
-    colors {
-        statusline $normal_white
-        background $background
-        focused_workspace $background $normal_black $foreground
-        active_workspace $background $background $normal_white
-        inactive_workspace $background $background $normal_white
-    }
+	colors {
+		background $base
+		statusline $text
+		focused_statusline $text
+		focused_separator $base
+		focused_workspace $base $mantle $teal
+		active_workspace $base $base $blue
+		inactive_workspace $base $base $surface1
+		urgent_workspace $base $base $surface1
+		binding_mode $base $base $surface1
+	}
 }
