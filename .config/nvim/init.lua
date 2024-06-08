@@ -38,9 +38,9 @@ require("my.settings")
 bootstrap_plugin_manager()
 setup_backup_directory()
 
--- Load the colorscheme before plugins due to lazy.nvim quirks.
-vim.cmd("colorscheme selenized")
-
 require("lazy").setup("my.plugins")
+
+vim.cmd("colorscheme catppuccin-frappe")
+
 require("my.keybindings")
 require("my.autocmds")
