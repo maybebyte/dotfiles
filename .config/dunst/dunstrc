@@ -14,19 +14,19 @@
 	show_age_threshold = 120
 
 [urgency_low]
-	background = "#103c48"
-	foreground = "#72898f"
-	frame_color = "#adbcbc"
+	background = "#303446"
+	foreground = "#c6d0f5"
+	frame_color = "#8caaee"
 	timeout = 5
 
 [urgency_normal]
-	background = "#103c48"
-	foreground = "#72898f"
-	frame_color = "#adbcbc"
+	background = "#303446"
+	foreground = "#c6d0f5"
+	frame_color = "#8caaee"
 	timeout = 5
 
 [urgency_critical]
-	background = "#103c48"
-	foreground = "#fa5750"
-	frame_color = "#fa5750"
+	background = "#303446"
+	foreground = "#c6d0f5"
+	frame_color = "#ef9f76"
 	timeout = 0
