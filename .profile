@@ -56,6 +56,9 @@ export \
 	LC_CTYPE='en_US.UTF-8' \
 	MANWIDTH=80
 
+# Bemenu theming
+export BEMENU_OPTS='--fb "#303446" --ff "#c6d0f5" --nb "#303446" --nf "#c6d0f5" --tb "#303446" --hb "#303446" --tf "#e78284" --hf "#e5c890" --af "#c6d0f5" --ab "#303446"'
+
 # If running Xorg, source the pywal colors.sh file.
 #
 # TODO: dotfiles don't actually use pywal anymore. While pywal output
