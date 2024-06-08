@@ -1,58 +1,38 @@
-!---------------------------------------------------------------------------
-! Selenized dark color palette for urxvt and X Window System
-!
-#define    bg_0        #103c48
-#define    bg_1        #174956
-#define    bg_2        #325b66
-#define    dim_0       #72898f
-#define    fg_0        #adbcbc
-#define    fg_1        #cad8d9
+! --- Catppuccin frappe color scheme ---
+*background: #303446
+*foreground: #C6D0F5
 
-#define    red         #fa5750
-#define    green       #75b938
-#define    yellow      #dbb32d
-#define    blue        #4695f7
-#define    magenta     #f275be
-#define    cyan        #41c7b9
-#define    orange      #ed8649
-#define    violet      #af88eb
+! black
+*color0: #51576D
+*color8: #626880
 
-#define    br_red      #ff665c
-#define    br_green    #84c747
-#define    br_yellow   #ebc13d
-#define    br_blue     #58a3ff
-#define    br_magenta  #ff84cd
-#define    br_cyan     #53d6c7
-#define    br_orange   #fd9456
-#define    br_violet   #bd96fa
+! red
+*color1: #E78284
+*color9: #E78284
 
-*background:              bg_0
-*foreground:              fg_0
-*fading:                  40
-*fadeColor:               bg_0
-*cursorColor:             fg_1
-*pointerColorBackground:  bg_2
-*pointerColorForeground:  fg_1
+! green
+*color2: #A6D189
+*color10: #A6D189
 
-! normal colors: "black", red, green, yellow, blue, magenta, cyan, "white"
-*color0:     bg_1
-*color1:     red
-*color2:     green
-*color3:     yellow
-*color4:     blue
-*color5:     magenta
-*color6:     cyan
-*color7:     dim_0
+! yellow
+*color3: #E5C890
+*color11: #E5C890
 
-! bright/bold versions of colors (in the same order)
-*color8:     bg_2
-*color9:     br_red
-*color10:    br_green
-*color11:    br_yellow
-*color12:    br_blue
-*color13:    br_magenta
-*color14:    br_cyan
-*color15:    fg_1
+! blue
+*color4: #8CAAEE
+*color12: #8CAAEE
+
+! magenta
+*color5: #F4B8E4
+*color13: #F4B8E4
+
+! cyan
+*color6: #81C8BE
+*color14: #81C8BE
+
+! white
+*color7: #B5BFE2
+*color15: #A5ADCE
 
 ! eye candy for non-{GTK,QT} applications
 Xft.antialias: 1
