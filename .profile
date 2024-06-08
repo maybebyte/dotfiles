@@ -59,6 +59,11 @@ export \
 # Bemenu theming
 export BEMENU_OPTS='--fb "#303446" --ff "#c6d0f5" --nb "#303446" --nf "#c6d0f5" --tb "#303446" --hb "#303446" --tf "#e78284" --hf "#e5c890" --af "#c6d0f5" --ab "#303446"'
 
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
+--color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
+--color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
+
 # If running Xorg, source the pywal colors.sh file.
 #
 # TODO: dotfiles don't actually use pywal anymore. While pywal output
