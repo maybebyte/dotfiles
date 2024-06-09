@@ -1,3 +1,9 @@
+## NOTE: can't be enabled unless dotfiles repo removes symlinks. Also
+# may cause compatibility issues
+#[core]
+## https://github.com/git/git/security/advisories/GHSA-8prw-h3cq-mghm
+	#symlinks = false
+
 [user]
 	name = Ashlen
 	email = dev@anthes.is
