@@ -3,3 +3,11 @@
 	email = dev@anthes.is
 [init]
 	defaultBranch = main
+
+## https://forums.whonix.org/t/git-users-enable-fsck-by-default-for-better-security/2066
+[transfer]
+	fsckobjects = true
+[fetch]
+	fsckobjects = true
+[receive]
+	fsckobjects = true
