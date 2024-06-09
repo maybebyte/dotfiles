@@ -2,4 +2,7 @@ key_bindings:
   - { key: V, mods: Alt, action: Paste }
 
 import:
-  - ~/.config/alacritty/catppuccin-frappe.yml
+  #- ~/.config/alacritty/themes/catppuccin/catppuccin-latte.yml
+  - ~/.config/alacritty/themes/catppuccin/catppuccin-frappe.yml
+  #- ~/.config/alacritty/themes/catppuccin/catppuccin-macchiato.yml
+  #- ~/.config/alacritty/themes/catppuccin/catppuccin-mocha.yml

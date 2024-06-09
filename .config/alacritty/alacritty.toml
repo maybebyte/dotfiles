@@ -1,5 +1,8 @@
 import = [
-	"~/.config/alacritty/catppuccin-frappe.toml"
+	#"~/.config/alacritty/themes/catppuccin/catppuccin-latte.toml"
+	"~/.config/alacritty/themes/catppuccin/catppuccin-frappe.toml"
+	#"~/.config/alacritty/themes/catppuccin/catppuccin-macchiato.toml"
+	#"~/.config/alacritty/themes/catppuccin/catppuccin-mocha.toml"
 ]
 
 [[keyboard.bindings]]
