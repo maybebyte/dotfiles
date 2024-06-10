@@ -106,17 +106,17 @@ return {
 			lsp.extend_lspconfig()
 
 			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"bashls",
-					"clangd",
-					"cssls",
-					"gopls",
-					"html",
-					"perlnavigator",
-					"pylsp",
-					"pyright",
-					"stylelint_lsp",
-				},
+				-- ensure_installed = {
+				-- 	"bashls",
+				-- 	"clangd",
+				-- 	"cssls",
+				-- 	"gopls",
+				-- 	"html",
+				-- 	"perlnavigator",
+				-- 	"pylsp",
+				-- 	"pyright",
+				-- 	"stylelint_lsp",
+				-- },
 				handlers = {
 					lsp.default_setup,
 					pyright = function()
