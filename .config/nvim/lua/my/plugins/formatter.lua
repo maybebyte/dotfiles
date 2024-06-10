@@ -4,6 +4,7 @@ return {
 	"mhartington/formatter.nvim",
 	lazy = true,
 	ft = {
+		"c",
 		"css",
 		"go",
 		"html",
@@ -18,6 +19,9 @@ return {
 	config = function()
 		require("formatter").setup({
 			filetype = {
+				c = {
+					require("formatter.filetypes.c").clangformat,
+				},
 				css = {
 					require("formatter.filetypes.css").prettier,
 				},
