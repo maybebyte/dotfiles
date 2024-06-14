@@ -1,0 +1,2 @@
+# Burp Suite
+for_window [instance="^install4j-burp-StartBurp$"] floating enable

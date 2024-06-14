@@ -5,6 +5,7 @@ include ~/.config/sway/settings
 include ~/.config/sway/bindings
 include ~/.config/sway/bar
 include ~/.config/sway/startup_apps
+include ~/.config/sway/window_mgmt
 
 # target                 title     bg    text   indicator  border
 client.focused           $lavender $base $text  $rosewater $lavender
