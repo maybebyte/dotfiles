@@ -22,8 +22,8 @@ bindsym Ctrl+space exec 'dunstctl close'
 bindsym Ctrl+Shift+space exec 'dunstctl close-all'
 
 # Audio controls
-bindsym XF86AudioRaiseVolume exec 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ && dunstify -r 25231 "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"'
-bindsym XF86AudioLowerVolume exec 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- && dunstify -r 25231 "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"'
+bindsym XF86AudioRaiseVolume exec 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03+ && dunstify -r 25231 "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"'
+bindsym XF86AudioLowerVolume exec 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03- && dunstify -r 25231 "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"'
 bindsym XF86AudioMute exec 'wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && dunstify -r 25231 "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"'
 
 # Monitor brightness control
