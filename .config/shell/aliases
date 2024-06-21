@@ -17,3 +17,17 @@ alias mpva='mpv --no-keep-open --no-resume-playback --no-pause --no-video'
 # See also:
 # https://wiki.gentoo.org/wiki/Project:Distribution_Kernel#Using_.2Fetc.2Fkernel.2Fconfig.d
 alias diffkernel='diff --changed-group-format="%>" --unchanged-group-format=""'
+
+# Aliases to add color
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+alias ip='ip --color=auto'
+alias ls='ls --color=auto'
+
+# These allow other aliases to be checked and expanded after sudo or
+# doas.
+alias sudo='sudo '
+alias doas='doas '
+
+# Convenience alias for viewing SELinux denials.
+alias sedenials='ausearch -m AVC,USER_AVC,SELINUX_ERR,USER_SELINUX_ERR -ts boot'
