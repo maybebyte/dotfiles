@@ -89,5 +89,8 @@ export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
 # Add local man page directory.
 export MANPATH=":${XDG_DATA_HOME}/man"
 
+# Needed so that OpenBSD ksh will source its rc file.
+export ENV="${HOME}/.kshrc"
+
 # Shell initialization. Currently, bash and OpenBSD ksh are supported.
 . "${XDG_CONFIG_HOME}/shell/rc"
