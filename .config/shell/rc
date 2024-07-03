@@ -32,11 +32,6 @@ fi
 
 set -o vi
 
-if [ -n "${BASH_VERSION}" ]; then
-	bind -m vi-command 'Control-l: clear-screen'
-	bind -m vi-insert 'Control-l: clear-screen'
-fi
-
 . "${XDG_CONFIG_HOME}/shell/aliases"
 . "${XDG_CONFIG_HOME}/shell/functions"
 . "${XDG_CONFIG_HOME}/shell/prompt"
