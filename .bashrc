@@ -1,1 +1,1 @@
-/home/sylvia/.config/shell/rc
+. "${XDG_CONFIG_HOME}/shell/rc"
