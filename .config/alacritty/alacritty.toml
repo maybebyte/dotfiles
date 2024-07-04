@@ -9,3 +9,6 @@ import = [
 action = "Paste"
 key = "V"
 mods = "Alt"
+
+[font]
+size = 18.0
