@@ -12,7 +12,7 @@ bar {
 		statusline $text
 		focused_statusline $text
 		focused_separator $base
-		focused_workspace $base $mantle $teal
+		focused_workspace $base $mantle $text
 		active_workspace $base $base $blue
 		inactive_workspace $base $base $surface1
 		urgent_workspace $base $base $surface1
