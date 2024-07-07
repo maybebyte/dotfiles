@@ -55,7 +55,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-	pattern = "/tmp/sh*",
+	pattern = "/tmp/sh[a-zA-Z0-9]*",
 	callback = function()
 		vim.opt.filetype = "sh"
 	end,
