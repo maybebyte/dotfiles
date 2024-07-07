@@ -1,5 +1,2 @@
 default_border none
 default_floating_border none
-
-gaps inner 20
-gaps outer 10
