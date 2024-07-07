@@ -61,3 +61,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 	desc = "Set command-line editing to sh filetype so it has syntax highlighting",
 })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	pattern = "/tmp/bash-fc.[a-zA-Z0-9]*",
+	callback = function()
+		vim.opt.filetype = "bash"
+	end,
+	desc = "Set command-line editing to bash filetype so it has syntax highlighting",
+})
