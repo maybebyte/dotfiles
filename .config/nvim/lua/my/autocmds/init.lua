@@ -53,23 +53,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	desc = "ZenMode is enabled for help files.",
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = {
-		"perl",
-		"nroff",
-		"html",
-	},
-	callback = function()
-		-- Validate if current buffer is empty
-		if vim.api.nvim_buf_line_count(0) == 1 and vim.api.nvim_get_current_line() == "" then
-			local skeleton_file = os.getenv("HOME") .. "/.local/share/nvim/skel/" .. vim.bo.filetype
-			local lines = vim.fn.readfile(skeleton_file)
-			vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
-		end
-	end,
-	desc = "Load filetype-specific skeleton for new files",
-})
-
 vim.api.nvim_create_autocmd("BufNewFile", {
 	pattern = {
 		"*.[0-9]",
