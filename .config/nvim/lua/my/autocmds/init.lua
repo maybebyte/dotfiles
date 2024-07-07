@@ -30,16 +30,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	desc = "Reload Xresources and Xdefaults with xrdb(1)",
 })
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-	pattern = vim.env.XDG_CONFIG_HOME .. "/sxhkd/sxhkdrc",
-	callback = function()
-		if os.getenv("DISPLAY") then
-			os.execute("pkill -USR1 sxhkd")
-		end
-	end,
-	desc = "Reload sxhkd(1) keybindings",
-})
-
 vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function()
 		if vim.bo.filetype == "help" then
@@ -62,14 +52,6 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 		vim.opt.filetype = "nroff"
 	end,
 	desc = 'Set "nroff" filetype for man pages with file names that end in 0-9 or 3p',
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-	pattern = "*sxhkdrc",
-	callback = function()
-		vim.opt.filetype = "sxhkdrc"
-	end,
-	desc = "Set sxhkdrc to the sxhkdrc file type so it has syntax highlighting",
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
