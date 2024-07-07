@@ -1,14 +1,14 @@
 [Default Applications]
-application/pdf=org.pwmt.zathura-pdf-mupdf.desktop;
+application/pdf=org.pwmt.zathura.desktop;
 application/x-shellscript=nvim.desktop;
-image/gif=nsxiv.desktop;
-image/jpeg=nsxiv.desktop;
-image/jpeg=nsxiv.desktop;
-image/png=nsxiv.desktop;
-text/html=ungoogled-chromium.desktop;
-x-scheme-handler/http=ungoogled-chromium.desktop;
-x-scheme-handler/https=ungoogled-chromium.desktop;
+image/gif=imv.desktop;
+image/jpeg=imv.desktop;
+image/jpeg=imv.desktop;
+image/png=imv.desktop;
+text/html=chromium-browser-chromium.desktop;
+x-scheme-handler/http=chromium-browser-chromium.desktop;
+x-scheme-handler/https=chromium-browser-chromium.desktop;
 text/markdown=nvim.desktop;
-text/pdf=zathura.desktop
+text/pdf=org.pwmt.zathura.desktop
 text/plain=nvim.desktop;
 video/mp4=mpv.desktop;
