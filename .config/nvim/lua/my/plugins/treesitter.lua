@@ -23,7 +23,6 @@ return {
 			"make",
 			"python",
 			"query",
-			"sxhkdrc",
 			"vim",
 			"vimdoc",
 		},
