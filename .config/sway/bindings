@@ -30,6 +30,9 @@ bindsym XF86AudioMute exec 'wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && dunsti
 bindsym XF86MonBrightnessUp exec 'xbacklight -inc 5 && dunstify -r 25231 "Brightness: 0.$(xbacklight -get)"'
 bindsym XF86MonBrightnessDown exec 'xbacklight -dec 5 && dunstify -r 25231 "Brightness: 0.$(xbacklight -get)"'
 
+# Start password manager
+bindsym $mod+p exec 'keepassxc'
+
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
 # Despite the name, also works for non-floating windows.
