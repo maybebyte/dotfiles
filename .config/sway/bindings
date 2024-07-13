@@ -8,9 +8,6 @@ bindsym $mod+Return exec $term
 # Start browser
 bindsym $mod+Shift+b exec $browser
 
-# Start password manager
-bindsym $mod+p exec 'keepassxc'
-
 # Kill focused window
 bindsym $mod+x kill
 
