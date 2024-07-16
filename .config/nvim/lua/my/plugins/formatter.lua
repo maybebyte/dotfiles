@@ -8,6 +8,7 @@ return {
 		"css",
 		"go",
 		"html",
+		"javascript",
 		"json",
 		"lua",
 		"markdown",
@@ -30,6 +31,9 @@ return {
 				},
 				html = {
 					require("formatter.filetypes.html").prettier,
+				},
+				javascript = {
+					require("formatter.filetypes.javascript").prettier,
 				},
 				json = {
 					require("formatter.filetypes.json").prettier,
