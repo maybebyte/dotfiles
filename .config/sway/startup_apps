@@ -1,3 +1,4 @@
+exec waybar
 exec swayidle -w
 exec gentoo-pipewire-launcher
 exec dunst
