@@ -4,9 +4,7 @@
   "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
   "modules-center": ["sway/window"],
   "modules-right": [
-    "mpd",
     "idle_inhibitor",
-    "pulseaudio",
     "cpu",
     "temperature",
     "memory",
@@ -22,32 +20,6 @@
     "format-icons": ["", ""],
     "tooltip": true,
     "tooltip-format": "{app}: {title}",
-  },
-  "mpd": {
-    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-    "format-disconnected": "Disconnected ",
-    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-    "unknown-tag": "N/A",
-    "interval": 5,
-    "consume-icons": {
-      "on": " ",
-    },
-    "random-icons": {
-      "off": "<span color=\"#f53c3c\"></span> ",
-      "on": " ",
-    },
-    "repeat-icons": {
-      "on": " ",
-    },
-    "single-icons": {
-      "on": "1 ",
-    },
-    "state-icons": {
-      "paused": "",
-      "playing": "",
-    },
-    "tooltip-format": "MPD (connected)",
-    "tooltip-format-disconnected": "MPD (disconnected)",
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -84,18 +56,5 @@
     "format-charging": "{capacity}% ",
     "format-plugged": "{capacity}% ",
     "format-icons": ["", "", "", "", ""],
-  },
-  "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-muted": " ",
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": ["", "", ""],
-    },
   },
 }
