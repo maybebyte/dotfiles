@@ -7,7 +7,6 @@
 
 window#waybar {
     background-color: @base;
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
     color: @text;
     transition-property: background-color;
     transition-duration: .5s;
