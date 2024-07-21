@@ -11,3 +11,7 @@ window#waybar {
     transition-property: background-color;
     transition-duration: .5s;
 }
+
+#workspaces button.focused {
+    background-color: @mantle;
+}
