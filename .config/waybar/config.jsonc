@@ -11,6 +11,9 @@
     "battery",
     "clock",
   ],
+  "sway/window": {
+    "format": "{app_id}",
+  },
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>",
   },
