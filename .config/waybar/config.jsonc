@@ -2,7 +2,6 @@
   "spacing": 25,
   "output": ["*"],
   "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
-  "modules-center": ["sway/window"],
   "modules-right": [
     "idle_inhibitor",
     "cpu",
@@ -11,9 +10,6 @@
     "battery",
     "clock",
   ],
-  "sway/window": {
-    "format": "{app_id}",
-  },
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>",
   },
