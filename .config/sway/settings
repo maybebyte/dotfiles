@@ -1,2 +1,4 @@
 default_border none
 default_floating_border none
+
+output 'Dell Inc. DELL U2720Q JYGT223' scale 2
