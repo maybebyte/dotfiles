@@ -14,6 +14,9 @@ bindsym $mod+x kill
 # Start your launcher
 bindsym $mod+d exec $menu
 
+# Emoji menu
+bindsym $mod+u exec "emoji_selector ${XDG_DATA_HOME}/emoji"
+
 # Lock screen
 bindsym $mod+s exec 'pkill -USR1 swayidle'
 
