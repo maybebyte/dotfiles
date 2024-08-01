@@ -1,0 +1,136 @@
+#!/bin/sh
+# Copyright (c) 2024 Ashlen <dev@anthes.is>
+# 
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# inspired by:
+# https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenuunicode
+
+main() {
+	set -eu
+
+	sanity_checks
+
+	selected_line="$(cat -- "$@" | print_valid_emoji_lines | cut -d ';' -f1 | bemenu -i -l 20)"
+	if [ -z "${selected_line}" ]; then
+		exit 0
+	fi
+
+	emoji="$(printf '%s\n' "${selected_line}" | awk '{print $1}')"
+	unset selected_line
+
+	# No newline here because in messaging clients, pasting a newline
+	# often will cause the client to send the message. Even if it
+	# doesn't cause this, an embedded newline usually isn't what the
+	# user wants.
+	printf '%s' "${emoji}" | copy_to_clipboard
+	unset emoji
+}
+
+err() {
+	printf '%s\n' "$*" >&2
+	exit 1
+}
+
+sanity_checks() {
+	DEPENDENCIES="$(
+		cat <<-EOF
+			bemenu
+			perl
+		EOF
+	)"
+
+	if [ -n "${WAYLAND_DISPLAY}" ]; then
+		DEPENDENCIES="$(printf '%s\n' "${DEPENDENCIES}" 'wl-copy')"
+	elif [ -n "${DISPLAY}" ]; then
+		DEPENDENCIES="$(printf '%s\n' "${DEPENDENCIES}" 'xclip')"
+	else
+		err "Wayland or Xorg must be running for ${0##*/} to function properly."
+	fi
+
+	check_dependencies "${DEPENDENCIES}"
+	unset DEPENDENCIES
+}
+
+check_dependencies() {
+	depends=$*
+
+	for dependency in ${depends}; do
+		command -v -- "${dependency}" > /dev/null 2>&1 \
+			|| err "${dependency} not found in PATH."
+	done
+
+	unset depends
+}
+
+copy_to_clipboard() {
+	if [ -n "${WAYLAND_DISPLAY}" ]; then
+		wl-copy
+	elif [ -n "${DISPLAY}" ]; then
+		xclip -i -selection clipboard
+	else
+		err 'Neither Wayland nor Xorg are running based on environment vars.'
+	fi
+}
+
+print_valid_emoji_lines() {
+	perl -e '
+use strict;
+use warnings qw(FATAL utf8);
+use autodie;
+use feature qw(unicode_strings);
+use open qw(:std :encoding(UTF-8));
+use feature qw(say);
+
+use Unicode::Normalize qw(normalize);
+
+while ( my $line = readline STDIN ) {
+	chomp $line;
+	$line = normalize( "D", $line ) or next;
+
+	$line =~ m/
+		\A
+
+		\p{Emoji}+
+		\p{Emoji_Component}*
+
+		\p{Space_Separator}+
+
+		(
+		\p{Lowercase_Letter} |
+		\p{Uppercase_Letter} |
+		\p{Decimal_Number} |
+		\p{Space_Separator} |
+		\p{Nonspacing_Mark} |
+		\p{Punct} |
+		)+
+		;
+
+		\p{Space_Separator}+
+
+		(
+		\p{Space_Separator}*
+		\p{ASCII_Hex_Digit}+
+		)+
+		;
+
+		\z
+	/xn or next;
+
+	$line = normalize "C", $line;
+	say $line;
+}
+'
+}
+
+main "$@"
