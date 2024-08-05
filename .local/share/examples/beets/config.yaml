@@ -3,89 +3,89 @@
 directory: /path/to/music/dir
 
 import:
-	languages: en
-	#timid: yes
+    languages: en
+    #timid: yes
 
 # https://beets.readthedocs.io/en/stable/plugins/index.html
 plugins:
-	# Fetch various AcousticBrainz metadata.
-	# https://beets.readthedocs.io/en/stable/plugins/acousticbrainz.html
-	- acousticbrainz
+    # Fetch various AcousticBrainz metadata.
+    # https://beets.readthedocs.io/en/stable/plugins/acousticbrainz.html
+    - acousticbrainz
 
-	# Use acoustic fingerprinting to identify audio files with missing or
-	# incorrect metadata.
-	# https://beets.readthedocs.io/en/stable/plugins/chroma.html
-	- chroma
+    # Use acoustic fingerprinting to identify audio files with missing or
+    # incorrect metadata.
+    # https://beets.readthedocs.io/en/stable/plugins/chroma.html
+    - chroma
 
-	# Edit metadata from a text editor.
-	# https://beets.readthedocs.io/en/stable/plugins/edit.html
-	- edit
+    # Edit metadata from a text editor.
+    # https://beets.readthedocs.io/en/stable/plugins/edit.html
+    - edit
 
-	# Embed album art images into files' metadata.
-	# https://beets.readthedocs.io/en/stable/plugins/embedart.html
-	- embedart
+    # Embed album art images into files' metadata.
+    # https://beets.readthedocs.io/en/stable/plugins/embedart.html
+    - embedart
 
-	# Fetch album cover art from various sources.
-	# https://beets.readthedocs.io/en/stable/plugins/fetchart.html
-	- fetchart
+    # Fetch album cover art from various sources.
+    # https://beets.readthedocs.io/en/stable/plugins/fetchart.html
+    - fetchart
 
-	# Fetch genres based on Last.fm tags.
-	# https://beets.readthedocs.io/en/stable/plugins/lastgenre.html
-	- lastgenre
+    # Fetch genres based on Last.fm tags.
+    # https://beets.readthedocs.io/en/stable/plugins/lastgenre.html
+    - lastgenre
 
-	# Automatically fetch song lyrics.
-	# https://beets.readthedocs.io/en/stable/plugins/lyrics.html
-	#- lyrics
+    # Automatically fetch song lyrics.
+    # https://beets.readthedocs.io/en/stable/plugins/lyrics.html
+    #- lyrics
 
-	# Automatically notifies Kodi whenever the beets library changes.
-	# https://beets.readthedocs.io/en/stable/plugins/kodiupdate.html
-	- kodiupdate
+    # Automatically notifies Kodi whenever the beets library changes.
+    # https://beets.readthedocs.io/en/stable/plugins/kodiupdate.html
+    - kodiupdate
 
-	# Automatically notifies MPD whenever the beets library changes.
-	# https://beets.readthedocs.io/en/stable/plugins/mpdupdate.html
-	- mpdupdate
+    # Automatically notifies MPD whenever the beets library changes.
+    # https://beets.readthedocs.io/en/stable/plugins/mpdupdate.html
+    - mpdupdate
 
-	# Calculate volume normalization for players that support it.
-	# https://beets.readthedocs.io/en/stable/plugins/replaygain.html
-	- replaygain
+    # Calculate volume normalization for players that support it.
+    # https://beets.readthedocs.io/en/stable/plugins/replaygain.html
+    - replaygain
 
-	# Clean extraneous metadata from music files.
-	# https://beets.readthedocs.io/en/stable/plugins/scrub.html
-	- scrub
+    # Clean extraneous metadata from music files.
+    # https://beets.readthedocs.io/en/stable/plugins/scrub.html
+    - scrub
 
-	# Nullify fields by pattern or unconditionally.
-	# https://beets.readthedocs.io/en/stable/plugins/zero.html
-	#- zero
+    # Nullify fields by pattern or unconditionally.
+    # https://beets.readthedocs.io/en/stable/plugins/zero.html
+    #- zero
 
 embedart:
-	# without maxwidth, images above a certain size result in embed failures.
-	#
-	# better to limit the maximum embed width, rather than the maximum fetch width.
-	maxwidth: 1000
+    # without maxwidth, images above a certain size result in embed failures.
+    #
+    # better to limit the maximum embed width, rather than the maximum fetch width.
+    maxwidth: 1000
 
 fetchart:
-	minwidth: 1000
+    minwidth: 1000
 
-	# use cover art from filesystem as a fallback if nothing can be
-	# fetched.
-	sources:
-		- coverart
-		- itunes
-		- amazon
-		- albumart
-		- filesystem
+    # use cover art from filesystem as a fallback if nothing can be
+    # fetched.
+    sources:
+        - coverart
+        - itunes
+        - amazon
+        - albumart
+        - filesystem
 
 # some of these values (port, user) match the default, but are placed
 # here nevertheless for clarity.
 kodi:
-	host: puthost.here
-	port: 8080
-	user: kodi
-	pwd: "opensesame"
+    host: puthost.here
+    port: 8080
+    user: kodi
+    pwd: "opensesame"
 
 # /usr/local/share/doc/pkg-readmes/beets
 replaygain:
-	backend: gstreamer
+    backend: gstreamer
 
 mpd:
-	host: /var/run/mpd/socket
+    host: /var/run/mpd/socket
