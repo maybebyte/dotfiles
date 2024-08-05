@@ -101,8 +101,13 @@ while ( my $line = readline STDIN ) {
 	$line =~ m/
 		\A
 
-		\p{Emoji}+
-		\p{Emoji_Component}*
+		(
+		\p{Emoji} |
+		\p{Emoji_Component} |
+		\p{Emoji_Modifier} |
+		\p{Emoji_Modifier_Base} |
+		\p{Emoji_Presentation}
+		)+
 
 		\p{Space_Separator}+
 
