@@ -5,6 +5,7 @@
 [user]
 	name = Ashlen
 	email = dev@anthes.is
+	signingkey = 90965AE120F8E848979DEA4853670DEBCF375780
 [init]
 	defaultBranch = main
 
