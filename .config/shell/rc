@@ -24,6 +24,9 @@ fi
 
 set -o vi
 
+GPG_TTY="$(tty)"
+export GPG_TTY
+
 . "${XDG_CONFIG_HOME}/shell/aliases"
 . "${XDG_CONFIG_HOME}/shell/functions"
 . "${XDG_CONFIG_HOME}/shell/prompt"
