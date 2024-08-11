@@ -11,37 +11,35 @@
 .\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 .\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-.Dd November 22, 2022
+.Dd August 10, 2024
 .Dt EMOJI 5
 .Sh NAME
 .Nm emoji
 .Nd formatted emoji file
 .Sh DESCRIPTION
 .Nm
-is a file format that contains emoji, as well as associated keywords and code points.
+is a file format that contains emoji, as well as a description and code
+points.
 .Pp
-Each line in an
+Each line of the
 .Nm
-file starts with an emoji, followed by a space. One or more keywords follow,
-separated by spaces and terminated by a semicolon. After that, one or more code
-points are written, separated by spaces. A semicolon completes the line.
+file is separated into fields. Each field is delimited by a semicolon.
+There are currently three fields: the emoji, the emoji description, and
+the code points.
 .Pp
 An
 .Nm
 file can be generated from data files provided by www.unicode.org.
 .Sh EXAMPLES
 .Bl -tag -width Ds
-.It 😅 grinning face with sweat; 1F605;
-.It 💕 two hearts; 1F495;
-.It ♟️ chess pawn; 265F FE0F;
-.It 🐺 wolf; 1F43A;
-.It 🙈 see-no-evil monkey; 1F648;
+.It 😅; grinning face with sweat; 1F605
+.It 💕; two hearts; 1F495
+.It ♟️; chess pawn; 265F FE0F
+.It 🐺; wolf; 1F43A
+.It 🙈; see-no-evil monkey; 1F648
 .El
 .Sh SEE ALSO
 .Bl -tag -width Ds
 .It Lk https://www.unicode.org/emoji/techindex.html "Unicode Emoji"
 .It Lk https://www.unicode.org/Public/emoji/latest/ "Unicode Emoji Data Files"
 .El
-.Sh BUGS
-Do not rely heavily on the current format. It is historical and may be reworked
-in the future.

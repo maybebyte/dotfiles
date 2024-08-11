@@ -1,10 +1,10 @@
 #!/bin/sh
 # Copyright (c) 2024 Ashlen <dev@anthes.is>
-# 
+#
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
 # copyright notice and this permission notice appear in all copies.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
 # WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
 # MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
@@ -21,7 +21,7 @@ main() {
 
 	sanity_checks
 
-	selected_line="$(cat -- "$@" | print_valid_emoji_lines | cut -d ';' -f1 | bemenu -i -l 20)"
+	selected_line="$(cat -- "$@" | print_valid_emoji_lines | awk -F ';' '{print $1 " " $2}' | bemenu -i -l 20)"
 	if [ -z "${selected_line}" ]; then
 		exit 0
 	fi
@@ -44,7 +44,7 @@ err() {
 
 sanity_checks() {
 	DEPENDENCIES="$(
-		cat <<-EOF
+		cat <<- EOF
 			bemenu
 			perl
 		EOF
@@ -108,8 +108,7 @@ while ( my $line = readline STDIN ) {
 		\p{Emoji_Modifier_Base} |
 		\p{Emoji_Presentation}
 		)+
-
-		\p{Space_Separator}+
+		;
 
 		(
 		\p{Lowercase_Letter} |
@@ -121,13 +120,10 @@ while ( my $line = readline STDIN ) {
 		)+
 		;
 
-		\p{Space_Separator}+
-
 		(
 		\p{Space_Separator}*
 		\p{ASCII_Hex_Digit}+
 		)+
-		;
 
 		\z
 	/xn or next;

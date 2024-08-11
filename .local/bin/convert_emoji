@@ -44,10 +44,10 @@ while ( my $line = <<>> ) {
 
 	my $output_line;
 	if ( $line =~ /\A \s* ( (:?[a-z0-9]+ \s+)* [a-z0-9]+ )/xpi ) {
-		$output_line = "$emoji; $description; ${^MATCH}";
+		$output_line = "$emoji;$description;${^MATCH}";
 	}
 	else {
-		$output_line = "$emoji; $description";
+		$output_line = "$emoji;$description";
 	}
 
 	$output_line = normalize "C", $output_line;
