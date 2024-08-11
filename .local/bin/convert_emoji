@@ -1,0 +1,55 @@
+#!/usr/bin/env perl
+# Copyright (c) 2024 Ashlen <dev@anthes.is>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# Basic Perl script to convert the file from here into emoji(5) format:
+# https://www.unicode.org/Public/emoji/latest/emoji-test.txt
+
+use strict;
+use warnings qw(FATAL utf8);
+use autodie;
+use feature qw(unicode_strings);
+use open qw(:std :encoding(UTF-8));
+use feature qw(say);
+
+use Unicode::Normalize qw(normalize);
+
+while ( my $line = <<>> ) {
+	chomp $line;
+
+	next unless $line =~ /; fully-qualified/;
+	next unless $line = normalize( "D", $line );
+
+	my $emoji_and_description = ( split /\#/, $line )[-1];
+	my ( $emoji, @description_fields ) = split " ", $emoji_and_description;
+
+	# Remove the unicode version label if it exists as the
+	# first element in the array.
+	if ( $description_fields[0] =~ /\A E[0-9]+\.[0-9]+ \z/xi ) {
+		shift @description_fields;
+	}
+
+	my $description = join " ", @description_fields;
+
+	my $output_line;
+	if ( $line =~ /\A \s* ( (:?[a-z0-9]+ \s+)* [a-z0-9]+ )/xpi ) {
+		$output_line = "$emoji; $description; ${^MATCH}";
+	}
+	else {
+		$output_line = "$emoji; $description";
+	}
+
+	$output_line = normalize "C", $output_line;
+	say $output_line;
+}
