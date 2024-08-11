@@ -21,7 +21,12 @@ main() {
 
 	sanity_checks
 
-	selected_line="$(cat -- "$@" | print_valid_emoji_lines | awk -F ';' '{print $1 " " $2}' | bemenu -i -l 20)"
+	selected_line="$(
+		cat -- "$@" \
+			| print_valid_emoji_lines \
+			| awk -F ';' '{print $1 " " $2}' \
+			| bemenu -i -l 20
+	)"
 	if [ -z "${selected_line}" ]; then
 		exit 0
 	fi
