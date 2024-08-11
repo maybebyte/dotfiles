@@ -44,3 +44,4 @@ statusbar_color = magenta
 statusbar_time_color = yellow
 volume_color = yellow
 window_border_color = yellow
+visualizer_color = blue,cyan,magenta,red
