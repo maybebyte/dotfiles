@@ -1,11 +1,6 @@
 -- luacheck: globals vim
 
-vim.keymap.set(
-	{ "v", "n" },
-	"<Space>",
-	"<Nop>",
-	{ silent = true, desc = "Leader is already space, so disable it otherwise." }
-)
+vim.keymap.set({ "v", "n" }, "<Space>", "<Nop>", { silent = true })
 
 vim.keymap.set({ "v", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Copy lines to CLIPBOARD." })
