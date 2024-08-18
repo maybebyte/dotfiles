@@ -1,6 +1,23 @@
+[include]
+	path = ~/.config/git/catppuccin.gitconfig
+
 # https://github.com/git/git/security/advisories/GHSA-8prw-h3cq-mghm
 [core]
 	symlinks = false
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	features = catppuccin-frappe
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
 
 [user]
 	name = Ashlen
