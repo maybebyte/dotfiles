@@ -31,6 +31,13 @@ if command -v eza > /dev/null 2>&1; then
 	alias ll='eza --icons --classify --time-style=long-iso --git --icons --binary --long --group --header --links --octal-permissions'
 fi
 
+# Replace cat and less with bat if available
+# https://github.com/sharkdp/bat
+if command -v bat > /dev/null 2>&1; then
+	alias cat='bat'
+	alias less='bat --paging always'
+fi
+
 # These allow other aliases to be checked and expanded after sudo or
 # doas.
 alias sudo='sudo '
