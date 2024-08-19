@@ -5,3 +5,4 @@ exec dunst
 exec easyeffects --gapplication-service
 exec gammastep
 exec_always test -f ~/.Xresources && xrdb -merge ~/.Xresources
+exec_always dbus-update-activation-environment WAYLAND_DISPLAY
