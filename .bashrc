@@ -20,3 +20,9 @@ complete -F _root_command doas
 if [ -f '/usr/share/fzf/key-bindings.bash' ]; then
 	. '/usr/share/fzf/key-bindings.bash'
 fi
+
+# Replaces cd with zoxide if available
+# https://github.com/ajeetdsouza/zoxide
+if command -v zoxide > /dev/null 2>&1; then
+	eval "$(zoxide init --cmd cd bash)"
+fi
