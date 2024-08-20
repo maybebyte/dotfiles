@@ -12,3 +12,11 @@ bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
 
 complete -F _root_command doas
+
+# Adds some nice things, like:
+# CTRL-R -- paste selected command into history
+# CTRL-T -- paste selected file path into command line
+# ALT-C -- cd into selected directory
+if [ -f '/usr/share/fzf/key-bindings.bash' ]; then
+	. '/usr/share/fzf/key-bindings.bash'
+fi
