@@ -38,6 +38,12 @@ if command -v bat > /dev/null 2>&1; then
 	alias less='bat --paging always'
 fi
 
+# Replace vi and vim commands with neovim if available.
+if command -v nvim > /dev/null 2>&1; then
+	alias vi='nvim'
+	alias vim='nvim'
+fi
+
 # These allow other aliases to be checked and expanded after sudo or
 # doas.
 alias sudo='sudo '
