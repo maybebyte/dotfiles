@@ -47,6 +47,11 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+# Don't write duplicate commands to the history file
+# Don't write commands starting with a space to the history file
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+
 # Disable CTRL-S and CTRL-Q
 # These cause the terminal output to stop and start, but I've never had
 # an actual use case for these.
