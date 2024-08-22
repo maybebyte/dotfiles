@@ -10,13 +10,13 @@ esac
 # 1) Wayland is not running
 # 2) We've logged into the first virtual terminal
 # 3) We're using Linux
-if [ -z "${WAYLAND_DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ] && [ "$(uname)" = "Linux" ]; then
+if [ -z "${WAYLAND_DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ] && [ "$(uname)" = 'Linux' ]; then
 	exec dbus-run-session sway
 fi
 
 # If tmux is installed and not inside a tmux session, then try to attach.
 # If attachment fails, start a new session.
-if [ -z "${TMUX}" ] && command -v tmux > /dev/null 2>&1; then
+if [ -z "${TMUX}" ] && command -v 'tmux' > /dev/null 2>&1; then
 	{ tmux attach || tmux; } > /dev/null 2>&1
 fi
 
@@ -108,7 +108,7 @@ bindkey "^U" backward-kill-line
 
 # Replaces cd with zoxide if available
 # https://github.com/ajeetdsouza/zoxide
-if command -v zoxide > /dev/null 2>&1; then
+if command -v 'zoxide' > /dev/null 2>&1; then
 	eval "$(zoxide init --cmd cd zsh)"
 fi
 
