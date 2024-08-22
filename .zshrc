@@ -47,10 +47,74 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-# Don't write duplicate commands to the history file
-# Don't write commands starting with a space to the history file
+
+# If a new command line being added to the history list duplicates
+# an older one, the older command is removed from the list (even if
+# it is not the previous event).
 setopt HIST_IGNORE_ALL_DUPS
+
+# When searching for history entries in the line editor, do not display
+# duplicates of a line previously found, even if the duplicates are not
+# contiguous.
+setopt HIST_FIND_NO_DUPS
+
+# When writing out the history file, older commands that duplicate newer
+# ones are omitted.
+setopt HIST_SAVE_NO_DUPS
+
+# Remove superfluous blanks from each command line being added to
+# the history list.
+setopt HIST_REDUCE_BLANKS
+
+# Remove command lines from the history list when the first character on
+# the line is a space, or when one of the expanded aliases contains a
+# leading space. Only normal aliases (not global or suffix aliases) have
+# this behaviour. Note that the command lingers in the internal history
+# until the next command is entered before it vanishes, allowing you to
+# briefly reuse or edit the line. If you want to make it vanish right
+# away without entering another command, type a space and press return.
 setopt HIST_IGNORE_SPACE
+
+# Whenever the user enters a line with history expansion, don’t execute
+# the line directly; instead, perform history expansion and reload the
+# line into the editing buffer.
+setopt HIST_VERIFY
+
+# This option works like APPEND_HISTORY except that new history lines
+# are added to the $HISTFILE incrementally (as soon as they are
+# entered), rather than waiting until the shell exits. The file will
+# still be periodically re-written to trim it when the number of lines
+# grows 20% beyond the value specified by $SAVEHIST (see also the
+# HIST_SAVE_BY_COPY option).
+setopt INC_APPEND_HISTORY
+
+# I'm not interested in beeps at all.
+unsetopt HIST_BEEP
+unsetopt LIST_BEEP
+
+# If a pattern for filename generation is badly formed, print an error
+# message. (If this option is unset, the pattern will be left
+# unchanged.)
+setopt BAD_PATTERN
+
+# When this option is set and the default zsh-style globbing is in effect,
+# the pattern ‘**/*’ can be abbreviated to ‘**’ and the pattern ‘***/*’
+# can be abbreviated to ***. Hence ‘**.c’ finds a file ending in .c in any
+# subdirectory, and ‘***.c’ does the same while also following symbolic
+# links. A / immediately after the ‘**’ or ‘***’ forces the pattern to be
+# treated as the unabbreviated form.
+setopt GLOB_STAR_SHORT
+
+# When writing out the history file, by default zsh uses ad-hoc file
+# locking to avoid known problems with locking on some operating systems.
+# With this option locking is done by means of the system’s fcntl call,
+# where this method is available. On recent operating systems this may
+# provide better performance, in particular avoiding history corruption
+# when files are stored on NFS.
+setopt HIST_FCNTL_LOCK
+
+# Allow comments even in interactive shells
+setopt INTERACTIVE_COMMENTS
 
 # Disable CTRL-S and CTRL-Q
 # These cause the terminal output to stop and start, but I've never had
