@@ -83,6 +83,20 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 
+# Fixes a really annoying bug with searching in vi mode.
+#
+# The problem is that if I hit ESC and / too quickly in succession,
+# it'll pull up this entirely different thing that I didn't want.
+#
+# https://superuser.com/questions/476532/how-can-i-make-zshs-vi-mode-behave-more-like-bashs-vi-mode
+vi-search-fix() {
+	zle vi-cmd-mode
+	zle .vi-history-search-backward
+}
+autoload vi-search-fix
+zle -N vi-search-fix
+bindkey -M viins '\e/' vi-search-fix
+
 # Replaces cd with zoxide if available
 # https://github.com/ajeetdsouza/zoxide
 if command -v zoxide > /dev/null 2>&1; then
