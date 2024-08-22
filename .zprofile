@@ -7,13 +7,6 @@ else
 	export EDITOR='vi'
 fi
 
-# determines what LS will be based on what's available
-if command -v 'colorls' > /dev/null 2>&1; then
-	export LS='colorls'
-else
-	export LS='ls'
-fi
-
 # History variables
 export \
 	HISTFILE="${HOME}/.history" \
