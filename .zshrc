@@ -97,6 +97,15 @@ autoload vi-search-fix
 zle -N vi-search-fix
 bindkey -M viins '\e/' vi-search-fix
 
+# Fixes the inability to delete characters preceding wherever the cursor
+# was when the user switches from normal to insert in zsh's vi mode.
+#
+# https://superuser.com/questions/476532/how-can-i-make-zshs-vi-mode-behave-more-like-bashs-vi-mode
+bindkey "^?" backward-delete-char
+bindkey "^W" backward-kill-word
+bindkey "^H" backward-delete-char
+bindkey "^U" backward-kill-line
+
 # Replaces cd with zoxide if available
 # https://github.com/ajeetdsouza/zoxide
 if command -v zoxide > /dev/null 2>&1; then
