@@ -1,4 +1,4 @@
 . "${HOME}/.profile"
 
 # Shell initialization.
-. "${HOME}/.zshrc"
+. "${HOME}/.bashrc"
