@@ -23,14 +23,13 @@ functionality provided by plugins:
 - Integrated debugging tools.
 - Git and GnuPG integration.
 
-## Shell
+## Shell (fish)
 
 - Vim bindings.
 - FZF integration.
-- Syntax highlighting.
-- Autosuggestions.
-- Zoxide as cd.
-- Delta as a git pager.
+- Various convenience functions and aliases.
 - Bat as cat/less.
 - Eza as ls.
-- Various convenience functions and aliases.
+- Zoxide as cd.
+- All of the good things that fish already has out of the box (syntax
+  highlighting, autosuggestions, etc).
