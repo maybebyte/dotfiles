@@ -7,7 +7,7 @@ case "$-" in
 esac
 
 # If fish is available, use fish.
-if command -v 'fish'; then
+if command -v 'fish' > /dev/null 2>&1; then
 	SHELL="$(command -v 'fish')"
 	exec "${SHELL}"
 fi
