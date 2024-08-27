@@ -2,7 +2,7 @@
 https://www.xkcd.com/rss.xml
 ===SECURITY_NEWS===
 https://security.gentoo.org/glsa/feed.rss
-https://feeds.feedburner.com/HaveIBeenPwnedLatestBreaches tech security
+https://feeds.feedburner.com/HaveIBeenPwnedLatestBreaches
 https://latesthackingnews.com/feed/
 https://securitynewsletter.co/issues.rss
 https://rss.packetstormsecurity.com/news/
@@ -43,6 +43,7 @@ https://github.com/GothenburgBitFactory/taskwarrior/releases.atom "~app-misc/tas
 https://github.com/dbrgn/tealdeer/releases.atom "~app-misc/tealdeer"
 https://github.com/GothenburgBitFactory/timewarrior/releases.atom "~app-misc/timew"
 https://github.com/tmux/tmux/releases.atom "~app-misc/tmux"
+https://github.com/sayanarijit/xplr/releases.atom "~app-misc/xplr"
 https://github.com/andmarti1424/sc-im/releases.atom "~app-office/sc-im"
 https://github.com/vaeth/eix/releases.atom "~app-portage/eix"
 https://github.com/gentoo-perl/genlop/tags.atom "~app-portage/genlop"
@@ -111,7 +112,7 @@ https://github.com/alobbs/macchanger/releases.atom "~net-analyzer/macchanger"
 https://github.com/the-tcpdump-group/tcpdump/tags.atom "~net-analyzer/tcpdump"
 https://sourceforge.net/p/traceroute/activity/feed "~net-analyzer/traceroute"
 https://gitlab.com/wireshark/wireshark/-/tags?format=atom "~net-analyzer/wireshark"
-https://github.com/npat-efault/picocom/releases.atom "~net-dialup/picom"
+https://github.com/npat-efault/picocom/releases.atom "~net-dialup/picocom"
 https://gitlab.isc.org/isc-projects/bind9/-/tags?format=atom "~net-dns/bind-tools"
 https://github.com/NLnetLabs/unbound/releases.atom "~net-dns/unbound"
 https://github.com/libfuse/sshfs/releases.atom "~net-fs/sshfs"
