@@ -47,6 +47,10 @@ if status is-interactive
 	bind -M insert \ch 'commandline --paging-mode; and commandline --function backward-char; or commandline --function backward-delete-char'
 	bind -M insert \cl 'commandline --paging-mode; and commandline --function forward-char; or commandline --function clear-screen'
 
+	# Bind CTRL-Y to accept-autosuggestion so that I don't need to press
+	# right arrow anymore
+	bind -M insert \cy accept-autosuggestion
+
 	# Mimic neovim's cursor.
 	set -gx fish_cursor_default block
 	set -gx fish_cursor_insert line
