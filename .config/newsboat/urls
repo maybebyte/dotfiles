@@ -17,6 +17,7 @@ https://dataswamp.org/~solene/rss.xml
 https://www.bsdhowto.ch/feed.atom "~BSD How To"
 https://undeadly.org/cgi?action=rss "~Undeadly: OpenBSD Journal"
 https://www.welivesecurity.com/feed "~We Live Security"
+https://zenhabits.net/feed/ "~Zen Habits"
 ===RELEASES===
 https://github.com/catppuccin/catppuccin/releases.atom "~catppuccin"
 https://github.com/Duncaen/OpenDoas/releases.atom "~app-admin/doas"
