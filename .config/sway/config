@@ -13,3 +13,8 @@ client.unfocused         $overlay0 $base $text  $rosewater $overlay0
 client.urgent            $peach    $base $peach $overlay0  $peach
 client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
 client.background        $base
+
+# Hides mouse cursor after a period of inactivity, or when starting to
+# type.
+seat * hide_cursor 2000
+seat * hide_cursor when-typing enable
