@@ -1,5 +1,6 @@
 ===FUN===
 https://www.xkcd.com/rss.xml
+https://poorlydrawnlines.com/feed/ "~Poorly Drawn Lines"
 ===SECURITY_NEWS===
 https://security.gentoo.org/glsa/feed.rss
 https://feeds.feedburner.com/HaveIBeenPwnedLatestBreaches
@@ -19,6 +20,7 @@ https://undeadly.org/cgi?action=rss "~Undeadly: OpenBSD Journal"
 https://www.welivesecurity.com/feed "~We Live Security"
 https://zenhabits.net/feed/ "~Zen Habits"
 https://productive.fish/feed.xml "~Productive Fish"
+https://solar.lowtechmagazine.com/posts/index.xml "~Low Tech Magazine"
 ===RELEASES===
 https://github.com/catppuccin/catppuccin/releases.atom "~catppuccin"
 https://github.com/Duncaen/OpenDoas/releases.atom "~app-admin/doas"
