@@ -4,7 +4,7 @@ if status is-interactive
 	# 2) We've logged into the first virtual terminal
 	# 3) We're using Linux
 	if ! string length --quiet {$WAYLAND_DISPLAY} \
-	&& [ {$XDG_VTNR} -eq 1 ] \
+	&& string match --quiet '1' {$XDG_VTNR} \
 	&& string match --quiet 'Linux' (uname)
 		exec dbus-run-session sway
 	end
