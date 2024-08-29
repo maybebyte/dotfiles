@@ -59,11 +59,11 @@ export FZF_DEFAULT_OPTS=" \
 --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
 --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
 
-# Append XDG_BIN_HOME to PATH.
+# Prepend XDG_BIN_HOME to PATH.
 #
 # PATH parameter expansion explanation:
 # https://unix.stackexchange.com/a/415028
-export PATH="${PATH:+${PATH}:}${XDG_BIN_HOME}"
+export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
 
 # Add local man page directory.
 export MANPATH=":${XDG_DATA_HOME}/man"
