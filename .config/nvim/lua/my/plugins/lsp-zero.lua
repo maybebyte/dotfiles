@@ -96,7 +96,7 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = true,
 		cmd = { "LspInfo", "LspInstall", "LspStart" },
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPre", "BufNewFile", "FileType" },
 		dependencies = {
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp",
