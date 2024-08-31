@@ -5,6 +5,12 @@ vim.opt.backupdir = vim.env.XDG_STATE_HOME .. "/nvim/backup"
 
 vim.opt.diffopt:append("iwhiteall")
 
+-- Keep signcolumn on by default.
+vim.opt.signcolumn = 'yes'
+
+-- Minimum number of lines to keep above and below cursor.
+vim.opt.scrolloff = 10
+
 vim.opt.expandtab = false
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
