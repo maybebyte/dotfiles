@@ -13,7 +13,6 @@ vim.opt.foldlevelstart = 1
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.hlsearch = false
 
 vim.opt.laststatus = 0
 

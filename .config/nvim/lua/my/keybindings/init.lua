@@ -1,5 +1,11 @@
 -- luacheck: globals vim
 
+-- Clear highlights on search when pressing <Esc> in normal mode
+-- See `:help hlsearch`
+vim.keymap.set("n", "<esc>", function()
+	vim.cmd("nohlsearch")
+end)
+
 vim.keymap.set({ "v", "n" }, "<Space>", "<Nop>", { silent = true })
 
 vim.keymap.set({ "v", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
