@@ -1,4 +1,3 @@
--- TODO: change so this lazy loads on LSP attach
 return {
 	"kosayoda/nvim-lightbulb",
 	opts = {
@@ -10,5 +9,5 @@ return {
 		priority = 11,
 	},
 	lazy = true,
-	event = "VeryLazy",
+	event = "LspAttach",
 }
