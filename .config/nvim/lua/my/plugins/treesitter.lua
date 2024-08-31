@@ -16,8 +16,9 @@ return {
 			"bash",
 			"c",
 			"css",
+			"diff",
+			"gitcommit",
 			"go",
-			--'diff', -- this assumes git, so disable for now
 			"html",
 			"lua",
 			"make",
