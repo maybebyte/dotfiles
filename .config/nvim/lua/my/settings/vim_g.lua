@@ -1,7 +1,7 @@
 -- luacheck: globals vim
 
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = ","
 
 -- https://github.com/jamessan/vim-gnupg/issues/119
 -- https://github.com/jamessan/vim-gnupg/issues/32
