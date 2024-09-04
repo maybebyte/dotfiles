@@ -14,4 +14,4 @@ mods = "Alt"
 size = 16.0
 
 [window]
-opacity = 0.90
+opacity = 0.875
