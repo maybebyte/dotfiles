@@ -23,6 +23,7 @@ https://zenhabits.net/feed/ "~Zen Habits"
 https://productive.fish/feed.xml "~Productive Fish"
 https://solar.lowtechmagazine.com/posts/index.xml "~Low Tech Magazine"
 ===RELEASES===
+https://github.com/nvim-neorg/neorg/releases.atom "~Neorg"
 https://github.com/catppuccin/catppuccin/releases.atom "~catppuccin"
 https://github.com/Duncaen/OpenDoas/releases.atom "~app-admin/doas"
 https://github.com/projg2/eclean-kernel/tags.atom "~app-admin/eclean-kernel"
