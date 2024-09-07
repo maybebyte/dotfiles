@@ -15,7 +15,7 @@ color index color5 default '~P'    # from me
 color index color5 default '!~Q^~p' # sent only to me; hasn't been replied to
 color index color5 default '!~Q~p'  # sent to me and others; hasn't been replied to
 color index color1 default '~D'     # deleted messages
-color indicator color14 default
+color indicator default color8
 color tree color7 default
 
 # Quote colors
