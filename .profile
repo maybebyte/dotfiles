@@ -49,6 +49,7 @@ export \
 	CLICOLOR=1 \
 	LC_CTYPE='en_US.UTF-8' \
 	MANWIDTH=80 \
+	READER='zathura' \
 	QT_STYLE_OVERRIDE='Adwaita-dark'
 
 # Bemenu theming
