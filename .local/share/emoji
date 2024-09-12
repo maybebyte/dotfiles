@@ -55,6 +55,7 @@
 😪;sleepy face;1F62A
 🤤;drooling face;1F924
 😴;sleeping face;1F634
+🫩;face with bags under eyes;1FAE9
 😷;face with medical mask;1F637
 🤒;face with thermometer;1F912
 🤕;face with head-bandage;1F915
@@ -1350,12 +1351,12 @@
 🤶🏽;Mrs. Claus: medium skin tone;1F936 1F3FD
 🤶🏾;Mrs. Claus: medium-dark skin tone;1F936 1F3FE
 🤶🏿;Mrs. Claus: dark skin tone;1F936 1F3FF
-🧑‍🎄;mx claus;1F9D1 200D 1F384
-🧑🏻‍🎄;mx claus: light skin tone;1F9D1 1F3FB 200D 1F384
-🧑🏼‍🎄;mx claus: medium-light skin tone;1F9D1 1F3FC 200D 1F384
-🧑🏽‍🎄;mx claus: medium skin tone;1F9D1 1F3FD 200D 1F384
-🧑🏾‍🎄;mx claus: medium-dark skin tone;1F9D1 1F3FE 200D 1F384
-🧑🏿‍🎄;mx claus: dark skin tone;1F9D1 1F3FF 200D 1F384
+🧑‍🎄;Mx Claus;1F9D1 200D 1F384
+🧑🏻‍🎄;Mx Claus: light skin tone;1F9D1 1F3FB 200D 1F384
+🧑🏼‍🎄;Mx Claus: medium-light skin tone;1F9D1 1F3FC 200D 1F384
+🧑🏽‍🎄;Mx Claus: medium skin tone;1F9D1 1F3FD 200D 1F384
+🧑🏾‍🎄;Mx Claus: medium-dark skin tone;1F9D1 1F3FE 200D 1F384
+🧑🏿‍🎄;Mx Claus: dark skin tone;1F9D1 1F3FF 200D 1F384
 🦸;superhero;1F9B8
 🦸🏻;superhero: light skin tone;1F9B8 1F3FB
 🦸🏼;superhero: medium-light skin tone;1F9B8 1F3FC
@@ -2426,6 +2427,7 @@
 🧑‍🧒;family: adult, child;1F9D1 200D 1F9D2
 🧑‍🧒‍🧒;family: adult, child, child;1F9D1 200D 1F9D2 200D 1F9D2
 👣;footprints;1F463
+🫆;fingerprint;1FAC6
 🐵;monkey face;1F435
 🐒;monkey;1F412
 🦍;gorilla;1F98D
@@ -2535,6 +2537,11 @@
 🐚;spiral shell;1F41A
 🪸;coral;1FAB8
 🪼;jellyfish;1FABC
+🦀;crab;1F980
+🦞;lobster;1F99E
+🦐;shrimp;1F990
+🦑;squid;1F991
+🦪;oyster;1F9AA
 🐌;snail;1F40C
 🦋;butterfly;1F98B
 🐛;bug;1F41B
@@ -2579,6 +2586,7 @@
 🪹;empty nest;1FAB9
 🪺;nest with eggs;1FABA
 🍄;mushroom;1F344
+🪾;leafless tree;1FABE
 🍇;grapes;1F347
 🍈;melon;1F348
 🍉;watermelon;1F349
@@ -2617,6 +2625,7 @@
 🫚;ginger root;1FADA
 🫛;pea pod;1FADB
 🍄‍🟫;brown mushroom;1F344 200D 1F7EB
+🫜;root vegetable;1FADC
 🍞;bread;1F35E
 🥐;croissant;1F950
 🥖;baguette bread;1F956
@@ -2668,11 +2677,6 @@
 🥟;dumpling;1F95F
 🥠;fortune cookie;1F960
 🥡;takeout box;1F961
-🦀;crab;1F980
-🦞;lobster;1F99E
-🦐;shrimp;1F990
-🦑;squid;1F991
-🦪;oyster;1F9AA
 🍦;soft ice cream;1F366
 🍧;shaved ice;1F367
 🍨;ice cream;1F368
@@ -3093,6 +3097,7 @@
 🪘;long drum;1FA98
 🪇;maracas;1FA87
 🪈;flute;1FA88
+🪉;harp;1FA89
 📱;mobile phone;1F4F1
 📲;mobile phone with arrow;1F4F2
 ☎️;telephone;260E FE0F
@@ -3231,6 +3236,7 @@
 🧰;toolbox;1F9F0
 🧲;magnet;1F9F2
 🪜;ladder;1FA9C
+🪏;shovel;1FA8F
 ⚗️;alembic;2697 FE0F
 🧪;test tube;1F9EA
 🧫;petri dish;1F9EB
@@ -3416,6 +3422,7 @@
 ©️;copyright;00A9 FE0F
 ®️;registered;00AE FE0F
 ™️;trade mark;2122 FE0F
+🫟;splatter;1FADF
 ️⃣;keycap:;0023 FE0F 20E3
 *️⃣;keycap: *;002A FE0F 20E3
 0️⃣;keycap: 0;0030 FE0F 20E3
@@ -3561,6 +3568,7 @@
 🇨🇳;flag: China;1F1E8 1F1F3
 🇨🇴;flag: Colombia;1F1E8 1F1F4
 🇨🇵;flag: Clipperton Island;1F1E8 1F1F5
+🇨🇶;flag: Sark;1F1E8 1F1F6
 🇨🇷;flag: Costa Rica;1F1E8 1F1F7
 🇨🇺;flag: Cuba;1F1E8 1F1FA
 🇨🇻;flag: Cape Verde;1F1E8 1F1FB
