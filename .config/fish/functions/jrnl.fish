@@ -14,9 +14,10 @@ tree, if it doesn't exist) and then opens up the file in EDITOR." >&2
 
 	set --local TODAY (date '+%F')
 	set --local JRNL_ENTRY {$HOME}/notes/journal/{$TODAY}.txt.gpg
-	set --erase TODAY
 
-	mkdir -p (string replace --regex '/[0-9]{4}-[0-9]{2}-[0-9]{2}\.txt\.gpg$' '' {$JRNL_ENTRY})
+	mkdir -p (string replace --regex "/$TODAY\.txt\.gpg\$" '' {$JRNL_ENTRY})
+
+	set --erase TODAY
 
 	{$EDITOR} {$JRNL_ENTRY}
 end
