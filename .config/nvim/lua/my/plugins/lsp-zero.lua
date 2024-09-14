@@ -1,5 +1,8 @@
 -- luacheck: globals vim
 
+-- TODO: clean this up somehow, I have a hard time remembering how everything interacts here.
+-- TODO: either migrate to lsp-zero v4.0, or get rid of lsp-zero completely.
+-- TODO: add lspkind for icons. See if LSP/linting output can have icons.
 return {
 	{
 		"VonHeikemen/lsp-zero.nvim",
