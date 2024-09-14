@@ -45,15 +45,7 @@ return {
 					require("formatter.filetypes.markdown").prettier,
 				},
 				perl = {
-					function()
-						return {
-							exe = "perltidy",
-							args = {
-								"--quiet",
-							},
-							stdin = true,
-						}
-					end,
+					require("formatter.filetypes.perl").perltidy,
 				},
 				python = {
 					require("formatter.filetypes.python").black,
