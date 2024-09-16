@@ -2,7 +2,7 @@
 
 -- TODO: clean this up somehow, I have a hard time remembering how everything interacts here.
 -- TODO: either migrate to lsp-zero v4.0, or get rid of lsp-zero completely.
--- TODO: add lspkind for icons. See if LSP/linting output can have icons.
+-- TODO: See if LSP/linting output can have icons.
 return {
 	{
 		"VonHeikemen/lsp-zero.nvim",
@@ -30,6 +30,7 @@ return {
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-cmdline",
+			"onsails/lspkind.nvim",
 			{
 				"L3MON4D3/LuaSnip",
 				version = "2.*",
@@ -55,7 +56,18 @@ return {
 
 			require("luasnip.loaders.from_vscode").lazy_load()
 
+			local lspkind = require("lspkind")
 			cmp.setup({
+				formatting = {
+					expandable_indicator = true,
+					fields = { "abbr", "kind" },
+					format = lspkind.cmp_format({
+						mode = "symbol_text",
+						maxwidth = 50,
+						ellipsis_char = "…",
+						show_labelDetails = true,
+					}),
+				},
 				sources = {
 					{ name = "buffer" },
 					{ name = "luasnip" },
