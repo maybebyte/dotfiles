@@ -11,13 +11,18 @@ https://www.darkreading.com/rss.xml
 https://thehackernews.com/feeds/posts/default
 https://duo.com/decipher/feed
 https://seclists.org/rss/oss-sec.rss "Open Source Security Mailing List"
-===BLOGS===
+===OS_NEWS===
+https://www.qubes-os.org/feed.xml "~Qubes OS News"
 https://planet.gentoo.org/rss20.xml "~Planet Gentoo"
+https://archlinux.org/feeds/news/ "~Arch News"
+https://forums.whonix.org/c/news.rss "~Whonix News"
+https://forums.kicksecure.com/c/news.rss "~Kicksecure News"
+https://undeadly.org/cgi?action=rss "~Undeadly: OpenBSD Journal"
+===BLOGS===
 https://xn--gckvb8fzb.com/index.xml
 https://blog.invisiblethings.org/feed.xml
 https://dataswamp.org/~solene/rss.xml
 https://www.bsdhowto.ch/feed.atom "~BSD How To"
-https://undeadly.org/cgi?action=rss "~Undeadly: OpenBSD Journal"
 https://www.welivesecurity.com/feed "~We Live Security"
 https://zenhabits.net/feed/ "~Zen Habits"
 https://productive.fish/feed.xml "~Productive Fish"
