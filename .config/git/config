@@ -23,7 +23,11 @@
 [user]
 	name = Ashlen
 	email = dev@anthes.is
-	signingkey = 90965AE120F8E848979DEA4853670DEBCF375780
+	signingkey = 4A2144F748E4F5DC17C5E707F1B59F496EE704B0
+
+[gpg]
+	program = qubes-gpg-client-wrapper
+
 [init]
 	defaultBranch = main
 
