@@ -1,4 +1,4 @@
-# My Gentoo dotfiles
+# My dotfiles
 
 ![laptop_screenshot](https://github.com/user-attachments/assets/0a128b41-2a19-459a-9859-f96677ba839b)
 
