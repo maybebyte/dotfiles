@@ -1,3 +1,4 @@
+-- TODO: Update plugin?
 return {
 	"nvim-neorg/neorg",
 	lazy = true,

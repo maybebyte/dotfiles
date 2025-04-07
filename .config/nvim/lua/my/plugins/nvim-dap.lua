@@ -1,5 +1,7 @@
 -- luacheck: globals vim
 
+-- TODO: Update plugins?
+
 local function setup_dap_keymaps(dap)
 	vim.keymap.set("n", "<leader>dc", function()
 		dap.continue()

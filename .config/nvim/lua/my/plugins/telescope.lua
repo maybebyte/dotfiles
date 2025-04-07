@@ -1,5 +1,7 @@
 -- luacheck: globals vim
 
+-- TODO: Update plugin?
+
 -- Configure file navigation keymaps
 local function setup_file_navigation_keymaps()
 	vim.keymap.set("n", "<leader>ts", function()
