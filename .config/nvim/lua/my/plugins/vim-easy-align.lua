@@ -1,3 +1,4 @@
+-- TODO: maybe replace with mini.align?
 return {
 	"junegunn/vim-easy-align",
 	lazy = true,

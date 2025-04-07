@@ -1,5 +1,6 @@
 -- luacheck: globals vim
 
+-- TODO: maybe replace with jiasohijie/undotree?
 return {
 	"mbbill/undotree",
 	lazy = true,

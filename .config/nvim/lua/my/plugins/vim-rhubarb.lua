@@ -1,3 +1,4 @@
+-- TODO: maybe replace with Neogit or lazygit?
 return {
 	"tpope/vim-rhubarb",
 	lazy = true,
