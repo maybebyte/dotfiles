@@ -36,23 +36,36 @@ local function get_completion_sources()
 	}
 end
 
+-- Helper functions for keymappings
+local function jump_in_snippet(luasnip, direction, fallback)
+	if luasnip.jumpable(direction) then
+		luasnip.jump(direction)
+	else
+		fallback()
+	end
+end
+
+local function handle_completion_selection(cmp, direction, fallback)
+	if cmp.visible() then
+		if direction > 0 then
+			cmp.select_next_item()
+		else
+			cmp.select_prev_item()
+		end
+	else
+		fallback()
+	end
+end
+
 -- Keymapping configuration
 local function get_keymappings(cmp, luasnip)
 	return {
 		-- Snippet navigation
 		["<C-f>"] = cmp.mapping(function(fallback)
-			if luasnip.jumpable(1) then
-				luasnip.jump(1)
-			else
-				fallback()
-			end
+			jump_in_snippet(luasnip, 1, fallback)
 		end, { "i", "s" }),
 		["<C-b>"] = cmp.mapping(function(fallback)
-			if luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
+			jump_in_snippet(luasnip, -1, fallback)
 		end, { "i", "s" }),
 
 		-- Documentation scrolling
@@ -61,18 +74,10 @@ local function get_keymappings(cmp, luasnip)
 
 		-- Completion selection
 		["<C-n>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			else
-				fallback()
-			end
+			handle_completion_selection(cmp, 1, fallback)
 		end, { "i", "s" }),
 		["<C-p>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			else
-				fallback()
-			end
+			handle_completion_selection(cmp, -1, fallback)
 		end, { "i", "s" }),
 
 		["<C-y>"] = cmp.mapping.confirm(),
