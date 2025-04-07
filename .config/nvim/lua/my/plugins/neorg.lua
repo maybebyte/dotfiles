@@ -1,6 +1,8 @@
 return {
 	"nvim-neorg/neorg",
-	lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+	lazy = true,
+	ft = { "norg" },
+	cmd = { "Neorg" },
 	version = "v9.1.1",
 	build = function()
 		vim.cmd("Neorg sync-parsers")
