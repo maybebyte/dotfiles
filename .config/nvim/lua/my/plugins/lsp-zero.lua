@@ -32,6 +32,15 @@ return {
 			"hrsh7th/cmp-cmdline",
 			"onsails/lspkind.nvim",
 			{
+				"zbirenbaum/copilot-cmp",
+				dependencies = {
+					"zbirenbaum/copilot.lua"
+				},
+				config = function()
+					require("copilot_cmp").setup()
+				end,
+			},
+			{
 				"L3MON4D3/LuaSnip",
 				version = "2.*",
 				dependencies = {
@@ -66,6 +75,7 @@ return {
 						maxwidth = 50,
 						ellipsis_char = "…",
 						show_labelDetails = true,
+						symbol_map = { Copilot = " " },
 					}),
 				},
 				sources = {
@@ -74,7 +84,8 @@ return {
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lua" },
 					{ name = "path" },
-					{ name = "lazydev", group_index = 0 },
+					{ name = "lazydev", group_index = 0 }, -- set group index to 0 to skip loading LuaLS completions
+					{ name = "copilot" },
 				},
 				mapping = {
 					["<C-f>"] = cmp_action.luasnip_jump_forward(),
