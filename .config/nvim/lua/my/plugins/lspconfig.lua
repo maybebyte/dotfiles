@@ -130,7 +130,10 @@ return {
 	{
 		"hrsh7th/nvim-cmp",
 		lazy = true,
-		event = "VeryLazy",
+		event = {
+			"InsertEnter",
+			"CmdlineEnter",
+		},
 		dependencies = {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
@@ -142,9 +145,7 @@ return {
 				dependencies = {
 					"zbirenbaum/copilot.lua",
 				},
-				config = function()
-					require("copilot_cmp").setup()
-				end,
+				opts = {},
 			},
 			{
 				"L3MON4D3/LuaSnip",
