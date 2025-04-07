@@ -6,7 +6,7 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = true,
 		cmd = { "LspInfo", "LspInstall", "LspStart" },
-		event = { "BufReadPre", "BufNewFile", "FileType" },
+		event = { "BufReadPost", "BufNewFile", "FileType" },
 		dependencies = {
 			-- Mason for LSP server management
 			"williamboman/mason.nvim",
@@ -184,7 +184,7 @@ return {
 						maxwidth = 50,
 						ellipsis_char = "…",
 						show_labelDetails = true,
-						symbol_map = { Copilot = " " },
+						symbol_map = { Copilot = "" },
 					}),
 				},
 				sources = {

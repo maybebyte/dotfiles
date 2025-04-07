@@ -15,7 +15,7 @@ return {
 		{
 			"jay-babu/mason-nvim-dap.nvim",
 			tag = "v2.1.1",
-			dependencies = { "williamboman/mason.nvim", config = true },
+			dependencies = { "williamboman/mason.nvim", opts = {} },
 			opts = {
 				ensure_installed = {
 					"python",
