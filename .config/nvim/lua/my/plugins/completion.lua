@@ -99,14 +99,17 @@ local function create_base_config(cmp, luasnip)
 end
 
 -- Setup filetype-specific configurations
-local function setup_filetype_configs(cmp)
+local function setup_filetype_specific_configs(cmp)
 	-- DAP-specific filetypes
 	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 		sources = {
 			{ name = "dap" },
 		},
 	})
+end
 
+-- Setup command-line completions
+local function setup_cmdline_completions(cmp)
 	-- Command line completion for search
 	cmp.setup.cmdline("/", {
 		mapping = cmp.mapping.preset.cmdline(),
@@ -189,6 +192,7 @@ return {
 		local base_config = create_base_config(cmp, luasnip)
 		cmp.setup(base_config)
 
-		setup_filetype_configs(cmp)
+		setup_filetype_specific_configs(cmp)
+		setup_cmdline_completions(cmp)
 	end,
 }
