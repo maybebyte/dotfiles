@@ -22,21 +22,11 @@ return {
 			require("harpoon.ui").toggle_quick_menu()
 		end, { desc = "[H]arpoon [q]uick [m]enu" })
 
-		vim.keymap.set("n", "<leader>h1", function()
-			require("harpoon.ui").nav_file(1)
-		end, { desc = "[H]arpoon file [1]" })
-
-		vim.keymap.set("n", "<leader>h2", function()
-			require("harpoon.ui").nav_file(2)
-		end, { desc = "[H]arpoon file [2]" })
-
-		vim.keymap.set("n", "<leader>h3", function()
-			require("harpoon.ui").nav_file(3)
-		end, { desc = "[H]arpoon file [3]" })
-
-		vim.keymap.set("n", "<leader>h4", function()
-			require("harpoon.ui").nav_file(4)
-		end, { desc = "[H]arpoon file [4]" })
+		for i = 1, 4 do
+			vim.keymap.set("n", "<leader>h" .. i, function()
+				require("harpoon.ui").nav_file(i)
+			end, { desc = "[H]arpoon file [" .. i .. "]" })
+		end
 
 		vim.keymap.set("n", "<leader>hn", function()
 			require("harpoon.ui").nav_next()
