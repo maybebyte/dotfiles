@@ -49,10 +49,6 @@ vim.keymap.set("n", "<leader>fm", function()
 	vim.cmd.Explore()
 end, { desc = "NetRW (file manager)" })
 
-vim.keymap.set("n", "<leader>frm", function()
-	vim.cmd.Format()
-end, { desc = "Format files using formatter.nvim" })
-
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down a line." })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up a line." })
 
