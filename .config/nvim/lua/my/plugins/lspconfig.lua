@@ -188,13 +188,22 @@ return {
 					}),
 				},
 				sources = {
-					{ name = "buffer" },
-					{ name = "luasnip" },
-					{ name = "nvim_lsp" },
-					{ name = "nvim_lua" },
-					{ name = "path" },
+					-- Group 1: AI and LSP (highest priority)
+					{ name = "copilot", priority = 1000 },
+					{ name = "nvim_lsp", priority = 900 },
+
+					-- Group 2: Snippets
+					{ name = "luasnip", priority = 750 },
+
+					-- Group 3: Neovim-specific
+					{ name = "nvim_lua", priority = 600 },
+
+					-- Group 4: Filesystem and buffer
+					{ name = "path", priority = 500 },
+					{ name = "buffer", priority = 400, keyword_length = 3 },
+
+					-- Keep lazydev in its own group
 					{ name = "lazydev", group_index = 0 }, -- set group index to 0 to skip loading LuaLS completions
-					{ name = "copilot" },
 				},
 				mapping = {
 					["<C-f>"] = cmp.mapping(function(fallback)
