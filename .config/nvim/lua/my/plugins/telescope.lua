@@ -1,16 +1,5 @@
 -- luacheck: globals vim
 
--- Configure core telescope setup
-local function setup_telescope_core()
-	require("telescope").setup({})
-end
-
--- Configure and load telescope extensions
-local function setup_telescope_extensions()
-	require("telescope").load_extension("dap")
-	-- Add other extensions here as needed
-end
-
 -- Configure file navigation keymaps
 local function setup_file_navigation_keymaps()
 	vim.keymap.set("n", "<leader>ts", function()
@@ -137,9 +126,8 @@ return {
 	},
 	cmd = { "Telescope" },
 	config = function()
-		-- Setup in a logical order
-		setup_telescope_core()
-		setup_telescope_extensions()
+		require("telescope").setup({})
+		require("telescope").load_extension("dap")
 
 		-- Setup keymaps by functionality groups
 		setup_file_navigation_keymaps()
