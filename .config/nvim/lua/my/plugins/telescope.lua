@@ -2,7 +2,7 @@
 
 -- Configure core telescope setup
 local function setup_telescope_core()
-	require("telescope").setup()
+	require("telescope").setup({})
 end
 
 -- Configure and load telescope extensions
