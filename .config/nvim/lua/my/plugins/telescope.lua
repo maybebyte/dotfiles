@@ -5,7 +5,7 @@
 -- Configure file navigation keymaps
 local function setup_file_navigation_keymaps()
 	vim.keymap.set("n", "<leader>ts", function()
-		vim.cmd("Telescope")
+		require("telescope.builtin").builtin()
 	end, { desc = "[T]ele[S]cope" })
 
 	vim.keymap.set("n", "<leader>sf", function()
@@ -24,7 +24,25 @@ local function setup_file_navigation_keymaps()
 		}))
 	end, { desc = "[/] Fuzzily search in current buffer" })
 
-	vim.keymap.set("n", "<leader>?", require("telescope.builtin").oldfiles, { desc = "[?] Find recently opened files" })
+	vim.keymap.set(
+		"n",
+		"<leader>s.",
+		require("telescope.builtin").oldfiles,
+		{ desc = '[S]earch Recent Files ("." for repeat)' }
+	)
+	-- Shortcut for searching your Neovim configuration files
+	vim.keymap.set("n", "<leader>sn", function()
+		require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+	end, { desc = "[S]earch [N]eovim files" })
+
+	vim.keymap.set("n", "<leader>sr", require("telescope.builtin").resume, { desc = "[S]earch [R]esume" })
+
+	vim.keymap.set(
+		"n",
+		"<leader><leader>",
+		require("telescope.builtin").buffers,
+		{ desc = "[ ] Find existing buffers" }
+	)
 end
 
 -- Configure search and grep keymaps
@@ -99,8 +117,9 @@ return {
 		-- TODO: need to actually build and load this
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
-			build = function()
-				vim.cmd("!gmake")
+			build = "gmake",
+			cond = function()
+				return vim.fn.executable("gmake") == 1
 			end,
 		},
 		{
@@ -116,13 +135,16 @@ return {
 		{ "<leader>sw" },
 		{ "<leader>sg" },
 		{ "<leader>sd" },
+		{ "<leader>sn" },
+		{ "<leader>sr" },
+		{ "<leader>s." },
+		{ "<leader><leader>" },
 		{ "<leader>dtb" },
 		{ "<leader>dtc" },
 		{ "<leader>dtf" },
 		-- { "<leader>dtv" },
 		{ "<leader>as" },
 		{ "<leader>/" },
-		{ "<leader>?" },
 		{ "gr" },
 		{ "gI" },
 		{ "<leader>ds" },
@@ -138,6 +160,7 @@ return {
 			},
 		})
 		require("telescope").load_extension("dap")
+		require("telescope").load_extension("fzf")
 
 		-- Setup keymaps by functionality groups
 		setup_file_navigation_keymaps()
