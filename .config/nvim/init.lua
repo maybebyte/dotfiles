@@ -1,8 +1,5 @@
 -- luacheck: globals vim
 
--- TODO: maybe add CopilotChat.nvim?
--- https://github.com/CopilotC-Nvim/CopilotChat.nvim
-
 local function bootstrap_plugin_manager()
 	local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 	if not vim.loop.fs_stat(lazypath) then
