@@ -95,6 +95,8 @@ return {
 	tag = "0.1.2",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
+		"nvim-telescope/telescope-ui-select.nvim",
+		-- TODO: need to actually build and load this
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = function()
@@ -128,7 +130,13 @@ return {
 	},
 	cmd = { "Telescope" },
 	config = function()
-		require("telescope").setup({})
+		require("telescope").setup({
+			extensions = {
+				["ui-select"] = {
+					require("telescope.themes").get_dropdown(),
+				},
+			},
+		})
 		require("telescope").load_extension("dap")
 
 		-- Setup keymaps by functionality groups
