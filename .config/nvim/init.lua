@@ -1,5 +1,8 @@
 -- luacheck: globals vim
 
+-- TODO: add autopairs functionality
+-- TODO: get rid of superfluous warnings in lua LSP
+
 local function bootstrap_plugin_manager()
 	local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 	if not vim.loop.fs_stat(lazypath) then
