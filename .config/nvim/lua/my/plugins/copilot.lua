@@ -33,7 +33,10 @@ return {
 			"CopilotChatReview",
 			"CopilotChatTests",
 		},
-		opts = {},
+		opts = {
+			model = "claude-3.7-sonnet-thought",
+			agent = "copilot",
+		},
 		config = function(_, opts)
 			vim.opt.completeopt = vim.opt.completeopt + {
 				-- For Neovim < 0.11.0, from README
@@ -43,6 +46,16 @@ return {
 				-- For Neovim, even if >= 0.11.0, from README
 				popup = true
 			}
+
+			vim.api.nvim_create_autocmd("BufEnter", {
+				pattern = "copilot-*",
+				callback = function()
+					-- Set buffer-local options
+					vim.opt_local.relativenumber = false
+					vim.opt_local.number = false
+					vim.opt_local.conceallevel = 0
+				end
+			})
 
 			require("CopilotChat").setup(opts)
 		end,
