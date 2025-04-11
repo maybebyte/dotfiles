@@ -100,11 +100,6 @@ local function setup_dap_keymaps()
 	vim.keymap.set("n", "<leader>dtf", function()
 		require("telescope").extensions.dap.frames()
 	end, { desc = "[D]ebug [T]elescope [F]rames" })
-
-	-- https://github.com/nvim-telescope/telescope-dap.nvim/pull/17
-	-- vim.keymap.set("n", "<leader>dtv", function()
-	--     require("telescope").extensions.dap.variables()
-	-- end, { desc = "[D]ebug [T]elescope [V]ariables" })
 end
 
 return {
@@ -128,27 +123,32 @@ return {
 		},
 	},
 	keys = {
+		-- File Navigation keymaps
 		{ "<leader>ts" },
 		{ "<leader>sf" },
 		{ "<leader>gf" },
+		{ "<leader>/" },
+		{ "<leader>s." },
+		{ "<leader>sn" },
+		{ "<leader>sr" },
+		{ "<leader><leader>" },
+
+		-- Search keymaps
 		{ "<leader>sh" },
 		{ "<leader>sw" },
 		{ "<leader>sg" },
+
+		-- LSP-related keymaps
 		{ "<leader>sd" },
-		{ "<leader>sn" },
-		{ "<leader>sr" },
-		{ "<leader>s." },
-		{ "<leader><leader>" },
-		{ "<leader>dtb" },
-		{ "<leader>dtc" },
-		{ "<leader>dtf" },
-		-- { "<leader>dtv" },
-		{ "<leader>as" },
-		{ "<leader>/" },
 		{ "gr" },
 		{ "gI" },
 		{ "<leader>ds" },
 		{ "<leader>ws" },
+
+		-- DAP extension keymaps
+		{ "<leader>dtb" },
+		{ "<leader>dtc" },
+		{ "<leader>dtf" },
 	},
 	cmd = { "Telescope" },
 	config = function()
