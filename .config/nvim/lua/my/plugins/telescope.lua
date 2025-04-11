@@ -109,7 +109,6 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-telescope/telescope-ui-select.nvim",
-		-- TODO: need to actually build and load this
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = "gmake",
