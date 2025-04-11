@@ -38,14 +38,15 @@ return {
 			agent = "copilot",
 		},
 		config = function(_, opts)
-			vim.opt.completeopt = vim.opt.completeopt + {
-				-- For Neovim < 0.11.0, from README
-				noinsert = true,
-				noselect = true,
+			vim.opt.completeopt = vim.opt.completeopt
+				+ {
+					-- For Neovim < 0.11.0, from README
+					noinsert = true,
+					noselect = true,
 
-				-- For Neovim, even if >= 0.11.0, from README
-				popup = true
-			}
+					-- For Neovim, even if >= 0.11.0, from README
+					popup = true,
+				}
 
 			vim.api.nvim_create_autocmd("BufEnter", {
 				pattern = "copilot-*",
@@ -54,7 +55,7 @@ return {
 					vim.opt_local.relativenumber = false
 					vim.opt_local.number = false
 					vim.opt_local.conceallevel = 0
-				end
+				end,
 			})
 
 			require("CopilotChat").setup(opts)
