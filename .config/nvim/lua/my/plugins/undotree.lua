@@ -1,15 +1,20 @@
 -- luacheck: globals vim
 
--- TODO: maybe replace with jiasohijie/undotree?
 return {
-	"mbbill/undotree",
+	"jiaoshijie/undotree",
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+	},
 	lazy = true,
 	keys = {
-		{ "<leader>u" },
+		{ "<leader>u", desc = "[U]ndo tree" },
 	},
 	config = function()
-		vim.keymap.set("n", "<leader>u", function()
-			vim.cmd.UndotreeToggle()
-		end, { desc = "[U]ndo tree" })
+		require("undotree").setup({
+			window = {
+				winblend = 0, -- disable transparency since doubled text messes with my eyes
+			},
+		})
+		vim.keymap.set("n", "<leader>u", require("undotree").toggle, { desc = "[U]ndo tree" })
 	end,
 }
