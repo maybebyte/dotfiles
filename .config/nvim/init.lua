@@ -1,6 +1,5 @@
 -- luacheck: globals vim
 
--- TODO: add autopairs functionality
 -- TODO: get rid of superfluous warnings in lua LSP
 
 local function bootstrap_plugin_manager()
