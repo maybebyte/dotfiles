@@ -1,7 +1,5 @@
 -- luacheck: globals vim
 
--- TODO: Update plugin?
-
 -- Configure file navigation keymaps
 local function setup_file_navigation_keymaps()
 	vim.keymap.set("n", "<leader>ts", function()
@@ -105,7 +103,7 @@ end
 return {
 	"nvim-telescope/telescope.nvim",
 	lazy = true,
-	tag = "0.1.2",
+	branch = "0.1.x",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-telescope/telescope-ui-select.nvim",
