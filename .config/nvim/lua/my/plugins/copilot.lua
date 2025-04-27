@@ -33,6 +33,10 @@ return {
 			"CopilotChatReview",
 			"CopilotChatTests",
 		},
+		opts = {
+			model = "claude-3.7-sonnet",
+			agent = "copilot",
+		},
 		config = function(_, opts)
 			vim.opt.completeopt = vim.opt.completeopt
 				+ {
