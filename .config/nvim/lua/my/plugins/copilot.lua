@@ -61,4 +61,46 @@ return {
 			require("CopilotChat").setup(opts)
 		end,
 	},
+	{
+		"olimorris/codecompanion.nvim",
+		lazy = true,
+		cmd = {
+			"CodeCompanion",
+			"CodeCompanionCmd",
+			"CodeCompanionChat",
+			"CodeCompanionActions",
+		},
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			local codecompanion = require("codecompanion")
+			codecompanion.setup({
+				adapters = {
+					copilot_local = function()
+						return require("codecompanion.adapters").extend("copilot", {
+							name = "copilot_local",
+							schema = {
+								model = {
+									default = "claude-3.7-sonnet",
+								},
+							},
+						})
+					end,
+				},
+				strategies = {
+					chat = {
+						adapter = "copilot_local",
+					},
+					inline = {
+						adapter = "copilot_local",
+					},
+					cmd = {
+						adapter = "copilot_local",
+					},
+				}
+			})
+		end,
+	},
 }
