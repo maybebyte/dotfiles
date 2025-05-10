@@ -16,7 +16,7 @@ return {
 			go = { "revive" },
 			lua = { "luacheck", "selene" },
 			html = { "erb_lint" },
-			markdown = { "proselint", "markdownlint" },
+			markdown = { "markdownlint", "proselint" },
 			text = { "proselint" },
 			python = { "mypy", "pylint", "ruff" },
 		}

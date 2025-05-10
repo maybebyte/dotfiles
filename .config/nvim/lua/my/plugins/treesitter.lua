@@ -20,6 +20,7 @@ return {
 			"gitcommit",
 			"go",
 			"html",
+			"latex",
 			"lua",
 			"make",
 			"markdown",

@@ -15,6 +15,7 @@ return {
 		"perl",
 		"python",
 		"sh",
+		"tex",
 		"yaml",
 	},
 	config = function()
@@ -31,6 +32,7 @@ return {
 				perl = { "perltidy" },
 				python = { "black" },
 				sh = { "shfmt" },
+				tex = { "tex-fmt" },
 				yaml = { "prettier" },
 			},
 			-- Custom formatter configurations
