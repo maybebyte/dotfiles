@@ -7,9 +7,12 @@ if status is-interactive
 	# 1) Wayland is not running
 	# 2) We've logged into the first virtual terminal
 	# 3) We're using Linux
+	# 4) both dbus-run-session and sway are available
 	if ! string length --quiet {$WAYLAND_DISPLAY} \
 	&& string match --quiet '1' {$XDG_VTNR} \
-	&& string match --quiet 'Linux' (uname)
+	&& string match --quiet 'Linux' (uname) \
+	&& command --search --quiet 'dbus-run-session' \
+	&& command --search --quiet 'sway'
 		exec dbus-run-session sway
 	end
 
