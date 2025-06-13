@@ -1,5 +1,5 @@
 return {
-	"NMAC427/guess-indent.nvim",
+	"tpope/vim-sleuth",
 	lazy = true,
 	event = { "BufReadPost", "BufNewFile" },
 }
