@@ -34,7 +34,7 @@ return {
 			"CopilotChatTests",
 		},
 		opts = {
-			model = "claude-3.7-sonnet",
+			model = "claude-sonnet-4",
 			agent = "copilot",
 		},
 		config = function(_, opts)
@@ -83,7 +83,7 @@ return {
 							name = "copilot_local",
 							schema = {
 								model = {
-									default = "claude-3.7-sonnet",
+									default = "claude-sonnet-4",
 								},
 							},
 						})
