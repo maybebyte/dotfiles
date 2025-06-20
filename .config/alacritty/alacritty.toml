@@ -1,11 +1,10 @@
-
 [[keyboard.bindings]]
 action = "Paste"
 key = "V"
 mods = "Alt"
 
 [font]
-size = 16.0
+size = 17.0
 
 [window]
 opacity = 0.875
