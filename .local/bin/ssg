@@ -255,7 +255,7 @@ render_html_file() {
 list_pages() {
 	e="\\( -name '*.html' -o -name '*.md' \\)"
 	cd "$1" && eval "find . -type f ! -path '*/.*' ! -path '*/_*' $IGNORE $e" |
-		sed 's#^./##;s#.md$#.html#;s#/index.html$#/#'
+		sed 's#^./##;s#.md$#.html#;s#/index.html$#/#;s#^index.html$#/#'
 }
 
 render_sitemap() {
@@ -270,7 +270,7 @@ render_sitemap() {
 	echo 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"'
 	echo 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 	echo "$urls" |
-		sed -E 's#^(.*)$#<url><loc>'"$base_url"'/\1</loc><lastmod>'"$date"'</lastmod><priority>1.0</priority></url>#'
+		sed -E 's#^(.*)$#<url><loc>'"$base_url"'/\1</loc><lastmod>'"$date"'</lastmod><priority>1.0</priority></url>#; s#/+</loc>#/</loc>#g'
 	echo '</urlset>'
 }
 
