@@ -142,7 +142,7 @@ list_files() {
 	cd "$1" && eval "find . -type f ! -name '.' ! -path '*/_*' $IGNORE"
 }
 
-list_dependant_files() {
+list_dependent_files() {
 	e="\\( -name '*.html' -o -name '*.md' -o -name '*.css' -o -name '*.js' \\)"
 	cd "$1" && eval "find . -type f ! -name '.' ! -path '*/_*' $IGNORE $e"
 }
@@ -159,7 +159,7 @@ list_affected_files() {
 	fs=$(list_newer_files "$1" "$2")
 
 	if echo "$fs" | has_partials; then
-		list_dependant_files "$1"
+		list_dependent_files "$1"
 	else
 		echo "$fs"
 	fi
