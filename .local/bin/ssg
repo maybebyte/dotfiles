@@ -201,7 +201,10 @@ make_canonical_url() {
 	file_path="$2"
 
 	clean_path="${file_path#./}"
-	base_url="${base_url%/}"
+
+	while [ "${base_url%/}" != "${base_url}" ]; do
+		base_url="${base_url%/}"
+	done
 
 	case "$clean_path" in
 		*/index.html)
