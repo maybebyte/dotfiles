@@ -7,6 +7,13 @@ return {
 		config = {
 			suggestion = { enabled = false },
 			panel = { enabled = false },
+			server_opts_overrides = {
+				settings = {
+					telemetry = {
+						telemetryLevel = "off",
+					},
+				},
+			},
 		},
 	},
 	{
@@ -99,7 +106,7 @@ return {
 					cmd = {
 						adapter = "copilot_local",
 					},
-				}
+				},
 			})
 		end,
 	},
