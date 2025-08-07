@@ -119,8 +119,8 @@ return {
 	event = { "BufReadPost", "BufNewFile", "FileType" },
 	dependencies = {
 		-- Mason for LSP server management
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
+		{ "williamboman/mason.nvim", version = "v2.*" },
+		{ "williamboman/mason-lspconfig.nvim", version = "v1.*" }, -- v1 needed until neovim v0.11.x
 
 		-- Completion capabilities for nvim-cmp
 		"hrsh7th/cmp-nvim-lsp",
