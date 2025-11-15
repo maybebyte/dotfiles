@@ -6,7 +6,7 @@ if status is-interactive
 
 	# Auto-install Fisher plugin manager if not present
 	if not functions --query fisher
-		if curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+		if curl --connect-timeout 3 --max-time 5 -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
 			fisher update
 		end
 	end
