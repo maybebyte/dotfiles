@@ -57,12 +57,12 @@ if lazy_ready then
 	require("lazy").setup("my.plugins")
 
 	vim.cmd("colorscheme catppuccin-frappe")
-
-	vim.cmd("highlight Normal guibg=none")
-	vim.cmd("highlight NonText guibg=none")
-	vim.cmd("highlight Normal ctermbg=none")
-	vim.cmd("highlight NonText ctermbg=none")
 end
+
+vim.cmd("highlight Normal guibg=none")
+vim.cmd("highlight NonText guibg=none")
+vim.cmd("highlight Normal ctermbg=none")
+vim.cmd("highlight NonText ctermbg=none")
 
 require("my.keybindings")
 require("my.autocmds")
