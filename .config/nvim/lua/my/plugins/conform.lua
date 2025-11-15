@@ -16,6 +16,7 @@ return {
 		"python",
 		"sh",
 		"tex",
+		"xml",
 		"yaml",
 	},
 	config = function()
@@ -33,6 +34,7 @@ return {
 				python = { "black" },
 				sh = { "shfmt" },
 				tex = { "tex-fmt" },
+				xml = { "xmlformatter" },
 				yaml = { "prettier" },
 			},
 			-- Custom formatter configurations

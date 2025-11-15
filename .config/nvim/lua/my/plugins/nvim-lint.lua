@@ -8,8 +8,8 @@ return {
 		"lua",
 		"html",
 		"markdown",
-		"text",
 		"python",
+		"text",
 	},
 	config = function()
 		require("lint").linters_by_ft = {
