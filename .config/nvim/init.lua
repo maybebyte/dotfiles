@@ -4,17 +4,30 @@
 
 local function bootstrap_plugin_manager()
 	local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+	-- Attempt to clone with a timeout to prevent blocking indefinitely
 	if not vim.loop.fs_stat(lazypath) then
 		vim.fn.system({
+			"timeout",
+			"10s",
 			"git",
 			"clone",
 			"--filter=blob:none",
 			"https://github.com/folke/lazy.nvim.git",
-			"--branch=stable", -- latest stable release
+			"--branch=stable",
 			lazypath,
 		})
+
+		-- Check if the clone was successful
+		if vim.v.shell_error ~= 0 then
+			vim.notify(
+				"Failed to install lazy.nvim (network issue or timeout). Starting without plugins.",
+				vim.log.levels.WARN
+			)
+			return false
+		end
 	end
 	vim.opt.rtp:prepend(lazypath)
+	return true
 end
 
 local function setup_backup_directory()
@@ -37,18 +50,19 @@ end
 
 require("my.settings")
 
-bootstrap_plugin_manager()
+local lazy_ready = bootstrap_plugin_manager()
 setup_backup_directory()
 
-require("lazy").setup("my.plugins")
+if lazy_ready then
+	require("lazy").setup("my.plugins")
 
-vim.cmd("colorscheme catppuccin-frappe")
+	vim.cmd("colorscheme catppuccin-frappe")
 
--- Set transparency (must come after colorscheme)
-vim.cmd("highlight Normal guibg=none")
-vim.cmd("highlight NonText guibg=none")
-vim.cmd("highlight Normal ctermbg=none")
-vim.cmd("highlight NonText ctermbg=none")
+	vim.cmd("highlight Normal guibg=none")
+	vim.cmd("highlight NonText guibg=none")
+	vim.cmd("highlight Normal ctermbg=none")
+	vim.cmd("highlight NonText ctermbg=none")
+end
 
 require("my.keybindings")
 require("my.autocmds")
