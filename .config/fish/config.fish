@@ -72,8 +72,6 @@ if status is-interactive
 	# CTRL-R - history
 	# CTRL-T - files
 	# ALT-C - directories -- will cd into the chosen directory
-	#
-	# TODO: ALT-C is currently broken due to some zoxide interaction
 	if command --search --quiet 'fzf'
 		fzf --fish | source
 	end
