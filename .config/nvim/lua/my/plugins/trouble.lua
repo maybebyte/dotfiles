@@ -36,4 +36,5 @@ return {
 			desc = "Quickfix List (Trouble)",
 		},
 	},
+	opts = {},
 }
