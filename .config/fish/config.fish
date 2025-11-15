@@ -3,6 +3,14 @@ if status is-interactive
 	if string length --quiet -- {$SSH_VAULT_VM}
 		set -gx SSH_AUTH_SOCK "/home/user/.SSH_AGENT_$SSH_VAULT_VM"
 	end
+
+	# Auto-install Fisher plugin manager if not present
+	if not functions --query fisher
+		if curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+			fisher update
+		end
+	end
+
 	# Automatically launch sway if:
 	# 1) Wayland is not running
 	# 2) We've logged into the first virtual terminal
