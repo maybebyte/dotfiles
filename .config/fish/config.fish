@@ -51,14 +51,6 @@ if status is-interactive
 	# Needed for GnuPG to properly operate.
 	set -gx GPG_TTY (tty)
 
-	# Add some fish bindings for fuzzy searching. They paste the result.
-	# CTRL-R - history
-	# CTRL-T - files
-	# ALT-C - directories -- will cd into the chosen directory
-	if command --search --quiet 'fzf'
-		fzf --fish | source
-	end
-
 	# Replaces cd with zoxide if available
 	# https://github.com/ajeetdsouza/zoxide
 	if command --search --quiet 'zoxide'
