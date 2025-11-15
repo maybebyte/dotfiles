@@ -54,9 +54,16 @@ local lazy_ready = bootstrap_plugin_manager()
 setup_backup_directory()
 
 if lazy_ready then
-	require("lazy").setup("my.plugins")
+	-- Load colorscheme before lazy.setup() so it's available during plugin installation UI
+	local catppuccin_path = vim.fn.stdpath("data") .. "/lazy/catppuccin"
+	if vim.loop.fs_stat(catppuccin_path) then
+		vim.opt.rtp:prepend(catppuccin_path)
+		pcall(function()
+			vim.cmd("colorscheme catppuccin-frappe")
+		end)
+	end
 
-	vim.cmd("colorscheme catppuccin-frappe")
+	require("lazy").setup("my.plugins")
 end
 
 vim.cmd("highlight Normal guibg=none")
