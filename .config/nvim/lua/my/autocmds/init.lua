@@ -33,11 +33,15 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function()
 		if vim.bo.filetype == "help" then
-			require("zen-mode").toggle({
-				on_close = function()
-					vim.cmd("q")
-				end,
-			})
+			-- Only use zen-mode if it's available (plugins are loaded)
+			local ok, zenmode = pcall(require, "zen-mode")
+			if ok then
+				zenmode.toggle({
+					on_close = function()
+						vim.cmd("q")
+					end,
+				})
+			end
 		end
 	end,
 	desc = "ZenMode is enabled for help files.",
