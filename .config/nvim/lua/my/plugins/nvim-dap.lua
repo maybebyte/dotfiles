@@ -1,54 +1,21 @@
--- luacheck: globals vim
-
 -- TODO: Update plugins?
-
-local function setup_dap_keymaps(dap)
-	vim.keymap.set("n", "<leader>dc", function()
-		dap.continue()
-	end, { desc = "[D]ebug [C]ontinue" })
-
-	vim.keymap.set("n", "<leader>do", function()
-		dap.step_over()
-	end, { desc = "[D]ebug Step [O]ver" })
-
-	vim.keymap.set("n", "<leader>dO", function()
-		dap.step_out()
-	end, { desc = "[D]ebug Step [O]ut" })
-
-	vim.keymap.set("n", "<leader>di", function()
-		dap.step_into()
-	end, { desc = "[D]ebug Step [I]nto" })
-
-	vim.keymap.set("n", "<leader>db", function()
-		dap.toggle_breakpoint()
-	end, { desc = "[D]ebug Toggle [B]reakpoint" })
-
-	vim.keymap.set("n", "<leader>dB", function()
-		dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-	end, { desc = "[D]ebug [B]reakpoint Condition" })
-
-	vim.keymap.set("n", "<leader>dC", function()
-		dap.run_to_cursor()
-	end, { desc = "[D]ebug Run to [C]ursor" })
-
-	vim.keymap.set("n", "<leader>dj", function()
-		dap.down()
-	end, { desc = "[D]ebug Down (j)" })
-
-	vim.keymap.set("n", "<leader>dk", function()
-		dap.up()
-	end, { desc = "[D]ebug Down (k)" })
-
-	vim.keymap.set("n", "<leader>dT", function()
-		dap.terminate()
-	end, { desc = "[D]ebug [T]erminate" })
-end
 
 return {
 	"mfussenegger/nvim-dap",
 	lazy = true,
-	event = { "BufReadPost", "BufNewFile" },
 	tag = "0.6.0",
+	keys = {
+		{ "<leader>dc", function() require("dap").continue() end, desc = "[D]ebug [C]ontinue" },
+		{ "<leader>do", function() require("dap").step_over() end, desc = "[D]ebug Step [O]ver" },
+		{ "<leader>dO", function() require("dap").step_out() end, desc = "[D]ebug Step [O]ut" },
+		{ "<leader>di", function() require("dap").step_into() end, desc = "[D]ebug Step [I]nto" },
+		{ "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "[D]ebug Toggle [B]reakpoint" },
+		{ "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "[D]ebug [B]reakpoint Condition" },
+		{ "<leader>dC", function() require("dap").run_to_cursor() end, desc = "[D]ebug Run to [C]ursor" },
+		{ "<leader>dj", function() require("dap").down() end, desc = "[D]ebug Down (j)" },
+		{ "<leader>dk", function() require("dap").up() end, desc = "[D]ebug Up (k)" },
+		{ "<leader>dT", function() require("dap").terminate() end, desc = "[D]ebug [T]erminate" },
+	},
 	dependencies = {
 		-- virtual text for the debugger
 		{
@@ -106,8 +73,4 @@ return {
 			end,
 		},
 	},
-	config = function()
-		local dap = require("dap")
-		setup_dap_keymaps(dap)
-	end,
 }

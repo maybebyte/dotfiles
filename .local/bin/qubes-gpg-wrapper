@@ -1,0 +1,12 @@
+#!/bin/bash
+# Wrapper for qubes-gpg-client to filter out --use-agent flag
+# which qubes-gpg-client doesn't support
+
+args=()
+for arg in "$@"; do
+    if [[ "$arg" != "--use-agent" && "$arg" != "--no-use-agent" ]]; then
+        args+=("$arg")
+    fi
+done
+
+exec qubes-gpg-client "${args[@]}"
