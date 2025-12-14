@@ -39,7 +39,7 @@ export \
 	HTML_TIDY="${XDG_CONFIG_HOME}/tidy/tidy.conf" \
 	MAILRC="${XDG_CONFIG_HOME}/mail/mailrc" \
 	PERL5LIB="${XDG_DATA_HOME}/perl5" \
-	PERLCRITIC="${XDG_CONFIG_HOME}/config/perlcritic.conf" \
+	PERLCRITIC="${XDG_CONFIG_HOME}/perlcritic/perlcritic.conf" \
 	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
 
 
