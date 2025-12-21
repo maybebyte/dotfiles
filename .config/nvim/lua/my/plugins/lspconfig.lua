@@ -1,40 +1,3 @@
--- Server-specific configuration functions
-local server_configs = {
-	lua_ls = function(capabilities)
-		return {
-			capabilities = capabilities,
-			settings = {
-				Lua = {
-					runtime = {
-						version = "LuaJIT",
-					},
-					diagnostics = {
-						-- Recognize vim global
-						globals = { "vim" },
-					},
-					workspace = {
-						checkThirdParty = false,
-					},
-					telemetry = {
-						enable = false,
-					},
-				},
-			},
-		}
-	end,
-	pyright = function(capabilities)
-		return {
-			capabilities = capabilities,
-			settings = {
-				pyright = {
-					disableLanguageServices = true,
-				},
-			},
-		}
-	end,
-	-- Add more server-specific configs as needed
-}
-
 local function setup_keybinds_on_attach(bufnr)
 	vim.keymap.set(
 		"n",
@@ -120,27 +83,31 @@ local function setup_lsp_diagnostics()
 end
 
 local function setup_lsp_servers()
-	-- Configure Mason for LSP server installations
-	require("mason").setup()
-	require("mason-lspconfig").setup()
-
-	-- Get capabilities from cmp_nvim_lsp
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-	-- Setup LSP servers with mason-lspconfig
-	require("mason-lspconfig").setup_handlers({
-		-- Default handler for servers without specific config
-		function(server_name)
-			local server_config = server_configs[server_name]
-			if server_config then
-				require("lspconfig")[server_name].setup(server_config(capabilities))
-			else
-				require("lspconfig")[server_name].setup({
-					capabilities = capabilities,
-				})
-			end
-		end,
+	vim.lsp.config('*', {
+		capabilities = capabilities,
 	})
+
+	vim.lsp.config('lua_ls', {
+		settings = {
+			Lua = {
+				runtime = { version = "LuaJIT" },
+				diagnostics = { globals = { "vim" } },
+				workspace = { checkThirdParty = false },
+				telemetry = { enable = false },
+			},
+		},
+	})
+
+	vim.lsp.config('pyright', {
+		settings = {
+			pyright = { disableLanguageServices = true },
+		},
+	})
+
+	require("mason").setup()
+	require("mason-lspconfig").setup()
 end
 
 return {
@@ -151,7 +118,7 @@ return {
 	dependencies = {
 		-- Mason for LSP server management
 		{ "williamboman/mason.nvim", version = "v2.*" },
-		{ "williamboman/mason-lspconfig.nvim", version = "v1.*" }, -- v1 needed until neovim v0.11.x
+		{ "williamboman/mason-lspconfig.nvim", version = "v2.*" },
 
 		-- Completion capabilities for nvim-cmp
 		"hrsh7th/cmp-nvim-lsp",
