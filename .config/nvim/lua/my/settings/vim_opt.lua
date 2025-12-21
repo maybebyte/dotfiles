@@ -1,5 +1,3 @@
--- luacheck: globals vim
-
 vim.opt.backup = true
 vim.opt.backupdir = vim.env.XDG_STATE_HOME .. "/nvim/backup"
 
@@ -53,3 +51,7 @@ vim.opt.listchars = {
     precedes = '⟨',
     nbsp = '◦',
 }
+
+if vim.fn.has("nvim-0.11") == 1 then
+	vim.o.winborder = "rounded"
+end
