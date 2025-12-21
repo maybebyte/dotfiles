@@ -1,7 +1,27 @@
--- luacheck: globals vim
-
 -- Server-specific configuration functions
 local server_configs = {
+	lua_ls = function(capabilities)
+		return {
+			capabilities = capabilities,
+			settings = {
+				Lua = {
+					runtime = {
+						version = "LuaJIT",
+					},
+					diagnostics = {
+						-- Recognize vim global
+						globals = { "vim" },
+					},
+					workspace = {
+						checkThirdParty = false,
+					},
+					telemetry = {
+						enable = false,
+					},
+				},
+			},
+		}
+	end,
 	pyright = function(capabilities)
 		return {
 			capabilities = capabilities,
@@ -69,22 +89,33 @@ local function setup_keybinds_on_attach(bufnr)
 end
 
 local function setup_lsp_diagnostics()
-	-- Configure diagnostic signs
-	local signs = {
-		Error = "E",
-		Warn = "W",
-		Hint = "H",
-		Info = "I",
-	}
+	vim.diagnostic.config({
+		virtual_text = true,
+		signs = {
+			text = {
+				[vim.diagnostic.severity.ERROR] = "E",
+				[vim.diagnostic.severity.WARN] = "W",
+				[vim.diagnostic.severity.HINT] = "H",
+				[vim.diagnostic.severity.INFO] = "I",
+			},
+			numhl = {
+				[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+				[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+				[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+				[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+			},
+		},
+		underline = true,
+		update_in_insert = false,
+		severity_sort = true,
+	})
 
-	for type, icon in pairs(signs) do
-		local hl = "DiagnosticSign" .. type
-		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-	end
-
-	-- Global diagnostic keymaps
-	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+	vim.keymap.set("n", "[d", function()
+		vim.diagnostic.jump({ count = -1, float = true })
+	end, { desc = "Go to previous diagnostic" })
+	vim.keymap.set("n", "]d", function()
+		vim.diagnostic.jump({ count = 1, float = true })
+	end, { desc = "Go to next diagnostic" })
 	vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
 end
 
