@@ -1,7 +1,7 @@
 local function bootstrap_plugin_manager()
 	local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 	-- Attempt to clone with a timeout to prevent blocking indefinitely
-	if not vim.loop.fs_stat(lazypath) then
+	if not vim.uv.fs_stat(lazypath) then
 		vim.fn.system({
 			"timeout",
 			"10s",
@@ -52,7 +52,7 @@ setup_backup_directory()
 if lazy_ready then
 	-- Load colorscheme before lazy.setup() so it's available during plugin installation UI
 	local catppuccin_path = vim.fn.stdpath("data") .. "/lazy/catppuccin"
-	if vim.loop.fs_stat(catppuccin_path) then
+	if vim.uv.fs_stat(catppuccin_path) then
 		vim.opt.rtp:prepend(catppuccin_path)
 		pcall(function()
 			vim.cmd("colorscheme catppuccin-frappe")
