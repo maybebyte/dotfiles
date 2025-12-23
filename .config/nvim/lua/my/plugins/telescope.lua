@@ -22,25 +22,22 @@ local function setup_file_navigation_keymaps()
 		}))
 	end, { desc = "[/] Fuzzily search in current buffer" })
 
-	vim.keymap.set(
-		"n",
-		"<leader>s.",
-		require("telescope.builtin").oldfiles,
-		{ desc = '[S]earch Recent Files ("." for repeat)' }
-	)
+	vim.keymap.set("n", "<leader>s.", function()
+		require("telescope.builtin").oldfiles()
+	end, { desc = '[S]earch Recent Files ("." for repeat)' })
+
 	-- Shortcut for searching your Neovim configuration files
 	vim.keymap.set("n", "<leader>sn", function()
 		require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
 	end, { desc = "[S]earch [N]eovim files" })
 
-	vim.keymap.set("n", "<leader>sr", require("telescope.builtin").resume, { desc = "[S]earch [R]esume" })
+	vim.keymap.set("n", "<leader>sr", function()
+		require("telescope.builtin").resume()
+	end, { desc = "[S]earch [R]esume" })
 
-	vim.keymap.set(
-		"n",
-		"<leader><leader>",
-		require("telescope.builtin").buffers,
-		{ desc = "[ ] Find existing buffers" }
-	)
+	vim.keymap.set("n", "<leader><leader>", function()
+		require("telescope.builtin").buffers()
+	end, { desc = "[ ] Find existing buffers" })
 end
 
 -- Configure search and grep keymaps
@@ -60,29 +57,19 @@ local function setup_search_keymaps()
 	end, { desc = "[S]earch by [G]rep" })
 end
 
--- Configure LSP-related keymaps
+-- Configure LSP-related keymaps (gr and gI are in lspconfig.lua)
 local function setup_lsp_keymaps()
 	vim.keymap.set("n", "<leader>sd", function()
 		require("telescope.builtin").diagnostics()
 	end, { desc = "[S]earch [D]iagnostics" })
 
-	vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, { desc = "[G]oto [R]eferences" })
+	vim.keymap.set("n", "<leader>ds", function()
+		require("telescope.builtin").lsp_document_symbols()
+	end, { desc = "[D]ocument [S]ymbols" })
 
-	vim.keymap.set("n", "gI", require("telescope.builtin").lsp_implementations, { desc = "[G]oto [I]mplementation" })
-
-	vim.keymap.set(
-		"n",
-		"<leader>ds",
-		require("telescope.builtin").lsp_document_symbols,
-		{ desc = "[D]ocument [S]ymbols" }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>ws",
-		require("telescope.builtin").lsp_dynamic_workspace_symbols,
-		{ desc = "[W]orkspace [S]ymbols" }
-	)
+	vim.keymap.set("n", "<leader>ws", function()
+		require("telescope.builtin").lsp_dynamic_workspace_symbols()
+	end, { desc = "[W]orkspace [S]ymbols" })
 end
 
 -- Configure DAP extension keymaps
@@ -103,7 +90,7 @@ end
 return {
 	"nvim-telescope/telescope.nvim",
 	lazy = true,
-	branch = "0.1.x",
+	tag = "v0.2.0",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-telescope/telescope-ui-select.nvim",
@@ -135,10 +122,8 @@ return {
 		{ "<leader>sw" },
 		{ "<leader>sg" },
 
-		-- LSP-related keymaps
+		-- LSP-related keymaps (gr and gI are in lspconfig.lua)
 		{ "<leader>sd" },
-		{ "gr" },
-		{ "gI" },
 		{ "<leader>ds" },
 		{ "<leader>ws" },
 

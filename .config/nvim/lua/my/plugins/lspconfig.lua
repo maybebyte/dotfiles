@@ -8,6 +8,15 @@ local function setup_keybinds_on_attach(bufnr)
 
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Show documentation for symbol under cursor" })
 
+	-- Telescope LSP keymaps
+	vim.keymap.set("n", "gr", function()
+		require("telescope.builtin").lsp_references()
+	end, { buffer = bufnr, nowait = true, desc = "[G]oto [R]eferences (Telescope)" })
+
+	vim.keymap.set("n", "gI", function()
+		require("telescope.builtin").lsp_implementations()
+	end, { buffer = bufnr, nowait = true, desc = "[G]oto [I]mplementation (Telescope)" })
+
 	vim.keymap.set(
 		"n",
 		"<leader>vws",
