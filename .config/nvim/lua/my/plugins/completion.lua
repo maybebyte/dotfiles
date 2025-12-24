@@ -137,7 +137,7 @@ end
 return {
 	"hrsh7th/nvim-cmp",
 	lazy = true,
-	event = "VeryLazy",
+	event = { "InsertEnter", "CmdlineEnter" },
 	dependencies = {
 		-- Standard completion sources
 		"hrsh7th/cmp-buffer",
