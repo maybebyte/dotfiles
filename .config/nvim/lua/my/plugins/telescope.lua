@@ -72,82 +72,95 @@ local function setup_lsp_keymaps()
 	end, { desc = "[W]orkspace [S]ymbols" })
 end
 
--- Configure DAP extension keymaps
+-- Configure DAP extension keymaps with lazy loading
 local function setup_dap_keymaps()
-	vim.keymap.set("n", "<leader>dtb", function()
+	local dap_ext_loaded = false
+	local function with_dap_ext(fn)
+		return function()
+			if not dap_ext_loaded then
+				local ok, err = pcall(function()
+					require("telescope").load_extension("dap")
+				end)
+				if not ok then
+					vim.notify("telescope-dap failed to load: " .. tostring(err), vim.log.levels.ERROR)
+					return
+				end
+				dap_ext_loaded = true
+			end
+			fn()
+		end
+	end
+
+	vim.keymap.set("n", "<leader>dtb", with_dap_ext(function()
 		require("telescope").extensions.dap.list_breakpoints()
-	end, { desc = "[D]ebug [T]elescope [B]reakpoints" })
+	end), { desc = "[D]ebug [T]elescope [B]reakpoints" })
 
-	vim.keymap.set("n", "<leader>dtc", function()
+	vim.keymap.set("n", "<leader>dtc", with_dap_ext(function()
 		require("telescope").extensions.dap.commands()
-	end, { desc = "[D]ebug [T]elescope [C]ommands" })
+	end), { desc = "[D]ebug [T]elescope [C]ommands" })
 
-	vim.keymap.set("n", "<leader>dtf", function()
+	vim.keymap.set("n", "<leader>dtf", with_dap_ext(function()
 		require("telescope").extensions.dap.frames()
-	end, { desc = "[D]ebug [T]elescope [F]rames" })
+	end), { desc = "[D]ebug [T]elescope [F]rames" })
 end
 
 return {
-	"nvim-telescope/telescope.nvim",
-	lazy = true,
-	tag = "v0.2.0",
-	dependencies = {
-		"nvim-lua/plenary.nvim",
-		"nvim-telescope/telescope-ui-select.nvim",
-		{
-			"nvim-telescope/telescope-fzf-native.nvim",
-			build = "gmake",
-			cond = function()
-				return vim.fn.executable("gmake") == 1
-			end,
-		},
-		{
-			"nvim-telescope/telescope-dap.nvim",
-			dependencies = "mfussenegger/nvim-dap",
-		},
-	},
-	keys = {
-		-- File Navigation keymaps
-		{ "<leader>ts" },
-		{ "<leader>sf" },
-		{ "<leader>gf" },
-		{ "<leader>/" },
-		{ "<leader>s." },
-		{ "<leader>sn" },
-		{ "<leader>sr" },
-		{ "<leader><leader>" },
+	-- Telescope-dap as standalone lazy plugin (not a telescope dependency)
+	{ "nvim-telescope/telescope-dap.nvim", lazy = true },
 
-		-- Search keymaps
-		{ "<leader>sh" },
-		{ "<leader>sw" },
-		{ "<leader>sg" },
-
-		-- LSP-related keymaps (gr and gI are in lspconfig.lua)
-		{ "<leader>sd" },
-		{ "<leader>ds" },
-		{ "<leader>ws" },
-
-		-- DAP extension keymaps
-		{ "<leader>dtb" },
-		{ "<leader>dtc" },
-		{ "<leader>dtf" },
-	},
-	cmd = { "Telescope" },
-	config = function()
-		require("telescope").setup({
-			extensions = {
-				["ui-select"] = {
-					require("telescope.themes").get_dropdown(),
-				},
+	-- Main Telescope configuration
+	{
+		"nvim-telescope/telescope.nvim",
+		lazy = true,
+		tag = "v0.2.0",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope-ui-select.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "gmake",
+				cond = function()
+					return vim.fn.executable("gmake") == 1
+				end,
 			},
-		})
-		require("telescope").load_extension("dap")
-		require("telescope").load_extension("fzf")
+		},
+		keys = {
+			-- File Navigation keymaps
+			{ "<leader>ts" },
+			{ "<leader>sf" },
+			{ "<leader>gf" },
+			{ "<leader>/" },
+			{ "<leader>s." },
+			{ "<leader>sn" },
+			{ "<leader>sr" },
+			{ "<leader><leader>" },
 
-		-- Setup keymaps by functionality groups
-		setup_file_navigation_keymaps()
-		setup_search_keymaps()
-		setup_lsp_keymaps()
-		setup_dap_keymaps()
-	end,
+			-- Search keymaps
+			{ "<leader>sh" },
+			{ "<leader>sw" },
+			{ "<leader>sg" },
+
+			-- LSP-related keymaps (gr and gI are in lspconfig.lua)
+			{ "<leader>sd" },
+			{ "<leader>ds" },
+			{ "<leader>ws" },
+		},
+		cmd = { "Telescope" },
+		config = function()
+			require("telescope").setup({
+				extensions = {
+					["ui-select"] = {
+						require("telescope.themes").get_dropdown(),
+					},
+				},
+			})
+			require("telescope").load_extension("fzf")
+
+			-- Setup keymaps by functionality groups
+			setup_file_navigation_keymaps()
+			setup_search_keymaps()
+			setup_lsp_keymaps()
+			setup_dap_keymaps()
+		end,
+	},
 }
