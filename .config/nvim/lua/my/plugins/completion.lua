@@ -97,20 +97,15 @@ local function create_base_config(cmp, luasnip)
 		sources = get_completion_sources(),
 		mapping = get_keymappings(cmp, luasnip),
 		enabled = function()
-			return vim.api.nvim_get_option_value("buftype", { buf = 0 }) ~= "prompt"
-				or require("cmp_dap").is_dap_buffer()
+			local buftype = vim.api.nvim_get_option_value("buftype", { buf = 0 })
+			if buftype == "prompt" then
+				-- Check if cmp_dap is loaded WITHOUT loading it (avoids eager loading)
+				local cmp_dap = package.loaded["cmp_dap"]
+				return cmp_dap and cmp_dap.is_dap_buffer()
+			end
+			return true
 		end,
 	}
-end
-
--- Setup filetype-specific configurations
-local function setup_filetype_specific_configs(cmp)
-	-- DAP-specific filetypes
-	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-		sources = {
-			{ name = "dap" },
-		},
-	})
 end
 
 -- Setup command-line completions
@@ -163,15 +158,6 @@ return {
 			},
 		},
 
-		-- Debug adapter protocol integration
-		{
-			"rcarriga/cmp-dap",
-			dependencies = {
-				"mfussenegger/nvim-dap",
-				"rcarriga/nvim-dap-ui",
-			},
-		},
-
 		-- Neovim Lua development
 		{
 			"folke/lazydev.nvim",
@@ -197,7 +183,6 @@ return {
 		local base_config = create_base_config(cmp, luasnip)
 		cmp.setup(base_config)
 
-		setup_filetype_specific_configs(cmp)
 		setup_cmdline_completions(cmp)
 	end,
 }
