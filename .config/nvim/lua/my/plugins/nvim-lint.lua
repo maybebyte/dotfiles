@@ -28,16 +28,18 @@ return {
 		require("lint").linters.erb_lint.cmd = "erblint"
 		require("lint").linters.erb_lint.args = { "--format", "compact" }
 
+		local lint_augroup = vim.api.nvim_create_augroup("UserLint", { clear = true })
+
 		vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+			group = lint_augroup,
 			callback = function()
 				require("lint").try_lint()
 			end,
 		})
 
 		vim.api.nvim_create_autocmd({ "FileType", "InsertLeave" }, {
-			pattern = {
-				"lua",
-			},
+			group = lint_augroup,
+			pattern = { "lua" },
 			callback = function()
 				require("lint").try_lint()
 			end,
