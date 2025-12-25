@@ -49,13 +49,6 @@ return {
 			"hrsh7th/cmp-cmdline",
 			"onsails/lspkind.nvim",
 
-			-- Copilot integration (will be moved in Phase 3)
-			{
-				"zbirenbaum/copilot-cmp",
-				dependencies = { "zbirenbaum/copilot.lua" },
-				opts = {},
-			},
-
 			-- Neovim Lua development
 			{
 				"folke/lazydev.nvim",

@@ -17,6 +17,23 @@ return {
 		},
 	},
 	{
+		"zbirenbaum/copilot-cmp",
+		event = "InsertEnter",
+		dependencies = {
+			"zbirenbaum/copilot.lua",
+			"hrsh7th/nvim-cmp",
+		},
+		config = function()
+			require("copilot_cmp").setup()
+			local ok, utils = pcall(require, "my.completion_utils")
+			if ok then
+				utils.reconfigure_cmp()
+			else
+				vim.notify("[cmp] Failed to load completion_utils: " .. tostring(utils), vim.log.levels.WARN)
+			end
+		end,
+	},
+	{
 		"CopilotC-Nvim/CopilotChat.nvim",
 		lazy = true,
 		dependencies = { "zbirenbaum/copilot.lua", "nvim-lua/plenary.nvim", branch = "master" },
@@ -56,9 +73,9 @@ return {
 				}
 
 			vim.api.nvim_create_autocmd("BufEnter", {
+				group = vim.api.nvim_create_augroup("CopilotChatBufSettings", { clear = true }),
 				pattern = "copilot-*",
 				callback = function()
-					-- Set buffer-local options
 					vim.opt_local.relativenumber = false
 					vim.opt_local.number = false
 					vim.opt_local.conceallevel = 0
