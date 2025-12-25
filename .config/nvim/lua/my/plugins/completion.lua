@@ -70,17 +70,7 @@ return {
 			local luasnip_ok, luasnip = pcall(require, "luasnip")
 
 			cmp.setup({
-				snippet = {
-					expand = function(args)
-						if luasnip_ok then
-							luasnip.lsp_expand(args.body)
-						elseif vim.fn.has("nvim-0.10") == 1 then
-							vim.snippet.expand(args.body)
-						else
-							vim.notify("[cmp] Snippet expansion requires LuaSnip or Neovim 0.10+", vim.log.levels.WARN)
-						end
-					end,
-				},
+				snippet = { expand = utils.expand_snippet },
 				formatting = get_formatting_config(),
 				sources = utils.get_completion_sources(),
 				mapping = luasnip_ok and utils.get_keymappings(cmp, luasnip) or utils.get_keymappings_no_snippets(cmp),

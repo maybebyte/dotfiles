@@ -49,6 +49,17 @@ function M.get_completion_sources()
 	return sources
 end
 
+function M.expand_snippet(args)
+	local luasnip_ok, luasnip = pcall(require, "luasnip")
+	if luasnip_ok then
+		luasnip.lsp_expand(args.body)
+	elseif vim.fn.has("nvim-0.10") == 1 then
+		vim.snippet.expand(args.body)
+	else
+		vim.notify("[cmp] Snippet expansion requires LuaSnip or Neovim 0.10+", vim.log.levels.WARN)
+	end
+end
+
 -- Keymappings without snippet support (for CmdlineEnter before LuaSnip loads)
 function M.get_keymappings_no_snippets(cmp)
 	return {
@@ -142,17 +153,7 @@ function M.reconfigure_cmp()
 			local config = {
 				sources = M.get_completion_sources(),
 				mapping = luasnip_ok and M.get_keymappings(cmp, luasnip) or M.get_keymappings_no_snippets(cmp),
-				snippet = {
-					expand = function(args)
-						if luasnip_ok then
-							luasnip.lsp_expand(args.body)
-						elseif vim.fn.has("nvim-0.10") == 1 then
-							vim.snippet.expand(args.body)
-						else
-							vim.notify("[cmp] Snippet expansion requires LuaSnip or Neovim 0.10+", vim.log.levels.WARN)
-						end
-					end,
-				},
+				snippet = { expand = M.expand_snippet },
 			}
 
 			cmp.setup(config)
