@@ -7,9 +7,6 @@ if vim.fn.has("nvim-0.9") ~= 1 then
 	return {}
 end
 
--- Compatibility shim: vim.loop was renamed to vim.uv in Neovim 0.10
-local uv = vim.uv or vim.loop
-
 local M = {}
 
 -- Debug logging (set NVIM_CMP_DEBUG=1 to enable)
