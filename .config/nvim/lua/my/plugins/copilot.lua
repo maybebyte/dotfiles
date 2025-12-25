@@ -36,7 +36,7 @@ return {
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
 		lazy = true,
-		dependencies = { "zbirenbaum/copilot.lua", "nvim-lua/plenary.nvim", branch = "master" },
+		dependencies = { "zbirenbaum/copilot.lua", { "nvim-lua/plenary.nvim", branch = "master" } },
 		cmd = {
 			"CopilotChat",
 			"CopilotChatOpen",
