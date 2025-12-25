@@ -60,72 +60,57 @@ function M.expand_snippet(args)
 	end
 end
 
--- Keymappings without snippet support (for CmdlineEnter before LuaSnip loads)
-function M.get_keymappings_no_snippets(cmp)
+-- Helper to create navigation mappings with configurable modes
+local function get_nav_mapping(cmp, modes, direction)
+	assert(direction == "next" or direction == "prev", "direction must be 'next' or 'prev'")
+	local select_fn = direction == "next" and cmp.select_next_item or cmp.select_prev_item
+	return cmp.mapping(function(fallback)
+		if cmp.visible() then
+			select_fn()
+		else
+			fallback()
+		end
+	end, modes)
+end
+
+-- Base mappings used by both variants
+local function get_base_mappings(cmp, modes)
 	return {
 		["<C-u>"] = cmp.mapping.scroll_docs(-4),
 		["<C-d>"] = cmp.mapping.scroll_docs(4),
-		["<C-n>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			else
-				fallback()
-			end
-		end, { "i" }), -- Note: only "i" mode, not "s" (select mode is for snippets)
-		["<C-p>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			else
-				fallback()
-			end
-		end, { "i" }),
+		["<C-n>"] = get_nav_mapping(cmp, modes, "next"),
+		["<C-p>"] = get_nav_mapping(cmp, modes, "prev"),
 		["<C-y>"] = cmp.mapping.confirm(),
 		["<C-Space>"] = cmp.mapping.complete(),
 	}
 end
 
+-- Keymappings without snippet support (for CmdlineEnter before LuaSnip loads)
+function M.get_keymappings_no_snippets(cmp)
+	return get_base_mappings(cmp, { "i" })
+end
+
 -- Full keymappings with LuaSnip snippet support
 function M.get_keymappings(cmp, luasnip)
-	return {
-		-- Snippet navigation
-		["<C-f>"] = cmp.mapping(function(fallback)
-			if luasnip.jumpable(1) then
-				luasnip.jump(1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-		["<C-b>"] = cmp.mapping(function(fallback)
-			if luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
+	local mappings = get_base_mappings(cmp, { "i", "s" })
 
-		-- Documentation scrolling
-		["<C-u>"] = cmp.mapping.scroll_docs(-4),
-		["<C-d>"] = cmp.mapping.scroll_docs(4),
+	mappings["<C-f>"] = cmp.mapping(function(fallback)
+		if luasnip.jumpable(1) then
+			luasnip.jump(1)
+		else
+			fallback()
+		end
+	end, { "i", "s" })
 
-		-- Completion selection
-		["<C-n>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-		["<C-p>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
+	mappings["<C-b>"] = cmp.mapping(function(fallback)
+		if luasnip.jumpable(-1) then
+			luasnip.jump(-1)
+		else
+			fallback()
+		end
+	end, { "i", "s" })
 
-		["<C-y>"] = cmp.mapping.confirm(),
-		["<C-Space>"] = cmp.mapping.complete(),
-	}
+	return mappings
 end
 
 local reconfigure_pending = false
