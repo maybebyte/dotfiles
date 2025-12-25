@@ -12,7 +12,7 @@ local M = {}
 -- Debug logging (set NVIM_CMP_DEBUG=1 to enable)
 local function log(msg)
 	if vim.env.NVIM_CMP_DEBUG then
-		vim.notify("[cmp-lazy] " .. msg, vim.log.levels.DEBUG)
+		vim.notify("[cmp] " .. msg, vim.log.levels.DEBUG)
 	end
 end
 
