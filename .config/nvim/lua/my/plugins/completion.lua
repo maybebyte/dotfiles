@@ -108,8 +108,8 @@ return {
 			local ok, utils = pcall(require, "my.completion_utils")
 			if ok then
 				utils.reconfigure_cmp()
-			else
-				vim.notify("[cmp] Failed to load completion_utils: " .. tostring(utils), vim.log.levels.WARN)
+			elseif vim.env.NVIM_CMP_DEBUG then
+				vim.notify("[cmp] completion_utils unavailable: " .. tostring(utils), vim.log.levels.DEBUG)
 			end
 		end,
 	},
