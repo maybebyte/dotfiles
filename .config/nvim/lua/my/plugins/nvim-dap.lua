@@ -1,9 +1,7 @@
--- TODO: Update plugins?
-
 return {
 	"mfussenegger/nvim-dap",
 	lazy = true,
-	tag = "0.6.0",
+	tag = "0.10.0",
 	keys = {
 		{ "<leader>dc", function() require("dap").continue() end, desc = "[D]ebug [C]ontinue" },
 		{ "<leader>do", function() require("dap").step_over() end, desc = "[D]ebug Step [O]ver" },
@@ -25,7 +23,7 @@ return {
 		-- mason.nvim integration
 		{
 			"jay-babu/mason-nvim-dap.nvim",
-			tag = "v2.1.1",
+			tag = "v2.5.2",
 			dependencies = { "williamboman/mason.nvim", opts = {} },
 			opts = {
 				ensure_installed = {
@@ -37,7 +35,7 @@ return {
 		-- fancy UI for the debugger
 		{
 			"rcarriga/nvim-dap-ui",
-			tag = "v3.9.1",
+			tag = "v3.9.3",
 			keys = {
 				{
 					"<leader>du",
