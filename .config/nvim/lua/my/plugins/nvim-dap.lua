@@ -35,7 +35,8 @@ return {
 		-- fancy UI for the debugger
 		{
 			"rcarriga/nvim-dap-ui",
-			tag = "v3.9.3",
+			tag = "v4.0.0",
+			dependencies = { "nvim-neotest/nvim-nio" },
 			keys = {
 				{
 					"<leader>du",
