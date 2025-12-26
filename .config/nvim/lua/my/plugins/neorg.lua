@@ -4,7 +4,7 @@ return {
 	lazy = true,
 	ft = { "norg" },
 	cmd = { "Neorg" },
-	version = "v9.1.1",
+	version = "v9.3.0",
 	build = function()
 		vim.cmd("Neorg sync-parsers")
 	end,
