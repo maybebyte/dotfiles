@@ -53,3 +53,19 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down a lin
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up a line." })
 
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Keep cursor in the same place when joining lines." })
+
+vim.keymap.set("n", "<leader>L", function()
+	if vim.bo.filetype == "lazy" then
+		vim.cmd.close()
+	else
+		require("lazy").show()
+	end
+end, { desc = "Toggle Lazy plugin manager." })
+
+vim.keymap.set("n", "<leader>M", function()
+	if vim.bo.filetype == "mason" then
+		vim.cmd.close()
+	else
+		require("mason.ui").open()
+	end
+end, { desc = "Toggle Mason package manager." })
