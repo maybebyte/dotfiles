@@ -5,8 +5,21 @@ return {
 	dependencies = { "nvim-lua/plenary.nvim" },
 	event = { "BufReadPost", "BufNewFile" },
 	keys = {
-		{ "<leader>st", "<cmd>TodoTelescope<cr>", desc = "[S]earch [T]odos" },
-		{ "<leader>xt", "<cmd>Trouble todo toggle<cr>", desc = "Todo (Trouble)" },
+		{
+			"<leader>st",
+			function()
+				require("todo-comments")
+				require("telescope").extensions["todo-comments"].todo()
+			end,
+			desc = "[S]earch [T]odos",
+		},
+		{
+			"<leader>xt",
+			function()
+				require("trouble").toggle("todo")
+			end,
+			desc = "Todo (Trouble)",
+		},
 		{
 			"]t",
 			function()
