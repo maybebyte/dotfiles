@@ -6,9 +6,6 @@ mods = "Alt"
 [font]
 size = 18.0
 
-[window]
-opacity = 0.875
-
 [general]
 import = [
 	#"~/.config/alacritty/themes/catppuccin/catppuccin-latte.toml"
