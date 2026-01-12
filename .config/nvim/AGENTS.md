@@ -1,6 +1,7 @@
 # Neovim Configuration
 
 Modular Lua config: lazy.nvim, LSP (Mason v2), nvim-cmp, treesitter, conform, nvim-lint.
+
 Neovim 0.11+.
 
 ## Commands
@@ -114,4 +115,5 @@ Full documentation in README.md (do not duplicate).
 ## Environment
 
 XDG-compliant paths | Leader: Space | Local leader: Comma
+
 Qubes OS: GPG wrapper at ~/.local/bin/qubes-gpg-wrapper
