@@ -437,6 +437,19 @@ Press `<leader>` and wait for which-key to show available bindings.
 </details>
 
 <details>
+<summary><strong>Terminal Mode</strong></summary>
+
+| Key | Description |
+|-----|-------------|
+| `<C-Space>` | Exit terminal mode |
+| `<C-h>` | Exit terminal + move left |
+| `<C-j>` | Exit terminal + move down |
+| `<C-k>` | Exit terminal + move up |
+| `<C-l>` | Exit terminal + move right |
+
+</details>
+
+<details>
 <summary><strong>Claude Code (AI)</strong></summary>
 
 | Key | Mode | Description |
