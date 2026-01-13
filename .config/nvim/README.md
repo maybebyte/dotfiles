@@ -165,6 +165,7 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 | [lazy.nvim](https://github.com/folke/lazy.nvim) | Plugin manager |
 | [which-key.nvim](https://github.com/folke/which-key.nvim) | Keybinding hints |
 | [vim-sleuth](https://github.com/tpope/vim-sleuth) | Auto-detect indentation |
+| [snacks.nvim](https://github.com/folke/snacks.nvim) | QoL utilities (terminal, bigfile, quickfile) |
 
 ### LSP
 
@@ -193,6 +194,12 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 | [LuaSnip](https://github.com/L3MON4D3/LuaSnip) | Snippet engine |
 | [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) | Snippet collection |
 | cmp-buffer, cmp-cmdline, cmp-nvim-lsp, cmp-nvim-lua, cmp-path, cmp_luasnip, cmp-dap | Completion sources |
+
+### AI
+
+| Plugin | Purpose |
+|--------|---------|
+| [claudecode.nvim](https://github.com/coder/claudecode.nvim) | Claude Code terminal integration |
 
 ### Treesitter
 
@@ -426,6 +433,24 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `<leader>o` | Toggle spell check |
 | `<leader>fm` | Open NetRW file manager |
 | `<Esc>` | Clear search highlights |
+
+</details>
+
+<details>
+<summary><strong>Claude Code (AI)</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>ac` | n | Toggle Claude terminal |
+| `<leader>af` | n | Focus Claude terminal |
+| `<leader>ar` | n | Resume Claude session |
+| `<leader>aC` | n | Continue Claude session |
+| `<leader>am` | n | Select Claude model |
+| `<leader>ab` | n | Add current buffer to context |
+| `<leader>as` | v | Send selection to Claude |
+| `<leader>at` | n (oil) | Add file from file explorer |
+| `<leader>aa` | n | Accept diff |
+| `<leader>ad` | n | Deny diff |
 
 </details>
 
