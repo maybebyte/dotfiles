@@ -36,9 +36,12 @@ return {
 	},
 	opts = {
 		terminal = {
-			split_side = "right",
-			split_width_percentage = 0.40,
-			provider = "auto",
+			provider = "snacks",
+			snacks_win_opts = {
+				position = "bottom",
+				height = 0.4,
+				width = 1.0,
+			},
 		},
 	},
 }
