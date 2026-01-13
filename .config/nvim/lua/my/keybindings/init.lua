@@ -71,7 +71,12 @@ vim.keymap.set("n", "<leader>M", function()
 end, { desc = "Toggle Mason package manager." })
 
 -- Terminal mode mappings
-vim.keymap.set("t", "<C-Space>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<C-Space>", "<C-\\><C-n>", { desc = "Toggle terminal mode" })
+vim.keymap.set("n", "<C-Space>", function()
+	if vim.bo.buftype == "terminal" then
+		vim.cmd("startinsert")
+	end
+end, { desc = "Toggle terminal mode" })
 vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Exit terminal + move left" })
 vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Exit terminal + move down" })
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Exit terminal + move up" })

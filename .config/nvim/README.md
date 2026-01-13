@@ -441,7 +441,7 @@ Press `<leader>` and wait for which-key to show available bindings.
 
 | Key | Description |
 |-----|-------------|
-| `<C-Space>` | Exit terminal mode |
+| `<C-Space>` | Toggle terminal mode |
 | `<C-h>` | Exit terminal + move left |
 | `<C-j>` | Exit terminal + move down |
 | `<C-k>` | Exit terminal + move up |
