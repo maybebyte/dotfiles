@@ -28,6 +28,7 @@ NVIM_CMP_DEBUG=1 nvim   Debug completion issues
 - Create new plugins as separate files in `lua/my/plugins/`
 - Follow existing lazy-loading patterns (event, ft, keys, cmd)
 - Update keybinds in README.md when adding, removing, or changing keybinds
+- Update "Plugins by Category" in README.md when adding new plugins
 
 ### REQUIRES APPROVAL
 
