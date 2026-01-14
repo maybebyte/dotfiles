@@ -81,3 +81,86 @@ vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Exit terminal + move
 vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Exit terminal + move down" })
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Exit terminal + move up" })
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Exit terminal + move right" })
+
+-- =============================================================================
+-- Smart Window Resizing
+-- =============================================================================
+-- Press Alt+direction to push that edge in that direction.
+-- Example: <M-l> pushes the right edge right (growing the window), unless
+-- you're already at the rightmost position, in which case it shrinks.
+--
+-- Supports count prefix: 5<M-l> resizes by 5 * step instead of 1 * step.
+-- Configure step size via vim.g.smart_resize_step (default: 2).
+
+-- User-configurable resize step (set vim.g.smart_resize_step to override)
+local function get_resize_step()
+	return vim.g.smart_resize_step or 2
+end
+
+-- Uses winnr() to detect edges without changing focus or triggering autocommands
+local function at_edge(dir)
+	return vim.fn.winnr() == vim.fn.winnr(dir)
+end
+
+-- Direction mapping: hjkl keys to resize commands
+-- h/l = horizontal edge detection -> vertical resize (change width)
+-- j/k = vertical edge detection -> horizontal resize (change height)
+local resize_config = {
+	h = "vertical resize",
+	j = "resize",
+	k = "resize",
+	l = "vertical resize",
+}
+
+local function smart_resize(dir)
+	-- Skip floating windows
+	if vim.api.nvim_win_get_config(0).relative ~= "" then
+		return
+	end
+	-- Skip single window (no-op anyway, but explicit)
+	if vim.fn.winnr("$") == 1 then
+		return
+	end
+	local count = vim.v.count1 -- Supports count prefix (defaults to 1)
+	local step = get_resize_step() * count
+	local cmd = resize_config[dir]
+	local sign = at_edge(dir) and "-" or "+"
+	pcall(vim.cmd, cmd .. " " .. sign .. step)
+end
+
+-- Normal mode
+vim.keymap.set("n", "<M-h>", function()
+	smart_resize("h")
+end, { desc = "Smart resize left", silent = true })
+vim.keymap.set("n", "<M-j>", function()
+	smart_resize("j")
+end, { desc = "Smart resize down", silent = true })
+vim.keymap.set("n", "<M-k>", function()
+	smart_resize("k")
+end, { desc = "Smart resize up", silent = true })
+vim.keymap.set("n", "<M-l>", function()
+	smart_resize("l")
+end, { desc = "Smart resize right", silent = true })
+
+-- Terminal mode (exit to normal first using <C-\><C-n> pattern)
+-- Set vim.g.smart_resize_terminal_stay_normal = true to stay in normal mode after resize
+local function terminal_smart_resize(dir)
+	return function()
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
+		vim.schedule(function()
+			if vim.fn.mode() ~= "n" then
+				return
+			end
+			smart_resize(dir)
+			-- Return to terminal insert mode unless configured otherwise
+			if not vim.g.smart_resize_terminal_stay_normal then
+				vim.cmd("startinsert")
+			end
+		end)
+	end
+end
+
+vim.keymap.set("t", "<M-h>", terminal_smart_resize("h"), { desc = "Smart resize left", silent = true })
+vim.keymap.set("t", "<M-j>", terminal_smart_resize("j"), { desc = "Smart resize down", silent = true })
+vim.keymap.set("t", "<M-k>", terminal_smart_resize("k"), { desc = "Smart resize up", silent = true })
+vim.keymap.set("t", "<M-l>", terminal_smart_resize("l"), { desc = "Smart resize right", silent = true })

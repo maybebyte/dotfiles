@@ -291,7 +291,13 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `R` | o, x | Treesitter Search |
 | `<C-s>` | c | Toggle Flash Search |
 | `-` | n | Oil: open parent directory |
+| `<M-x>` | n (Oil) | Oil: open file in horizontal split |
+| `<M-r>` | n (Oil) | Oil: refresh buffer |
 | `<C-h/j/k/l>` | n | Window navigation |
+| `<M-h>` | n, t | Smart resize left (shrinks at left edge, grows otherwise) |
+| `<M-j>` | n, t | Smart resize down (shrinks at bottom edge, grows otherwise) |
+| `<M-k>` | n, t | Smart resize up (shrinks at top edge, grows otherwise) |
+| `<M-l>` | n, t | Smart resize right (shrinks at right edge, grows otherwise) |
 
 </details>
 
