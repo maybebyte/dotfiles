@@ -1,9 +1,13 @@
 -- luacheck: globals vim
 
+-- TODO: Migrate to main branch API when tree-sitter CLI >= 0.26.1
+-- The main branch (now default) removed nvim-treesitter.configs module.
+-- Pinning to master branch until CLI is upgraded.
 return {
 	"nvim-treesitter/nvim-treesitter",
+	branch = "master",
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects",
+		{ "nvim-treesitter/nvim-treesitter-textobjects", branch = "master" },
 		"nvim-treesitter/nvim-treesitter-context",
 	},
 	lazy = true,
