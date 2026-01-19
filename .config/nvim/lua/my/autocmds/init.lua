@@ -73,3 +73,29 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 	desc = "Set bash command-line editing to bash filetype so it has syntax highlighting",
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
+	pattern = {
+		"checkhealth",
+		"fugitive",
+		"git",
+		"gitsigns-blame",
+		"help",
+		"lspinfo",
+		"man",
+		"notify",
+		"qf",
+		"startuptime",
+	},
+	callback = function(event)
+		vim.bo[event.buf].buflisted = false
+		vim.schedule(function()
+			vim.keymap.set("n", "q", function()
+				vim.cmd("close")
+				pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+			end, { buffer = event.buf, silent = true, desc = "Close buffer" })
+		end)
+	end,
+	desc = "Close special buffers with q",
+})
