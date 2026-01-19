@@ -185,3 +185,22 @@ vim.keymap.set("t", "<M-h>", terminal_smart_resize("h"), { desc = "Smart resize 
 vim.keymap.set("t", "<M-j>", terminal_smart_resize("j"), { desc = "Smart resize down", silent = true })
 vim.keymap.set("t", "<M-k>", terminal_smart_resize("k"), { desc = "Smart resize up", silent = true })
 vim.keymap.set("t", "<M-l>", terminal_smart_resize("l"), { desc = "Smart resize right", silent = true })
+
+-- =================================
+-- Diagnostic Navigation by Severity
+-- =================================
+-- ]e/[e for errors only, ]w/[w for warnings only
+local function diagnostic_goto(next, severity)
+	return function()
+		vim.diagnostic.jump({
+			count = (next and 1 or -1) * vim.v.count1,
+			severity = severity and vim.diagnostic.severity[severity] or nil,
+			float = true,
+		})
+	end
+end
+
+vim.keymap.set("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next error" })
+vim.keymap.set("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev error" })
+vim.keymap.set("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next warning" })
+vim.keymap.set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
