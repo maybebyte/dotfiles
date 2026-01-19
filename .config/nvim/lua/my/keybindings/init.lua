@@ -23,6 +23,12 @@ vim.keymap.set({ "v", "n" }, "<Space>", "<Nop>", { silent = true })
 vim.keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true, desc = "Down (wrap-aware)" })
 vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, desc = "Up (wrap-aware)" })
 
+-- Undo break-points at punctuation
+-- Creates granular undo history in insert mode instead of undoing entire paragraphs
+vim.keymap.set("i", ",", ",<c-g>u", { desc = "Undo break-point at comma" })
+vim.keymap.set("i", ".", ".<c-g>u", { desc = "Undo break-point at period" })
+vim.keymap.set("i", ";", ";<c-g>u", { desc = "Undo break-point at semicolon" })
+
 vim.keymap.set({ "v", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Copy lines to CLIPBOARD." })
 
