@@ -285,6 +285,8 @@ Press `<leader>` and wait for which-key to show available bindings.
 
 | Key | Mode | Description |
 |-----|------|-------------|
+| `j` / `k` | n, x | Smart navigation (visual lines without count, actual lines with count) |
+| `n` / `N` | n | Search navigation (n always forward, N always backward, opens folds) |
 | `s` | n, x, o | Flash jump |
 | `gs` | n, x, o | Flash Treesitter |
 | `r` | o | Remote Flash |
@@ -363,6 +365,8 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `<leader>vf` | n | Format buffer |
 | `<C-h>` | i | Signature help |
 | `[d` / `]d` | n | Previous/next diagnostic |
+| `]e` / `[e` | n | Next/previous error |
+| `]w` / `[w` | n | Next/previous warning |
 | `<leader>vd` | n | Diagnostic float |
 
 </details>
@@ -422,6 +426,7 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `<leader>p` | n | Paste from clipboard (after) |
 | `<leader>P` | n | Paste from clipboard (before) |
 | `<leader>S` | n | Substitute all |
+| `<` / `>` | x | Indent and reselect |
 | `J` / `K` | v | Move selection down/up |
 | `<leader>dws` | n | Delete trailing whitespace |
 | `<leader>dnl` | n | Delete trailing newlines |
