@@ -34,6 +34,10 @@ vim.keymap.set("i", ";", ";<c-g>u", { desc = "Undo break-point at semicolon" })
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" })
 vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" })
 
+-- Keep selection when indenting in visual mode
+vim.keymap.set("x", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("x", ">", ">gv", { desc = "Indent right and reselect" })
+
 vim.keymap.set({ "v", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Copy lines to CLIPBOARD." })
 
