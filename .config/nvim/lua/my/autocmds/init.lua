@@ -36,11 +36,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 			-- Only use zen-mode if it's available (plugins are loaded)
 			local ok, zenmode = pcall(require, "zen-mode")
 			if ok then
-				zenmode.toggle({
-					on_close = function()
-						vim.cmd("q")
-					end,
-				})
+				zenmode.toggle()
 			end
 		end
 	end,
