@@ -125,3 +125,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 	desc = "Auto-create parent directories when saving file",
 })
+
+vim.api.nvim_create_autocmd("VimResized", {
+	group = vim.api.nvim_create_augroup("resize_splits", { clear = true }),
+	callback = function()
+		local current_tab = vim.fn.tabpagenr()
+		vim.cmd("tabdo wincmd =")
+		vim.cmd("tabnext " .. current_tab)
+	end,
+	desc = "Auto-resize splits when terminal window is resized",
+})
