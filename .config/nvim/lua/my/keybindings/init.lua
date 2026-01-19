@@ -29,6 +29,11 @@ vim.keymap.set("i", ",", ",<c-g>u", { desc = "Undo break-point at comma" })
 vim.keymap.set("i", ".", ".<c-g>u", { desc = "Undo break-point at period" })
 vim.keymap.set("i", ";", ";<c-g>u", { desc = "Undo break-point at semicolon" })
 
+-- Consistent n/N search direction and auto-open folds
+-- n always forward, N always backward regardless of / vs ?
+vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" })
+vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" })
+
 vim.keymap.set({ "v", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Copy lines to CLIPBOARD." })
 
