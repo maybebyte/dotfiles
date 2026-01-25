@@ -435,10 +435,100 @@ Press `<leader>` and wait for which-key to show available bindings.
 </details>
 
 <details>
+<summary><strong>Commenting</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `gcc` | n | Toggle comment (line) |
+| `gbc` | n | Toggle block comment (line) |
+| `gc` | n, o, x | Toggle comment (motion/visual) |
+| `gb` | n, o, x | Toggle block comment (motion/visual) |
+| `gco` | n | Insert comment below |
+| `gcO` | n | Insert comment above |
+| `gcA` | n | Insert comment at end of line |
+
+</details>
+
+<details>
+<summary><strong>Surround</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `ys{motion}{char}` | n | Add surround |
+| `yss{char}` | n | Add surround to entire line |
+| `ds{char}` | n | Delete surround |
+| `cs{old}{new}` | n | Change surround |
+| `S{char}` | v | Surround selection |
+
+</details>
+
+<details>
+<summary><strong>Alignment</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `ga` | n, x | Align text (mini.align) |
+| `gA` | n, x | Align with preview |
+
+</details>
+
+<details>
+<summary><strong>Treesitter Textobjects</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `aa` / `ia` | o, x | Select parameter (outer/inner) |
+| `af` / `if` | o, x | Select function (outer/inner) |
+| `ac` / `ic` | o, x | Select class (outer/inner) |
+| `]a` / `[a` | n | Next/previous parameter start |
+| `]m` / `[m` | n | Next/previous function start |
+| `]]` / `[[` | n | Next/previous class start |
+| `]A` / `[A` | n | Next/previous parameter end |
+| `]M` / `[M` | n | Next/previous function end |
+| `][` / `[]` | n | Next/previous class end |
+| `<leader>lp` | n | Swap next parameter |
+| `<leader>hp` | n | Swap previous parameter |
+| `<leader>jf` | n | Swap next function |
+| `<leader>kf` | n | Swap previous function |
+| `<leader>jc` | n | Swap next class |
+| `<leader>kc` | n | Swap previous class |
+
+</details>
+
+<details>
+<summary><strong>Trouble & Diagnostics</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>xx` | n | Diagnostics (Trouble) |
+| `<leader>xX` | n | Buffer Diagnostics (Trouble) |
+| `<leader>xs` | n | Symbols (Trouble) |
+| `<leader>xl` | n | LSP Definitions/references (Trouble) |
+| `<leader>xL` | n | Location List (Trouble) |
+| `<leader>xQ` | n | Quickfix List (Trouble) |
+| `<leader>st` | n | Search Todos (Telescope) |
+| `<leader>xt` | n | Todo list (Trouble) |
+| `]t` / `[t` | n | Next/previous todo comment |
+
+</details>
+
+<details>
+<summary><strong>Markdown</strong></summary>
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>ti` | n | Insert table of contents |
+| `<leader>tu` | n | Update table of contents |
+| `<leader>tr` | n | Remove table of contents |
+
+</details>
+
+<details>
 <summary><strong>Utility</strong></summary>
 
 | Key | Description |
 |-----|-------------|
+| `<leader>u` | Toggle undotree |
 | `<leader>L` | Toggle Lazy UI |
 | `<leader>M` | Toggle Mason UI |
 | `<leader>o` | Toggle spell check |
