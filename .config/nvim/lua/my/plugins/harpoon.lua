@@ -11,7 +11,7 @@ return {
 		{ "<leader>h3" },
 		{ "<leader>h4" },
 		{ "<leader>hn" },
-		{ "<leader>hp" },
+		{ "<leader>hP" },
 	},
 	config = function()
 		vim.keymap.set("n", "<leader>haf", function()
@@ -32,8 +32,8 @@ return {
 			require("harpoon.ui").nav_next()
 		end, { desc = "[H]arpoon [n]ext" })
 
-		vim.keymap.set("n", "<leader>hp", function()
+		vim.keymap.set("n", "<leader>hP", function()
 			require("harpoon.ui").nav_prev()
-		end, { desc = "[H]arpoon [p]revious" })
+		end, { desc = "[H]arpoon [P]revious" })
 	end,
 }

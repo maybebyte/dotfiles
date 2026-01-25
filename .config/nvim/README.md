@@ -178,11 +178,12 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 | [lspkind.nvim](https://github.com/onsails/lspkind.nvim) | LSP completion icons |
 | [nvim-lightbulb](https://github.com/kosayoda/nvim-lightbulb) | Code action indicator |
 
-### Linting
+### Linting & Formatting
 
 | Plugin | Purpose |
 |--------|---------|
 | [nvim-lint](https://github.com/mfussenegger/nvim-lint) | Async linting (Go, Lua, HTML, Markdown, Python) |
+| [conform.nvim](https://github.com/stevearc/conform.nvim) | Async formatting (see [External Tools](#external-tools)) |
 
 ### Completion
 
@@ -345,7 +346,7 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `<leader>hqm` | Quick menu |
 | `<leader>h1-4` | Jump to file 1-4 |
 | `<leader>hn` | Next file |
-| `<leader>hp` | Previous file |
+| `<leader>hP` | Previous file |
 
 </details>
 
