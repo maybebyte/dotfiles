@@ -69,6 +69,9 @@ export PATH="${XDG_BIN_HOME}${PATH:+:${PATH}}"
 # Add local man page directory.
 export MANPATH=":${XDG_DATA_HOME}/man"
 
+# Get NPM to install global packages in ~/.local
+export npm_config_prefix="${HOME}/.local"
+
 # Needed for OpenBSD's ksh and dash
 #
 # (Obviously dash is not ksh, but nothing ksh specific is set there, so
