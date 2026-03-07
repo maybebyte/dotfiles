@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Claude Code statusline.
-# Palette: Catppuccin Mocha.
+# Palette: Catppuccin Frappé.
 
 set -u
 
 readonly ESC=$'\033[38;2;'
-readonly C_GRAY="${ESC}108;112;134m"  # #6c7086
-readonly C_GREEN="${ESC}166;227;161m" # #a6e3a1
-readonly C_PEACH="${ESC}250;179;135m" # #fab387
-readonly C_RED="${ESC}243;139;168m"   # #f38ba8
+readonly C_GRAY="${ESC}115;121;148m"  # #737994
+readonly C_GREEN="${ESC}166;209;137m" # #a6d189
+readonly C_PEACH="${ESC}239;159;118m" # #ef9f76
+readonly C_RED="${ESC}231;130;132m"   # #e78284
 readonly RST=$'\033[0m'
 readonly BAR_WIDTH=20
 
