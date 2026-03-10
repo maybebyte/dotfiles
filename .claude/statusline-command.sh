@@ -10,7 +10,7 @@ readonly C_GREEN="${ESC}166;209;137m" # #a6d189
 readonly C_PEACH="${ESC}239;159;118m" # #ef9f76
 readonly C_RED="${ESC}231;130;132m"   # #e78284
 readonly RST=$'\033[0m'
-readonly BAR_WIDTH=20
+readonly BAR_WIDTH=15
 
 used_pct="$(jq -r '.context_window.used_percentage // empty | floor')"
 
@@ -18,9 +18,9 @@ if [[ -n ${used_pct} ]]; then
   filled=$((used_pct * BAR_WIDTH / 100))
   empty=$((BAR_WIDTH - filled))
 
-  if ((used_pct >= 80)); then
+  if ((used_pct >= 60)); then
     fill_clr=${C_RED}
-  elif ((used_pct >= 50)); then
+  elif ((used_pct >= 40)); then
     fill_clr=${C_PEACH}
   else
     fill_clr=${C_GREEN}
