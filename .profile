@@ -58,7 +58,9 @@ export BEMENU_OPTS='--fb "#24273a" --ff "#cad3f5" --nb "#24273a" --nf "#cad3f5" 
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
 --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
---color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
+--color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284 \
+--color=selected-bg:#51576d \
+--color=border:#737994,label:#c6d0f5"
 
 # Prepend XDG_BIN_HOME to PATH.
 #
