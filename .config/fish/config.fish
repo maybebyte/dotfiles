@@ -1,9 +1,4 @@
 if status is-interactive
-	set SSH_VAULT_VM "vault-ssh"
-	if string length --quiet -- {$SSH_VAULT_VM}
-		set -gx SSH_AUTH_SOCK "/home/user/.SSH_AGENT_$SSH_VAULT_VM"
-	end
-
 	# Auto-install Fisher plugin manager if not present
 	if not functions --query fisher
 		if curl --connect-timeout 3 --max-time 5 -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
@@ -63,5 +58,17 @@ if status is-interactive
 	# https://github.com/ajeetdsouza/zoxide
 	if command --search --quiet 'zoxide'
 		zoxide init --cmd 'cd' 'fish' | source
+	end
+
+	# mise - tool version manager
+	# https://mise.jdx.dev/
+	if command --search --quiet 'mise'
+		mise activate fish | source
+	end
+
+	# direnv - directory-specific environment variables
+	# https://direnv.net/
+	if command --search --quiet 'direnv'
+		direnv hook fish | source
 	end
 end

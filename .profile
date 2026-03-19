@@ -74,6 +74,18 @@ export MANPATH=":${XDG_DATA_HOME}/man"
 # Get NPM to install global packages in ~/.local
 export npm_config_prefix="${HOME}/.local"
 
+# SSH agent forwarding via Qubes vault VM
+SSH_VAULT_VM="vault-ssh"
+if [ -n "${SSH_VAULT_VM}" ]; then
+	export SSH_AUTH_SOCK="${HOME}/.SSH_AGENT_${SSH_VAULT_VM}"
+fi
+
+# MuninnDB LLM Enrichment
+export MUNINN_ENRICH_URL="anthropic://claude-haiku-4-5-20251001"
+
+# Source credentials from a separate, non-committed file
+[ -f "${HOME}/.secrets" ] && . "${HOME}/.secrets"
+
 # Needed for OpenBSD's ksh and dash
 #
 # (Obviously dash is not ksh, but nothing ksh specific is set there, so
