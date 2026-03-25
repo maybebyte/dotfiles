@@ -1,0 +1,21 @@
+**/.claude/settings.local.json
+
+# Developer tooling caches
+.direnv/
+
+# Claude Code runtime data (do not track)
+.claude/history.jsonl
+.claude/todos/
+.claude/session-env/
+.claude/file-history/
+.claude/debug/
+.claude/projects/
+.claude/plans/
+.claude/plugins/
+.claude/statsig/
+.claude/downloads/
+.claude/shell-snapshots/
+.claude/.credentials.json
+.claude/CLAUDE.md
+.claude/*.md
+.claude/hooks/node_modules/
