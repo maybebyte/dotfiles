@@ -10,6 +10,10 @@
 # GPG
 secring.*
 
+# Patch
+*.orig
+*.rej
+
 # Developer tooling caches
 .direnv/
 
