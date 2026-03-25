@@ -7,6 +7,9 @@
 *.orig
 *.tmp
 
+# GPG
+secring.*
+
 # Developer tooling caches
 .direnv/
 
