@@ -34,6 +34,22 @@ profile.cov
 go.work
 go.work.sum
 
+# Environments
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff stuff:
+.ruff_cache/
+
 # Developer tooling caches
 .direnv/
 
