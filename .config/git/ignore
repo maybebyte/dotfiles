@@ -1,5 +1,12 @@
 **/.claude/settings.local.json
 
+# Backup files
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+
 # Developer tooling caches
 .direnv/
 
