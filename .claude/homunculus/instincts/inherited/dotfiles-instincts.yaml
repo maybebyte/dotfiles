@@ -1,0 +1,562 @@
+# Instincts generated from https://github.com/maybebyte/dotfiles
+# Generated: 2026-03-26T17:14:01.530Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: dotfiles-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat, fix, chore, refactor, docs
+
+## Evidence
+
+- 200 commits analyzed
+- Detected conventional commit pattern
+- Examples: refactor(copilot): defer loading until explicit :Copilot command, feat(gitignore): add python stuff
+
+---
+id: dotfiles-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Commit Length
+
+## Action
+
+Keep commit messages concise (~46 characters)
+
+## Evidence
+
+- Average commit message length: 46 chars
+- Based on 200 commits
+
+---
+id: dotfiles-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: dotfiles-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: dotfiles-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: dotfiles-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: dotfiles-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~20x per month
+- Files: 
+
+---
+id: dotfiles-workflow-update-global-gitignore
+trigger: "when doing update global gitignore"
+confidence: 0.7
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Update Global Gitignore
+
+## Action
+
+Follow the update-global-gitignore workflow:
+1. Edit .config/git/ignore to add new ignore patterns.
+2. Commit the changes with a message describing the new patterns added.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~4x per month
+- Files: .config/git/ignore
+
+---
+id: dotfiles-workflow-add-or-update-neovim-plugin-config
+trigger: "when doing add or update neovim plugin config"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Add Or Update Neovim Plugin Config
+
+## Action
+
+Follow the add-or-update-neovim-plugin-config workflow:
+1. Create or update a plugin config file in .config/nvim/lua/my/plugins/*.lua.
+2. Optionally update .config/nvim/README.md to document the plugin or its keybindings.
+3. Optionally update related keybindings in .config/nvim/lua/my/keybindings/init.lua.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: .config/nvim/lua/my/plugins/*.lua, .config/nvim/README.md, .config/nvim/lua/my/keybindings/init.lua
+
+---
+id: dotfiles-workflow-add-or-update-neovim-keybindings
+trigger: "when doing add or update neovim keybindings"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Add Or Update Neovim Keybindings
+
+## Action
+
+Follow the add-or-update-neovim-keybindings workflow:
+1. Edit .config/nvim/lua/my/keybindings/init.lua to add or modify keybindings.
+2. Optionally update .config/nvim/README.md to document the new or changed keybindings.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: .config/nvim/lua/my/keybindings/init.lua, .config/nvim/README.md
+
+---
+id: dotfiles-workflow-add-or-update-neovim-autocmds
+trigger: "when doing add or update neovim autocmds"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Add Or Update Neovim Autocmds
+
+## Action
+
+Follow the add-or-update-neovim-autocmds workflow:
+1. Edit .config/nvim/lua/my/autocmds/init.lua to add or update autocmds.
+2. Commit with a message describing the new automation or fix.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: .config/nvim/lua/my/autocmds/init.lua
+
+---
+id: dotfiles-workflow-add-or-update-neovim-documentation
+trigger: "when doing add or update neovim documentation"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Add Or Update Neovim Documentation
+
+## Action
+
+Follow the add-or-update-neovim-documentation workflow:
+1. Edit or create documentation files such as .config/nvim/README.md, .config/nvim/AGENTS.md, or .config/nvim/CLAUDE.md.
+2. Commit with a message summarizing the documentation changes.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: .config/nvim/README.md, .config/nvim/AGENTS.md, .config/nvim/CLAUDE.md
+
+---
+id: dotfiles-workflow-update-or-refactor-neovim-plugin-configs
+trigger: "when doing update or refactor neovim plugin configs"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/maybebyte/dotfiles
+---
+
+# Dotfiles Workflow Update Or Refactor Neovim Plugin Configs
+
+## Action
+
+Follow the update-or-refactor-neovim-plugin-configs workflow:
+1. Edit multiple files in .config/nvim/lua/my/plugins/*.lua to apply the refactor or update.
+2. Commit with a message summarizing the refactor or update.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: .config/nvim/lua/my/plugins/*.lua
+
+---
+id: dotfiles-instinct-file-naming-camelCase
+trigger: "When creating or renaming files in the codebase"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct File Naming CamelCase
+
+## Action
+
+Use camelCase for file names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files
+
+---
+id: dotfiles-instinct-function-naming-camelCase
+trigger: "When defining new functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Function Naming CamelCase
+
+## Action
+
+Name functions using camelCase
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions
+
+---
+id: dotfiles-instinct-class-naming-PascalCase
+trigger: "When defining new classes"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Class Naming PascalCase
+
+## Action
+
+Name classes using PascalCase
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes
+
+---
+id: dotfiles-instinct-constant-naming-SCREAMING_SNAKE_CASE
+trigger: "When defining constants"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Constant Naming SCREAMING_SNAKE_CASE
+
+## Action
+
+Name constants using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+
+---
+id: dotfiles-instinct-import-style-relative
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Import Style Relative
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+
+---
+id: dotfiles-instinct-export-style-named
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Export Style Named
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+
+---
+id: dotfiles-instinct-git-commit-conventional-format
+trigger: "When writing a git commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Git Commit Conventional Format
+
+## Action
+
+Use the conventional commit format: <type>(<scope>): <description>
+
+## Evidence
+
+- Pattern in commits.prefixes: feat, fix, chore, refactor, docs, perf
+- Examples: 'feat(gitignore): add python stuff', 'fix(profile): update fzf catppuccin colors'
+
+---
+id: dotfiles-instinct-git-commit-length
+trigger: "When writing a git commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Git Commit Length
+
+## Action
+
+Keep the commit message concise, around 46 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength
+
+---
+id: dotfiles-instinct-update-global-gitignore
+trigger: "When someone wants to ignore new file types or tools globally in all git projects"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Update Global Gitignore
+
+## Action
+
+Edit .config/git/ignore to add new ignore patterns and commit with a descriptive message
+
+## Evidence
+
+- Workflow: update-global-gitignore
+- Commits: 'feat(gitignore): add python stuff', 'feat(gitignore): add Go'
+
+---
+id: dotfiles-instinct-add-or-update-neovim-plugin-config
+trigger: "When someone wants to install, configure, or update a Neovim plugin"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Add Or Update Neovim Plugin Config
+
+## Action
+
+Create or update a plugin config file in .config/nvim/lua/my/plugins/*.lua and optionally update documentation or keybindings
+
+## Evidence
+
+- Workflow: add-or-update-neovim-plugin-config
+- Commits: 'feat(nvim): add toggle keymaps for Lazy and Mason'
+
+---
+id: dotfiles-instinct-add-or-update-neovim-keybindings
+trigger: "When someone wants to introduce or change Neovim keybindings for improved workflow"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Add Or Update Neovim Keybindings
+
+## Action
+
+Edit .config/nvim/lua/my/keybindings/init.lua to add or modify keybindings and optionally update .config/nvim/README.md
+
+## Evidence
+
+- Workflow: add-or-update-neovim-keybindings
+- Commits: 'fix(profile): update fzf catppuccin colors'
+
+---
+id: dotfiles-instinct-add-or-update-neovim-autocmds
+trigger: "When someone wants to automate editor actions or fix issues related to events in Neovim"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Add Or Update Neovim Autocmds
+
+## Action
+
+Edit .config/nvim/lua/my/autocmds/init.lua to add or update autocmds and commit with a descriptive message
+
+## Evidence
+
+- Workflow: add-or-update-neovim-autocmds
+
+---
+id: dotfiles-instinct-add-or-update-neovim-documentation
+trigger: "When someone wants to document new features, plugins, or usage instructions for their Neovim setup"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Add Or Update Neovim Documentation
+
+## Action
+
+Edit or create documentation files such as .config/nvim/README.md, .config/nvim/AGENTS.md, or .config/nvim/CLAUDE.md and commit with a summary
+
+## Evidence
+
+- Workflow: add-or-update-neovim-documentation
+- Commits: 'docs(readme): add missing keybinding sections', 'chore(nvim): swap CLAUDE.md and AGENTS.md contents'
+
+---
+id: dotfiles-instinct-update-or-refactor-neovim-plugin-configs
+trigger: "When someone wants to modernize, refactor, or synchronize plugin config patterns across several plugins"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: maybebyte/dotfiles
+---
+
+# Dotfiles Instinct Update Or Refactor Neovim Plugin Configs
+
+## Action
+
+Edit multiple files in .config/nvim/lua/my/plugins/*.lua to apply the refactor or update and commit with a summary
+
+## Evidence
+
+- Workflow: update-or-refactor-neovim-plugin-configs
+- Commits: 'refactor(copilot): defer loading until explicit :Copilot command'
+
