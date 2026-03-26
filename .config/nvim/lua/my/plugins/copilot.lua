@@ -3,22 +3,24 @@ return {
 		"zbirenbaum/copilot.lua",
 		lazy = true,
 		cmd = "Copilot",
-		event = "InsertEnter",
-		config = {
-			suggestion = { enabled = false },
-			panel = { enabled = false },
-			server_opts_overrides = {
-				settings = {
-					telemetry = {
-						telemetryLevel = "off",
+		config = function()
+			require("copilot").setup({
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+				server_opts_overrides = {
+					settings = {
+						telemetry = {
+							telemetryLevel = "off",
+						},
 					},
 				},
-			},
-		},
+			})
+			require("lazy").load({ plugins = { "copilot-cmp" } })
+		end,
 	},
 	{
 		"zbirenbaum/copilot-cmp",
-		event = "InsertEnter",
+		lazy = true,
 		dependencies = {
 			"zbirenbaum/copilot.lua",
 			"hrsh7th/nvim-cmp",
