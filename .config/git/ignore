@@ -66,6 +66,4 @@ dmypy.json
 .claude/downloads/
 .claude/shell-snapshots/
 .claude/.credentials.json
-.claude/CLAUDE.md
-.claude/*.md
 .claude/hooks/node_modules/
