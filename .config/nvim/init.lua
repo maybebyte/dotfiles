@@ -58,13 +58,26 @@ if lazy_ready then
 		end)
 	end
 
+	local hl_overrides_group = vim.api.nvim_create_augroup("my_highlight_overrides", { clear = true })
+	local overrides = {
+		Normal  = { bg = "NONE", ctermbg = "NONE" },
+		NonText = { bg = "NONE", ctermbg = "NONE" },
+	}
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		group = hl_overrides_group,
+		callback = function()
+			for name, opts in pairs(overrides) do
+				vim.api.nvim_set_hl(0, name, opts)
+			end
+		end,
+		desc = "Apply transparent-bg overrides across colorscheme changes",
+	})
+	-- D-09: ColorScheme does not retro-fire at registration; invoke once manually
+	-- so the already-active catppuccin-frappe picks up the overrides without flash.
+	vim.api.nvim_exec_autocmds("ColorScheme", { group = hl_overrides_group })
+
 	require("lazy").setup("my.plugins")
 end
-
-vim.cmd("highlight Normal guibg=none")
-vim.cmd("highlight NonText guibg=none")
-vim.cmd("highlight Normal ctermbg=none")
-vim.cmd("highlight NonText ctermbg=none")
 
 require("my.keybindings")
 require("my.autocmds")
