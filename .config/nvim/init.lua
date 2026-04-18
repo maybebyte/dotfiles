@@ -1,3 +1,8 @@
+if vim.g.my_config_loaded then
+	return
+end
+vim.g.my_config_loaded = true
+
 local function bootstrap_plugin_manager()
 	local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 	-- Attempt to clone with a timeout to prevent blocking indefinitely
