@@ -530,8 +530,8 @@ Press `<leader>` and wait for which-key to show available bindings.
 | Key | Description |
 |-----|-------------|
 | `<leader>U` | Toggle undotree |
-| `<leader>uf` | Toggle autoformat (global) |
-| `<leader>uF` | Toggle autoformat (buffer) |
+| `<leader>uf` | Autoformat (global) |
+| `<leader>uF` | Autoformat (buffer) |
 | `<leader>L` | Toggle Lazy UI |
 | `<leader>M` | Toggle Mason UI |
 | `<leader>o` | Toggle spell check |
