@@ -32,11 +32,16 @@ local function bootstrap_plugin_manager()
 end
 
 local function setup_backup_directory()
-	local backup_directory = vim.env.XDG_STATE_HOME .. "/nvim/backup"
-	local ok, err = pcall(vim.fn.mkdir, backup_directory, "p")
-	if not ok then
+	-- Use stdpath("state") for XDG-compliant fallback; vim.env.XDG_STATE_HOME
+	-- is raw environment and may be nil, whereas stdpath already encodes the
+	-- XDG default ($HOME/.local/state).
+	local backup_directory = vim.fn.stdpath("state") .. "/backup"
+	-- vim.fn.mkdir does not throw; it returns 0 on failure. Do not wrap in
+	-- pcall — check the return value directly.
+	local result = vim.fn.mkdir(backup_directory, "p")
+	if result == 0 then
 		vim.notify(
-			"Failed to create " .. backup_directory .. ": " .. tostring(err),
+			"Failed to create " .. backup_directory .. " — backup disabled",
 			vim.log.levels.WARN
 		)
 		vim.opt.backup = false
