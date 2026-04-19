@@ -8,10 +8,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=../lib.sh
 source "$SCRIPT_DIR/../lib.sh"
 
+# Capture pre-VeryLazy and post-VeryLazy maparg in a single -c invocation
+# so we avoid leaking state through _G, which any plugin could collide with.
 out="$(nvim_headless \
-	-c 'lua _G.__pre = vim.fn.maparg("<C-h>", "n")' \
-	-c 'doautocmd User VeryLazy' \
-	-c 'lua io.write(tostring(_G.__pre)..","..vim.fn.maparg("<C-h>", "n"))')"
+	-c 'lua local pre = vim.fn.maparg("<C-h>", "n"); vim.api.nvim_exec_autocmds("User", { pattern = "VeryLazy" }); io.write(tostring(pre)..","..vim.fn.maparg("<C-h>", "n"))')"
 pre="${out%%,*}"
 post="${out#*,}"
 if [ -n "$pre" ]; then
