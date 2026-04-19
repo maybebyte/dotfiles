@@ -26,6 +26,12 @@ done
 # for the same code). The intent is to detect real regressions — not measure noise.
 current="$(printf '%s\n' "${samples[@]}" | sort -n | awk 'NR==1')"
 echo "samples: ${samples[*]} → min=${current}ms"
+# Guard against zero/empty reading: LazyDone not populated => lazy.nvim did
+# not load in headless mode, so the comparison below would pass vacuously.
+if [ -z "$current" ] || [ "$current" = "0" ]; then
+	echo "LazyDone time is zero/empty — lazy.nvim may not have loaded in headless mode" >&2
+	exit 1
+fi
 # POSIX-safe float comparison via awk (allow 15% headroom for cold-start variation)
 ok="$(awk -v a="$current" -v b="$baseline" 'BEGIN{ print (a <= b * 1.15) ? 1 : 0 }')"
 if [ "$ok" != "1" ]; then
