@@ -18,6 +18,11 @@ nvim_startuptime_ms() {
 	nvim_headless -c 'lua local s = require("lazy").stats(); io.write(tostring(s.times and (s.times.LazyDone or 0) or 0))' | tr -d '[:space:]'
 }
 
+# Compare two values for string equality.
+# Convention: when one side is a known-expected reference, pass it as $1;
+# when both sides are runtime values (e.g. before/after measurements),
+# the label "expected/actual" in the failure message is advisory only —
+# callers should use $msg to document the semantic role of each side.
 assert_eq() {
 	local expected="$1" actual="$2" msg="${3:-}"
 	if [ "$expected" != "$actual" ]; then
