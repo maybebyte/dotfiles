@@ -17,8 +17,10 @@ run_one() {
 	local name="$1"
 	local path="$TESTS_DIR/${name}.sh"
 	if [ ! -x "$path" ]; then
-		echo "FAIL  $name  (missing or non-executable: $path)"
-		return 1
+		# Usage error (typo in test name / wrong path) — distinct exit code
+		# from a real test failure (1) so callers can tell them apart.
+		echo "ERROR $name  (missing or non-executable: $path)" >&2
+		return 2
 	fi
 	if "$path"; then
 		echo "PASS  $name"
