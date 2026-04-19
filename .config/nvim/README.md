@@ -529,7 +529,7 @@ Press `<leader>` and wait for which-key to show available bindings.
 
 | Key | Description |
 |-----|-------------|
-| `<leader>u` | Toggle undotree |
+| `<leader>U` | Toggle undotree |
 | `<leader>L` | Toggle Lazy UI |
 | `<leader>M` | Toggle Mason UI |
 | `<leader>o` | Toggle spell check |

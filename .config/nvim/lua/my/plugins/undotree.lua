@@ -7,7 +7,7 @@ return {
 	},
 	lazy = true,
 	keys = {
-		{ "<leader>u", desc = "[U]ndo tree" },
+		{ "<leader>U", desc = "[U]ndo tree" },
 	},
 	config = function()
 		require("undotree").setup({
@@ -15,6 +15,6 @@ return {
 				winblend = 0, -- disable transparency since doubled text messes with my eyes
 			},
 		})
-		vim.keymap.set("n", "<leader>u", require("undotree").toggle, { desc = "[U]ndo tree" })
+		vim.keymap.set("n", "<leader>U", require("undotree").toggle, { desc = "[U]ndo tree" })
 	end,
 }
