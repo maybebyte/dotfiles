@@ -16,8 +16,12 @@ case "$out" in
 esac
 
 # Part 2: override must survive a colorscheme swap
+# Use `default` (always built-in) instead of habamax (bundled but could be
+# absent in minimal builds or removed in future) — headless Neovim does not
+# abort on :colorscheme errors, so an unavailable scheme would make the
+# survival assertion vacuous.
 out2="$(nvim_headless \
-	-c 'colorscheme habamax' \
+	-c 'colorscheme default' \
 	-c 'colorscheme catppuccin-mocha' \
 	-c 'lua local hl = vim.api.nvim_get_hl(0, { name = "Normal" }); io.write(tostring(hl.bg))')"
 case "$out2" in
