@@ -64,9 +64,7 @@ if lazy_ready then
 	local catppuccin_path = vim.fn.stdpath("data") .. "/lazy/catppuccin"
 	if vim.uv.fs_stat(catppuccin_path) then
 		vim.opt.rtp:prepend(catppuccin_path)
-		pcall(function()
-			vim.cmd("colorscheme catppuccin-frappe")
-		end)
+		pcall(vim.cmd.colorscheme, "catppuccin-frappe")
 	end
 
 	local hl_overrides_group = vim.api.nvim_create_augroup("my_highlight_overrides", { clear = true })
@@ -76,6 +74,10 @@ if lazy_ready then
 	}
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = hl_overrides_group,
+		-- Explicit pattern makes intent clear: match every colorscheme
+		-- (all catppuccin variants + any user override) rather than
+		-- relying on the unspecified default.
+		pattern = "*",
 		callback = function()
 			for name, opts in pairs(overrides) do
 				vim.api.nvim_set_hl(0, name, opts)
