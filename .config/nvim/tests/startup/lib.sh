@@ -7,6 +7,10 @@ NVIM_CONFIG_DIR="${NVIM_CONFIG_DIR:-$HOME/.config/nvim}"
 BASELINE_FILE="$NVIM_CONFIG_DIR/.planning/phases/01-startup-init-hygiene/baseline-startuptime.txt"
 
 # Run headless nvim with a list of -c commands; prints combined stdout+stderr.
+# Caveat: Lua errors in `-c 'lua ...'` blocks are printed to stderr but do NOT
+# abort the session, and the trailing `-c 'qa!'` still exits cleanly. Callers
+# that expect non-empty output should validate that explicitly — otherwise a
+# silent Lua error will look identical to a successful run with empty output.
 nvim_headless() {
 	"$NVIM_BIN" --headless "$@" -c 'qa!' 2>&1
 }
