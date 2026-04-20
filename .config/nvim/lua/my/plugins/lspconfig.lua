@@ -143,8 +143,24 @@ local function setup_lsp_servers()
 		},
 	})
 
-	-- gopls/rust_analyzer: defaults produce inlay hints out of the box.
-	vim.lsp.config('gopls', {})
+	-- gopls: hints require explicit server-side enablement via settings
+	-- (Pitfall 6). All 7 canonical hint types enabled to match ts_ls pattern.
+	-- rust_analyzer: defaults produce inlay hints out of the box.
+	vim.lsp.config('gopls', {
+		settings = {
+			gopls = {
+				hints = {
+					assignVariableTypes    = true,
+					compositeLiteralFields = true,
+					compositeLiteralTypes  = true,
+					constantValues         = true,
+					functionTypeParameters = true,
+					parameterNames         = true,
+					rangeVariableTypes     = true,
+				},
+			},
+		},
+	})
 	vim.lsp.config('rust_analyzer', {})
 
 	-- bashls: default config functional.
