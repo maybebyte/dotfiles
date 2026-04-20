@@ -45,6 +45,20 @@ return {
 				150,
 				0,
 				vim.schedule_wrap(function()
+					-- UTILS-05/D-20: suppress lint while any float is open (LSP hover,
+					-- telescope, which-key, Snacks, cmp). Dropped silently (D-21) — next
+					-- UserLint trigger (BufWritePost/InsertLeave/FileType/BufReadPost)
+					-- catches up.
+					for _, win in ipairs(vim.api.nvim_list_wins()) do
+						if vim.api.nvim_win_get_config(win).relative ~= "" then
+							pcall(function()
+								timer:stop()
+								timer:close()
+							end)
+							timers[bufnr] = nil
+							return
+						end
+					end
 					if vim.api.nvim_buf_is_valid(bufnr) then
 						vim.api.nvim_buf_call(bufnr, function()
 							require("lint").try_lint()
