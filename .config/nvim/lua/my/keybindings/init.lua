@@ -20,7 +20,12 @@ vim.keymap.set({ "v", "n" }, "<Space>", "<Nop>", { silent = true })
 -- Smart j/k navigation for wrapped lines
 -- Without count: move by visual lines (respects wrap)
 -- With count: move by actual lines (for relative jumps)
-vim.keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true, desc = "Down (wrap-aware)" })
+vim.keymap.set(
+	{ "n", "x" },
+	"j",
+	"v:count == 0 ? 'gj' : 'j'",
+	{ expr = true, silent = true, desc = "Down (wrap-aware)" }
+)
 vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, desc = "Up (wrap-aware)" })
 
 -- Undo break-points at punctuation
@@ -112,95 +117,34 @@ vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Exit terminal + move
 --
 -- Supports count prefix: 5<M-l> resizes by 5 * step instead of 1 * step.
 -- Configure step size via vim.g.smart_resize_step (default: 2).
-
--- User-configurable resize step (set vim.g.smart_resize_step to override)
-local function get_resize_step()
-	return vim.g.smart_resize_step or 2
-end
-
--- Uses winnr() to detect edges without changing focus or triggering autocommands
-local function at_edge(dir)
-	return vim.fn.winnr() == vim.fn.winnr(dir)
-end
-
--- Direction mapping: hjkl keys to resize commands
--- h/l = horizontal edge detection -> vertical resize (change width)
--- j/k = vertical edge detection -> horizontal resize (change height)
-local resize_config = {
-	h = "vertical resize",
-	j = "resize",
-	k = "resize",
-	l = "vertical resize",
-}
-
-local function smart_resize(dir)
-	-- Skip floating windows
-	if vim.api.nvim_win_get_config(0).relative ~= "" then
-		return
-	end
-	-- Skip single window (no-op anyway, but explicit)
-	if vim.fn.winnr("$") == 1 then
-		return
-	end
-	local count = vim.v.count1 -- Supports count prefix (defaults to 1)
-	local step = get_resize_step() * count
-	local cmd = resize_config[dir]
-	local sign = at_edge(dir) and "-" or "+"
-	pcall(vim.cmd, cmd .. " " .. sign .. step)
-end
+-- Implementation: lua/my/utils.lua (smart_resize, terminal_smart_resize, at_edge, get_resize_step).
 
 -- Normal mode
 vim.keymap.set("n", "<M-h>", function()
-	smart_resize("h")
+	require("my.utils").smart_resize("h")
 end, { desc = "Smart resize left", silent = true })
 vim.keymap.set("n", "<M-j>", function()
-	smart_resize("j")
+	require("my.utils").smart_resize("j")
 end, { desc = "Smart resize down", silent = true })
 vim.keymap.set("n", "<M-k>", function()
-	smart_resize("k")
+	require("my.utils").smart_resize("k")
 end, { desc = "Smart resize up", silent = true })
 vim.keymap.set("n", "<M-l>", function()
-	smart_resize("l")
+	require("my.utils").smart_resize("l")
 end, { desc = "Smart resize right", silent = true })
 
 -- Terminal mode (exit to normal first using <C-\><C-n> pattern)
 -- Set vim.g.smart_resize_terminal_stay_normal = true to stay in normal mode after resize
-local function terminal_smart_resize(dir)
-	return function()
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
-		vim.schedule(function()
-			if vim.fn.mode() ~= "n" then
-				return
-			end
-			smart_resize(dir)
-			-- Return to terminal insert mode unless configured otherwise
-			if not vim.g.smart_resize_terminal_stay_normal then
-				vim.cmd("startinsert")
-			end
-		end)
-	end
-end
-
-vim.keymap.set("t", "<M-h>", terminal_smart_resize("h"), { desc = "Smart resize left", silent = true })
-vim.keymap.set("t", "<M-j>", terminal_smart_resize("j"), { desc = "Smart resize down", silent = true })
-vim.keymap.set("t", "<M-k>", terminal_smart_resize("k"), { desc = "Smart resize up", silent = true })
-vim.keymap.set("t", "<M-l>", terminal_smart_resize("l"), { desc = "Smart resize right", silent = true })
+vim.keymap.set("t", "<M-h>", require("my.utils").terminal_smart_resize("h"), { desc = "Smart resize left", silent = true })
+vim.keymap.set("t", "<M-j>", require("my.utils").terminal_smart_resize("j"), { desc = "Smart resize down", silent = true })
+vim.keymap.set("t", "<M-k>", require("my.utils").terminal_smart_resize("k"), { desc = "Smart resize up", silent = true })
+vim.keymap.set("t", "<M-l>", require("my.utils").terminal_smart_resize("l"), { desc = "Smart resize right", silent = true })
 
 -- =================================
 -- Diagnostic Navigation by Severity
 -- =================================
--- ]e/[e for errors only, ]w/[w for warnings only
-local function diagnostic_goto(next, severity)
-	return function()
-		vim.diagnostic.jump({
-			count = (next and 1 or -1) * vim.v.count1,
-			severity = severity and vim.diagnostic.severity[severity] or nil,
-			float = true,
-		})
-	end
-end
-
-vim.keymap.set("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next error" })
-vim.keymap.set("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev error" })
-vim.keymap.set("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next warning" })
-vim.keymap.set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
+-- ]e/[e for errors only, ]w/[w for warnings only. Implementation: lua/my/utils.lua (diagnostic_goto).
+vim.keymap.set("n", "]e", require("my.utils").diagnostic_goto(true, "ERROR"), { desc = "Next error" })
+vim.keymap.set("n", "[e", require("my.utils").diagnostic_goto(false, "ERROR"), { desc = "Prev error" })
+vim.keymap.set("n", "]w", require("my.utils").diagnostic_goto(true, "WARN"), { desc = "Next warning" })
+vim.keymap.set("n", "[w", require("my.utils").diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
