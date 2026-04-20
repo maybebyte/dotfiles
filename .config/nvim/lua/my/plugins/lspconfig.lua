@@ -226,6 +226,9 @@ return {
 		-- D-18/D-20: Snacks.toggle registrations. pcall-guarded per CLAUDE.md
 		-- "Safe Requires". Mirrors Phase 2 autoformat pattern verbatim
 		-- (conform.lua lines 81-106).
+		-- Snacks.toggle:map() uses the toggle `name` as the keymap desc
+		-- automatically, which is why the :map("<leader>uH") / :map("<leader>uh")
+		-- calls below look desc-less compared to other keymaps in this file.
 		local ok, _ = pcall(require, "snacks")
 		if ok then
 			Snacks.toggle.new({
