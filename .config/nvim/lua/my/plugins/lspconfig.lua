@@ -219,10 +219,9 @@ return {
 			end,
 		})
 
-		-- D-17: Default global inlay hints on. Set before first LspAttach can fire.
-		if vim.g.inlay_hints == nil then
-			vim.g.inlay_hints = true
-		end
+		-- D-17: `vim.g.inlay_hints` default is established unconditionally at
+		-- startup in lua/my/settings/vim_g.lua so it is set even if no buffer
+		-- event (BufReadPost / FileType / LspAttach) ever fires.
 
 		-- D-18/D-20: Snacks.toggle registrations. pcall-guarded per CLAUDE.md
 		-- "Safe Requires". Mirrors Phase 2 autoformat pattern verbatim
