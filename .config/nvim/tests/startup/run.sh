@@ -11,7 +11,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$SCRIPT_DIR/lib.sh"
 
 TESTS_DIR="$SCRIPT_DIR/tests"
-QUICK_SKIP=(profile-delta)
+QUICK_SKIP=(profile-delta inlay-hints-attach inlay-hints-cap-guard)
 
 run_one() {
 	local name="$1"
