@@ -172,7 +172,8 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 | Plugin | Purpose |
 |--------|---------|
 | [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | LSP configuration |
-| [mason.nvim](https://github.com/williamboman/mason.nvim) v2.* | LSP/DAP/Linter installer |
+| [mason.nvim](https://github.com/williamboman/mason.nvim) v2.* | LSP/DAP/Linter installer (standalone spec, lazy=false, priority=100) |
+| [mason-tool-installer.nvim](https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim) | Single source of truth for ensure_installed; covers servers + formatters + linters; run_on_start=true |
 | [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) v2.* | Mason + lspconfig bridge |
 | [lazydev.nvim](https://github.com/folke/lazydev.nvim) | Neovim Lua development |
 | [lspkind.nvim](https://github.com/onsails/lspkind.nvim) | LSP completion icons |

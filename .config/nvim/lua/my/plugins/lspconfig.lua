@@ -115,7 +115,6 @@ local function setup_lsp_servers()
 		},
 	})
 
-	require("mason").setup()
 	require("mason-lspconfig").setup()
 end
 
@@ -125,8 +124,7 @@ return {
 	cmd = { "LspInfo", "LspInstall", "LspStart" },
 	event = { "BufReadPost", "BufNewFile", "FileType" },
 	dependencies = {
-		-- Mason for LSP server management
-		{ "williamboman/mason.nvim", version = "v2.*" },
+		-- Mason for LSP server management (mason.nvim is top-level now; see mason.lua)
 		{ "williamboman/mason-lspconfig.nvim", version = "v2.*" },
 
 		-- Completion capabilities for nvim-cmp
