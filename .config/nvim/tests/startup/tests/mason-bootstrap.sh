@@ -21,8 +21,10 @@ if [ ! -f "$PLUGIN_FILE" ]; then
 fi
 
 # Count quoted-string entries at the start of an indented line (the ensure_installed
-# list items). Comments are `--` prefixed so the `"[a-z]` anchor skips them.
-count="$(grep -cE '^[[:space:]]*"[a-z]' "$PLUGIN_FILE" || true)"
+# list items). `--` comments are never preceded by a quote so this anchor safely
+# skips them, while accepting names beginning with digits/uppercase/underscore
+# (e.g. future entries like "2html-pl").
+count="$(grep -cE '^[[:space:]]+"[^"]+"' "$PLUGIN_FILE" || true)"
 
 if [ "${count:-0}" -lt 25 ]; then
 	echo "ensure_installed has fewer than 25 entries (got $count)" >&2
