@@ -22,10 +22,19 @@ run_one() {
 		echo "ERROR $name  (missing or non-executable: $path)" >&2
 		return 2
 	fi
-	if "$path"; then
+	# Buffer combined stdout+stderr so PASS/FAIL summary lines don't interleave
+	# with each test's diagnostic output when multiple tests run. Flush the
+	# buffer only on failure; passing tests stay quiet.
+	local output rc
+	output="$("$path" 2>&1)"
+	rc=$?
+	if [ "$rc" -eq 0 ]; then
+		# Preserve any stdout the test produced (e.g. "ensure_installed count: 28").
+		[ -n "$output" ] && printf '%s\n' "$output"
 		echo "PASS  $name"
 		return 0
 	else
+		printf '%s\n' "$output" >&2
 		echo "FAIL  $name"
 		return 1
 	fi
