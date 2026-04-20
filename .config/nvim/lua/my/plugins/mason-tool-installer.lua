@@ -9,6 +9,11 @@
 -- integration (enabled by default) translates to Mason registry names.
 -- D-11/D-12: conform.lua and nvim-lint.lua keep their own ft→tool maps;
 -- this file is the INSTALLATION source of truth, they are USAGE.
+--
+-- Manual-only tools (not in the Mason registry, not auto-installed here —
+-- see VALIDATION.md §Manual-Only):
+--   - perltidy   (install via `cpan install Perl::Tidy`)
+--   - clang-format (typically system-installed via distro package manager)
 return {
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	lazy = false,
@@ -35,8 +40,6 @@ return {
 			"gofumpt",
 			"black",
 			"shfmt",
-			-- perltidy: not in mason registry; install manually (cpan install Perl::Tidy)
-			-- clang-format is typically system-installed; not added to ensure_installed
 			"tex-fmt",
 			"xmlformatter",
 
