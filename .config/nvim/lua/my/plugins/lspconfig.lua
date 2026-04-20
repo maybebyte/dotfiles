@@ -112,6 +112,9 @@ local function setup_lsp_servers()
 		},
 	})
 
+	-- pyright: no native inlay-hint support; users typically pair with
+	-- basedpyright or enable hints via ruff (Pitfall 6 — hints will not
+	-- render for this server regardless of supports_method result).
 	vim.lsp.config('pyright', {
 		settings = {
 			pyright = { disableLanguageServices = true },
