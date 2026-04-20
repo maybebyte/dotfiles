@@ -681,9 +681,12 @@ For non-Qubes systems, either:
 |----------|---------|
 | Go | revive |
 | Lua | luacheck, selene |
-| HTML | erb_lint |
 | Markdown | markdownlint |
 | Python | mypy, pylint, ruff |
+| Ruby/ERB | erb_lint |
+
+> All linters above are auto-installed by `mason-tool-installer.nvim`, the
+> single source of truth for Mason tool provisioning.
 
 </details>
 
@@ -704,7 +707,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 | Profile startup time | `:Lazy profile` |
 | Check health | `:checkhealth` |
 
-> **Note**: Some plugins use pinned versions for stability (mason v2.*, telescope 0.2.0, nvim-dap 0.10.0). Updating may require configuration changes.
+> **Note**: Some plugins use pinned versions for stability (mason v2.*, telescope 0.2.0, nvim-dap 0.10.0). Updating may require configuration changes. `mason-tool-installer.nvim` intentionally tracks HEAD — its API is stable.
 
 ## Troubleshooting
 
