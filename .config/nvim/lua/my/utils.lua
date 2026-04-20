@@ -12,11 +12,16 @@ local resize_config = {
 	l = "vertical resize",
 }
 
--- Return true when the current working directory is inside a git repo,
--- including bare repos and worktrees that have no literal `.git` directory.
+-- Return true when the current working directory (or any ancestor) contains a
+-- .git marker. Handles bare repos, worktrees (`.git` file), and cwd-inside-subdir.
+-- Result memoized: cwd is stable for a session, consumers call this from plugin
+-- `cond` which evaluates at startup only.
+local git_repo_cache
 function M.is_git_repo()
-	return vim.fn.isdirectory(".git") == 1
-		or vim.trim(vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null")) == "true"
+	if git_repo_cache == nil then
+		git_repo_cache = vim.fs.root(vim.fn.getcwd(), { ".git" }) ~= nil
+	end
+	return git_repo_cache
 end
 
 -- Configurable resize step, defaults to 2. Override with vim.g.smart_resize_step.
