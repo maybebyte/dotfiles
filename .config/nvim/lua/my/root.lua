@@ -3,7 +3,7 @@
 -- Algorithm (per D-10):
 --   1. LSP workspace_folders with longest-common-prefix tie-break (D-15)
 --   2. Walk up for `.git` marker (D-09)
---   3. Fallback to vim.fn.getcwd() (D-17)
+--   3. Fallback to vim.fn.getcwd() (D-17; unnamed buffers also try git_walk(cwd) first)
 -- Cache: vim.b[bufnr].my_root, invalidated on BufFilePost (D-11).
 
 local M = {}
@@ -65,11 +65,11 @@ function M.get(bufnr)
 
 	local buf_path = buffer_path(bufnr)
 
-	-- Unnamed buffer (D-17).
+	-- Unnamed buffer: try .git walk from cwd before surrendering (D-17, GAP-01).
+	-- No cache write — buffer may receive a name later; next call re-resolves.
 	if not buf_path then
 		local cwd = vim.fn.getcwd()
-		-- Do not cache unnamed-buffer fallback (buffer may receive a name later).
-		return cwd
+		return git_walk(cwd) or cwd
 	end
 
 	local buf_dir = vim.fs.dirname(buf_path)
