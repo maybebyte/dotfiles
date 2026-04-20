@@ -105,6 +105,9 @@ local function setup_lsp_servers()
 				diagnostics = { globals = { "vim" } },
 				workspace = { checkThirdParty = false },
 				telemetry = { enable = false },
+				-- D-16 support: advertise inlayHintProvider so the LspAttach
+				-- callback's supports_method check returns true for lua_ls.
+				hint = { enable = true },
 			},
 		},
 	})
@@ -114,6 +117,53 @@ local function setup_lsp_servers()
 			pyright = { disableLanguageServices = true },
 		},
 	})
+
+	-- D-06 expansion: 10 new servers. Only ts_ls needs an explicit settings
+	-- block (Pitfall 6: inlayHints require server-side enablement via settings).
+	-- Other servers work with defaults; mason-lspconfig automatic_enable picks
+	-- them up after this function finishes.
+
+	-- ts_ls: inlayHints only appear if the server is told to compute them.
+	vim.lsp.config('ts_ls', {
+		settings = {
+			typescript = {
+				inlayHints = {
+					includeInlayParameterNameHints = "all",
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+				},
+			},
+			javascript = {
+				inlayHints = {
+					includeInlayParameterNameHints = "all",
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+				},
+			},
+		},
+	})
+
+	-- gopls/rust_analyzer: defaults produce inlay hints out of the box.
+	vim.lsp.config('gopls', {})
+	vim.lsp.config('rust_analyzer', {})
+
+	-- bashls: default config functional.
+	vim.lsp.config('bashls', {})
+
+	-- cssls/html/jsonls/yamlls: defaults fine (snippetSupport injected globally
+	-- via vim.lsp.config('*', { capabilities }) above).
+	vim.lsp.config('cssls', {})
+	vim.lsp.config('html', {})
+	vim.lsp.config('jsonls', {})
+	vim.lsp.config('yamlls', {})
+
+	-- stylelint_lsp: Pitfall 5 notes its default filetypes include JS/TS which
+	-- can duplicate ts_ls diagnostics on mixed projects. Keep defaults for now;
+	-- restrict reactively if friction surfaces.
+	vim.lsp.config('stylelint_lsp', {})
+
+	-- marksman: default config functional.
+	vim.lsp.config('marksman', {})
 
 	require("mason-lspconfig").setup()
 end
