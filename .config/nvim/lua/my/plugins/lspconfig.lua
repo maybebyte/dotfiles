@@ -199,6 +199,44 @@ return {
 				end
 			end,
 		})
+
+		-- D-17: Default global inlay hints on. Set before first LspAttach can fire.
+		if vim.g.inlay_hints == nil then
+			vim.g.inlay_hints = true
+		end
+
+		-- D-18/D-20: Snacks.toggle registrations. pcall-guarded per CLAUDE.md
+		-- "Safe Requires". Mirrors Phase 2 autoformat pattern verbatim
+		-- (conform.lua lines 81-106).
+		local ok, _ = pcall(require, "snacks")
+		if ok then
+			Snacks.toggle.new({
+				name = "Inlay Hints (global)",
+				get = function()
+					return vim.lsp.inlay_hint.is_enabled()
+				end,
+				set = function(v)
+					vim.g.inlay_hints = v
+					vim.lsp.inlay_hint.enable(v)
+				end,
+			}):map("<leader>uH")
+
+			Snacks.toggle.new({
+				name = "Inlay Hints (buffer)",
+				get = function()
+					local buf = vim.b.inlay_hints
+					if buf == nil then
+						return vim.g.inlay_hints
+					end
+					return buf
+				end,
+				set = function(v)
+					vim.b.inlay_hints = v
+					vim.lsp.inlay_hint.enable(v, { bufnr = 0 })
+				end,
+			}):map("<leader>uh")
+		end
+
 		setup_lsp_servers()
 	end,
 }
