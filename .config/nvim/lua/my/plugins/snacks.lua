@@ -1,4 +1,4 @@
--- luacheck: globals vim
+-- luacheck: globals vim Snacks
 
 return {
 	"folke/snacks.nvim",
@@ -9,5 +9,14 @@ return {
 		bigfile = { enabled = true },
 		quickfile = { enabled = true },
 		terminal = { enabled = true },
+	},
+	keys = {
+		{
+			"<leader>tt",
+			function()
+				Snacks.terminal.toggle(nil, { cwd = require("my.root").get() })
+			end,
+			desc = "[T]erminal (project root)",
+		},
 	},
 }

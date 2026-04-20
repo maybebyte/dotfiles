@@ -7,11 +7,11 @@ local function setup_file_navigation_keymaps()
 	end, { desc = "[T]ele[S]cope" })
 
 	vim.keymap.set("n", "<leader>sf", function()
-		require("telescope.builtin").find_files()
+		require("telescope.builtin").find_files({ cwd = require("my.root").get() })
 	end, { desc = "[S]earch [F]iles" })
 
 	vim.keymap.set("n", "<leader>gf", function()
-		require("telescope.builtin").git_files()
+		require("telescope.builtin").git_files({ cwd = require("my.root").get() })
 	end, { desc = "Search [G]it [F]iles" })
 
 	vim.keymap.set("n", "<leader>/", function()
