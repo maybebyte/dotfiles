@@ -79,6 +79,16 @@ out="$(nvim_headless \
 # nvim_headless returns combined stdout+stderr; the last line is our io.write.
 last="$(printf '%s\n' "$out" | tail -n 1 | tr -d '[:space:]')"
 
+# Defense-in-depth: nvim_headless does NOT abort on Lua errors inside
+# `-c 'lua ...'` blocks (see lib.sh notes). A regression in LspAttach could
+# emit a traceback but still exit 0 with "false"/"nil" as the last line,
+# masking the real cause. Mirror the cap-guard test's error sniff.
+if printf '%s\n' "$out" | grep -qE '(E5108|stack traceback|attempt to call|attempt to index)'; then
+	echo "Lua error in LspAttach path:" >&2
+	printf '%s\n' "$out" >&2
+	exit 1
+fi
+
 assert_eq "true" "$last" "inlay hints enabled after LspAttach ($server_label)"
 
 # gopls branch: also verify extmarks with virt_text are actually rendered.
