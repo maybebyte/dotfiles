@@ -538,6 +538,7 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `<leader>L` | Toggle Lazy UI |
 | `<leader>M` | Toggle Mason UI |
 | `<leader>o` | Toggle spell check |
+| `<leader>tt` | [T]erminal (project root) |
 | `<leader>fm` | Open NetRW file manager |
 | `<Esc>` | Clear search highlights |
 
