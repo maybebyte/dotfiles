@@ -21,7 +21,6 @@ return {
 	},
 	config = function(_, opts)
 		require("snacks").setup(opts)
-		-- UTILS-04: spell toggle migrated from inline keybindings/init.lua block.
 		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>o")
 	end,
 }

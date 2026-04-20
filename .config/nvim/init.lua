@@ -50,7 +50,7 @@ end
 
 require("my.settings")
 
--- CONFIG-05: defensively suppress clipboard provider probe during startup.
+-- Suppress clipboard provider probe during startup.
 -- If my.settings (or any future module pre-VeryLazy) sets vim.opt.clipboard,
 -- save its value and clear it; the VeryLazy callback restores it.
 local saved_clipboard = vim.opt.clipboard:get()
@@ -85,7 +85,7 @@ if lazy_ready then
 		end,
 		desc = "Apply transparent-bg overrides across colorscheme changes",
 	})
-	-- D-09: ColorScheme does not retro-fire at registration; invoke once manually
+	-- ColorScheme does not retro-fire at registration; invoke once manually
 	-- so the already-active catppuccin-frappe picks up the overrides without flash.
 	vim.api.nvim_exec_autocmds("ColorScheme", { group = hl_overrides_group })
 
@@ -94,7 +94,7 @@ end
 
 require("my.autocmds")
 
--- CONFIG-01 + CONFIG-05: defer non-essential init to after lazy.nvim fires VeryLazy.
+-- Defer non-essential init until lazy.nvim fires VeryLazy.
 -- VeryLazy runs after LazyDone + VimEnter in interactive mode. In headless mode
 -- it does not auto-fire; tests must invoke it explicitly with `doautocmd User VeryLazy`.
 vim.api.nvim_create_autocmd("User", {

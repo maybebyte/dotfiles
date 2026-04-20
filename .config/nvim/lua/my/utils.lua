@@ -37,11 +37,9 @@ end
 -- Resize the current split toward/away from the edge in direction dir.
 -- No-ops on floating windows and single-window layouts. Honors vim.v.count1.
 function M.smart_resize(dir)
-	-- Skip floating windows
 	if vim.api.nvim_win_get_config(0).relative ~= "" then
 		return
 	end
-	-- Skip single window (no-op anyway, but explicit)
 	if vim.fn.winnr("$") == 1 then
 		return
 	end
@@ -71,12 +69,12 @@ function M.terminal_smart_resize(dir)
 end
 
 -- Higher-order: return a callable that jumps to next/prev diagnostic.
--- severity is an optional string like "ERROR" keyed against vim.diagnostic.severity.
+-- severity is an optional vim.diagnostic.severity.* value.
 function M.diagnostic_goto(next, severity)
 	return function()
 		vim.diagnostic.jump({
 			count = (next and 1 or -1) * vim.v.count1,
-			severity = severity and vim.diagnostic.severity[severity] or nil,
+			severity = severity,
 			float = true,
 		})
 	end

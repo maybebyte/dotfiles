@@ -1,26 +1,16 @@
 -- luacheck: globals vim
 
--- D-01/D-02/D-03/D-04/D-05: sole toolchain provisioner.
--- lazy=false is MANDATORY — `event = "VimEnter"` or `event = "VeryLazy"` silently
--- skip run_on_start (plugin not loaded by the time VimEnter fires).
--- See .planning/phases/03-lsp-tool-provisioning/03-RESEARCH.md Pitfall 1.
---
--- D-06: LSP server list uses lspconfig short names; mason-lspconfig
--- integration (enabled by default) translates to Mason registry names.
--- D-11/D-12: conform.lua and nvim-lint.lua keep their own ft→tool maps;
--- this file is the INSTALLATION source of truth, they are USAGE.
---
--- Manual-only tools (not in the Mason registry, not auto-installed here —
--- see VALIDATION.md §Manual-Only):
---   - perltidy   (install via `cpan install Perl::Tidy`)
---   - clang-format (typically system-installed via distro package manager)
+-- Sole toolchain provisioner. `lazy = false` is mandatory: `event = "VimEnter"`
+-- or `VeryLazy` silently skip run_on_start (plugin not loaded yet when VimEnter
+-- fires). Manual-only tools (not in the Mason registry): perltidy (`cpan install
+-- Perl::Tidy`), clang-format (system package).
 return {
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	lazy = false,
 	dependencies = { "williamboman/mason.nvim" },
 	opts = {
 		ensure_installed = {
-			-- LSP servers (D-06, 12 total — lspconfig names)
+			-- LSP servers (lspconfig short names; mason-lspconfig translates)
 			"lua_ls",
 			"pyright",
 			"gopls",
@@ -53,8 +43,7 @@ return {
 			"ruff",
 			"erb-lint",
 		},
-		auto_update = false, -- D-03: install-missing only, no silent drift
-		run_on_start = true, -- D-02: async install on VimEnter
-		-- vim.notify default (D-04): visible bootstrap confirmation
+		auto_update = false, -- install-missing only, no silent drift
+		run_on_start = true, -- async install on VimEnter
 	},
 }

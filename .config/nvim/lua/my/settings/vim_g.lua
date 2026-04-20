@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
--- D-17: Default global inlay-hints flag established unconditionally at startup,
+-- Default global inlay-hints flag established unconditionally at startup,
 -- before any lazy-loaded LSP plugin spec runs. Guard preserves user override
 -- if this file is re-sourced.
 if vim.g.inlay_hints == nil then

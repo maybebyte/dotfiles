@@ -1,10 +1,11 @@
 -- Project root detection module
 -- API: require("my.root").get(bufnr?) -> absolute path string
--- Algorithm (per D-10):
---   1. LSP workspace_folders with longest-common-prefix tie-break (D-15)
---   2. Walk up for `.git` marker (D-09)
---   3. Fallback to vim.fn.getcwd() (D-17; unnamed buffers also try git_walk(cwd) first)
--- Cache: vim.b[bufnr].my_root, invalidated on BufFilePost (D-11).
+-- Algorithm:
+--   1. LSP workspace_folders with longest-common-prefix tie-break
+--   2. Walk up for `.git` marker
+--   3. Fallback to vim.fn.getcwd()
+-- Unnamed buffers try a .git walk from cwd before surrendering.
+-- Cache: vim.b[bufnr].my_root, invalidated on BufFilePost.
 
 local M = {}
 
@@ -17,7 +18,7 @@ local function buffer_path(bufnr)
 end
 
 -- LSP workspace_folders lookup. Returns nil if no folder covers the buffer.
--- Tie-break: longest common prefix of the buffer's realpath (D-15).
+-- Tie-break: longest common prefix of the buffer's realpath.
 local function lsp_root(bufnr, buf_path)
 	if not buf_path then
 		return nil
@@ -28,7 +29,7 @@ local function lsp_root(bufnr, buf_path)
 		local folders = client.config and client.config.workspace_folders
 		if folders then
 			for _, folder in ipairs(folders) do
-				-- URI is "file:///..." — decode before compare (RESEARCH Risk §7).
+				-- URI is "file:///..." — decode before compare.
 				local fname = vim.uri_to_fname(folder.uri)
 				local fresolved = vim.uv.fs_realpath(fname) or fname
 				if vim.startswith(buf_path, fresolved) and #fresolved > best_len then
@@ -48,7 +49,7 @@ end
 function M.get(bufnr)
 	bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-	-- Cache hit (D-11).
+	-- Cache hit.
 	local cached = vim.b[bufnr].my_root
 	if cached and cached ~= "" then
 		return cached
@@ -56,7 +57,7 @@ function M.get(bufnr)
 
 	local buf_path = buffer_path(bufnr)
 
-	-- Unnamed buffer: try .git root from cwd before surrendering (D-17, GAP-01).
+	-- Unnamed buffer: try .git root from cwd before surrendering.
 	-- No cache write — buffer may receive a name later; next call re-resolves.
 	if not buf_path then
 		local cwd = vim.fn.getcwd()
@@ -71,7 +72,7 @@ function M.get(bufnr)
 		root = resolve(vim.fs.root(bufnr, { ".git" }))
 	end
 
-	-- 3. Fallback to getcwd() (D-17).
+	-- 3. Fallback to getcwd().
 	if not root then
 		root = vim.fn.getcwd()
 	end
@@ -80,7 +81,7 @@ function M.get(bufnr)
 	return root
 end
 
--- Cache invalidation on buffer rename (D-11).
+-- Cache invalidation on buffer rename.
 vim.api.nvim_create_autocmd("BufFilePost", {
 	group = vim.api.nvim_create_augroup("my_root_cache", { clear = true }),
 	callback = function(args)

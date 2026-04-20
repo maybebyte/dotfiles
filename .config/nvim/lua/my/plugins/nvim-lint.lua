@@ -3,7 +3,7 @@
 return {
 	"mfussenegger/nvim-lint",
 	lazy = true,
-	event = "BufReadPost", -- D-19: load before BufReadPost fires so LINT-01 (lint-on-open) works
+	event = "BufReadPost", -- load before first BufReadPost so lint-on-open works
 	config = function()
 		require("lint").linters_by_ft = {
 			go = { "revive" },
@@ -21,14 +21,13 @@ return {
 		require("lint").linters.erb_lint.cmd = "erblint"
 		require("lint").linters.erb_lint.args = { "--format", "compact" }
 
-		-- D-16..D-18: per-buffer debounced try_lint (150ms).
-		-- Diverges from LazyVim util/lint.lua shared-timer pattern so saves in
-		-- buffer A do not cancel pending lint for buffer B (ROADMAP SC-6).
-		-- RESEARCH Pitfall 7: wrap try_lint in nvim_buf_call(bufnr, ...) so ft
+		-- Per-buffer debounced try_lint (150ms). Diverges from the LazyVim
+		-- shared-timer pattern so saves in buffer A do not cancel pending lint
+		-- for buffer B. try_lint is wrapped in nvim_buf_call(bufnr, ...) so ft
 		-- resolves against the originally-scheduled buffer, not whichever is
-		-- current when the timer fires.
-		-- Note: timers are uv userdata (not msgpack-serializable), so they live
-		-- in a closure-local table keyed by bufnr — vim.b[bufnr] rejects userdata.
+		-- current when the timer fires. Timers are uv userdata (not
+		-- msgpack-serializable), so they live in a closure-local table keyed
+		-- by bufnr — vim.b[bufnr] rejects userdata.
 		local timers = {}
 		local function debounced_lint(bufnr)
 			bufnr = bufnr or vim.api.nvim_get_current_buf()
@@ -45,10 +44,9 @@ return {
 				150,
 				0,
 				vim.schedule_wrap(function()
-					-- UTILS-05/D-20: suppress lint while any float is open (LSP hover,
-					-- telescope, which-key, Snacks, cmp). Dropped silently (D-21) — next
-					-- UserLint trigger (BufWritePost/InsertLeave/FileType/BufReadPost)
-					-- catches up.
+					-- Suppress lint while any float is open (LSP hover, telescope,
+					-- which-key, Snacks, cmp). Dropped silently — the next UserLint
+					-- trigger (BufWritePost/InsertLeave/FileType/BufReadPost) catches up.
 					for _, win in ipairs(vim.api.nvim_list_wins()) do
 						if vim.api.nvim_win_get_config(win).relative ~= "" then
 							pcall(function()
@@ -88,9 +86,8 @@ return {
 			end,
 		})
 
-		-- D-22: single UserLint augroup owns all four lint triggers.
-		-- No `pattern =` filter: try_lint() filters by ft internally
-		-- (LINT-03 extends InsertLeave beyond lua via this mechanism).
+		-- Single UserLint augroup owns all four lint triggers.
+		-- No `pattern =` filter: try_lint() filters by ft internally.
 		local lint_augroup = vim.api.nvim_create_augroup("UserLint", { clear = true })
 		vim.api.nvim_create_autocmd({ "BufReadPost", "FileType", "InsertLeave", "BufWritePost" }, {
 			group = lint_augroup,

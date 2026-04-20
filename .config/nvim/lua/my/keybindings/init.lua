@@ -110,32 +110,35 @@ vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Exit terminal + move
 -- Configure step size via vim.g.smart_resize_step (default: 2).
 -- Implementation: lua/my/utils.lua (smart_resize, terminal_smart_resize, at_edge, get_resize_step).
 
+local utils = require("my.utils")
+local severity = vim.diagnostic.severity
+
 -- Normal mode
 vim.keymap.set("n", "<M-h>", function()
-	require("my.utils").smart_resize("h")
+	utils.smart_resize("h")
 end, { desc = "Smart resize left", silent = true })
 vim.keymap.set("n", "<M-j>", function()
-	require("my.utils").smart_resize("j")
+	utils.smart_resize("j")
 end, { desc = "Smart resize down", silent = true })
 vim.keymap.set("n", "<M-k>", function()
-	require("my.utils").smart_resize("k")
+	utils.smart_resize("k")
 end, { desc = "Smart resize up", silent = true })
 vim.keymap.set("n", "<M-l>", function()
-	require("my.utils").smart_resize("l")
+	utils.smart_resize("l")
 end, { desc = "Smart resize right", silent = true })
 
 -- Terminal mode (exit to normal first using <C-\><C-n> pattern)
 -- Set vim.g.smart_resize_terminal_stay_normal = true to stay in normal mode after resize
-vim.keymap.set("t", "<M-h>", require("my.utils").terminal_smart_resize("h"), { desc = "Smart resize left", silent = true })
-vim.keymap.set("t", "<M-j>", require("my.utils").terminal_smart_resize("j"), { desc = "Smart resize down", silent = true })
-vim.keymap.set("t", "<M-k>", require("my.utils").terminal_smart_resize("k"), { desc = "Smart resize up", silent = true })
-vim.keymap.set("t", "<M-l>", require("my.utils").terminal_smart_resize("l"), { desc = "Smart resize right", silent = true })
+vim.keymap.set("t", "<M-h>", utils.terminal_smart_resize("h"), { desc = "Smart resize left", silent = true })
+vim.keymap.set("t", "<M-j>", utils.terminal_smart_resize("j"), { desc = "Smart resize down", silent = true })
+vim.keymap.set("t", "<M-k>", utils.terminal_smart_resize("k"), { desc = "Smart resize up", silent = true })
+vim.keymap.set("t", "<M-l>", utils.terminal_smart_resize("l"), { desc = "Smart resize right", silent = true })
 
 -- =================================
 -- Diagnostic Navigation by Severity
 -- =================================
 -- ]e/[e for errors only, ]w/[w for warnings only. Implementation: lua/my/utils.lua (diagnostic_goto).
-vim.keymap.set("n", "]e", require("my.utils").diagnostic_goto(true, "ERROR"), { desc = "Next error" })
-vim.keymap.set("n", "[e", require("my.utils").diagnostic_goto(false, "ERROR"), { desc = "Prev error" })
-vim.keymap.set("n", "]w", require("my.utils").diagnostic_goto(true, "WARN"), { desc = "Next warning" })
-vim.keymap.set("n", "[w", require("my.utils").diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
+vim.keymap.set("n", "]e", utils.diagnostic_goto(true, severity.ERROR), { desc = "Next error" })
+vim.keymap.set("n", "[e", utils.diagnostic_goto(false, severity.ERROR), { desc = "Prev error" })
+vim.keymap.set("n", "]w", utils.diagnostic_goto(true, severity.WARN), { desc = "Next warning" })
+vim.keymap.set("n", "[w", utils.diagnostic_goto(false, severity.WARN), { desc = "Prev warning" })
