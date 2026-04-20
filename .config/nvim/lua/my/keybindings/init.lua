@@ -62,15 +62,6 @@ vim.keymap.set("n", "<leader>dnl", function()
 	vim.cmd("%s/\\n\\+\\%$//e")
 end, { desc = "Delete all trailing newlines." })
 
-vim.keymap.set("n", "<leader>o", function()
-	if vim.o.spell == true then
-		vim.o.spell = false
-	else
-		vim.o.spell = true
-	end
-	vim.opt.spelllang = "en_us"
-end, { desc = "Toggle spell check ('o' for orthography)." })
-
 vim.keymap.set("n", "<leader>fm", function()
 	vim.cmd.Explore()
 end, { desc = "NetRW (file manager)" })

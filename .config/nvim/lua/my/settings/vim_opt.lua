@@ -6,6 +6,8 @@ vim.opt.diffopt:append("iwhiteall")
 -- Keep signcolumn on by default.
 vim.opt.signcolumn = "yes"
 
+vim.opt.spelllang = "en_us"
+
 -- Minimum number of lines to keep above and below cursor.
 vim.opt.scrolloff = 10
 
