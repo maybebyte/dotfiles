@@ -41,17 +41,8 @@ local function lsp_root(bufnr, buf_path)
 	return best_prefix
 end
 
--- Walk upward from `dir` looking for `.git` (file or directory).
-local function git_walk(dir)
-	if not dir or dir == "" then
-		return nil
-	end
-	local found = vim.fs.find({ ".git" }, { upward = true, path = dir })
-	if found and #found > 0 then
-		local parent = vim.fs.dirname(found[1])
-		return vim.uv.fs_realpath(parent) or parent
-	end
-	return nil
+local function resolve(path)
+	return path and (vim.uv.fs_realpath(path) or path) or nil
 end
 
 function M.get(bufnr)
@@ -65,21 +56,19 @@ function M.get(bufnr)
 
 	local buf_path = buffer_path(bufnr)
 
-	-- Unnamed buffer: try .git walk from cwd before surrendering (D-17, GAP-01).
+	-- Unnamed buffer: try .git root from cwd before surrendering (D-17, GAP-01).
 	-- No cache write — buffer may receive a name later; next call re-resolves.
 	if not buf_path then
 		local cwd = vim.fn.getcwd()
-		return git_walk(cwd) or cwd
+		return resolve(vim.fs.root(cwd, { ".git" })) or cwd
 	end
-
-	local buf_dir = vim.fs.dirname(buf_path)
 
 	-- 1. LSP workspace_folders.
 	local root = lsp_root(bufnr, buf_path)
 
 	-- 2. `.git` walk.
 	if not root then
-		root = git_walk(buf_dir)
+		root = resolve(vim.fs.root(bufnr, { ".git" }))
 	end
 
 	-- 3. Fallback to getcwd() (D-17).
