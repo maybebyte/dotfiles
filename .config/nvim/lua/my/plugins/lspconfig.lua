@@ -82,12 +82,9 @@ local function setup_lsp_diagnostics()
 		severity_sort = true,
 	})
 
-	vim.keymap.set("n", "[d", function()
-		vim.diagnostic.jump({ count = -1, float = true })
-	end, { desc = "Go to previous diagnostic" })
-	vim.keymap.set("n", "]d", function()
-		vim.diagnostic.jump({ count = 1, float = true })
-	end, { desc = "Go to next diagnostic" })
+	local utils = require("my.utils")
+	vim.keymap.set("n", "[d", utils.diagnostic_goto(false), { desc = "Go to previous diagnostic" })
+	vim.keymap.set("n", "]d", utils.diagnostic_goto(true), { desc = "Go to next diagnostic" })
 	vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
 end
 
