@@ -80,3 +80,46 @@ out="$(nvim_headless \
 last="$(printf '%s\n' "$out" | tail -n 1 | tr -d '[:space:]')"
 
 assert_eq "true" "$last" "inlay hints enabled after LspAttach ($server_label)"
+
+# gopls branch: also verify extmarks with virt_text are actually rendered.
+# is_enabled returns true as soon as enable() is called — even if gopls sent
+# zero hints (false positive). This second check detects that gap.
+if [ "$server_label" = "gopls" ]; then
+	hint_count="$(nvim_headless \
+		-c "edit $tmpfile" \
+		-c 'lua
+local buf = 0
+-- Wait for LSP attach (up to 5s)
+vim.wait(5000, function()
+    return vim.lsp.inlay_hint.is_enabled({ bufnr = buf })
+end)
+-- Wait for extmarks to populate (up to 3s)
+local count = 0
+vim.wait(3000, function()
+    local ns_id = -1
+    for name, id in pairs(vim.api.nvim_get_namespaces()) do
+        if name:find("inlayhint") or name:find("inlay_hint") then
+            ns_id = id
+            break
+        end
+    end
+    if ns_id == -1 then return false end
+    local marks = vim.api.nvim_buf_get_extmarks(buf, ns_id, 0, -1, { details = true })
+    count = 0
+    for _, m in ipairs(marks) do
+        if m[4] and m[4].virt_text and #m[4].virt_text > 0 then
+            count = count + 1
+        end
+    end
+    return count > 0
+end)
+io.write(tostring(count))
+')"
+	hint_count="$(printf '%s\n' "$hint_count" | tail -n 1 | tr -d '[:space:]')"
+	# count must be a positive integer; "0" or empty string means false pass
+	if ! echo "$hint_count" | grep -qE '^[1-9][0-9]*$'; then
+		echo "assertion failed: gopls extmark hints not rendered (count=$hint_count)" >&2
+		exit 1
+	fi
+	echo "gopls extmark hint count: $hint_count"
+fi
