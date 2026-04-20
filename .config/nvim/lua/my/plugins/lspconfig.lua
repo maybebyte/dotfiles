@@ -133,11 +133,20 @@ return {
 	config = function()
 		setup_lsp_diagnostics()
 
-		-- Create autocommand for LSP attachment
+		-- Pitfall 3 fix: missing `clear = true` caused duplicate LspAttach handlers
+		-- on config re-source (doubles inlay_hint.enable calls).
 		vim.api.nvim_create_autocmd("LspAttach", {
-			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 			callback = function(ev)
 				setup_keybinds_on_attach(ev.buf)
+
+				-- D-16/D-21: enable inlay hints only if the attached client
+				-- advertises textDocument/inlayHint. No-op otherwise — no error,
+				-- no visual glitch (success criterion #4).
+				local client = vim.lsp.get_client_by_id(ev.data.client_id)
+				if client and client:supports_method("textDocument/inlayHint") then
+					vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+				end
 			end,
 		})
 		setup_lsp_servers()
