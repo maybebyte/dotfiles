@@ -172,7 +172,8 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 | Plugin | Purpose |
 |--------|---------|
 | [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | LSP configuration |
-| [mason.nvim](https://github.com/williamboman/mason.nvim) v2.* | LSP/DAP/Linter installer |
+| [mason.nvim](https://github.com/williamboman/mason.nvim) v2.* | LSP/DAP/Linter installer (standalone spec, lazy=false, priority=100) |
+| [mason-tool-installer.nvim](https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim) | Single source of truth for ensure_installed; covers servers + formatters + linters; run_on_start=true |
 | [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) v2.* | Mason + lspconfig bridge |
 | [lazydev.nvim](https://github.com/folke/lazydev.nvim) | Neovim Lua development |
 | [lspkind.nvim](https://github.com/onsails/lspkind.nvim) | LSP completion icons |
@@ -529,10 +530,15 @@ Press `<leader>` and wait for which-key to show available bindings.
 
 | Key | Description |
 |-----|-------------|
-| `<leader>u` | Toggle undotree |
+| `<leader>U` | Toggle undotree |
+| `<leader>uf` | Autoformat (global) |
+| `<leader>uF` | Autoformat (buffer) |
+| `<leader>uh` | Toggle inlay hints (buffer) |
+| `<leader>uH` | Toggle inlay hints (global) |
 | `<leader>L` | Toggle Lazy UI |
 | `<leader>M` | Toggle Mason UI |
 | `<leader>o` | Toggle spell check |
+| `<leader>tt` | [T]erminal (project root) |
 | `<leader>fm` | Open NetRW file manager |
 | `<Esc>` | Clear search highlights |
 
@@ -676,9 +682,12 @@ For non-Qubes systems, either:
 |----------|---------|
 | Go | revive |
 | Lua | luacheck, selene |
-| HTML | erb_lint |
 | Markdown | markdownlint |
 | Python | mypy, pylint, ruff |
+| Ruby/ERB | erb_lint |
+
+> All linters above are auto-installed by `mason-tool-installer.nvim`, the
+> single source of truth for Mason tool provisioning.
 
 </details>
 
@@ -699,7 +708,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 | Profile startup time | `:Lazy profile` |
 | Check health | `:checkhealth` |
 
-> **Note**: Some plugins use pinned versions for stability (mason v2.*, telescope 0.2.0, nvim-dap 0.10.0). Updating may require configuration changes.
+> **Note**: Some plugins use pinned versions for stability (mason v2.*, telescope 0.2.0, nvim-dap 0.10.0). Updating may require configuration changes. `mason-tool-installer.nvim` intentionally tracks HEAD — its API is stable.
 
 ## Troubleshooting
 

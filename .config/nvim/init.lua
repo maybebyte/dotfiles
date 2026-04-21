@@ -1,3 +1,8 @@
+if vim.g.my_config_loaded then
+	return
+end
+vim.g.my_config_loaded = true
+
 local function bootstrap_plugin_manager()
 	local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 	-- Attempt to clone with a timeout to prevent blocking indefinitely
@@ -27,24 +32,29 @@ local function bootstrap_plugin_manager()
 end
 
 local function setup_backup_directory()
-	local backup_directory = vim.env.XDG_STATE_HOME .. "/nvim/backup"
-
-	-- Make sure the backup directory is present and really a directory.
-	if os.rename(backup_directory, backup_directory) then
-		if not os.rename(backup_directory, backup_directory .. "/") then
-			vim.api.nvim_err_writeln(backup_directory .. " is a file, not a directory.")
-			vim.opt.backup = false
-		end
-	-- If nothing is there, attempt to create it.
-	else
-		if not os.execute("mkdir -p " .. backup_directory) then
-			vim.api.nvim_err_writeln("Failed to create " .. backup_directory)
-			vim.opt.backup = false
-		end
+	-- Use stdpath("state") for XDG-compliant fallback; vim.env.XDG_STATE_HOME
+	-- is raw environment and may be nil, whereas stdpath already encodes the
+	-- XDG default ($HOME/.local/state).
+	local backup_directory = vim.fn.stdpath("state") .. "/backup"
+	-- vim.fn.mkdir does not throw; it returns 0 on failure. Do not wrap in
+	-- pcall — check the return value directly.
+	local result = vim.fn.mkdir(backup_directory, "p")
+	if result == 0 then
+		vim.notify(
+			"Failed to create " .. backup_directory .. " — backup disabled",
+			vim.log.levels.WARN
+		)
+		vim.opt.backup = false
 	end
 end
 
 require("my.settings")
+
+-- Suppress clipboard provider probe during startup.
+-- If my.settings (or any future module pre-VeryLazy) sets vim.opt.clipboard,
+-- save its value and clear it; the VeryLazy callback restores it.
+local saved_clipboard = vim.opt.clipboard:get()
+vim.opt.clipboard = ""
 
 local lazy_ready = bootstrap_plugin_manager()
 setup_backup_directory()
@@ -54,18 +64,47 @@ if lazy_ready then
 	local catppuccin_path = vim.fn.stdpath("data") .. "/lazy/catppuccin"
 	if vim.uv.fs_stat(catppuccin_path) then
 		vim.opt.rtp:prepend(catppuccin_path)
-		pcall(function()
-			vim.cmd("colorscheme catppuccin-frappe")
-		end)
+		pcall(vim.cmd.colorscheme, "catppuccin-frappe")
 	end
+
+	local hl_overrides_group = vim.api.nvim_create_augroup("my_highlight_overrides", { clear = true })
+	local overrides = {
+		Normal  = { bg = "NONE", ctermbg = "NONE" },
+		NonText = { bg = "NONE", ctermbg = "NONE" },
+	}
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		group = hl_overrides_group,
+		-- Explicit pattern makes intent clear: match every colorscheme
+		-- (all catppuccin variants + any user override) rather than
+		-- relying on the unspecified default.
+		pattern = "*",
+		callback = function()
+			for name, opts in pairs(overrides) do
+				vim.api.nvim_set_hl(0, name, opts)
+			end
+		end,
+		desc = "Apply transparent-bg overrides across colorscheme changes",
+	})
+	-- ColorScheme does not retro-fire at registration; invoke once manually
+	-- so the already-active catppuccin-frappe picks up the overrides without flash.
+	vim.api.nvim_exec_autocmds("ColorScheme", { group = hl_overrides_group })
 
 	require("lazy").setup("my.plugins")
 end
 
-vim.cmd("highlight Normal guibg=none")
-vim.cmd("highlight NonText guibg=none")
-vim.cmd("highlight Normal ctermbg=none")
-vim.cmd("highlight NonText ctermbg=none")
-
-require("my.keybindings")
 require("my.autocmds")
+
+-- Defer non-essential init until lazy.nvim fires VeryLazy.
+-- VeryLazy runs after LazyDone + VimEnter in interactive mode. In headless mode
+-- it does not auto-fire; tests must invoke it explicitly with `doautocmd User VeryLazy`.
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	once = true,
+	callback = function()
+		require("my.keybindings")
+		if saved_clipboard and #saved_clipboard > 0 then
+			vim.opt.clipboard = saved_clipboard
+		end
+	end,
+	desc = "Post-startup deferred init (keymaps, clipboard restore)",
+})

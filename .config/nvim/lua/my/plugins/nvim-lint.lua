@@ -3,14 +3,7 @@
 return {
 	"mfussenegger/nvim-lint",
 	lazy = true,
-	ft = {
-		"go",
-		"lua",
-		"html",
-		"markdown",
-		"python",
-		"text",
-	},
+	event = "BufReadPost", -- load before first BufReadPost so lint-on-open works
 	config = function()
 		require("lint").linters_by_ft = {
 			go = { "revive" },
@@ -28,20 +21,78 @@ return {
 		require("lint").linters.erb_lint.cmd = "erblint"
 		require("lint").linters.erb_lint.args = { "--format", "compact" }
 
-		local lint_augroup = vim.api.nvim_create_augroup("UserLint", { clear = true })
+		-- Per-buffer debounced try_lint (150ms). Diverges from the LazyVim
+		-- shared-timer pattern so saves in buffer A do not cancel pending lint
+		-- for buffer B. try_lint is wrapped in nvim_buf_call(bufnr, ...) so ft
+		-- resolves against the originally-scheduled buffer, not whichever is
+		-- current when the timer fires. Timers are uv userdata (not
+		-- msgpack-serializable), so they live in a closure-local table keyed
+		-- by bufnr — vim.b[bufnr] rejects userdata.
+		local timers = {}
+		local function debounced_lint(bufnr)
+			bufnr = bufnr or vim.api.nvim_get_current_buf()
+			local prev = timers[bufnr]
+			if prev then
+				pcall(function()
+					prev:stop()
+					prev:close()
+				end)
+			end
+			local timer = vim.uv.new_timer()
+			timers[bufnr] = timer
+			timer:start(
+				150,
+				0,
+				vim.schedule_wrap(function()
+					-- Suppress lint while any float is open (LSP hover, telescope,
+					-- which-key, Snacks, cmp). Dropped silently — the next UserLint
+					-- trigger (BufWritePost/InsertLeave/FileType/BufReadPost) catches up.
+					for _, win in ipairs(vim.api.nvim_list_wins()) do
+						if vim.api.nvim_win_get_config(win).relative ~= "" then
+							pcall(function()
+								timer:stop()
+								timer:close()
+							end)
+							timers[bufnr] = nil
+							return
+						end
+					end
+					if vim.api.nvim_buf_is_valid(bufnr) then
+						vim.api.nvim_buf_call(bufnr, function()
+							require("lint").try_lint()
+						end)
+					end
+					pcall(function()
+						timer:stop()
+						timer:close()
+					end)
+					timers[bufnr] = nil
+				end)
+			)
+		end
 
-		vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-			group = lint_augroup,
-			callback = function()
-				require("lint").try_lint()
+		-- Clean up per-buffer timer on buffer wipeout so timers[] doesn't grow
+		-- unbounded over a long session.
+		vim.api.nvim_create_autocmd("BufWipeout", {
+			callback = function(args)
+				local t = timers[args.buf]
+				if t then
+					pcall(function()
+						t:stop()
+						t:close()
+					end)
+					timers[args.buf] = nil
+				end
 			end,
 		})
 
-		vim.api.nvim_create_autocmd({ "FileType", "InsertLeave" }, {
+		-- Single UserLint augroup owns all four lint triggers.
+		-- No `pattern =` filter: try_lint() filters by ft internally.
+		local lint_augroup = vim.api.nvim_create_augroup("UserLint", { clear = true })
+		vim.api.nvim_create_autocmd({ "BufReadPost", "FileType", "InsertLeave", "BufWritePost" }, {
 			group = lint_augroup,
-			pattern = { "lua" },
-			callback = function()
-				require("lint").try_lint()
+			callback = function(args)
+				debounced_lint(args.buf)
 			end,
 		})
 	end,

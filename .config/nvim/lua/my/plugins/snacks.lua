@@ -1,4 +1,4 @@
--- luacheck: globals vim
+-- luacheck: globals vim Snacks
 
 return {
 	"folke/snacks.nvim",
@@ -10,4 +10,17 @@ return {
 		quickfile = { enabled = true },
 		terminal = { enabled = true },
 	},
+	keys = {
+		{
+			"<leader>tt",
+			function()
+				Snacks.terminal.toggle(nil, { cwd = require("my.root").get() })
+			end,
+			desc = "[T]erminal (project root)",
+		},
+	},
+	config = function(_, opts)
+		require("snacks").setup(opts)
+		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>o")
+	end,
 }

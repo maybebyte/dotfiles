@@ -82,12 +82,9 @@ local function setup_lsp_diagnostics()
 		severity_sort = true,
 	})
 
-	vim.keymap.set("n", "[d", function()
-		vim.diagnostic.jump({ count = -1, float = true })
-	end, { desc = "Go to previous diagnostic" })
-	vim.keymap.set("n", "]d", function()
-		vim.diagnostic.jump({ count = 1, float = true })
-	end, { desc = "Go to next diagnostic" })
+	local utils = require("my.utils")
+	vim.keymap.set("n", "[d", utils.diagnostic_goto(false), { desc = "Go to previous diagnostic" })
+	vim.keymap.set("n", "]d", utils.diagnostic_goto(true), { desc = "Go to next diagnostic" })
 	vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
 end
 
@@ -105,17 +102,68 @@ local function setup_lsp_servers()
 				diagnostics = { globals = { "vim" } },
 				workspace = { checkThirdParty = false },
 				telemetry = { enable = false },
+				-- Advertise inlayHintProvider so the LspAttach callback's
+				-- supports_method check returns true for lua_ls.
+				hint = { enable = true },
 			},
 		},
 	})
 
+	-- pyright: no native inlay-hint support; users typically pair with
+	-- basedpyright or enable hints via ruff. Hints will not render for
+	-- this server regardless of supports_method result.
 	vim.lsp.config('pyright', {
 		settings = {
 			pyright = { disableLanguageServices = true },
 		},
 	})
 
-	require("mason").setup()
+	-- Only ts_ls and gopls need explicit settings; inlayHints require
+	-- server-side enablement. Other servers use defaults; mason-lspconfig
+	-- automatic_enable picks them up after this function finishes.
+
+	-- ts_ls: inlayHints only appear if the server is told to compute them.
+	vim.lsp.config('ts_ls', {
+		settings = {
+			typescript = {
+				inlayHints = {
+					includeInlayParameterNameHints = "all",
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+				},
+			},
+			javascript = {
+				inlayHints = {
+					includeInlayParameterNameHints = "all",
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+				},
+			},
+		},
+	})
+
+	-- gopls: hints require explicit server-side enablement via settings.
+	-- All 7 canonical hint types enabled to match the ts_ls pattern.
+	vim.lsp.config('gopls', {
+		settings = {
+			gopls = {
+				hints = {
+					assignVariableTypes    = true,
+					compositeLiteralFields = true,
+					compositeLiteralTypes  = true,
+					constantValues         = true,
+					functionTypeParameters = true,
+					parameterNames         = true,
+					rangeVariableTypes     = true,
+				},
+			},
+		},
+	})
+	-- bashls, rust_analyzer, cssls, html, jsonls, yamlls, stylelint_lsp,
+	-- marksman: use defaults; capabilities are injected via the '*' config
+	-- above, and mason-lspconfig.automatic_enable picks them up after setup.
+	-- stylelint_lsp default filetypes include JS/TS which can duplicate ts_ls
+	-- diagnostics on mixed projects; restrict reactively if friction surfaces.
 	require("mason-lspconfig").setup()
 end
 
@@ -125,8 +173,7 @@ return {
 	cmd = { "LspInfo", "LspInstall", "LspStart" },
 	event = { "BufReadPost", "BufNewFile", "FileType" },
 	dependencies = {
-		-- Mason for LSP server management
-		{ "williamboman/mason.nvim", version = "v2.*" },
+		-- Mason for LSP server management (mason.nvim is top-level now; see mason.lua)
 		{ "williamboman/mason-lspconfig.nvim", version = "v2.*" },
 
 		-- Completion capabilities for nvim-cmp
@@ -135,13 +182,55 @@ return {
 	config = function()
 		setup_lsp_diagnostics()
 
-		-- Create autocommand for LSP attachment
+		-- `clear = true` prevents duplicate LspAttach handlers on config
+		-- re-source (which would double inlay_hint.enable calls).
 		vim.api.nvim_create_autocmd("LspAttach", {
-			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 			callback = function(ev)
 				setup_keybinds_on_attach(ev.buf)
+
+				-- Enable inlay hints only if the attached client advertises
+				-- textDocument/inlayHint. No-op otherwise — no error, no glitch.
+				local client = vim.lsp.get_client_by_id(ev.data.client_id)
+				if client and client:supports_method("textDocument/inlayHint") then
+					vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+				end
 			end,
 		})
+
+		-- The `vim.g.inlay_hints` default is established unconditionally at
+		-- startup in lua/my/settings/vim_g.lua so it is set even if no
+		-- buffer event (BufReadPost / FileType / LspAttach) ever fires.
+		--
+		-- Snacks.toggle:map() uses the toggle `name` as the keymap desc
+		-- automatically, which is why the :map("<leader>uH") / :map("<leader>uh")
+		-- calls below look desc-less compared to other keymaps in this file.
+		Snacks.toggle.new({
+			name = "Inlay Hints (global)",
+			get = function()
+				return vim.lsp.inlay_hint.is_enabled()
+			end,
+			set = function(v)
+				vim.g.inlay_hints = v
+				vim.lsp.inlay_hint.enable(v)
+			end,
+		}):map("<leader>uH")
+
+		Snacks.toggle.new({
+			name = "Inlay Hints (buffer)",
+			get = function()
+				local buf = vim.b.inlay_hints
+				if buf == nil then
+					return vim.g.inlay_hints
+				end
+				return buf
+			end,
+			set = function(v)
+				vim.b.inlay_hints = v
+				vim.lsp.inlay_hint.enable(v, { bufnr = 0 })
+			end,
+		}):map("<leader>uh")
+
 		setup_lsp_servers()
 	end,
 }
