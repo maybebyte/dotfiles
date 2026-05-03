@@ -127,6 +127,16 @@ If the network is unavailable or slow, Neovim starts without plugins and display
 :checkhealth
 ```
 
+## Testing
+
+```bash
+make test           # Run plenary spec suite headless
+make test-bash      # Run legacy bash startup tests (retained until v1.1 parity gate)
+```
+
+Inside an interactive nvim session, run `:PlenaryBustedDirectory tests/spec/`
+to drive the same suite.
+
 ## Directory Structure
 
 ```
@@ -680,7 +690,7 @@ For non-Qubes systems, either:
 
 | Language | Linters |
 |----------|---------|
-| Go | revive |
+| Go | golangci-lint (aggregates ~100+ Go linters; honors `.golangci.yml` in project root) |
 | Lua | luacheck, selene |
 | Markdown | markdownlint |
 | Python | mypy, pylint, ruff |
