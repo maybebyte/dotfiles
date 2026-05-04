@@ -15,7 +15,7 @@ Neovim 0.11+.
 NVIM_CMP_DEBUG=1 nvim   Debug completion issues
 make test               Run plenary spec suite headless
 :PlenaryBustedDirectory tests/spec/   Drive specs interactively
-make test prereqs       See README "Test prerequisites" (black + python linter)
+# test prereqs          See README "Test prerequisites" (black + python linter)
 ```
 
 **Git:** This config is in a bare dotfiles repo. For all git operations on `~/.config/nvim/`:
