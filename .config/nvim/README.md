@@ -137,6 +137,17 @@ make test-bash      # Run legacy bash startup tests (retained until v1.1 parity 
 Inside an interactive nvim session, run `:PlenaryBustedDirectory tests/spec/`
 to drive the same suite.
 
+### Test prerequisites
+
+Wave B/C specs invoke real binaries (no mocking — see decision D-08):
+
+- `black` — required for PORT-06/07/08 (formatter specs).
+- One of `pylint`, `ruff`, `mypy` — required for PORT-09/10 (linter specs).
+
+Specs hard-fail (no `pending()` skip) when these are absent. To install on
+this machine, all four are available via `:MasonInstall <name>`; system
+packages also work (`/usr/bin/black`, `/usr/bin/pylint`, `/usr/bin/ruff`).
+
 ## Directory Structure
 
 ```
