@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+# PORT-15 carve-out (Phase 9, PARITY-02). This is the maintained source of truth
+# for the startup-regression check; the Lua port at tests/spec/profile_delta_spec.lua
+# is sticky pending() under the PORT-15 exception because Qubes triple-nested spawn
+# noise pushed the min-of-5 over the 15% headroom on every trial.
+# Measured Phase 8 gap:
+#   baseline           = 21.998793 ms (Phase 1 capture)
+#   headroom ceiling   = 25.298612 ms (baseline × 1.15)
+#   worst-case min-of-5 = 50.95 ms (Trial 5/5)
+#   gap                = +28.95 ms over baseline
+# See .planning/phases/08-performance-spec/08-01-SUMMARY.md for the trial record
+# and 08-CONTEXT.md D-16 for the carve-out cascade decision.
 # Test success criterion #1: startup time must not regress vs. the Phase 1 baseline.
 # Reads baseline-startuptime.txt (captured at Wave 0 pre-implementation), measures
 # current LazyDone time, asserts current <= baseline.
