@@ -146,7 +146,8 @@ Wave B/C specs invoke real binaries (no mocking — see decision D-08):
 
 Specs hard-fail (no `pending()` skip) when these are absent. To install on
 this machine, all four are available via `:MasonInstall <name>`; system
-packages also work (`/usr/bin/black`, `/usr/bin/pylint`, `/usr/bin/ruff`).
+packages also work (`/usr/bin/black`, `/usr/bin/pylint`, `/usr/bin/ruff`,
+`/usr/bin/mypy`).
 
 ## Directory Structure
 
