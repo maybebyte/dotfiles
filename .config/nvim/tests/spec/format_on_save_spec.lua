@@ -30,12 +30,28 @@ describe("PORT-08 conform format-on-save fires on BufWritePre", function()
 			vim.g.autoformat = true
 			conform.setup({
 				formatters_by_ft = { python = { "black" } },
-				format_on_save = function()
-					if not vim.g.autoformat then return end
+				-- Mirror conform.lua's buffer-local-first logic so this spec
+				-- exercises the same callback shape regardless of whether it
+				-- runs in isolation or as part of the full suite (LW-01).
+				format_on_save = function(bufnr)
+					local effective = vim.b[bufnr].autoformat
+					if effective == nil then
+						effective = vim.g.autoformat
+					end
+					if not effective then
+						return
+					end
 					return { timeout_ms = 3000, lsp_format = "fallback" }
 				end,
 			})
 		end
+	end)
+
+	-- Reset vim.g.autoformat between specs so the `if vim.g.autoformat == nil`
+	-- guard re-arms on every `before_each`, ensuring this spec is independent
+	-- of execution order (see REVIEW MD-01).
+	after_each(function()
+		vim.g.autoformat = nil
 	end)
 
 	it(":w on bad-formatted .py file triggers black", function()
