@@ -129,13 +129,23 @@ If the network is unavailable or slow, Neovim starts without plugins and display
 
 ## Testing
 
+The Lua spec suite is the primary developer harness:
+
 ```bash
-make test           # Run plenary spec suite headless
-make test-bash      # Run legacy bash startup tests (retained until v1.1 parity gate)
+make test           # Run :PlenaryBustedDirectory tests/spec/ headless
 ```
 
 Inside an interactive nvim session, run `:PlenaryBustedDirectory tests/spec/`
-to drive the same suite.
+to drive the same suite (developer-loop reload pattern).
+
+`make test-bash` is the **PORT-15 perf-parity carve-out** — a single-script
+runner for `tests/startup/tests/profile-delta.sh`, which remains the
+maintained source of truth for the startup-regression check because the
+Lua port (`tests/spec/profile_delta_spec.lua`) is `pending()` under Qubes
+triple-nested spawn noise. The Makefile recipe tolerates the carve-out
+target via a `|| echo` clause documented at the recipe site. See
+`.planning/phases/08-performance-spec/08-01-SUMMARY.md` for the trial
+record and the +28.95 ms gap rationale.
 
 ### Test prerequisites
 
@@ -156,12 +166,6 @@ Specs hard-fail (no `pending()` skip) when these are absent. To install on
 this machine, all four are available via `:MasonInstall <name>`; system
 packages also work (`/usr/bin/black`, `/usr/bin/pylint`, `/usr/bin/ruff`,
 `/usr/bin/mypy`).
-
-Note: `tests/spec/profile_delta_spec.lua` is currently `pending()` under
-the REQUIREMENTS PORT-15 exception (Qubes triple-nested spawn noise pushes
-the measured min-of-5 over the 15% headroom). `tests/startup/tests/profile-delta.sh`
-remains the maintained source of truth for the startup-regression check;
-run `make test-bash` to exercise it.
 
 ## Directory Structure
 
