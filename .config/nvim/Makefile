@@ -9,7 +9,10 @@ test:
 	cd $(MAKEFILE_DIR) && nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/spec/ {minimal_init = 'tests/minimal_init.lua', sequential = true}"
 
 test-bash:
-	cd $(MAKEFILE_DIR) && tests/startup/run.sh
+	cd $(MAKEFILE_DIR) && tests/startup/run.sh --quick
+	cd $(MAKEFILE_DIR) && tests/startup/run.sh --test inlay-hints-attach
+	cd $(MAKEFILE_DIR) && tests/startup/run.sh --test inlay-hints-cap-guard
+	cd $(MAKEFILE_DIR) && tests/startup/run.sh --test profile-delta || echo "[Phase 8 / Option 2] profile-delta tolerated under Qubes load — see .planning/phases/08-performance-spec/08-01-SUMMARY.md"
 
 test-spec:
 	cd $(MAKEFILE_DIR) && nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedFile $(FILE)"

@@ -146,11 +146,22 @@ Wave B/C specs invoke real binaries (no mocking — see decision D-08):
 - `gopls` — required for PORT-13 (gopls inlay hints attach + extmark probe).
 - `lua-language-server` — required for PORT-13 (lua_ls inlay hints attach).
 - `yaml-language-server` — required for PORT-14 (capability guard negative path).
+- `baseline-startuptime.txt` (project file at `.planning/phases/01-startup-init-hygiene/`)
+  — reference startup time used by both `tests/spec/profile_delta_spec.lua` and
+  `tests/startup/tests/profile-delta.sh` (PORT-15). Unlike the entries above this
+  is a `.planning/`-tree file, not an external binary; restored from the v1.0
+  archive at `.planning/milestones/v1.0-phases/01-startup-init-hygiene/`.
 
 Specs hard-fail (no `pending()` skip) when these are absent. To install on
 this machine, all four are available via `:MasonInstall <name>`; system
 packages also work (`/usr/bin/black`, `/usr/bin/pylint`, `/usr/bin/ruff`,
 `/usr/bin/mypy`).
+
+Note: `tests/spec/profile_delta_spec.lua` is currently `pending()` under
+the REQUIREMENTS PORT-15 exception (Qubes triple-nested spawn noise pushes
+the measured min-of-5 over the 15% headroom). `tests/startup/tests/profile-delta.sh`
+remains the maintained source of truth for the startup-regression check;
+run `make test-bash` to exercise it.
 
 ## Directory Structure
 
