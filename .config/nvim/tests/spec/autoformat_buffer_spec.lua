@@ -37,6 +37,13 @@ describe("PORT-07 vim.b.autoformat buffer-local override", function()
 		end
 	end)
 
+	-- Reset vim.g.autoformat between specs so the `if vim.g.autoformat == nil`
+	-- guard re-arms on every `before_each`, ensuring this spec is independent
+	-- of execution order (see REVIEW MD-01).
+	after_each(function()
+		vim.g.autoformat = nil
+	end)
+
 	it("buffer-local autoformat=false beats global autoformat=true", function()
 		vim.g.autoformat = true
 		local pA = vim.fn.tempname() .. ".py"
