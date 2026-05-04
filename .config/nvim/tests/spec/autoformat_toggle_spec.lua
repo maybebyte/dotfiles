@@ -37,6 +37,14 @@ describe("PORT-06 vim.g.autoformat global toggle", function()
 		end
 	end)
 
+	-- Reset vim.g.autoformat between specs so the `if vim.g.autoformat == nil`
+	-- guard re-arms on every `before_each`. Without this, an `H.assert_contains`
+	-- failure on the unformatted assertion leaves vim.g.autoformat=false and
+	-- silently disables formatting in subsequent specs (see REVIEW MD-01/MD-02).
+	after_each(function()
+		vim.g.autoformat = nil
+	end)
+
 	it("autoformat=false suppresses; autoformat=true restores", function()
 		local pOff = vim.fn.tempname() .. ".py"
 		local fh1 = assert(io.open(pOff, "w"))
