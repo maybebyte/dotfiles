@@ -27,6 +27,36 @@ function M.assert_contains(haystack, needle)
 end
 
 -- ============================================================
+-- M.assert_no_lua_error(r)  — D-17 (Phase 7 carve-out from Phase 6 D-13)
+--   Accepts H.nvim_child result table {exit, stdout, stderr}.
+--   Concatenates stdout + "\n" + stderr; runs plain-find sniff for known
+--   Lua-error markers (E5108, stack traceback, attempt to call/index).
+--   Errors with truncated (~200-char) combined output on match. Level=2
+--   (blame caller, not helper).
+--   Justification: headless nvim does NOT abort on `-c lua` errors, so a
+--   regression in LspAttach could emit a traceback but still exit 0 with
+--   "false"/"nil" as the last line, masking the real cause. Mirrors bash
+--   defense-in-depth (inlay-hints-attach.sh L86-90, cap-guard.sh L46-50).
+-- ============================================================
+function M.assert_no_lua_error(r)
+	assert(type(r) == "table", "assert_no_lua_error: r must be table")
+	local combined = (r.stdout or "") .. "\n" .. (r.stderr or "")
+	local needles = { "E5108", "stack traceback", "attempt to call", "attempt to index" }
+	for _, needle in ipairs(needles) do
+		if combined:find(needle, 1, true) then
+			error(
+				string.format(
+					"assert_no_lua_error: matched %q in subprocess output:\n%s",
+					needle,
+					combined:sub(1, 200)
+				),
+				2
+			)
+		end
+	end
+end
+
+-- ============================================================
 -- M.wait_for(cond, timeout_ms)  — D-38
 --   Wrapper around vim.wait with 50ms interval. Returns boolean
 --   (true = cond satisfied within timeout, false = timeout).

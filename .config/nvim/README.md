@@ -143,6 +143,9 @@ Wave B/C specs invoke real binaries (no mocking — see decision D-08):
 
 - `black` — required for PORT-06/07/08 (formatter specs).
 - One of `pylint`, `ruff`, `mypy` — required for PORT-09/10 (linter specs).
+- `gopls` — required for PORT-13 (gopls inlay hints attach + extmark probe).
+- `lua-language-server` — required for PORT-13 (lua_ls inlay hints attach).
+- `yaml-language-server` — required for PORT-14 (capability guard negative path).
 
 Specs hard-fail (no `pending()` skip) when these are absent. To install on
 this machine, all four are available via `:MasonInstall <name>`; system
