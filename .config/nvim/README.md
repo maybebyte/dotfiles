@@ -129,43 +129,13 @@ If the network is unavailable or slow, Neovim starts without plugins and display
 
 ## Testing
 
-The Lua spec suite is the primary developer harness:
+This repository currently has no maintained automated test harness. The
+previous harness was intentionally removed to create a clean slate for a
+future testing strategy.
 
-```bash
-make test           # Run :PlenaryBustedDirectory tests/spec/ headless
-```
-
-Inside an interactive nvim session, run `:PlenaryBustedDirectory tests/spec/`
-to drive the same suite (developer-loop reload pattern).
-
-`make test-bash` is the **PORT-15 perf-parity carve-out** — a single-script
-runner for `tests/startup/tests/profile-delta.sh`, which remains the
-maintained source of truth for the startup-regression check because the
-Lua port (`tests/spec/profile_delta_spec.lua`) is `pending()` under Qubes
-triple-nested spawn noise. The Makefile recipe tolerates the carve-out
-target via a `|| echo` clause documented at the recipe site. See
-`.planning/phases/08-performance-spec/08-01-SUMMARY.md` for the trial
-record and the +28.95 ms gap rationale.
-
-### Test prerequisites
-
-Wave B/C specs invoke real binaries (no mocking — see decision D-08):
-
-- `black` — required for PORT-06/07/08 (formatter specs).
-- One of `pylint`, `ruff`, `mypy` — required for PORT-09/10 (linter specs).
-- `gopls` — required for PORT-13 (gopls inlay hints attach + extmark probe).
-- `lua-language-server` — required for PORT-13 (lua_ls inlay hints attach).
-- `yaml-language-server` — required for PORT-14 (capability guard negative path).
-- `baseline-startuptime.txt` (project file at `.planning/phases/01-startup-init-hygiene/`)
-  — reference startup time used by both `tests/spec/profile_delta_spec.lua` and
-  `tests/startup/tests/profile-delta.sh` (PORT-15). Unlike the entries above this
-  is a `.planning/`-tree file, not an external binary; restored from the v1.0
-  archive at `.planning/milestones/v1.0-phases/01-startup-init-hygiene/`.
-
-Specs hard-fail (no `pending()` skip) when these are absent. To install on
-this machine, all four are available via `:MasonInstall <name>`; system
-packages also work (`/usr/bin/black`, `/usr/bin/pylint`, `/usr/bin/ruff`,
-`/usr/bin/mypy`).
+Use direct Neovim sanity checks when changing runtime behavior, such as
+`:checkhealth` and `:Lazy profile`. These checks verify the local editor
+state, but they are not a replacement automated harness.
 
 ## Directory Structure
 

@@ -13,9 +13,8 @@ Neovim 0.11+.
 :ConformInfo            Check formatters (skips missing silently)
 :MasonInstall <tool>    Install LSP/formatter/linter
 NVIM_CMP_DEBUG=1 nvim   Debug completion issues
-make test               Run plenary spec suite headless
-:PlenaryBustedDirectory tests/spec/   Drive specs interactively
-# test prereqs          See README "Test prerequisites" (black + python linter)
+# Testing note: this repo currently has no maintained automated test harness.
+# Use direct Neovim sanity checks for runtime changes; do not recreate old test entry points.
 ```
 
 **Git:** This config is in a bare dotfiles repo. For all git operations on `~/.config/nvim/`:

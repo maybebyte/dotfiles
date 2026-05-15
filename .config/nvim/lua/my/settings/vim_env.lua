@@ -4,5 +4,3 @@ vim.env.XDG_CONFIG_HOME = vim.env.XDG_CONFIG_HOME or os.getenv("HOME") .. "/.con
 vim.env.XDG_DATA_HOME = vim.env.XDG_DATA_HOME or os.getenv("HOME") .. "/.local/share"
 vim.env.XDG_STATE_HOME = vim.env.XDG_STATE_HOME or os.getenv("HOME") .. "/.local/state"
 
--- Allow tests/spec/helpers to be required interactively (D-19)
-package.path = package.path .. ";./?.lua;./?/init.lua"

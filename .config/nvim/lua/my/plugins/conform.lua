@@ -57,8 +57,8 @@ return {
 				},
 			},
 			-- Format-on-save gate. Explicit if/else (not Lua ternary) — `x and false or y`
-			-- evaluates to y when x is true and middle value is false, which broke the
-			-- autoformat-buffer test.
+			-- evaluates to y when x is true and middle value is false, which broke
+			-- buffer-local disabling.
 			format_on_save = function(bufnr)
 				local effective = vim.b[bufnr].autoformat
 				if effective == nil then
