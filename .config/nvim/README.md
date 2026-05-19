@@ -680,7 +680,7 @@ For non-Qubes systems, either:
 | Perl | perltidy |
 | Python | black |
 | Shell | shfmt |
-| Terraform | terraform_fmt (requires `terraform` CLI in `PATH`; not in Mason registry) |
+| Terraform | terraform_fmt (shells out to the `terraform` CLI, installed via Mason) |
 | TeX | tex-fmt |
 | XML | xmlformatter |
 
