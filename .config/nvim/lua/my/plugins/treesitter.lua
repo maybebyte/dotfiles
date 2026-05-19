@@ -23,6 +23,7 @@ return {
 			"diff",
 			"gitcommit",
 			"go",
+			"hcl",
 			"html",
 			"latex",
 			"lua",
@@ -30,6 +31,7 @@ return {
 			"markdown",
 			"python",
 			"query",
+			"terraform",
 			"vim",
 			"vimdoc",
 			"yaml",
@@ -108,5 +110,10 @@ return {
 	},
 	config = function(_, opts)
 		require("nvim-treesitter.configs").setup(opts)
+
+		-- `.tfvars` files get filetype `terraform-vars` (Neovim 0.11+ builtin),
+		-- but no dedicated treesitter parser exists. Reuse the `terraform`
+		-- parser for highlighting/text-objects on those buffers.
+		vim.treesitter.language.register("terraform", "terraform-vars")
 	end,
 }

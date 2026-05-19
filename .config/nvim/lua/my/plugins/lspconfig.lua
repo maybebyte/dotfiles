@@ -160,11 +160,18 @@ local function setup_lsp_servers()
 		},
 	})
 	-- bashls, rust_analyzer, cssls, html, jsonls, yamlls, stylelint_lsp,
-	-- marksman: use defaults; capabilities are injected via the '*' config
-	-- above, and mason-lspconfig.automatic_enable picks them up after setup.
+	-- marksman, terraformls: use defaults; capabilities are injected via the
+	-- '*' config above, and mason-lspconfig.automatic_enable picks them up
+	-- after setup.
 	-- stylelint_lsp default filetypes include JS/TS which can duplicate ts_ls
 	-- diagnostics on mixed projects; restrict reactively if friction surfaces.
-	require("mason-lspconfig").setup()
+	-- tflint is excluded: nvim-lint already runs tflint via linters_by_ft, and
+	-- both paths produce identical diagnostics — double-reporting otherwise.
+	require("mason-lspconfig").setup({
+		automatic_enable = {
+			exclude = { "tflint" },
+		},
+	})
 end
 
 return {

@@ -3,7 +3,8 @@
 -- Sole toolchain provisioner. `lazy = false` is mandatory: `event = "VimEnter"`
 -- or `VeryLazy` silently skip run_on_start (plugin not loaded yet when VimEnter
 -- fires). Manual-only tools (not in the Mason registry): perltidy (`cpan install
--- Perl::Tidy`), clang-format (system package).
+-- Perl::Tidy`), clang-format (system package), terraform (system package /
+-- `tfenv` / `asdf`; needed by conform's `terraform_fmt`).
 return {
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	lazy = false,
@@ -23,6 +24,7 @@ return {
 			"yamlls",
 			"stylelint_lsp",
 			"marksman",
+			"terraformls",
 
 			-- Formatters (from conform.lua formatters_by_ft — Mason registry names)
 			"stylua",
@@ -42,6 +44,7 @@ return {
 			"pylint",
 			"ruff",
 			"erb-lint",
+			"tflint",
 		},
 		auto_update = false, -- install-missing only, no silent drift
 		run_on_start = true, -- async install on VimEnter
