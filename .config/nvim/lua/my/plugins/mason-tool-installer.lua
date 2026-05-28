@@ -23,6 +23,7 @@ return {
 			"yamlls",
 			"stylelint_lsp",
 			"marksman",
+			"terraformls",
 
 			-- Formatters (from conform.lua formatters_by_ft — Mason registry names)
 			"stylua",
@@ -32,6 +33,7 @@ return {
 			"shfmt",
 			"tex-fmt",
 			"xmlformatter",
+			"terraform", -- ships the `terraform` CLI; conform's terraform_fmt shells to `terraform fmt -`
 
 			-- Linters (from nvim-lint.lua linters_by_ft — Mason registry names)
 			"revive",
@@ -42,6 +44,7 @@ return {
 			"pylint",
 			"ruff",
 			"erb-lint",
+			"tflint",
 		},
 		auto_update = false, -- install-missing only, no silent drift
 		run_on_start = true, -- async install on VimEnter

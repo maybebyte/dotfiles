@@ -11,6 +11,7 @@ return {
 			html = { "erb_lint" },
 			markdown = { "markdownlint" },
 			python = { "mypy", "pylint", "ruff" },
+			terraform = { "tflint" },
 		}
 
 		-- NOTE: by default, erb_lint cmd and args are expecting a

@@ -680,6 +680,7 @@ For non-Qubes systems, either:
 | Perl | perltidy |
 | Python | black |
 | Shell | shfmt |
+| Terraform | terraform_fmt (shells out to the `terraform` CLI, installed via Mason) |
 | TeX | tex-fmt |
 | XML | xmlformatter |
 
@@ -695,9 +696,13 @@ For non-Qubes systems, either:
 | Markdown | markdownlint |
 | Python | mypy, pylint, ruff |
 | Ruby/ERB | erb_lint |
+| Terraform | tflint |
 
 > All linters above are auto-installed by `mason-tool-installer.nvim`, the
 > single source of truth for Mason tool provisioning.
+>
+> tflint runs with built-in rules by default; create a project-local
+> `.tflint.hcl` (via `tflint --init`) to enable plugin rules.
 
 </details>
 
