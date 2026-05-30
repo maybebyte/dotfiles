@@ -71,4 +71,8 @@ if status is-interactive
 	if command --search --quiet 'direnv'
 		direnv hook fish | source
 	end
+
+	if command --search --quiet 'goose'
+		goose term init fish | source
+	end
 end
