@@ -1,0 +1,148 @@
+GOOSE_TELEMETRY_ENABLED: true
+SECURITY_PROMPT_ENABLED: true
+SECURITY_PROMPT_THRESHOLD: 0.8
+extensions:
+  linear:
+    name: Linear
+    description: Linear MCP server for issues, projects, and comments
+    cmd: npx
+    args:
+      - -y
+      - mcp-remote
+      - https://mcp.linear.app/mcp
+    enabled: false
+    envs: {}
+    type: stdio
+    timeout: 300
+    available_tools: []
+  developer:
+    enabled: true
+    type: builtin
+    name: developer
+    description: Write and edit files, and execute shell commands
+    display_name: Developer
+    timeout: null
+    bundled: true
+    available_tools: []
+  tom:
+    enabled: false
+    type: platform
+    name: tom
+    description: Inject custom context into every turn via GOOSE_MOIM_MESSAGE_TEXT and GOOSE_MOIM_MESSAGE_FILE environment variables
+    display_name: Top Of Mind
+    bundled: true
+    available_tools: []
+  orchestrator:
+    enabled: false
+    type: platform
+    name: orchestrator
+    description: "Manage agent sessions: list, view, start, send messages, interrupt, and stop agents"
+    display_name: Orchestrator
+    bundled: true
+    available_tools: []
+  summarize:
+    enabled: true
+    type: platform
+    name: summarize
+    description: Load files/directories and get an LLM summary in a single call
+    display_name: Summarize
+    bundled: true
+    available_tools: []
+  analyze:
+    enabled: true
+    type: platform
+    name: analyze
+    description: "Analyze code structure with tree-sitter: directory overviews, file details, symbol call graphs"
+    display_name: Analyze
+    bundled: true
+    available_tools: []
+  todo:
+    enabled: true
+    type: platform
+    name: todo
+    description: Enable a todo list for goose so it can keep track of what it is doing
+    display_name: Todo
+    bundled: true
+    available_tools: []
+  extensionmanager:
+    enabled: false
+    type: platform
+    name: Extension Manager
+    description: Enable extension management tools for discovering, enabling, and disabling extensions
+    display_name: Extension Manager
+    bundled: true
+    available_tools: []
+  summon:
+    enabled: true
+    type: platform
+    name: summon
+    description: Load knowledge and delegate tasks to subagents
+    display_name: Summon
+    bundled: true
+    available_tools: []
+  code_execution:
+    enabled: true
+    type: platform
+    name: code_execution
+    description: Goose will make extension calls through code execution, saving tokens
+    display_name: Code Mode
+    bundled: true
+    available_tools: []
+  chatrecall:
+    enabled: true
+    type: platform
+    name: chatrecall
+    description: Search past conversations and load session summaries for contextual memory
+    display_name: Chat Recall
+    bundled: true
+    available_tools: []
+  skills:
+    enabled: true
+    type: platform
+    name: skills
+    description: Discover and provide skill instructions from filesystem and builtins
+    display_name: Skills
+    bundled: true
+    available_tools: []
+  apps:
+    enabled: false
+    type: platform
+    name: apps
+    description: Create and manage custom Goose apps through chat. Apps are HTML/CSS/JavaScript and run in sandboxed windows.
+    display_name: Apps
+    bundled: true
+    available_tools: []
+  memory:
+    enabled: false
+    type: builtin
+    name: memory
+    description: Tools to save and retrieve durable memories
+    display_name: Memory
+    timeout: 300
+    bundled: true
+    available_tools: []
+  tutorial:
+    enabled: false
+    type: builtin
+    name: tutorial
+    description: Access interactive tutorials and guides
+    display_name: Tutorial
+    timeout: 300
+    bundled: true
+    available_tools: []
+active_provider: chatgpt_codex
+providers:
+  chatgpt_codex:
+    enabled: true
+    model: gpt-5.5
+    configured: true
+slash_commands:
+  - command: research_codebase
+    recipe_path: /home/user/.config/goose/recipes/rpi-research.yaml
+  - command: create_plan
+    recipe_path: /home/user/.config/goose/recipes/rpi-plan.yaml
+  - command: implement_plan
+    recipe_path: /home/user/.config/goose/recipes/rpi-implement.yaml
+  - command: iterate_plan
+    recipe_path: /home/user/.config/goose/recipes/rpi-iterate.yaml
+GOOSE_MODE: auto
