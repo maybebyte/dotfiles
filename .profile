@@ -42,7 +42,6 @@ export \
 	PERLCRITIC="${XDG_CONFIG_HOME}/perlcritic/perlcritic.conf" \
 	PERLTIDY="${XDG_CONFIG_HOME}/perltidy/perltidy.conf"
 
-
 # Other miscellaneous variables
 export \
 	BROWSER='chromium' \
@@ -60,7 +59,8 @@ export FZF_DEFAULT_OPTS=" \
 --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
 --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284 \
 --color=selected-bg:#51576d \
---color=border:#737994,label:#c6d0f5"
+--color=border:#737994,label:#c6d0f5 \
+--preview='bat --style=numbers --color=always --line-range :500 {}'"
 
 # Prepend XDG_BIN_HOME to PATH.
 #
