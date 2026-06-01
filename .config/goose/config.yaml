@@ -1,7 +1,21 @@
 GOOSE_TELEMETRY_ENABLED: true
+GOOSE_AUTO_COMPACT_THRESHOLD: 0.5
+GOOSE_CONTEXT_STRATEGY: summarize
 SECURITY_PROMPT_ENABLED: true
 SECURITY_PROMPT_THRESHOLD: 0.8
 extensions:
+  context7:
+    name: context7
+    description: Context7 MCP server for up-to-date library documentation
+    cmd: npx
+    args:
+      - -y
+      - "@upstash/context7-mcp"
+    enabled: true
+    envs: {}
+    type: stdio
+    timeout: 300
+    available_tools: []
   linear:
     name: Linear
     description: Linear MCP server for issues, projects, and comments
@@ -33,7 +47,7 @@ extensions:
     bundled: true
     available_tools: []
   orchestrator:
-    enabled: false
+    enabled: true
     type: platform
     name: orchestrator
     description: "Manage agent sessions: list, view, start, send messages, interrupt, and stop agents"
