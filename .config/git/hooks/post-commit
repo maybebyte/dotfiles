@@ -1,7 +1,0 @@
-#!/bin/sh
-
-set -eu
-
-if command -v dijo > /dev/null 2>&1; then
-	dijo -c 'track-up Commits'
-fi
