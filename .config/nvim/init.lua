@@ -69,8 +69,13 @@ if lazy_ready then
 
 	local hl_overrides_group = vim.api.nvim_create_augroup("my_highlight_overrides", { clear = true })
 	local overrides = {
-		Normal  = { bg = "NONE", ctermbg = "NONE" },
-		NonText = { bg = "NONE", ctermbg = "NONE" },
+		-- update = true does a partial merge (Nvim 0.12+) instead of the
+		-- default full-replace, so each group keeps its colorscheme fg.
+		-- Full-replace here wipes Normal's fg, which crashes snacks.nvim's
+		-- gh module during :checkhealth (unguarded nil fg -> M.blend). See
+		-- folke/snacks.nvim#2662.
+		Normal  = { bg = "NONE", ctermbg = "NONE", update = true },
+		NonText = { bg = "NONE", ctermbg = "NONE", update = true },
 	}
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = hl_overrides_group,
