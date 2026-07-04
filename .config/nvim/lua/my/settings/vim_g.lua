@@ -8,6 +8,16 @@ if vim.g.inlay_hints == nil then
 	vim.g.inlay_hints = true
 end
 
+-- Disable unused language-host providers. This config uses no Python, Node,
+-- Perl, or Ruby remote plugins, so the language hosts are never needed.
+-- Setting these skips the startup provider probe (small startup win) and
+-- silences the corresponding :checkhealth vim.provider warnings. Re-enable a
+-- provider (and install its host, e.g. pynvim) only if a plugin requires it.
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 -- vim-gnupg configuration
 -- https://github.com/jamessan/vim-gnupg/issues/119
 -- https://github.com/jamessan/vim-gnupg/issues/32
