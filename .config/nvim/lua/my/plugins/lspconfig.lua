@@ -109,15 +109,6 @@ local function setup_lsp_servers()
 		},
 	})
 
-	-- pyright: no native inlay-hint support; users typically pair with
-	-- basedpyright or enable hints via ruff. Hints will not render for
-	-- this server regardless of supports_method result.
-	vim.lsp.config('pyright', {
-		settings = {
-			pyright = { disableLanguageServices = true },
-		},
-	})
-
 	-- Only ts_ls and gopls need explicit settings; inlayHints require
 	-- server-side enablement. Other servers use defaults; mason-lspconfig
 	-- automatic_enable picks them up after this function finishes.
@@ -159,7 +150,7 @@ local function setup_lsp_servers()
 			},
 		},
 	})
-	-- bashls, rust_analyzer, cssls, html, jsonls, yamlls, stylelint_lsp,
+	-- pyright, bashls, rust_analyzer, cssls, html, jsonls, yamlls, stylelint_lsp,
 	-- marksman, terraformls: use defaults; capabilities are injected via the
 	-- '*' config above, and mason-lspconfig.automatic_enable picks them up
 	-- after setup.
