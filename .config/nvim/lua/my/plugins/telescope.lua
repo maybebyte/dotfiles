@@ -144,6 +144,11 @@ return {
 			{ "<leader>sd" },
 			{ "<leader>ds" },
 			{ "<leader>ws" },
+
+			-- DAP extension keymaps
+			{ "<leader>dtb", desc = "[D]ebug [T]elescope [B]reakpoints" },
+			{ "<leader>dtc", desc = "[D]ebug [T]elescope [C]ommands" },
+			{ "<leader>dtf", desc = "[D]ebug [T]elescope [F]rames" },
 		},
 		cmd = { "Telescope" },
 		config = function()
