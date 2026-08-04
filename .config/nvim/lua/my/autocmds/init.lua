@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	pattern = "*",
 })
 
-vim.api.nvim_create_autocmd("VimEnter", {
+vim.api.nvim_create_autocmd({ "VimEnter", "FileType" }, {
 	callback = function()
 		vim.opt.formatoptions:remove({ "c", "r", "o" })
 	end,
