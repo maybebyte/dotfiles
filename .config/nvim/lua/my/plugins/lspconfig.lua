@@ -60,6 +60,14 @@ local function setup_keybinds_on_attach(bufnr)
 	)
 end
 
+local function inlay_hints_enabled(bufnr)
+	local buffer_override = vim.b[bufnr].inlay_hints
+	if buffer_override ~= nil then
+		return buffer_override
+	end
+	return vim.g.inlay_hints
+end
+
 local function setup_lsp_diagnostics()
 	vim.diagnostic.config({
 		virtual_text = true,
@@ -200,7 +208,7 @@ return {
 				-- textDocument/inlayHint. No-op otherwise — no error, no glitch.
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
 				if client and client:supports_method("textDocument/inlayHint") then
-					vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+					vim.lsp.inlay_hint.enable(inlay_hints_enabled(ev.buf), { bufnr = ev.buf })
 				end
 			end,
 		})
@@ -215,22 +223,24 @@ return {
 		Snacks.toggle.new({
 			name = "Inlay Hints (global)",
 			get = function()
-				return vim.lsp.inlay_hint.is_enabled()
+				return vim.g.inlay_hints
 			end,
 			set = function(v)
 				vim.g.inlay_hints = v
 				vim.lsp.inlay_hint.enable(v)
+				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+					local buffer_override = vim.b[bufnr].inlay_hints
+					if buffer_override ~= nil and vim.api.nvim_buf_is_loaded(bufnr) then
+						vim.lsp.inlay_hint.enable(buffer_override, { bufnr = bufnr })
+					end
+				end
 			end,
 		}):map("<leader>uH")
 
 		Snacks.toggle.new({
 			name = "Inlay Hints (buffer)",
 			get = function()
-				local buf = vim.b.inlay_hints
-				if buf == nil then
-					return vim.g.inlay_hints
-				end
-				return buf
+				return inlay_hints_enabled(0)
 			end,
 			set = function(v)
 				vim.b.inlay_hints = v
