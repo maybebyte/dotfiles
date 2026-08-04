@@ -10,6 +10,7 @@ return {
 	end,
 	opts = {
 		spec = {
+			{ "<leader>a", group = "AI/Claude Code" },
 			{ "<leader>s", group = "[S]earch" },
 			{ "<leader>g", group = "[G]it" },
 			{ "<leader>d", group = "[D]ocument/Delete" },
