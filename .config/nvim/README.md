@@ -541,8 +541,6 @@ Press `<leader>` and wait for which-key to show available bindings.
 | Key | Description |
 |-----|-------------|
 | `<leader>U` | Toggle undotree |
-| `<leader>uf` | Autoformat (global) |
-| `<leader>uF` | Autoformat (buffer) |
 | `<leader>uh` | Toggle inlay hints (buffer) |
 | `<leader>uH` | Toggle inlay hints (global) |
 | `<leader>L` | Toggle Lazy UI |
