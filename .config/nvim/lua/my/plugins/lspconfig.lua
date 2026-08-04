@@ -178,7 +178,7 @@ return {
 	"neovim/nvim-lspconfig",
 	lazy = true,
 	cmd = { "LspInfo", "LspInstall", "LspStart" },
-	event = { "BufReadPost", "BufNewFile", "FileType" },
+	event = "FileType",
 	dependencies = {
 		-- Mason for LSP server management (mason.nvim is top-level now; see mason.lua)
 		{ "williamboman/mason-lspconfig.nvim", version = "v2.*" },
