@@ -72,11 +72,26 @@ end
 -- severity is an optional vim.diagnostic.severity.* value.
 function M.diagnostic_goto(next, severity)
 	return function()
-		vim.diagnostic.jump({
+		local opts = {
 			count = (next and 1 or -1) * vim.v.count1,
 			severity = severity,
-			float = true,
-		})
+		}
+
+		if vim.fn.has("nvim-0.12") == 1 then
+			opts.on_jump = function(_, bufnr)
+				vim.diagnostic.open_float({
+					bufnr = bufnr,
+					scope = "cursor",
+					focus = false,
+				})
+			end
+		else
+			-- `on_jump` was added in 0.12; `float` remains the supported
+			-- equivalent on the minimum supported Neovim 0.11 release.
+			opts.float = { scope = "cursor", focus = false }
+		end
+
+		vim.diagnostic.jump(opts)
 	end
 end
 
