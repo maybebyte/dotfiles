@@ -1,5 +1,5 @@
 vim.opt.backup = true
-vim.opt.backupdir = vim.env.XDG_STATE_HOME .. "/nvim/backup"
+vim.opt.backupdir = vim.fn.stdpath("state") .. "/backup//"
 
 vim.opt.diffopt:append("iwhiteall")
 
