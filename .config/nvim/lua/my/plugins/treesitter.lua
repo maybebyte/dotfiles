@@ -12,9 +12,7 @@ return {
 	},
 	lazy = true,
 	event = { "BufReadPost", "BufNewFile", "FileType" },
-	build = function()
-		vim.cmd("TSUpdate")
-	end,
+	build = ":TSUpdate",
 	opts = {
 		ensure_installed = {
 			"bash",
