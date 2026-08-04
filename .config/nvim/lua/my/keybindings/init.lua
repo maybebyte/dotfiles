@@ -15,7 +15,7 @@ vim.keymap.set("n", "<esc>", function()
 	vim.cmd("nohlsearch")
 end)
 
-vim.keymap.set({ "v", "n" }, "<Space>", "<Nop>", { silent = true })
+vim.keymap.set({ "x", "n" }, "<Space>", "<Nop>", { silent = true })
 
 -- Smart j/k navigation for wrapped lines
 -- Without count: move by visual lines (respects wrap)
@@ -43,14 +43,14 @@ vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Pr
 vim.keymap.set("x", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("x", ">", ">gv", { desc = "Indent right and reselect" })
 
-vim.keymap.set({ "v", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
+vim.keymap.set({ "x", "n" }, "<leader>y", '"+y', { desc = "Copy to CLIPBOARD." })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Copy lines to CLIPBOARD." })
 
 vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from CLIPBOARD (after cursor)." })
 vim.keymap.set("n", "<leader>P", '"+P', { desc = "Paste from CLIPBOARD (before cursor)." })
 
-vim.keymap.set("", ";", ":", { desc = "Semicolon swapped with colon to protect pinky." })
-vim.keymap.set("", ":", ";", { desc = "Colon swapped with semicolon to protect pinky." })
+vim.keymap.set({ "n", "x", "o" }, ";", ":", { desc = "Semicolon swapped with colon to protect pinky." })
+vim.keymap.set({ "n", "x", "o" }, ":", ";", { desc = "Colon swapped with semicolon to protect pinky." })
 
 vim.keymap.set("n", "<leader>S", ":%s//g<Left><Left>", { desc = "Replace all." })
 
@@ -66,8 +66,8 @@ vim.keymap.set("n", "<leader>fm", function()
 	vim.cmd.Explore()
 end, { desc = "NetRW (file manager)" })
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down a line." })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up a line." })
+vim.keymap.set("x", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down a line." })
+vim.keymap.set("x", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up a line." })
 
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Keep cursor in the same place when joining lines." })
 

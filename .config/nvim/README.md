@@ -288,7 +288,8 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 
 - **Leader key**: `<Space>`
 - **Local leader**: `,`
-- **Important**: `;` and `:` are swapped (pinky protection)
+- **Important**: `;` and `:` are swapped in Normal, Visual, and
+  Operator-pending modes (pinky protection)
 
 Press `<leader>` and wait for which-key to show available bindings.
 
@@ -433,13 +434,13 @@ Press `<leader>` and wait for which-key to show available bindings.
 
 | Key | Mode | Description |
 |-----|------|-------------|
-| `<leader>y` | n, v | Yank to system clipboard |
+| `<leader>y` | n, x | Yank to system clipboard |
 | `<leader>Y` | n | Yank lines to system clipboard |
 | `<leader>p` | n | Paste from clipboard (after) |
 | `<leader>P` | n | Paste from clipboard (before) |
 | `<leader>S` | n | Substitute all |
 | `<` / `>` | x | Indent and reselect |
-| `J` / `K` | v | Move selection down/up |
+| `J` / `K` | x | Move selection down/up |
 | `<leader>dws` | n | Delete trailing whitespace |
 | `<leader>dnl` | n | Delete trailing newlines |
 | `<leader>frm` | n, v | Format file or range |
