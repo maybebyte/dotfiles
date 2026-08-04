@@ -98,12 +98,30 @@ end
 
 local function setup_lsp_servers()
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
+	local lua_root_markers = {
+		[".emmyrc.json"] = true,
+		[".luarc.json"] = true,
+		[".luarc.jsonc"] = true,
+		[".luacheckrc"] = true,
+		[".stylua.toml"] = true,
+		["stylua.toml"] = true,
+		["selene.toml"] = true,
+		["selene.yml"] = true,
+		[".git"] = true,
+	}
 
 	vim.lsp.config('*', {
 		capabilities = capabilities,
 	})
 
 	vim.lsp.config('lua_ls', {
+		-- Treat all markers equally so the nearest project root wins over
+		-- broad user-level lint configuration in an ancestor directory.
+		root_dir = function(bufnr, on_dir)
+			on_dir(vim.fs.root(bufnr, function(name)
+				return lua_root_markers[name] == true
+			end))
+		end,
 		settings = {
 			Lua = {
 				runtime = { version = "LuaJIT" },
