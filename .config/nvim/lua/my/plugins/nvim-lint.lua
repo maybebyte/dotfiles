@@ -19,8 +19,38 @@ return {
 		--
 		-- Unsure whether to mention this to
 		-- https://github.com/williamboman/mason.nvim/issues
-		require("lint").linters.erb_lint.cmd = "erblint"
-		require("lint").linters.erb_lint.args = { "--format", "compact" }
+		local erb_lint = require("lint").linters.erb_lint
+		local parse_erb_lint = erb_lint.parser
+		erb_lint.cmd = "erblint"
+		erb_lint.args = { "--format", "compact" }
+		erb_lint.stream = "both"
+		erb_lint.parser = function(output, bufnr, cwd)
+			local diagnostics = parse_erb_lint(output, bufnr, cwd)
+
+			-- erb_lint exits with code 1 for ordinary findings, so the exit code
+			-- alone cannot distinguish findings from a Ruby runtime failure.
+			for line in output:gmatch("[^\r\n]+") do
+				-- A valid compact finding can end in an exception-like class name.
+				if not line:match("^.+:%d+:%d+:%s") then
+					local exception = line:match("%(([%w_:]*Error)%)%s*$")
+						or line:match("%(([%w_:]*Exception)%)%s*$")
+					if exception then
+						local message = line:match(":%s+(.+)%s+%(" .. exception .. "%)%s*$")
+						local details = message and message .. " (" .. exception .. ")" or line
+						table.insert(diagnostics, {
+							lnum = 0,
+							col = 0,
+							message = "erb_lint failed: " .. details,
+							severity = vim.diagnostic.severity.ERROR,
+							source = "erb-lint",
+						})
+						break
+					end
+				end
+			end
+
+			return diagnostics
+		end
 
 		-- Per-buffer debounced try_lint (150ms). Diverges from the LazyVim
 		-- shared-timer pattern so saves in buffer A do not cancel pending lint
