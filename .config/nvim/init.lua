@@ -52,7 +52,8 @@ require("my.settings")
 
 -- Suppress clipboard provider probe during startup.
 -- If my.settings (or any future module pre-VeryLazy) sets vim.opt.clipboard,
--- save its value and clear it; the VeryLazy callback restores it.
+-- save its value and clear it. The normal path restores it at VeryLazy;
+-- the bootstrap-failure path schedules a deferred restore.
 local saved_clipboard = vim.opt.clipboard:get()
 vim.opt.clipboard = ""
 
@@ -99,11 +100,15 @@ end
 
 require("my.autocmds")
 
-local function setup_deferred_init()
-	require("my.keybindings")
+local function restore_clipboard()
 	if saved_clipboard and #saved_clipboard > 0 then
 		vim.opt.clipboard = saved_clipboard
 	end
+end
+
+local function setup_deferred_init()
+	require("my.keybindings")
+	restore_clipboard()
 end
 
 if lazy_ready then
@@ -117,5 +122,6 @@ if lazy_ready then
 		desc = "Post-startup deferred init (keymaps, clipboard restore)",
 	})
 else
-	setup_deferred_init()
+	require("my.keybindings")
+	vim.schedule(restore_clipboard)
 end
