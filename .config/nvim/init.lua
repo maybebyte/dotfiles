@@ -99,17 +99,23 @@ end
 
 require("my.autocmds")
 
--- Defer non-essential init until lazy.nvim fires VeryLazy.
--- VeryLazy runs after LazyDone + VimEnter in interactive mode. Headless
--- startup checks can trigger it explicitly with `doautocmd User VeryLazy`.
-vim.api.nvim_create_autocmd("User", {
-	pattern = "VeryLazy",
-	once = true,
-	callback = function()
-		require("my.keybindings")
-		if saved_clipboard and #saved_clipboard > 0 then
-			vim.opt.clipboard = saved_clipboard
-		end
-	end,
-	desc = "Post-startup deferred init (keymaps, clipboard restore)",
-})
+local function setup_deferred_init()
+	require("my.keybindings")
+	if saved_clipboard and #saved_clipboard > 0 then
+		vim.opt.clipboard = saved_clipboard
+	end
+end
+
+if lazy_ready then
+	-- Defer non-essential init until lazy.nvim fires VeryLazy.
+	-- VeryLazy runs after LazyDone + VimEnter in interactive mode. Headless
+	-- startup checks can trigger it explicitly with `doautocmd User VeryLazy`.
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "VeryLazy",
+		once = true,
+		callback = setup_deferred_init,
+		desc = "Post-startup deferred init (keymaps, clipboard restore)",
+	})
+else
+	setup_deferred_init()
+end
