@@ -60,7 +60,6 @@ After Neovim opens, verify the installation:
 | Git | Plugin installation and version control |
 | Ripgrep (`rg`) | Telescope live grep functionality |
 | Nerd Font | Icons via nvim-web-devicons |
-| `gmake` | Building telescope-fzf-native (all platforms) |
 | `timeout` | GNU coreutils command used in lazy.nvim bootstrap |
 
 ### Optional
@@ -69,6 +68,7 @@ After Neovim opens, verify the installation:
 |------------|---------|
 | Node.js | GitHub Copilot |
 | GitHub Copilot subscription | AI-powered code completion (authenticate via `:Copilot auth`) |
+| `make` | Native FZF sorting for Telescope |
 | Formatters/Linters | See [External Tools](#external-tools) |
 
 ### XDG Base Directory Support
@@ -226,7 +226,7 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 | Plugin | Purpose |
 |--------|---------|
 | [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) v0.2.0 | Fuzzy finder |
-| [telescope-fzf-native.nvim](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | FZF sorter (requires gmake) |
+| [telescope-fzf-native.nvim](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | FZF sorter (requires `make`) |
 | [telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim) | Telescope as vim.ui.select |
 | [telescope-dap.nvim](https://github.com/nvim-telescope/telescope-dap.nvim) | DAP integration |
 | [flash.nvim](https://github.com/folke/flash.nvim) | Enhanced motions |
@@ -660,11 +660,11 @@ For non-Qubes systems, either:
 ## External Tools
 
 <details>
-<summary><strong>Required</strong></summary>
+<summary><strong>Optional</strong></summary>
 
 | Tool | Purpose |
 |------|---------|
-| `gmake` | Building telescope-fzf-native |
+| `make` | Building telescope-fzf-native for native sorting |
 
 </details>
 
@@ -731,7 +731,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 |---------|----------|
 | Plugins not loading | Check network; 10-second timeout requires GNU `timeout` command |
 | Backup directory issues | Uses `$XDG_STATE_HOME/nvim/backup` (defaults to `~/.local/state/nvim/backup`) |
-| gmake not found | Install via Homebrew/ports on BSD/macOS; on Linux, symlink: `ln -s /usr/bin/make /usr/bin/gmake` |
+| Native FZF sorter unavailable | Install `make`, then run `:Lazy build telescope-fzf-native.nvim` |
 | timeout command not found | Install GNU coreutils, or modify `init.lua` bootstrap section |
 | Git features not appearing | gitsigns only loads in git repositories (intentional) |
 | GPG errors | vim-gnupg uses Qubes OS-specific wrapper by default; customize `vim_g.lua` |

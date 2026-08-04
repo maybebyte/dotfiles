@@ -118,9 +118,9 @@ return {
 			"nvim-telescope/telescope-ui-select.nvim",
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
-				build = "gmake",
+				build = "make",
 				cond = function()
-					return vim.fn.executable("gmake") == 1
+					return vim.fn.executable("make") == 1
 				end,
 			},
 		},
@@ -154,7 +154,7 @@ return {
 					},
 				},
 			})
-			require("telescope").load_extension("fzf")
+			pcall(require("telescope").load_extension, "fzf")
 
 			-- Setup keymaps by functionality groups
 			setup_file_navigation_keymaps()
