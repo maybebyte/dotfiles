@@ -165,11 +165,12 @@ local function setup_lsp_servers()
 	-- after setup.
 	-- stylelint_lsp default filetypes include JS/TS which can duplicate ts_ls
 	-- diagnostics on mixed projects; restrict reactively if friction surfaces.
-	-- tflint is excluded: nvim-lint already runs tflint via linters_by_ft, and
-	-- both paths produce identical diagnostics — double-reporting otherwise.
+	-- These tool-only clients are excluded from automatic LSP enablement:
+	-- Conform owns StyLua formatting, while nvim-lint owns Ruff and TFLint
+	-- diagnostics. Starting their LSP clients would duplicate that work.
 	require("mason-lspconfig").setup({
 		automatic_enable = {
-			exclude = { "tflint" },
+			exclude = { "ruff", "stylua", "tflint" },
 		},
 	})
 end
