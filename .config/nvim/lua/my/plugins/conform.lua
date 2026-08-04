@@ -3,6 +3,19 @@
 return {
 	"stevearc/conform.nvim",
 	lazy = true,
+	keys = {
+		{
+			"<leader>frm",
+			function()
+				require("conform").format({
+					lsp_format = "fallback",
+					async = false,
+				})
+			end,
+			mode = { "n", "v" },
+			desc = "Format file or range",
+		},
+	},
 	ft = {
 		"c",
 		"css",
@@ -61,13 +74,5 @@ return {
 				},
 			},
 		})
-
-		-- Format keymap
-		vim.keymap.set({ "n", "v" }, "<leader>frm", function()
-			require("conform").format({
-				lsp_fallback = true,
-				async = false,
-			})
-		end, { desc = "Format file or range" })
 	end,
 }
