@@ -8,7 +8,7 @@ return {
 		require("lint").linters_by_ft = {
 			go = { "revive" },
 			lua = { "luacheck", "selene" },
-			html = { "erb_lint" },
+			eruby = { "erb_lint" },
 			markdown = { "markdownlint" },
 			python = { "mypy", "pylint", "ruff" },
 			terraform = { "tflint" },
