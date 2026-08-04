@@ -280,7 +280,7 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 
 | Plugin | Purpose |
 |--------|---------|
-| [undotree](https://github.com/mbbill/undotree) | Undo history visualization |
+| [undotree](https://github.com/jiaoshijie/undotree) | Undo history visualization |
 | [zen-mode.nvim](https://github.com/folke/zen-mode.nvim) | Distraction-free editing |
 | [vim-gnupg](https://github.com/jamessan/vim-gnupg) | GPG file encryption |
 
