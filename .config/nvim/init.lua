@@ -52,7 +52,8 @@ require("my.settings")
 
 -- Suppress clipboard provider probe during startup.
 -- If my.settings (or any future module pre-VeryLazy) sets vim.opt.clipboard,
--- save its value and clear it; the VeryLazy callback restores it.
+-- save its value and clear it. The normal path restores it at VeryLazy;
+-- the bootstrap-failure path schedules a deferred restore.
 local saved_clipboard = vim.opt.clipboard:get()
 vim.opt.clipboard = ""
 
@@ -99,17 +100,28 @@ end
 
 require("my.autocmds")
 
--- Defer non-essential init until lazy.nvim fires VeryLazy.
--- VeryLazy runs after LazyDone + VimEnter in interactive mode. Headless
--- startup checks can trigger it explicitly with `doautocmd User VeryLazy`.
-vim.api.nvim_create_autocmd("User", {
-	pattern = "VeryLazy",
-	once = true,
-	callback = function()
-		require("my.keybindings")
-		if saved_clipboard and #saved_clipboard > 0 then
-			vim.opt.clipboard = saved_clipboard
-		end
-	end,
-	desc = "Post-startup deferred init (keymaps, clipboard restore)",
-})
+local function restore_clipboard()
+	if saved_clipboard and #saved_clipboard > 0 then
+		vim.opt.clipboard = saved_clipboard
+	end
+end
+
+local function setup_deferred_init()
+	require("my.keybindings")
+	restore_clipboard()
+end
+
+if lazy_ready then
+	-- Defer non-essential init until lazy.nvim fires VeryLazy.
+	-- VeryLazy runs after LazyDone + VimEnter in interactive mode. Headless
+	-- startup checks can trigger it explicitly with `doautocmd User VeryLazy`.
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "VeryLazy",
+		once = true,
+		callback = setup_deferred_init,
+		desc = "Post-startup deferred init (keymaps, clipboard restore)",
+	})
+else
+	require("my.keybindings")
+	vim.schedule(restore_clipboard)
+end
