@@ -26,7 +26,7 @@ local function lsp_root(bufnr, buf_path)
 	local best_prefix
 	local best_len = 0
 	for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
-		local folders = client.config and client.config.workspace_folders
+		local folders = client.workspace_folders
 		if folders then
 			for _, folder in ipairs(folders) do
 				-- URI is "file:///..." — decode before compare.
