@@ -4,9 +4,7 @@ return {
 	ft = { "norg" },
 	cmd = { "Neorg" },
 	version = "v9.3.0",
-	build = function()
-		vim.cmd("Neorg sync-parsers")
-	end,
+	build = ":Neorg sync-parsers",
 	config = function()
 		require("neorg").setup({
 			load = {
