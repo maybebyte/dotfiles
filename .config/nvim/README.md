@@ -690,7 +690,7 @@ For non-Qubes systems, either:
 
 | Language | Linters |
 |----------|---------|
-| Go | golangci-lint (aggregates ~100+ Go linters; honors `.golangci.yml` in project root) |
+| Go | revive |
 | Lua | luacheck, selene |
 | Markdown | markdownlint |
 | Python | mypy, pylint, ruff |
