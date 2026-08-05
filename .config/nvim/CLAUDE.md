@@ -2,7 +2,7 @@
 
 Modular Lua config: lazy.nvim, LSP (Mason v2), nvim-cmp, treesitter, conform, nvim-lint.
 
-Neovim 0.11+.
+Neovim 0.12.0+ (hard floor: `nvim-treesitter` `main` errors below 0.12).
 
 ## Commands
 
@@ -16,6 +16,22 @@ NVIM_CMP_DEBUG=1 nvim   Debug completion issues
 # Testing note: this repo currently has no maintained automated test harness.
 # Use direct Neovim sanity checks for runtime changes; do not recreate old test entry points.
 ```
+
+## Treesitter
+
+On the `main` branch. There is no `nvim-treesitter.configs` — parsers
+come from `require("nvim-treesitter").install(...)`, and highlighting,
+indent, and text objects are enabled by `FileType` autocommands in
+`lua/my/plugins/treesitter.lua`. Requires `tree-sitter-cli` 0.26.1+ on
+`PATH`, which mason-tool-installer does *not* provide.
+
+Two API traps in that file, both load-bearing:
+
+- `vim.treesitter.language.add()` returns `nil, err`; it does not raise.
+  Guard on the return value — a `pcall` around it is inert.
+- `vim.treesitter.query.get()` *does* assert when no parser exists, so
+  nothing may call it until `add()` has confirmed one. Both paths go
+  through the `resolve_lang()` helper.
 
 **Git:** This config is in a bare dotfiles repo. For all git operations on `~/.config/nvim/`:
 `git --git-dir=$HOME/.dotfiles --work-tree=$HOME <command>`

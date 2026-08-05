@@ -56,11 +56,14 @@ After Neovim opens, verify the installation:
 
 | Dependency | Purpose |
 |------------|---------|
-| Neovim 0.11+ | Required for `vim.o.winborder` feature; 0.10+ minimum for `vim.uv` |
+| Neovim 0.12.0+ | Hard floor: `nvim-treesitter` `main` errors below 0.12 (`vim.o.winborder` needs only 0.11) |
 | Git | Plugin installation and version control |
 | Ripgrep (`rg`) | Telescope live grep functionality |
 | Nerd Font | Icons via nvim-web-devicons |
 | `timeout` | GNU coreutils command used in lazy.nvim bootstrap |
+| `tree-sitter-cli` 0.26.1+ | Compiles Treesitter parsers. **Not** provisioned by mason-tool-installer |
+| C compiler (`cc`/`gcc`) | Compiles Treesitter parsers |
+| `curl` and `tar` | Downloads and unpacks parser sources (`nvim-treesitter` `main` requires both) |
 
 ### Optional
 
@@ -217,9 +220,18 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 
 | Plugin | Purpose |
 |--------|---------|
-| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax highlighting |
-| [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) | Syntax-aware text objects |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) (`main`) | Syntax highlighting and indent |
+| [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) (`main`) | Syntax-aware text objects |
 | [nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context) | Sticky context header |
+
+`nvim-treesitter` and `nvim-treesitter-textobjects` are pinned to the
+`main` branch (`nvim-treesitter-context` tracks its own default branch).
+`master` is frozen upstream and is
+incompatible with Neovim 0.12. On `main` there is no
+`nvim-treesitter.configs` — parsers come from
+`require("nvim-treesitter").install(...)`, and highlighting, indent, and
+text objects are enabled by `FileType` autocommands in
+`lua/my/plugins/treesitter.lua`.
 
 ### Navigation
 
@@ -272,7 +284,6 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 
 | Plugin | Purpose |
 |--------|---------|
-| [neorg](https://github.com/nvim-neorg/neorg) v9.3.0 | Note-taking (workspace: `~/neorg`) |
 | [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight TODO/FIXME/etc. |
 | [markdown-toc.nvim](https://github.com/hedyhli/markdown-toc.nvim) | Markdown table of contents |
 
@@ -493,12 +504,12 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `aa` / `ia` | o, x | Select parameter (outer/inner) |
 | `af` / `if` | o, x | Select function (outer/inner) |
 | `ac` / `ic` | o, x | Select class (outer/inner) |
-| `]a` / `[a` | n | Next/previous parameter start |
-| `]m` / `[m` | n | Next/previous function start |
-| `]]` / `[[` | n | Next/previous class start |
-| `]A` / `[A` | n | Next/previous parameter end |
-| `]M` / `[M` | n | Next/previous function end |
-| `][` / `[]` | n | Next/previous class end |
+| `]a` / `[a` | n, x, o | Next/previous parameter start |
+| `]m` / `[m` | n, x, o | Next/previous function start |
+| `]]` / `[[` | n, x, o | Next/previous class start |
+| `]A` / `[A` | n, x, o | Next/previous parameter end |
+| `]M` / `[M` | n, x, o | Next/previous function end |
+| `][` / `[]` | n, x, o | Next/previous class end |
 | `<leader>lp` | n | Swap next parameter |
 | `<leader>hp` | n | Swap previous parameter |
 | `<leader>jf` | n | Swap next function |
@@ -630,20 +641,6 @@ vim.cmd("colorscheme catppuccin-frappe")
 
 Also update your preferred colorscheme plugin in `lua/my/plugins/`.
 
-### Neorg Workspace
-
-Default workspace path is `~/neorg`. Customize in `lua/my/plugins/neorg.lua`:
-
-```lua
-["core.dirman"] = {
-    config = {
-        workspaces = {
-            neorg = "~/neorg",  -- Change this path
-        },
-    },
-},
-```
-
 ### Important: vim_g.lua Customization
 
 The `vim_g.lua` file contains Qubes OS-specific GPG wrapper configuration:
@@ -737,6 +734,53 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 | Copilot not working | Run `:Copilot auth` and ensure you have an active subscription |
 | Mason tools not working | Ensure Mason bin path is in `$PATH`, or use system-installed tools |
 | Help files open in ZenMode | Intentional behavior for focused reading (see `lua/my/autocmds/init.lua`) |
+
+### Neovim 0.12 Markdown Tree-sitter error (resolved)
+
+Opening Markdown containing fenced code blocks used to report:
+
+```text
+vim.schedule callback: .../vim/treesitter.lua:197:
+attempt to call method 'range' (a nil value)
+```
+
+This was a compatibility failure between Neovim 0.12 and the frozen
+`master` branch of `nvim-treesitter`, not a cursor-movement problem. The
+old `set-lang-from-info-string!` directive treated a capture list as a
+single `TSNode`; a redraw or cursor move merely resumed asynchronous
+parsing and exposed the error.
+
+`:TSUpdate` could not fix it, because the incompatible code was in the
+plugin's Lua layer. **Migrating to the `main` branch resolved it.** If
+the error reappears, verify that `nvim-treesitter` is still on `main`
+(`:Lazy`) rather than pinned back to `master`.
+
+- [Exact upstream error report](https://github.com/nvim-treesitter/nvim-treesitter/issues/8618)
+- [`main` branch migration requirements](https://github.com/nvim-treesitter/nvim-treesitter/blob/main/README.md)
+
+### Treesitter parsers fail to install or `:TSUpdate` does nothing
+
+`main` shells out to `tree-sitter-cli` to compile every parser. Confirm
+it is on `PATH` and recent enough:
+
+```bash
+tree-sitter --version   # must be >= 0.26.1
+```
+
+`:checkhealth nvim-treesitter` reports the CLI, `tar`, `curl`, and the
+install directory — it does *not* check for a C compiler. A missing one
+surfaces instead as `Error during "tree-sitter build"` on screen and in
+`:messages`.
+
+Because the plugin is lazy-loaded, run `:checkhealth` only after opening
+a real file; in a session where no `FileType` has fired it reports
+`No healthcheck found for "nvim-treesitter"`.
+
+Note that `:TSUpdate` only refreshes parsers that are *already*
+installed — first-time provisioning comes from the
+`require("nvim-treesitter").install(...)` call in
+`lua/my/plugins/treesitter.lua`, which runs asynchronously over the
+network.
 
 ---
 
