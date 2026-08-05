@@ -2,6 +2,9 @@
 return {
 	"tpope/vim-fugitive",
 	lazy = true,
+	dependencies = {
+		"tpope/vim-rhubarb",
+	},
 	cmd = {
 		"Git",
 		"Ggrep",
@@ -16,6 +19,7 @@ return {
 		"Gtabedit",
 		"Gpedit",
 		"Gdrop",
+		"GBrowse",
 		"Gread",
 		"Gwrite",
 		"Gwq",
