@@ -3,9 +3,8 @@ local function get_formatting_config()
 	local lspkind = require("lspkind")
 	return {
 		expandable_indicator = true,
-		fields = { "abbr", "kind" },
+		fields = { "abbr", "icon", "kind" },
 		format = lspkind.cmp_format({
-			mode = "symbol_text",
 			maxwidth = 50,
 			ellipsis_char = "…",
 			show_labelDetails = true,
