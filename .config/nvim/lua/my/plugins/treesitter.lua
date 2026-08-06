@@ -390,6 +390,21 @@ return {
 			return vim.fn.executable(tool) == 0
 		end, { "tree-sitter", "curl", "tar" })
 
+		-- `tree-sitter build` shells out once more, to the system C
+		-- compiler ($CC if set, else the first of cc/gcc/clang), so
+		-- the CLI existing does not mean builds can succeed. On Qubes
+		-- this is the likeliest gap: a pacman-installed gcc vanishes
+		-- with the AppVM's volatile root while a $HOME-level CLI
+		-- survives.
+		local compilers = vim.env.CC and { vim.env.CC } or { "cc", "gcc", "clang" }
+		local available = vim.tbl_filter(function(tool)
+			return vim.fn.executable(tool) == 1
+		end, compilers)
+
+		if #available == 0 then
+			table.insert(missing, "a C compiler (cc/gcc)")
+		end
+
 		if #missing > 0 then
 			vim.notify(
 				"nvim-treesitter: missing parser build tools: "
