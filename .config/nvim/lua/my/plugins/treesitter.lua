@@ -243,6 +243,10 @@ end
 -- the `:syntax` fallback. `query.get()` also asserts ("No parser for
 -- language ..."), so no caller may reach it until `add()` has
 -- confirmed the parser loads.
+-- Languages already complained about, so a broken parser warns once
+-- per session instead of on every FileType event.
+local load_warned = {}
+
 local function resolve_lang(filetype)
 	if filetype == nil or filetype == "" then
 		return nil
@@ -254,7 +258,27 @@ local function resolve_lang(filetype)
 	end
 
 	local ok, has_parser = pcall(vim.treesitter.language.add, lang)
-	if not ok or not has_parser then
+	if not ok then
+		-- The raise means a parser file exists and failed to load.
+		-- Degrading to `:syntax` is right, but it must not be
+		-- silent: nothing else reports the state, and `:TSUpdate`
+		-- cannot repair it -- `needs_update()` compares registry
+		-- revisions only, never loadability, so after a Neovim
+		-- upgrade bumps the ABI floor it answers "all parsers are
+		-- up-to-date" while every buffer quietly loses treesitter.
+		-- Only a forced rebuild recovers.
+		if not load_warned[lang] then
+			load_warned[lang] = true
+			vim.notify(
+				("nvim-treesitter: parser for %s is installed but failed to load"
+					.. " -- run :TSInstall! %s to rebuild it (:TSLog for details)"):format(lang, lang),
+				vim.log.levels.WARN
+			)
+		end
+		return nil
+	end
+
+	if not has_parser then
 		return nil
 	end
 
