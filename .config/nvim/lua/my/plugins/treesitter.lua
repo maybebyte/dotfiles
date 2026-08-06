@@ -74,6 +74,13 @@ local swap_maps = {
 	},
 }
 
+-- Marks a buffer as carrying *this config's* text object maps. Master
+-- tracked the equivalent in `attached_buffers_by_module` and gated
+-- detach on it. Without a stand-in, `detach_textobjects` cannot tell our
+-- `]]` from the one `$VIMRUNTIME/ftplugin/ruby.vim` just installed, and
+-- deletes both. Stored on the buffer so it dies with it.
+local ATTACHED = "my_treesitter_textobjects"
+
 -- Buffer-local, matching what master's `attach.lua` did. The `require`
 -- calls sit inside the callbacks, so defining a mapping never forces a
 -- plugin load.
@@ -108,6 +115,8 @@ local function attach_textobjects(bufnr)
 			end)
 		end
 	end
+
+	vim.b[bufnr][ATTACHED] = true
 end
 
 -- Master's FileType handler ran detach-then-attach (`reattach_module`).
@@ -115,9 +124,35 @@ end
 -- one without a parser, the stale buffer-local maps survive, and the 12
 -- move maps then raise E5108 -- including `]]`, `[[`, `]m`, `[m`, which
 -- shadow builtin motions.
+--
+-- Two things here are load-bearing, and dropping either reintroduces a
+-- silent regression:
+--
+--  1. The `ATTACHED` gate. This runs on *every* FileType event, and
+--     `MyTreesitterTextobjects` is ordered after `$VIMRUNTIME/ftplugin`.
+--     Ungated, it deletes the ftplugin's own `]] [[ ]m [m ]M [M ][ []`
+--     from every buffer we never attached to -- ruby, rust, sql, help,
+--     checkhealth -- and nothing restores them, because `b:did_ftplugin`
+--     is already set.
+--  2. One mode per `pcall`. `vim.keymap.del` loops modes internally with
+--     no per-mode guard, so a batched `del({"n","x","o"}, ...)` aborts on
+--     the first mode that is already gone and a single outer `pcall`
+--     swallows it. `b:undo_ftplugin` for markdown and vim unmaps these in
+--     `n` and `x` before we run, which left the `o` maps alive -- exactly
+--     the E5108 this function exists to prevent.
 local function detach_textobjects(bufnr)
-	local function del(mode, lhs)
-		pcall(vim.keymap.del, mode, lhs, { buffer = bufnr })
+	if not vim.b[bufnr][ATTACHED] then
+		return
+	end
+
+	local function del(modes, lhs)
+		if type(modes) == "string" then
+			modes = { modes }
+		end
+
+		for _, mode in ipairs(modes) do
+			pcall(vim.keymap.del, mode, lhs, { buffer = bufnr })
+		end
 	end
 
 	for _, entry in ipairs(select_maps) do
@@ -135,6 +170,8 @@ local function detach_textobjects(bufnr)
 			del("n", entry[1])
 		end
 	end
+
+	vim.b[bufnr][ATTACHED] = nil
 end
 
 -- Languages where `main` ships an `indents.scm` that `master` did not.
@@ -147,6 +184,39 @@ end
 local indent_optout = {
 	bash = true,
 }
+
+local TS_INDENTEXPR = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+-- Records the language we called `vim.treesitter.start()` with, so the
+-- next `FileType` event can tear it down again. Master got this from
+-- `reattach_module` (detach + attach); starting only leaves the previous
+-- filetype's parser painting the buffer with `'syntax'` pinned to `''`.
+local STARTED = "my_treesitter_lang"
+
+-- Holds the `'indentexpr'` that was in effect before we overwrote it.
+local INDENT_SAVED = "my_treesitter_indentexpr"
+
+-- Undoes our `'indentexpr'`, but only if it is still ours. By the time
+-- this runs, the new filetype's `indent/<ft>.vim` has already fired --
+-- if it set its own expression, that one is correct and must win.
+-- Restoring blindly here would clobber it.
+--
+-- Neovim only clears `'indentexpr'` for us when the old filetype set
+-- `b:undo_indent` or the new one ships an indent script. markdown and
+-- nix ship `indents.scm` but no runtime indent script, so without this
+-- they leak the treesitter expression into text/help/conf buffers.
+local function restore_indentexpr(bufnr)
+	local saved = vim.b[bufnr][INDENT_SAVED]
+	if saved == nil then
+		return
+	end
+
+	vim.b[bufnr][INDENT_SAVED] = nil
+
+	if vim.bo[bufnr].indentexpr == TS_INDENTEXPR then
+		vim.bo[bufnr].indentexpr = saved
+	end
+end
 
 -- Resolves a filetype to a language whose parser is actually
 -- installed, or nil.
@@ -199,17 +269,39 @@ return {
 			desc = "Start treesitter highlighting and indent",
 			callback = function(ev)
 				local lang = resolve_lang(ev.match)
+				local started = vim.b[ev.buf][STARTED]
+
+				-- Tear down the previous filetype's highlighting.
+				-- `stop()` restores `'spelloptions'`, clears
+				-- `b:ts_highlight` and re-fires the `syntaxset` autocmd,
+				-- handing the buffer back to `:syntax`. Skipped when the
+				-- language is unchanged and the highlighter is still
+				-- live, so a re-fired FileType does not rebuild it.
+				-- `ts_highlight` is the liveness check because some
+				-- ftplugins call `stop()` from `b:undo_ftplugin`.
+				if started and (started ~= lang or not vim.b[ev.buf].ts_highlight) then
+					vim.treesitter.stop(ev.buf)
+					started = nil
+					vim.b[ev.buf][STARTED] = nil
+				end
+
+				restore_indentexpr(ev.buf)
+
 				if not lang then
 					return
 				end
 
-				vim.treesitter.start(ev.buf, lang)
+				if not started then
+					vim.treesitter.start(ev.buf, lang)
+					vim.b[ev.buf][STARTED] = lang
+				end
 
 				-- Reproduces master's `is_supported = has_indents`.
 				-- Without this, ungated indentexpr silently replaces
 				-- the built-in indent script with a no-op.
 				if not indent_optout[lang] and vim.treesitter.query.get(lang, "indents") then
-					vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					vim.b[ev.buf][INDENT_SAVED] = vim.bo[ev.buf].indentexpr
+					vim.bo[ev.buf].indentexpr = TS_INDENTEXPR
 				end
 			end,
 		})
@@ -219,16 +311,25 @@ return {
 		-- `install` is asynchronous, and `main` -- unlike master's
 		-- `reattach_if_possible_fn` -- has no post-install hook. Without
 		-- this, buffers already open when a parser finishes building
-		-- stay unhighlighted until they are reopened. Only reachable on
-		-- a fresh machine or after adding a language.
+		-- stay unhighlighted until they are reopened.
+		--
+		-- The task resolves on every startup, not only when something was
+		-- built, so the re-broadcast is gated per buffer: replay `FileType`
+		-- only where we never started treesitter *and* a parser now
+		-- resolves -- i.e. exactly the buffers a build just unblocked. An
+		-- ungated `doautocmd` here replays the whole FileType chain
+		-- (ftplugins, lspconfig, nvim-lint) for every buffer on every
+		-- launch, which the parent never did.
 		require("nvim-treesitter").install(languages):await(function()
 			vim.schedule(function()
 				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-					local filetype = vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].filetype or ""
-					if filetype ~= "" then
-						vim.api.nvim_buf_call(bufnr, function()
-							vim.cmd("doautocmd FileType " .. filetype)
-						end)
+					if vim.api.nvim_buf_is_loaded(bufnr) and not vim.b[bufnr][STARTED] then
+						local filetype = vim.bo[bufnr].filetype
+						if filetype ~= "" and resolve_lang(filetype) then
+							vim.api.nvim_buf_call(bufnr, function()
+								vim.cmd("doautocmd FileType " .. filetype)
+							end)
+						end
 					end
 				end
 			end)

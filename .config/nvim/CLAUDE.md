@@ -25,13 +25,40 @@ indent, and text objects are enabled by `FileType` autocommands in
 `lua/my/plugins/treesitter.lua`. Requires `tree-sitter-cli` 0.26.1+ on
 `PATH`, which mason-tool-installer does *not* provide.
 
-Two API traps in that file, both load-bearing:
+Two Neovim API asymmetries, both load-bearing:
 
 - `vim.treesitter.language.add()` returns `nil, err`; it does not raise.
   Guard on the return value — a `pcall` around it is inert.
 - `vim.treesitter.query.get()` *does* assert when no parser exists, so
   nothing may call it until `add()` has confirmed one. Both paths go
   through the `resolve_lang()` helper.
+
+`main` has no equivalent of master's `reattach_module`, so every
+`FileType` handler in that file must undo what the previous filetype left
+behind — and undo *only its own* work. Four gates enforce that. Removing
+any one reintroduces a silent regression:
+
+- `detach_textobjects()` is gated on `b:my_treesitter_textobjects`. It
+  runs on *every* `FileType` event, ordered after `$VIMRUNTIME/ftplugin`,
+  so ungated it deletes the ftplugin's own `]] [[ ]m [m ]M [M ][ []` from
+  ruby, rust, sql, help and checkhealth buffers — and `b:did_ftplugin`
+  stops anything from restoring them.
+- That function deletes **one mode per `pcall`**. `vim.keymap.del` loops
+  modes with no per-mode guard, so a batched `del({"n","x","o"}, ...)`
+  aborts on the first already-unmapped mode and one outer `pcall` hides
+  it, leaving `o` maps that raise E5108. `b:undo_ftplugin` for markdown
+  and vim unmaps `n` and `x` before we run, so this is a routine path.
+- Highlighting is stopped via `b:my_treesitter_lang`. `vim.treesitter.stop()`
+  restores `'spelloptions'` and re-fires the `syntaxset` autocmd; without
+  the teardown, `sh` → `conf` keeps the bash parser painting the buffer
+  with `'syntax'` pinned to `''`. The liveness check is `b:ts_highlight`,
+  because some ftplugins call `stop()` from `b:undo_ftplugin`.
+- `restore_indentexpr()` reverts `'indentexpr'` **only when it is still
+  ours**. The new filetype's `indent/<ft>.vim` has already run by then, so
+  an unconditional restore clobbers it. Neovim only clears the option for
+  us when the old filetype set `b:undo_indent` or the new one ships an
+  indent script — markdown and nix ship `indents.scm` but no indent
+  script, so without this they leak into text/help/conf buffers.
 
 **Git:** This config is in a bare dotfiles repo. For all git operations on `~/.config/nvim/`:
 `git --git-dir=$HOME/.dotfiles --work-tree=$HOME <command>`
