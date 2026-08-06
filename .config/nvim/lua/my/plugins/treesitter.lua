@@ -361,6 +361,26 @@ return {
 	end,
 
 	config = function()
+		-- Every parser build shells out: `curl`+`tar` fetch the
+		-- grammar tarball (no git fallback on `main`) and the
+		-- `tree-sitter` CLI compiles it. mason-tool-installer
+		-- provisions none of them, and on Qubes an AppVM install
+		-- vanishes on reboot unless it lives in the template. A
+		-- missing tool otherwise surfaces only as transient async
+		-- echoes, then a silent `:syntax` fallback.
+		local missing = vim.tbl_filter(function(tool)
+			return vim.fn.executable(tool) == 0
+		end, { "tree-sitter", "curl", "tar" })
+
+		if #missing > 0 then
+			vim.notify(
+				"nvim-treesitter: missing parser build tools: "
+					.. table.concat(missing, ", ")
+					.. " -- builds will fail (see README Dependencies)",
+				vim.log.levels.WARN
+			)
+		end
+
 		-- `install` is asynchronous, and `main` -- unlike master's
 		-- `reattach_if_possible_fn` -- has no post-install hook. Without
 		-- this, buffers already open when a parser finishes building
