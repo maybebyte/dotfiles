@@ -2,7 +2,10 @@
 
 Modular Lua config: lazy.nvim, LSP (Mason v2), nvim-cmp, treesitter, conform, nvim-lint.
 
-Neovim 0.11+.
+Neovim 0.12.0+ (hard floor: `nvim-treesitter` `main` errors below 0.12).
+
+This config is in a bare dotfiles repo. For all git operations on `~/.config/nvim/`:
+`git --git-dir=$HOME/.dotfiles --work-tree=$HOME <command>`
 
 ## Commands
 
@@ -16,9 +19,6 @@ NVIM_CMP_DEBUG=1 nvim   Debug completion issues
 # Testing note: this repo currently has no maintained automated test harness.
 # Use direct Neovim sanity checks for runtime changes; do not recreate old test entry points.
 ```
-
-**Git:** This config is in a bare dotfiles repo. For all git operations on `~/.config/nvim/`:
-`git --git-dir=$HOME/.dotfiles --work-tree=$HOME <command>`
 
 ## Boundaries
 

@@ -56,11 +56,14 @@ After Neovim opens, verify the installation:
 
 | Dependency | Purpose |
 |------------|---------|
-| Neovim 0.11+ | Required for `vim.o.winborder` feature; 0.10+ minimum for `vim.uv` |
+| Neovim 0.12.0+ | Hard floor: `nvim-treesitter` `main` errors below 0.12 (`vim.o.winborder` needs only 0.11) |
 | Git | Plugin installation and version control |
 | Ripgrep (`rg`) | Telescope live grep functionality |
 | Nerd Font | Icons via nvim-web-devicons |
 | `timeout` | GNU coreutils command used in lazy.nvim bootstrap |
+| `tree-sitter-cli` 0.26.1+ | Compiles Treesitter parsers. **Not** provisioned by mason-tool-installer |
+| C compiler (`cc`/`gcc`) | Compiles Treesitter parsers |
+| `curl` and `tar` | Downloads and unpacks parser sources (`nvim-treesitter` `main` requires both) |
 
 ### Optional
 
@@ -217,9 +220,18 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 
 | Plugin | Purpose |
 |--------|---------|
-| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax highlighting |
-| [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) | Syntax-aware text objects |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) (`main`) | Syntax highlighting and indent |
+| [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) (`main`) | Syntax-aware text objects |
 | [nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context) | Sticky context header |
+
+`nvim-treesitter` and `nvim-treesitter-textobjects` are pinned to the
+`main` branch (`nvim-treesitter-context` tracks its own default branch).
+`master` is frozen upstream and is
+incompatible with Neovim 0.12. On `main` there is no
+`nvim-treesitter.configs` — parsers come from
+`require("nvim-treesitter").install(...)`, and highlighting, indent, and
+text objects are enabled by `FileType` autocommands in
+`lua/my/plugins/treesitter.lua`.
 
 ### Navigation
 
@@ -272,7 +284,6 @@ Plugins verified against `lazy-lock.json`. Transitive dependencies (plenary.nvim
 
 | Plugin | Purpose |
 |--------|---------|
-| [neorg](https://github.com/nvim-neorg/neorg) v9.3.0 | Note-taking (workspace: `~/neorg`) |
 | [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight TODO/FIXME/etc. |
 | [markdown-toc.nvim](https://github.com/hedyhli/markdown-toc.nvim) | Markdown table of contents |
 
@@ -493,12 +504,12 @@ Press `<leader>` and wait for which-key to show available bindings.
 | `aa` / `ia` | o, x | Select parameter (outer/inner) |
 | `af` / `if` | o, x | Select function (outer/inner) |
 | `ac` / `ic` | o, x | Select class (outer/inner) |
-| `]a` / `[a` | n | Next/previous parameter start |
-| `]m` / `[m` | n | Next/previous function start |
-| `]]` / `[[` | n | Next/previous class start |
-| `]A` / `[A` | n | Next/previous parameter end |
-| `]M` / `[M` | n | Next/previous function end |
-| `][` / `[]` | n | Next/previous class end |
+| `]a` / `[a` | n, x, o | Next/previous parameter start |
+| `]m` / `[m` | n, x, o | Next/previous function start |
+| `]]` / `[[` | n, x, o | Next/previous class start |
+| `]A` / `[A` | n, x, o | Next/previous parameter end |
+| `]M` / `[M` | n, x, o | Next/previous function end |
+| `][` / `[]` | n, x, o | Next/previous class end |
 | `<leader>lp` | n | Swap next parameter |
 | `<leader>hp` | n | Swap previous parameter |
 | `<leader>jf` | n | Swap next function |
@@ -630,20 +641,6 @@ vim.cmd("colorscheme catppuccin-frappe")
 
 Also update your preferred colorscheme plugin in `lua/my/plugins/`.
 
-### Neorg Workspace
-
-Default workspace path is `~/neorg`. Customize in `lua/my/plugins/neorg.lua`:
-
-```lua
-["core.dirman"] = {
-    config = {
-        workspaces = {
-            neorg = "~/neorg",  -- Change this path
-        },
-    },
-},
-```
-
 ### Important: vim_g.lua Customization
 
 The `vim_g.lua` file contains Qubes OS-specific GPG wrapper configuration:
@@ -719,6 +716,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 |------|---------|
 | Update plugins | `:Lazy update` |
 | Update Mason packages | `:MasonUpdate` |
+| Update Treesitter parsers | `:TSUpdate` (also runs automatically when lazy.nvim updates `nvim-treesitter`) |
 | Profile startup time | `:Lazy profile` |
 | Check health | `:checkhealth` |
 
@@ -732,6 +730,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 | Backup directory issues | Uses `$XDG_STATE_HOME/nvim/backup` (defaults to `~/.local/state/nvim/backup`) |
 | Native FZF sorter unavailable | Install `make`, then run `:Lazy build telescope-fzf-native.nvim` |
 | timeout command not found | Install GNU coreutils, or modify `init.lua` bootstrap section |
+| Treesitter highlighting broken or missing | Run `:TSUpdate`; if it reports all parsers up-to-date (it checks revisions, not loadability -- e.g. after a Neovim upgrade changes the parser ABI), force a rebuild with `:TSInstall! <lang>`. Inspect build failures with `:TSLog`. Parser builds need `tree-sitter-cli`, a C compiler (`cc`/`gcc`), `curl`, and `tar` (Qubes: install in the template, not the AppVM) |
 | Git features not appearing | gitsigns only loads in git repositories (intentional) |
 | GPG errors | vim-gnupg uses Qubes OS-specific wrapper by default; customize `vim_g.lua` |
 | Copilot not working | Run `:Copilot auth` and ensure you have an active subscription |

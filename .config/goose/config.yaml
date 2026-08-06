@@ -148,7 +148,7 @@ active_provider: chatgpt_codex
 providers:
   chatgpt_codex:
     enabled: true
-    model: gpt-5.5
+    model: gpt-5.6-sol
     configured: true
   anthropic:
     enabled: true
