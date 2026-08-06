@@ -445,17 +445,22 @@ return {
 		--
 		-- The task resolves on every startup, not only when something was
 		-- built, so the re-broadcast is gated per buffer: replay `FileType`
-		-- only where we never started treesitter *and* a parser now
-		-- resolves -- i.e. exactly the buffers a build just unblocked. An
+		-- only where we never started treesitter *and* start()'s own gate
+		-- would now pass -- a parser resolves and its highlights query
+		-- exists -- i.e. exactly the buffers a build just unblocked. An
 		-- ungated `doautocmd` here replays the whole FileType chain
 		-- (ftplugins, lspconfig, nvim-lint) for every buffer on every
-		-- launch, which the parent never did.
+		-- launch, which the parent never did. Checking the parser alone
+		-- is not enough: the permanent parser-without-queries state (see
+		-- the highlights gate) resolves but can never start, so it would
+		-- re-fire the full chain once per session, forever, for nothing.
 		require("nvim-treesitter").install(languages):await(function()
 			vim.schedule(function()
 				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
 					if vim.api.nvim_buf_is_loaded(bufnr) and not vim.b[bufnr][STARTED] then
 						local filetype = vim.bo[bufnr].filetype
-						if filetype ~= "" and resolve_lang(filetype) then
+						local lang = filetype ~= "" and resolve_lang(filetype)
+						if lang and get_query(lang, "highlights") then
 							vim.api.nvim_buf_call(bufnr, function()
 								vim.cmd("doautocmd FileType " .. filetype)
 							end)
