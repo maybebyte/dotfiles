@@ -125,7 +125,7 @@ end
 -- move maps then raise E5108 -- including `]]`, `[[`, `]m`, `[m`, which
 -- shadow builtin motions.
 --
--- Two things here are load-bearing, and dropping either reintroduces a
+-- Three things here are load-bearing, and dropping any reintroduces a
 -- silent regression:
 --
 --  1. The `ATTACHED` gate. This runs on *every* FileType event, and
@@ -140,34 +140,47 @@ end
 --     swallows it. `b:undo_ftplugin` for markdown and vim unmaps these in
 --     `n` and `x` before we run, which left the `o` maps alive -- exactly
 --     the E5108 this function exists to prevent.
+--  3. The per-map `desc` ownership check. The gate cannot help a buffer
+--     we *did* attach to: when its filetype changes, `filetypeplugin`
+--     has already sourced the new ftplugin by the time this runs, so
+--     `]]` may already be that ftplugin's replacement, not ours.
+--     Deleting by bare lhs then destroys the map that was just
+--     installed (python -> ruby lost ruby's `]]`/`]m` searchsyn
+--     motions), again with nothing to restore it.
 local function detach_textobjects(bufnr)
 	if not vim.b[bufnr][ATTACHED] then
 		return
 	end
 
-	local function del(modes, lhs)
+	local function del(modes, lhs, desc)
 		if type(modes) == "string" then
 			modes = { modes }
 		end
 
 		for _, mode in ipairs(modes) do
-			pcall(vim.keymap.del, mode, lhs, { buffer = bufnr })
+			local map = vim.api.nvim_buf_call(bufnr, function()
+				return vim.fn.maparg(lhs, mode, false, true)
+			end)
+
+			if map.buffer == 1 and map.desc == desc then
+				pcall(vim.keymap.del, mode, lhs, { buffer = bufnr })
+			end
 		end
 	end
 
 	for _, entry in ipairs(select_maps) do
-		del({ "x", "o" }, entry[1])
+		del({ "x", "o" }, entry[1], entry[3])
 	end
 
 	for _, entries in pairs(move_maps) do
 		for _, entry in ipairs(entries) do
-			del({ "n", "x", "o" }, entry[1])
+			del({ "n", "x", "o" }, entry[1], entry[3])
 		end
 	end
 
 	for _, entries in pairs(swap_maps) do
 		for _, entry in ipairs(entries) do
-			del("n", entry[1])
+			del("n", entry[1], entry[3])
 		end
 	end
 
