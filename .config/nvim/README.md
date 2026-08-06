@@ -735,53 +735,6 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 | Mason tools not working | Ensure Mason bin path is in `$PATH`, or use system-installed tools |
 | Help files open in ZenMode | Intentional behavior for focused reading (see `lua/my/autocmds/init.lua`) |
 
-### Neovim 0.12 Markdown Tree-sitter error (resolved)
-
-Opening Markdown containing fenced code blocks used to report:
-
-```text
-vim.schedule callback: .../vim/treesitter.lua:197:
-attempt to call method 'range' (a nil value)
-```
-
-This was a compatibility failure between Neovim 0.12 and the frozen
-`master` branch of `nvim-treesitter`, not a cursor-movement problem. The
-old `set-lang-from-info-string!` directive treated a capture list as a
-single `TSNode`; a redraw or cursor move merely resumed asynchronous
-parsing and exposed the error.
-
-`:TSUpdate` could not fix it, because the incompatible code was in the
-plugin's Lua layer. **Migrating to the `main` branch resolved it.** If
-the error reappears, verify that `nvim-treesitter` is still on `main`
-(`:Lazy`) rather than pinned back to `master`.
-
-- [Exact upstream error report](https://github.com/nvim-treesitter/nvim-treesitter/issues/8618)
-- [`main` branch migration requirements](https://github.com/nvim-treesitter/nvim-treesitter/blob/main/README.md)
-
-### Treesitter parsers fail to install or `:TSUpdate` does nothing
-
-`main` shells out to `tree-sitter-cli` to compile every parser. Confirm
-it is on `PATH` and recent enough:
-
-```bash
-tree-sitter --version   # must be >= 0.26.1
-```
-
-`:checkhealth nvim-treesitter` reports the CLI, `tar`, `curl`, and the
-install directory — it does *not* check for a C compiler. A missing one
-surfaces instead as `Error during "tree-sitter build"` on screen and in
-`:messages`.
-
-Because the plugin is lazy-loaded, run `:checkhealth` only after opening
-a real file; in a session where no `FileType` has fired it reports
-`No healthcheck found for "nvim-treesitter"`.
-
-Note that `:TSUpdate` only refreshes parsers that are *already*
-installed — first-time provisioning comes from the
-`require("nvim-treesitter").install(...)` call in
-`lua/my/plugins/treesitter.lua`, which runs asynchronously over the
-network.
-
 ---
 
 This is a personal configuration. Feel free to copy or modify any portion for your own use.
