@@ -251,6 +251,11 @@ return {
 	},
 	lazy = true,
 	event = "FileType",
+	-- `main` defines its commands in `plugin/nvim-treesitter.lua`, which
+	-- only runs on plugin load. Without these stubs, a session that never
+	-- fires FileType (bare `nvim`, unrecognized extensions) has no
+	-- :TSUpdate -- the manual update path README.md tells you to run.
+	cmd = { "TSInstall", "TSInstallFromGrammar", "TSUpdate", "TSUninstall", "TSLog" },
 	build = ":TSUpdate",
 
 	-- Highlighting and indent are pure `vim.treesitter` calls, so this
