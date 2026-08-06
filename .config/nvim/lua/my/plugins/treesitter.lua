@@ -261,6 +261,19 @@ local function resolve_lang(filetype)
 	return lang
 end
 
+-- `query.get()` raises when a query file names a node the installed
+-- parser does not produce. That skew is one failed `:TSUpdate` away:
+-- `site/queries/<lang>` are symlinks into the plugin checkout, while
+-- `site/parser/<lang>.so` stays at the last successful build, so a
+-- plugin update whose build step fails leaves new queries over old
+-- parsers. The raise is not memoized (only successful returns are
+-- cached), so unguarded it repeats on every FileType event instead
+-- of degrading to `:syntax`.
+local function get_query(lang, name)
+	local ok, query = pcall(vim.treesitter.query.get, lang, name)
+	return ok and query or nil
+end
+
 return {
 	"nvim-treesitter/nvim-treesitter",
 	branch = "main",
@@ -316,14 +329,20 @@ return {
 				end
 
 				if not started then
-					vim.treesitter.start(ev.buf, lang)
-					vim.b[ev.buf][STARTED] = lang
+					-- Same skew guard as `get_query`: `start()`
+					-- re-raises a broken `highlights.scm` out of
+					-- `TSHighlighter:get_query` after cleanup. On
+					-- failure the buffer keeps its `:syntax`
+					-- highlighting.
+					if pcall(vim.treesitter.start, ev.buf, lang) then
+						vim.b[ev.buf][STARTED] = lang
+					end
 				end
 
 				-- Reproduces master's `is_supported = has_indents`.
 				-- Without this, ungated indentexpr silently replaces
 				-- the built-in indent script with a no-op.
-				if not indent_optout[lang] and vim.treesitter.query.get(lang, "indents") then
+				if not indent_optout[lang] and get_query(lang, "indents") then
 					vim.b[ev.buf][INDENT_SAVED] = vim.bo[ev.buf].indentexpr
 					vim.bo[ev.buf].indentexpr = TS_INDENTEXPR
 				end
@@ -377,7 +396,7 @@ return {
 				detach_textobjects(ev.buf)
 
 				local lang = resolve_lang(ev.match)
-				if lang and vim.treesitter.query.get(lang, "textobjects") then
+				if lang and get_query(lang, "textobjects") then
 					attach_textobjects(ev.buf)
 				end
 			end,
@@ -388,7 +407,7 @@ return {
 		for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
 			if vim.api.nvim_buf_is_loaded(bufnr) then
 				local lang = resolve_lang(vim.bo[bufnr].filetype)
-				if lang and vim.treesitter.query.get(lang, "textobjects") then
+				if lang and get_query(lang, "textobjects") then
 					attach_textobjects(bufnr)
 				end
 			end
