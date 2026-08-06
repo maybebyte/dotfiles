@@ -234,10 +234,15 @@ end
 -- Resolves a filetype to a language whose parser is actually
 -- installed, or nil.
 --
--- Order matters. `language.add()` returns nil + err rather than
--- raising, so it is guarded on its return value. `query.get()` is the
--- opposite -- it *asserts* ("No parser for language ...") -- so no
--- caller may reach it until `add()` has confirmed the parser exists.
+-- Order matters. `language.add()` returns nil + err when no parser
+-- file exists, but *raises* when one exists and fails to load -- a
+-- truncated .so from an interrupted :TSUpdate, or a stale parser after
+-- a Neovim upgrade bumps the ABI floor -- so it needs a `pcall` on top
+-- of the return-value guard, or one corrupt parser turns every
+-- FileType event for that filetype into an autocmd error instead of
+-- the `:syntax` fallback. `query.get()` also asserts ("No parser for
+-- language ..."), so no caller may reach it until `add()` has
+-- confirmed the parser loads.
 local function resolve_lang(filetype)
 	if filetype == nil or filetype == "" then
 		return nil
@@ -248,7 +253,8 @@ local function resolve_lang(filetype)
 		return nil
 	end
 
-	if not vim.treesitter.language.add(lang) then
+	local ok, has_parser = pcall(vim.treesitter.language.add, lang)
+	if not ok or not has_parser then
 		return nil
 	end
 
