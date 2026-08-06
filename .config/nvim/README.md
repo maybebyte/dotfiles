@@ -716,6 +716,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 |------|---------|
 | Update plugins | `:Lazy update` |
 | Update Mason packages | `:MasonUpdate` |
+| Update Treesitter parsers | `:TSUpdate` (also runs automatically when lazy.nvim updates `nvim-treesitter`) |
 | Profile startup time | `:Lazy profile` |
 | Check health | `:checkhealth` |
 
@@ -729,6 +730,7 @@ Or use your system package manager. Formatting and linting degrade gracefully if
 | Backup directory issues | Uses `$XDG_STATE_HOME/nvim/backup` (defaults to `~/.local/state/nvim/backup`) |
 | Native FZF sorter unavailable | Install `make`, then run `:Lazy build telescope-fzf-native.nvim` |
 | timeout command not found | Install GNU coreutils, or modify `init.lua` bootstrap section |
+| Treesitter highlighting broken or missing | Run `:TSUpdate`; inspect build failures with `:TSLog`. Parser builds need `tree-sitter-cli`, `curl`, and `tar` (Qubes: install in the template, not the AppVM) |
 | Git features not appearing | gitsigns only loads in git repositories (intentional) |
 | GPG errors | vim-gnupg uses Qubes OS-specific wrapper by default; customize `vim_g.lua` |
 | Copilot not working | Run `:Copilot auth` and ensure you have an active subscription |
