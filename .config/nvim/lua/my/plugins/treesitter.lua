@@ -329,12 +329,22 @@ return {
 				end
 
 				if not started then
-					-- Same skew guard as `get_query`: `start()`
-					-- re-raises a broken `highlights.scm` out of
-					-- `TSHighlighter:get_query` after cleanup. On
-					-- failure the buffer keeps its `:syntax`
-					-- highlighting.
-					if pcall(vim.treesitter.start, ev.buf, lang) then
+					-- The highlights gate covers a state install()
+					-- cannot repair: a kill between the parser `.so`
+					-- landing and the query symlinks leaves a parser
+					-- without queries, and `get_installed()` (a union
+					-- of both directories) reports it installed
+					-- forever. `highlighter.new` pins `'syntax'` to
+					-- `''` even when no highlights query resolves, so
+					-- starting anyway strips legacy syntax and sets
+					-- STARTED -- which also gates off the post-install
+					-- FileType replay. No query, no start.
+					--
+					-- The pcall is the same skew guard as `get_query`:
+					-- `start()` re-raises a broken `highlights.scm`
+					-- out of `TSHighlighter:get_query` after cleanup.
+					-- On failure the buffer keeps `:syntax`.
+					if get_query(lang, "highlights") and pcall(vim.treesitter.start, ev.buf, lang) then
 						vim.b[ev.buf][STARTED] = lang
 					end
 				end
